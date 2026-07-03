@@ -72,6 +72,19 @@ Run against the real 76-report archive, this pipeline's chunking produces
 just how much structured content (header, seven data tables, and a
 narrative time breakdown) each single-page DDR actually contains.
 
+Token-based chunking with overlap looks like this — each chunk shares a
+few tokens with its neighbour, so no boundary loses context entirely:
+
+```
+tokens:   t1  t2  t3  t4  t5  t6  t7  t8  t9  t10 t11 t12
+
+chunk 1: [t1  t2  t3  t4  t5  t6]
+chunk 2:             [t5  t6  t7  t8  t9  t10]
+chunk 3:                         [t9  t10 t11 t12]
+                       ^^^^^^         ^^^^^^
+                       overlap        overlap
+```
+
 ## Implementation
 
 ```{python}
@@ -108,6 +121,32 @@ appears complete within at least one chunk rather than split across two.
 
 **You'll know it worked when:** you can point to a single chunk that
 contains the full sentence, from "During the slide" through "became stuck."
+
+## Field notes
+
+::: {.callout-tip title="Field notes: does the heading heuristic ever guess wrong?"}
+**Action:** run the "all-caps line under 6 words = heading" rule against
+every line of all ten real reports, and list every match.
+
+**Result:** every single match — across all ten reports — is a genuine
+section header: `BHA`, `BOP`, `CASING`, `CONSUMABLES`, `DRILL BITS`,
+`MUD`, `PUMPS`, `SURVEY DATA`, `TIME BREAKDOWN`, `WELL/JOB INFORMATION`,
+plus the completion report's `FLUID DATA`, `FRAC`, `PERFORATIONS`,
+`SAFETY`, and `TIME LOG`. Zero false positives — no data row anywhere in
+the archive happens to look like a heading.
+
+**Why:** this isn't luck — it reflects something real about how DDR
+software generates these reports. Section headers are short, fixed,
+all-caps labels from a small controlled vocabulary; data rows always
+carry numbers, units, or lowercase narrative text that the pattern
+correctly excludes.
+
+**Lesson:** a heuristic that "seems reasonable" is still a guess until
+you've run it against real data and checked every match by hand. This
+one happens to be exactly right on this archive — but that's a claim
+worth verifying yourself before trusting it on a different one, not an
+assumption to inherit.
+:::
 
 ## Challenge exercise
 

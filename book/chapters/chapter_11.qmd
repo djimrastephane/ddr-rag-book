@@ -78,6 +78,21 @@ more valuable than the metric computation itself, because writing the
 questions forces you to think like the engineer who will actually use the
 system.
 
+```
+hand-labeled questions
+(question -> expected report)
+   ↓
+run each through the retrieval pipeline
+   ↓
+record the rank of the expected report
+   ↓
+compute recall@k, MRR, NDCG@k
+   ↓
+break results down by category and difficulty
+   ↓
+find the weakest category -> that's where to improve next
+```
+
 ## Implementation
 
 ```{python}
@@ -115,6 +130,39 @@ report's rank, and compute `recall@3` by hand.
 question → expected report → observed rank, and a `recall@3` score you
 can quote and defend — because you wrote and verified every question
 yourself.
+
+## Field notes
+
+::: {.callout-important title="Field notes: 'better' isn't monotonic — track one hard question across every chapter"}
+**Action:** track report #39's rank for the query `"stuck pipe"` through
+every retrieval method this book has built so far, instead of just
+looking at one final aggregate score.
+
+**Result:**
+
+```
+Chapter 3  keyword (AND)         not found at all   (0 of 10)
+Chapter 4  dense, whole-document  rank 5 of 10
+Chapter 9  hybrid, pipeline weights (BM25x2.0/dense x0.5)  rank 9 of 10
+Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10
+```
+
+**Why:** each chapter's technique is a genuine improvement *in general* —
+that's not in question. But this specific, operationally important
+question doesn't improve monotonically as the pipeline gets more
+sophisticated. It gets a little better (Chapter 4), then gets worse
+twice in a row (Chapter 9's two weightings) before hybrid retrieval's
+other strengths (Chapter 9's `"packers fishing"` example) show up
+clearly.
+
+**Lesson:** a single aggregate metric — `recall@5` averaged across your
+whole evaluation set — can climb steadily from chapter to chapter while
+a specific, real question you care about gets worse. This is exactly why
+Chapter 9 insisted on per-category breakdowns and why this chapter opened
+by building your own question set rather than trusting someone else's
+summary number: the only way to know if *your* hard questions are
+improving is to track them individually, the way this table just did.
+:::
 
 ## Challenge exercise
 

@@ -41,7 +41,9 @@ Evidence:
 :::
 
 Both claims here are directly quoted from real report text — nothing in
-this answer was inferred beyond what the two reports state.
+this answer was inferred beyond what the two reports state. This is the
+*target*. Keep reading — the practical exercise below checks whether the
+simple system this chapter builds actually reaches it.
 
 ## Theory
 
@@ -131,14 +133,49 @@ single API call.
 ## Practical exercise
 
 **Try it yourself:** Wire up `answer_question` with a stub `llm_call` that
-simply returns the evidence text, and confirm the evidence list for
-"What led to the fishing operation on report #50?" contains
-`FORGE-16A-78-32_Drilling_049_2020-12-07.pdf` and
-`FORGE-16A-78-32_Drilling_050_2020-12-08.pdf`.
+simply returns the evidence text, run it for "What led to the fishing
+operation on report #50?" with `top_k=3`, and print the evidence list.
 
-**You'll know it worked when:** the evidence list is correct *before* you
-plug in a real language model — retrieval quality, not generation
-fluency, is what determines whether this system is trustworthy.
+**You'll know it worked when:** you can see exactly which three reports
+came back — and, before reading further, decide for yourself whether
+that list actually contains what the target answer above needs.
+
+## Field notes
+
+::: {.callout-warning title="Field notes: the report the question is about isn't in the evidence"}
+**Query:** `"What led to the fishing operation on report #50?"`, `top_k=3`.
+
+**Result:** retrieval returns report #49 (rank 1) plus two other reports
+— but **not report #50**, the report the question is literally about.
+The full ranking:
+
+```
+1. 0.4412  Drilling_049_2020-12-07   <- packers fail (correctly retrieved)
+2. 0.3461  Drilling_038_2020-11-26
+3. 0.3358  Drilling_037_2020-11-25
+...
+8. 0.3012  Drilling_050_2020-12-08   <- the fishing report itself
+```
+
+**Why:** report #50's own text — bit-mill fishing narrative buried among
+casing tables, mud tables, and a full BHA component list — is, at
+whole-document granularity, more similar to *several other reports'*
+tables than it is to a question about fishing. This is the same
+granularity problem Chapter 4 already flagged; here it has a sharper
+consequence.
+
+**Lesson:** this is exactly the failure mode this chapter's own Key
+Takeaways warn about — and it's a dangerous one specifically *because*
+the question names "report #50" directly. A careless `llm_call`
+implementation could echo that report number back in its answer without
+ever having actually retrieved report #50's content, producing a
+citation-shaped sentence that *looks* grounded and isn't. Always check
+what's actually in the evidence list — not what the question happens to
+mention — before trusting an answer. Chapter 7's chunking and Chapter 9's
+hybrid retrieval are what actually close this gap; Part I's simple
+system doesn't, and pretending otherwise would defeat the entire point
+of this book.
+:::
 
 ## Challenge exercise
 

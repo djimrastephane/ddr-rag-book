@@ -131,6 +131,38 @@ order as Chapter 4's brute-force search — report #38 at rank 2, report
 agree — because, mathematically, `IndexFlatIP` over normalized vectors
 *is* cosine similarity, just implemented differently.
 
+## Field notes
+
+::: {.callout-tip title="Field notes: proving 'exact, not approximate' rather than asserting it"}
+**Action:** run five different real queries — `"stuck pipe"`, `"fishing
+operation"`, `"packers failed to set"`, `"torque problems"`, `"losses"`
+— through both the brute-force NumPy search and a FAISS `IndexFlatIP`
+built over the same ten embeddings, and compare the full ranked order
+each one returns.
+
+**Result:** all five queries produce byte-for-byte identical rankings
+between the two methods.
+
+```
+'stuck pipe':              brute-force order == FAISS order: True
+'fishing operation':       brute-force order == FAISS order: True
+'packers failed to set':   brute-force order == FAISS order: True
+'torque problems':         brute-force order == FAISS order: True
+'losses':                  brute-force order == FAISS order: True
+```
+
+**Why:** this is exactly what the Theory section claimed — `IndexFlatIP`
+computes the *same* inner-product comparison as `embeddings @
+query_vec`, just in optimised C++ rather than NumPy. There's no
+approximation step anywhere in this index type for it to disagree with
+brute force on.
+
+**Lesson:** "mathematically equivalent" is a claim worth testing, not
+just trusting because it sounds right — especially before you rely on it
+at a scale where you can no longer eyeball the difference. It took five
+lines of code to confirm this one.
+:::
+
 ## Challenge exercise
 
 **Challenge:** If you have the full 76-report Utah FORGE archive

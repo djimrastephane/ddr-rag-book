@@ -45,6 +45,18 @@ Tokenization matters here: "losses" and "LOSSES" should be the same
 token, and punctuation shouldn't create spurious tokens (`6,507'` should
 not prevent `6507` or nearby words from matching cleanly).
 
+```
+documents                              inverted index
+------------------------------         --------------------------
+report_038: "...became stuck..."       "stuck"   -> {report_038}
+report_019: "...seepage losses..."     "pipe"    -> {report_038}
+report_050: "...milled up lost..."     "losses"  -> {report_019}
+                                        "milled"  -> {report_050}
+
+query "stuck" -> look up "stuck" -> {report_038}   (one dict lookup,
+                                                     not ten file scans)
+```
+
 ## Implementation
 
 ```{python}

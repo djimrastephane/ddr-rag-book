@@ -60,6 +60,24 @@ page only once **two or more** flags fire, so no single noisy-but-legitimate
 page (e.g. a short report with a lot of numeric data) gets discarded on
 one false positive.
 
+```
+extracted text
+   ↓
+compute four flags:
+  low_text_density?  high_symbol_ratio?
+  repeated_garbage?  low_line_count?
+   ↓
+count how many are True
+   ↓
+   +----------------+----------------+
+   |                                 |
+   v                                 v
+>= 2 flags active            < 2 flags active
+   |                                 |
+   v                                 v
+reject (flag for review)     accept into index
+```
+
 ## Implementation
 
 Build a simplified version of the same idea:
@@ -105,6 +123,36 @@ text of report #38 (clean) and the degraded example string above.
 **You'll know it worked when:** the real report text passes cleanly, and
 you can explain, from the flags returned, exactly why the degraded text
 fails.
+
+## Field notes
+
+::: {.callout-tip title="Field notes: checking the gate doesn't cry wolf"}
+**Action:** run `evaluate_ocr_quality()` against all ten real sample
+reports, including report #3 — the sparsest one in the archive, written
+before the well was even spudded, with most of its tables entirely
+empty.
+
+**Result:** every single report passes cleanly. Report #3, the thinnest
+of the ten, still has 2,220 characters and 360 alphabetic words —
+comfortably clear of the 200-character / 30-word thresholds:
+
+```
+chars=2220 alpha_words=360 symbol_ratio=0.007  reject=False
+```
+
+**Why:** even a nearly-empty DDR carries a full page of section headers,
+column labels, and boilerplate ("WELL/JOB INFORMATION", "PRESENT
+OPERATIONS", table column names) regardless of how little actually
+happened that day. That structural text alone is enough to clear the
+density thresholds.
+
+**Lesson:** a quality gate is only trustworthy if it doesn't also reject
+legitimate sparse content — a gate that flagged every quiet day as
+"probably OCR garbage" would be useless in practice, burying real pages
+under false alarms. Checking the gate against your *most* sparse real
+documents, not just your noisiest fake ones, is how you find that out
+before it costs you.
+:::
 
 ## Challenge exercise
 

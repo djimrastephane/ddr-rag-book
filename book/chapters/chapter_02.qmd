@@ -54,6 +54,18 @@ well-chosen abbreviations, expanded correctly, solve most of the
 readability problem — and unlike a model, a dictionary is auditable: you
 can list every expansion it will ever make.
 
+```
+raw text
+   ↓
+for each (abbreviation, expansion) in dictionary:
+   ↓
+  build pattern: \b + abbreviation + \b   (case-insensitive)
+   ↓
+  substitute every match with the expansion
+   ↓
+expanded text
+```
+
 ## Implementation
 
 ```{python}

@@ -88,6 +88,20 @@ about, but `pdfplumber` is a good default: actively maintained, and its
 text extraction is reliable on the kind of structured reports we're
 working with.
 
+```
+DDR PDF
+   ↓
+open with pdfplumber
+   ↓
+for each page:
+   ↓
+  page.extract_text()  -->  string, or None if unextractable
+   ↓
+join every page's text together
+   ↓
+one Python string, ready for Chapter 2
+```
+
 ## Implementation
 
 ### Step 1: get the sample archive
@@ -182,6 +196,41 @@ describing what the crew milled up that day.
 **You'll know it worked when:** you have ten `.txt` files in
 `datasets/ddr_text/`, one per PDF, and you can find the word "Fishing" in
 report 050's text without opening the original PDF.
+
+## Field notes
+
+::: {.callout-warning title="Field notes: a table that reads like nonsense until you know why"}
+**Action:** extract report #38's `BHA` section and read it as plain text.
+
+**Result:**
+
+```
+# COMPONENT OD ID LENGTH # COMPONENT OD ID LENGTH
+1 Drill Bit-Reed SKC613M-01C 8.75 1 7 Monel Collar-NMDC with MWD 6.75 3.25 30.35
+2 Motor-6.5'' 7/8, 5.7, 0.242 RPG 1.50,* Fixed 6.5 33.01 8 Monel Collar-NMDC (2 joints) 6.75 3.25 60.66
+```
+
+**Why:** the real BHA table on this report is laid out as **two
+side-by-side sub-tables** — components 1–6 on the left half of the page,
+components 7–10 on the right half. Visually, that's obvious: two neat
+columns. But `extract_text()` reads left to right, top to bottom, so
+component 1's row and component 7's row — which just happen to sit on
+the same horizontal line of the page — get concatenated into one line of
+output text, with no marker showing where the left sub-table ends and
+the right one begins.
+
+**Lesson:** `extract_text()` gives you the words on the page, not the
+*layout* those words depend on to make sense. A two-column table isn't a
+special case — it's normal DDR formatting — and reading its flattened
+output at face value would have you believe component 1 and component 7
+are the same row. This book's chapters work around it by favouring the
+narrative `TIME BREAKDOWN` text over the structured tables for search and
+retrieval — real table-aware parsing (detecting table boundaries and
+reconstructing rows correctly) is its own discipline, and the companion
+pipeline's `src/rag_pdf/table_detect.py` and `table_extract.py` handle it
+properly. For now, just know that "extracted text" and "correct reading
+order" are not the same guarantee.
+:::
 
 ## Challenge exercise
 

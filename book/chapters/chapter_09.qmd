@@ -150,6 +150,45 @@ weights=[2.0, 0.5])` — matching the companion pipeline's real weighting.
 both rank near the top of the fused list, and you can explain why the
 weighting favours the keyword signal here.
 
+## Field notes
+
+::: {.callout-warning title="Field notes: hybrid fusion isn't automatically better — check both directions"}
+**Query:** the same `"stuck pipe"` query from Chapters 3 and 4.
+
+**Result:** with the pipeline's real fusion weights (BM25 × 2.0, dense ×
+0.5), report #39 ranks **9th of 10** — *worse* than Chapter 4's
+dense-only search, which ranked it 5th. Equal weighting (1.0 / 1.0)
+still only gets it to 7th.
+
+```
+BM25 alone:    report #39 ranks 9th of 10
+Dense alone:   report #39 ranks 5th of 10   (Chapter 4)
+RRF (2.0/0.5): report #39 ranks 9th of 10   (pipeline default weights)
+RRF (1.0/1.0): report #39 ranks 7th of 10
+```
+
+Compare that to `"packers fishing"` (the practical exercise above),
+where fusion helps exactly as expected — report #49 stays 1st and
+report #50 jumps from 10th (dense alone) to 2nd (fused).
+
+**Why:** BM25 has essentially nothing useful to say about report #39 for
+`"stuck pipe"` — it shares almost no vocabulary with the query, so BM25
+ranks it 9th on its own. Fusing that weak, near-random signal in with a
+weight of `2.0` doesn't cancel out — it actively drags a mediocre dense
+result down further. For `"packers fishing"`, by contrast, both signals
+carry real information (the word "fishing" genuinely appears in report
+#50), so combining them helps.
+
+**Lesson:** hybrid retrieval's benefit depends on *both* signals being
+informative for the query at hand — not on combining more signals being
+unconditionally better. A sparse signal with nothing to contribute isn't
+neutral when fused; it's noise with a weight attached, and can make a
+weak dense ranking worse. This is exactly why Chapter 11 insists on
+per-category evaluation rather than one aggregate score — "hybrid beats
+dense on average" can still be actively wrong for a specific,
+operationally important query like this one.
+:::
+
 ## Challenge exercise
 
 **Challenge:** Implement the two guards from the code study above against

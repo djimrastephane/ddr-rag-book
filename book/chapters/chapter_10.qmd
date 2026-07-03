@@ -55,6 +55,22 @@ a language model each time it's asked. Generation is reserved for what
 it's actually good at — narrative synthesis across multiple passages —
 and even then, every claim carries its source.
 
+```
+question
+   ↓
+answerable by looking up / computing from structured data?
+   ↓
+   +---------------------+---------------------+
+   |                                           |
+  yes                                          no
+   |                                           |
+   v                                           v
+query ddr_facts.parquet directly       retrieve + generate (Chapter 5)
+   |                                           |
+   v                                           v
+exact answer, always re-derivable      answer + citations, verify before trusting
+```
+
 ## A real, honest gap in this archive
 
 The second mitigation is **corpus-completeness awareness**. This archive
@@ -116,6 +132,41 @@ of them simply reflecting that Part I's curated subset skips most of the
 archive's days on purpose. Then run it against the *full* 76-report
 archive's dates (`datasets/forge_archive/`) and confirm it finds exactly
 one real gap: January 4th–5th, 2021, right before the Completion report.
+
+## Field notes
+
+::: {.callout-warning title="Field notes: verify the automatic label, not just the automatic lookup"}
+**Action:** check the real, computed `is_npt` flag — set once during
+extraction, not re-derived on every query — for every operations row on
+report #38, the stuck-pipe day.
+
+**Result:** out of ten rows covering the full 24 hours, exactly **one**
+is flagged `is_npt = True`:
+
+```
+23:30-04:00  is_npt=True   "Drill From 6,360' to 6,507'... During the
+                            slide lost tool face and became assembly
+                            became stuck"
+04:00-06:00  is_npt=False  "Work pipe, circulate lube sweep, work tool
+                            back in position, Pipe free"
+```
+
+**Why:** the classifier flagged the 4.5-hour block where the pipe
+*became* stuck, but not the following 2-hour block where the crew
+actually recovered it. That's a defensible reading — the drilling
+operation is what got interrupted — but it's also a real judgment call:
+an engineer asking "how many hours did this stuck-pipe event cost?"
+would probably expect all 6.5 hours counted, not 4.5.
+
+**Lesson:** a structured field being *automatically extracted* doesn't
+mean it's automatically *correct for your question*. Trusting
+`ddr_facts.parquet` blindly here would silently undercount the incident
+by 2 hours, every time someone asks. The fix isn't to distrust structured
+data — Chapter 10's whole argument is that it beats generation — it's to
+read the classification logic once, understand exactly what it counts,
+and know the edge it sits on before you build a report or a chart on top
+of it.
+:::
 
 ## Challenge exercise
 
