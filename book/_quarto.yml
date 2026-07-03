@@ -14,6 +14,8 @@ book:
   repo-url: https://github.com/djimrastephane/ddr-rag-book
   repo-actions: [edit, issue]
   downloads: [pdf]
+  cover-image: figures/cover.jpg
+  cover-image-alt: "Building Industrial RAG Systems from Daily Drilling Reports, book cover showing a drilling rig at sunset with two engineers in the foreground and a pipeline diagram across the bottom half"
   sidebar:
     style: docked
     collapse-level: 2

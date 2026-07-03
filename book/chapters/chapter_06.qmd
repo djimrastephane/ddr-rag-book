@@ -63,19 +63,16 @@ one false positive.
 ```
 extracted text
    ↓
-compute four flags:
-  low_text_density?  high_symbol_ratio?
-  repeated_garbage?  low_line_count?
+compute four flags
+(low_text_density, high_symbol_ratio,
+ repeated_garbage, low_line_count)
    ↓
 count how many are True
    ↓
-   +----------------+----------------+
-   |                                 |
-   v                                 v
->= 2 flags active            < 2 flags active
-   |                                 |
-   v                                 v
-reject (flag for review)     accept into index
+2 or more active?
+   ↓
+  yes -> reject, flag for review
+  no  -> accept into index
 ```
 
 ## Implementation

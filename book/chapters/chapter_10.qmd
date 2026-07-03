@@ -58,17 +58,14 @@ and even then, every claim carries its source.
 ```
 question
    ↓
-answerable by looking up / computing from structured data?
+answerable from structured data?
    ↓
-   +---------------------+---------------------+
-   |                                           |
-  yes                                          no
-   |                                           |
-   v                                           v
-query ddr_facts.parquet directly       retrieve + generate (Chapter 5)
-   |                                           |
-   v                                           v
-exact answer, always re-derivable      answer + citations, verify before trusting
+yes -> query ddr_facts.parquet
+    -> exact, re-derivable answer
+   ↓
+no  -> retrieve + generate (Ch.5)
+    -> answer + citations
+       (verify before trusting)
 ```
 
 ## A real, honest gap in this archive

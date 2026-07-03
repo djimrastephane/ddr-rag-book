@@ -71,20 +71,20 @@ The two tiers branch from the same per-document work, then serve
 different questions:
 
 ```
-                    76 DDR PDFs
-                         |
-                         v
-              chunks + embeddings
-                (per report)
-                         |
-            +------------+------------+
-            |                         |
-            v                         v
-   Per-doc FAISS index       Global FAISS index
-   (one per report)          (2,943 chunks, all reports)
-            |                         |
-            v                         v
-  "search THIS report"       "search ACROSS reports"
+76 DDR PDFs
+   ↓
+chunks + embeddings
+(per report)
+   ↓
+built into two indexes:
+   ↓
+Per-doc FAISS index
+(one per report)
+-> search THIS report
+   ↓
+Global FAISS index
+(2,943 chunks, all reports)
+-> search ACROSS reports
 ```
 
 ## Implementation
