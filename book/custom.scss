@@ -11,3 +11,11 @@ $code-block-bg: #f6f8fa;
 pre.sourceCode {
   font-size: 0.9em;
 }
+
+// Long unbroken strings (file paths, module names) in table cells --
+// e.g. every chapter's "Repository files" table -- otherwise force the
+// whole page to scroll horizontally on narrow/mobile viewports.
+.table code {
+  word-break: break-all;
+  white-space: normal;
+}
