@@ -73,6 +73,14 @@ format:
     colorlinks: true
     geometry:
       - margin=1in
+    include-in-header:
+      text: |
+        % Long inline `code` spans (e.g. file paths) otherwise overflow
+        % past the page margin instead of wrapping -- seqsplit allows a
+        % break at any character while \ttfamily keeps the monospace font.
+        \usepackage{seqsplit}
+        \let\oldtexttt\texttt
+        \renewcommand{\texttt}[1]{{\ttfamily\seqsplit{#1}}}
 
 execute:
   freeze: auto

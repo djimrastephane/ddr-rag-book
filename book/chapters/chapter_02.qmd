@@ -21,14 +21,6 @@ assembly" finds nothing in a report that only ever writes `BHA`. Before we
 can search, summarise, or embed this text well, we need to expand it into
 language that means the same thing to a human and to a machine.
 
-Interestingly, this archive's own software (WellEz) sometimes expands its
-own abbreviations — every report writes `PJSM, pre job safety meeting`
-in full, spelled out inline. But `BHA`, `WOB`, `MWD`, `SPP`, and a dozen
-others never get that treatment anywhere in the archive. Real-world
-consistency is exactly this uneven — which is precisely why an automated
-expander is worth building rather than relying on reports to document
-themselves.
-
 ## Example DDR extract
 
 ::: {.callout-note title="Real excerpt — report #38, showing both patterns"}
@@ -109,6 +101,30 @@ folder and save the expanded versions to `datasets/ddr_text_expanded/`.
 `Pick up Curve assembly 2, bottom hole assembly 21`, and no unrelated
 word (check the `MD`/`TVD` survey table carefully — short abbreviations
 are the ones most likely to collide with real words) gets corrupted.
+
+## Field notes
+
+::: {.callout-warning title="Field notes: the source already expands some abbreviations — but not the ones that matter"}
+**Action:** search every report for the literal string `PJSM`.
+
+**Result:** it appears in all ten sample reports — and every single time,
+it's immediately followed by its own expansion, written by the source
+software itself: `PJSM, pre job safety meeting`.
+
+**Why:** this archive's report-generation software (WellEz) evidently has
+a template that spells "pre job safety meeting" out in full every time,
+right after the abbreviation. But run the same check against `BHA`,
+`WOB`, `MWD`, or `SPP` — the terms that actually carry operational
+meaning in the time breakdown — and none of them ever get that
+treatment, anywhere in the archive.
+
+**Lesson:** don't assume a real archive is consistently either
+abbreviated or expanded. This one is both, unevenly, by accident of
+whatever template a report-writing tool happened to use for one specific
+phrase. An automated expander has to cover every term regardless — you
+can't rely on the source to have already done the job for the ones that
+matter.
+:::
 
 ## Challenge exercise
 

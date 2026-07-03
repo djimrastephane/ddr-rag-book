@@ -178,6 +178,54 @@ solution is in `code/chapter_12/challenge/`.
 | `DDR_UTAH_FORGE/src/ddr_rag/npt_classifier.py` | Utah-FORGE-adapted NPT classification (companion repo) |
 | `DDR_UTAH_FORGE/data/fields/UtahForge/wells/` | Multi-well data structure, ready for expansion (companion repo) |
 
+## The complete system
+
+Twelve chapters ago, this was a single PDF and a five-line function.
+Here's everything you built, end to end — every arrow below is a chapter
+you completed, not an aspiration:
+
+```
+DDR PDF (scanned or digital)
+   ↓
+OCR quality gate                (Chapter 6)
+   ↓
+Extraction                      (Chapter 1)
+   ↓
+Cleaning                        (Chapter 2)
+   ↓
+Segment-aware chunking          (Chapter 7)
+   ↓
+Embeddings                      (Chapter 4)
+   ↓
+Hybrid index — BM25 + FAISS     (Chapters 8-9)
+   ↓
+Retriever + Reranker            (Chapter 9)
+   ↓
+LLM + structured facts          (Chapter 5, 10)
+   ↓
+Answer + Citations + Gaps flagged   (Chapter 10)
+```
+
+Two more pieces sit alongside this pipeline rather than inside it —
+they don't run on every query, but they're what make the rest of it
+trustworthy at scale:
+
+```
+Evaluation (Chapter 11) ---------- measures how well the pipeline above
+                                    actually performs, against questions
+                                    with known correct answers
+
+Sequence detection (Chapter 12) -- mines what the pipeline has already
+                                    indexed for patterns no single query
+                                    would surface on its own
+```
+
+Every stage exists because an earlier, simpler version of this system
+failed at it — a scanned page with no text, a chunk that split a
+stuck-pipe sentence in half, a query that missed a report because it
+used the wrong three words, a hallucinated number where a table lookup
+belonged. None of the complexity here is complexity for its own sake.
+
 ## Suggested next step
 
 You've now built, chapter by chapter, a working RAG system grounded

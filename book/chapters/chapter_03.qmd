@@ -89,6 +89,35 @@ and run `search(index, "fishing")`.
 milled up lost pieces of bit, right after packers failed to set the day
 before.
 
+## Field notes
+
+::: {.callout-warning title="Field notes: the search that misses the day after"}
+**Query:** `"stuck pipe"`
+
+**Result:** one hit — report #38 (2020-11-26), the day the assembly
+actually got stuck. Report #39, the very next day, is invisible to this
+query.
+
+**Why:** report #39's own words are:
+
+- "Work tight hole at 6,526'."
+- "Due to high torque decision to pull out of hole"
+- "Hole drag from 6,050' to 5,901' no issues"
+
+but the word "stuck" never appears anywhere in report #39. `pipe` does
+(buried in a BHA table row, `Drill Pipe-5'' HWDP`), but the AND search
+still fails because `stuck` alone has zero matches outside report #38.
+
+**Lesson:** an engineer researching *"how did the stuck-pipe situation
+on this well develop"* would want report #39 too — tight hole, high
+torque, and a decision to pull out of hole are exactly the kind of
+continued-risk language that matters the day after an incident. Keyword
+search can't surface it, because report #39 never uses the word the
+query asked for. This isn't a bug in the code above — it's the fundamental
+limit of matching on exact words at all. Chapter 4 comes back to this
+same query.
+:::
+
 ## Challenge exercise
 
 **Challenge:** Add phrase search (query tokens must appear *adjacent* and
@@ -119,7 +148,8 @@ fishing"` and confirm it returns both report #49 (packers) and #50
 
 ## Suggested next step
 
-Keyword search is exact and unforgiving — it doesn't know that "packers
-did not set" and "fishing operation" are related ideas. Chapter 4
-replaces exact matching with semantic search, so retrieval works by
-meaning, not just spelling.
+Keyword search is exact and unforgiving — it doesn't know that "high
+torque decision to pull out of hole" and "stuck pipe" describe related
+trouble. Chapter 4 replaces exact matching with semantic search, so
+retrieval works by meaning, not just spelling — and comes back to this
+exact "stuck pipe" query to see how much that actually fixes.

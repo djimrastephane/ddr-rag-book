@@ -58,6 +58,31 @@ part of the answer came from. This doesn't make hallucination impossible —
 Chapter 10 covers stronger mitigations — but it is the foundation
 everything else builds on.
 
+Here's the complete pipeline you've actually built, chapter by chapter —
+every arrow below is real, working code you've already written:
+
+```
+DDR PDF
+   ↓
+Extraction              (Chapter 1 — pdfplumber)
+   ↓
+Cleaning                (Chapter 2 — abbreviation expansion)
+   ↓
+Embeddings              (Chapter 4 — sentence-transformers)
+   ↓
+Retriever               (Chapter 4 — cosine similarity search)
+   ↓
+LLM                     (this chapter — prompt + generation)
+   ↓
+Answer + Citations
+```
+
+This is deliberately the simplest version of this pipeline that could
+possibly work — brute-force search, whole-document embeddings, no
+reranking, no traceability guardrails beyond a citation list. Part II
+rebuilds nearly every arrow in this diagram to survive a real, full-scale
+archive.
+
 ## Implementation
 
 ```{python}

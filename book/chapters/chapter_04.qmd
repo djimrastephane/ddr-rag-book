@@ -10,26 +10,31 @@ By the end of this chapter, you will be able to:
   `sentence-transformers`.
 - Retrieve the most semantically similar chunks to a query using cosine
   similarity, without any exact keyword overlap required.
+- Recognise that semantic search over whole documents is an improvement,
+  not a complete fix — and that granularity is what actually determines
+  how well it works.
 
 ## Operational problem
 
-An engineer searches "torque problems" and expects to find report #39,
-which says *"Due to high torque decision to pull out of hole"* — even
-though the word "problems" never appears there. Chapter 3's keyword
-search can't do this; it needs the exact token "problems" to appear
-somewhere, and it has no notion that "high torque... decision to pull
-out" describes a problem at all. Semantic search retrieves by *meaning*,
-not spelling.
+Chapter 3 ended on a real miss: the query `"stuck pipe"` found report #38
+(the actual incident) but was blind to report #39, which describes tight
+hole, high torque, and a decision to pull out of hole — real continued-risk
+language, written the very next day — without ever using the word "stuck."
+Semantic search is supposed to retrieve by *meaning* rather than exact
+words. Let's find out, honestly, how much of that problem it actually
+solves.
 
 ## Example DDR extract
 
-::: {.callout-note title="Query that keyword search misses"}
+::: {.callout-note title="The same query, now by meaning"}
 ```
-Query: "torque problems"
-Keyword search (Chapter 3): 0 results (no exact token overlap)
-Semantic search (this chapter): report #39 ranks highest —
-  "Work tight hole at 6,526'... Due to high torque decision to pull
-  out of hole" — despite sharing no vocabulary with the query.
+Query: "stuck pipe"  (same query Chapter 3 used)
+
+Keyword search (Chapter 3): report #39 not in results at all.
+
+Semantic search, whole-report embeddings (this chapter): report #39
+  ranks 5th out of 10 — findable, but not prominent. Report #38 (the
+  actual incident) ranks 2nd.
 ```
 :::
 
@@ -88,23 +93,92 @@ Because embeddings are normalized, the dot product `embeddings @
 query_vec` *is* cosine similarity — no separate normalization step needed
 at query time.
 
+Run this against all ten sample reports with `query="stuck pipe"` and
+`top_k=10` (the whole ranking, not just the top few), and you get the
+real numbers behind the callout above:
+
+```
+1. 0.2239  Completion_003_2021-01-06
+2. 0.2076  Drilling_038_2020-11-26   <- the actual stuck-pipe day
+3. 0.1731  Drilling_049_2020-12-07
+4. 0.1635  Drilling_003_2020-10-22
+5. 0.1496  Drilling_039_2020-11-27   <- tight hole / high torque, findable now
+6. 0.1495  Drilling_048_2020-12-06
+7. 0.1458  Drilling_050_2020-12-08
+8. 0.1437  Drilling_019_2020-11-07
+9. 0.1366  Drilling_037_2020-11-25
+10. 0.1319 Drilling_036_2020-11-24
+```
+
+Report #39 went from *absent* (Chapter 3) to *rank 5 of 10* — a real
+improvement, worth having. But it's not a clean win: the scores are
+bunched close together (0.13–0.22), and a busy engineer scanning only the
+top 2 or 3 results would still miss it.
+
+## Field notes
+
+::: {.callout-warning title="Field notes: why whole-document embeddings are noisy"}
+**Query:** `"stuck pipe"`, same as above.
+
+**Result:** report #39 ranks 5th of 10 when you embed each *entire
+report* as one vector — an improvement over keyword search's zero, but
+not a clean fix.
+
+**Why:** each report is one page, but that page holds seven distinct data
+tables (casing, mud, drill bits, pumps, BHA, survey data, consumables)
+plus the narrative time breakdown. Embedding the whole thing blends a
+handful of sentences of relevant narrative with a few hundred words of
+numeric table content. The relevant signal — "Work tight hole... high
+torque... pull out of hole" — is a small fraction of what actually goes
+into the vector.
+
+Isolate just the narrative lines instead of the whole report, and the
+picture changes completely:
+
+```
+0.4868  report #38 — "Work pipe, circulate lube sweep, work tool
+                       back in position, Pipe free"
+0.3359  report #38 — "During the slide lost tool face and became
+                       assembly became stuck"
+0.2402  report #39 — "Due to high torque decision to pull out of hole"
+0.2329  report #49 — "Attempted multiple times to set packers..."
+0.2143  report #39 — "Work tight hole at 6,526 feet."
+0.1892  report #39 — "Hole drag from 6,050' to 5,901' no issues"
+0.1892  report #36 — "Trip out of hole with BHA #17 core assembly..."
+        (genuinely unrelated coring operation, same score as above)
+```
+
+At line granularity, report #39's high-torque line clearly separates
+from genuinely unrelated content (0.24 vs. 0.19) — something whole-document
+embedding couldn't show at all.
+
+**Lesson:** semantic search doesn't fail because the *technique* is wrong
+— it fails here because the *unit of retrieval* is too coarse. This is
+exactly the problem Chapter 7's chunking solves, and it's worth
+remembering the next time a semantic search "isn't working": check
+what's actually inside each embedded vector before blaming the model.
+:::
+
 ## Practical exercise
 
 **Try it yourself:** Embed all ten sample DDRs and run
-`search(model, "torque problems", filenames, embeddings)`.
+`search(model, "stuck pipe", filenames, embeddings, top_k=10)`.
 
 **You'll know it worked when:** `FORGE-16A-78-32_Drilling_039_2020-11-27.txt`
-ranks in the top results, despite no keyword overlap with "torque problems."
+appears somewhere in your ranked results — unlike Chapter 3, where it
+didn't appear at all — even if it isn't near the top.
 
 ## Challenge exercise
 
-**Challenge:** Chunk each report into individual `TIME BREAKDOWN` line
-items (rather than embedding the whole report as one vector) and re-run
-the search. Compare which granularity gives more precise, directly
-quotable results — a whole-report embedding blends the packer failure,
-the fishing operation, and the drilling narrative in report #49 together;
-does line-level chunking separate them more usefully? A reference
-solution is in `code/chapter_04/challenge/`.
+**Challenge:** Reproduce the Field Notes line-level result yourself.
+Manually pull three lines of text — report #39's `"Due to high torque
+decision to pull out of hole"`, report #39's `"Hole drag from 6,050' to
+5,901' no issues"`, and report #36's `"Trip out of hole with BHA #17 core
+assembly, lay down core barrels"` (a genuinely unrelated line) — embed
+just those three strings, and confirm the high-torque line scores
+meaningfully higher against `"stuck pipe"` than the other two, which
+should score close to each other. A reference solution is in
+`code/chapter_04/challenge/`.
 
 ## Key takeaways
 
@@ -112,8 +186,13 @@ solution is in `code/chapter_04/challenge/`.
   vectors.
 - Cosine similarity is the standard comparison because it isolates
   direction (meaning) from magnitude.
-- Semantic search finds relevant text that shares no vocabulary with the
-  query — the exact failure mode of Chapter 3's keyword search.
+- Semantic search over whole documents is a real improvement on keyword
+  search — report #39 goes from unfindable to rank 5 of 10 — but "an
+  improvement" and "solved" are different claims. Don't oversell it.
+- Granularity is often the actual lever, not the embedding model. The
+  same query, same model, same text — just isolated to individual
+  narrative lines instead of a whole noisy report — turns a middling
+  rank-5 result into a clear, checkable win.
 - Brute-force cosine search (a matrix multiply) is entirely adequate at
   ten documents. It stops being adequate well before you reach the full
   76-report archive's scale — that's Chapter 8's problem to solve.
@@ -127,6 +206,8 @@ solution is in `code/chapter_04/challenge/`.
 
 ## Suggested next step
 
-You can now retrieve relevant passages by meaning. Chapter 5 turns
+You can now retrieve relevant passages by meaning, and you've learned the
+honest limits of doing it at whole-document granularity. Chapter 5 turns
 retrieval into an answer: given a question, retrieve the right evidence,
 and generate a response that cites exactly where each claim came from.
+Chapter 7 comes back to fix the granularity problem directly.

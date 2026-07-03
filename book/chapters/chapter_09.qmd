@@ -38,6 +38,30 @@ similarities live on completely different, incomparable scales, so
 averaging raw scores directly would let whichever signal happens to have
 larger numbers dominate regardless of which is actually more informative.
 
+```
+                       Query
+                         |
+            +------------+------------+
+            |                         |
+            v                         v
+     BM25 (sparse)             Dense (semantic)
+     exact terms                embedding search
+            |                         |
+            +------------+------------+
+                         |
+                         v
+              Reciprocal Rank Fusion
+              (combine by rank, not
+               raw score)
+                         |
+                         v
+             Cross-encoder rerank
+             (top candidates only)
+                         |
+                         v
+                      Results
+```
+
 **Cross-encoder reranking** is the last, most expensive step, and
 deliberately runs on only the top handful of fused candidates, not the
 whole corpus. Unlike a dense embedding (which encodes the query and each

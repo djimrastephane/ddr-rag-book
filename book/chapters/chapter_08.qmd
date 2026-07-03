@@ -67,6 +67,26 @@ Chapter 4 — this pipeline doesn't switch models between the toy version
 and the production one, it just changes how the resulting vectors are
 indexed and queried.
 
+The two tiers branch from the same per-document work, then serve
+different questions:
+
+```
+                    76 DDR PDFs
+                         |
+                         v
+              chunks + embeddings
+                (per report)
+                         |
+            +------------+------------+
+            |                         |
+            v                         v
+   Per-doc FAISS index       Global FAISS index
+   (one per report)          (2,943 chunks, all reports)
+            |                         |
+            v                         v
+  "search THIS report"       "search ACROSS reports"
+```
+
 ## Implementation
 
 ```{python}
@@ -103,8 +123,9 @@ document's other artefacts.
 
 **Try it yourself:** Build a FAISS index over the ten sample DDR
 embeddings from Chapter 4, save it to disk, reload it in a fresh Python
-session, and confirm a query for "torque problems" returns the same
-top result as Chapter 4's brute-force search.
+session, and confirm a query for "stuck pipe" returns the same ranked
+order as Chapter 4's brute-force search — report #38 at rank 2, report
+#39 at rank 5.
 
 **You'll know it worked when:** the FAISS-based and brute-force results
 agree — because, mathematically, `IndexFlatIP` over normalized vectors

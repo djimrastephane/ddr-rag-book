@@ -82,6 +82,37 @@ every chapter has one. -->
 
 **You'll know it worked when:** ...
 
+## Field notes
+
+<!-- Optional but encouraged, and should recur often across the book: a
+short, real, independently-verified vignette showing where the tool this
+chapter just built actually breaks (or, in a later chapter, where a
+previous chapter's tool breaks and this chapter's technique fixes it).
+Every number and quote here must be checked against the real archive
+before writing it down -- run the code, don't estimate the outcome. The
+payoff is a moment where the reader sees, concretely, why the next
+chapter's added complexity is earning its keep, not complexity for its
+own sake.
+
+Format:
+  Query/Action -> the (surprising) result -> the real report language
+  that explains why -> the one-sentence lesson. -->
+
+::: {.callout-warning title="Field notes: <short description>"}
+**Query:** `"..."`
+
+**Result:** ...
+
+**Why:** the report says:
+
+- "..."
+- "..."
+
+but never says "...".
+
+**Lesson:** ...
+:::
+
 ## Challenge exercise
 
 <!-- A harder, more open-ended extension for readers who want to go
