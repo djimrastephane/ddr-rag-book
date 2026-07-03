@@ -247,7 +247,7 @@
     "href": "chapters/chapter_02.html#operational-problem",
     "title": "2  Cleaning Operational Text",
     "section": "2.2 Operational problem",
-    "text": "2.2 Operational problem\nOpen one of the .txt files you extracted in Chapter 1 and read it as a computer would. Report #38’s time breakdown says: “During the slide lost tool face and became assembly became stuck” — plain enough. But the same report is full of terms a keyword search or language model has no way to interpret: BHA, WOB, MWD, SPP, NMDC, DLS, ECD. A drilling engineer reads these instantly. A keyword search for “bottom hole assembly” finds nothing in a report that only ever writes BHA. Before we can search, summarise, or embed this text well, we need to expand it into language that means the same thing to a human and to a machine.\nInterestingly, this archive’s own software (WellEz) sometimes expands its own abbreviations — every report writes PJSM, pre job safety meeting in full, spelled out inline. But BHA, WOB, MWD, SPP, and a dozen others never get that treatment anywhere in the archive. Real-world consistency is exactly this uneven — which is precisely why an automated expander is worth building rather than relying on reports to document themselves.",
+    "text": "2.2 Operational problem\nOpen one of the .txt files you extracted in Chapter 1 and read it as a computer would. Report #38’s time breakdown says: “During the slide lost tool face and became assembly became stuck” — plain enough. But the same report is full of terms a keyword search or language model has no way to interpret: BHA, WOB, MWD, SPP, NMDC, DLS, ECD. A drilling engineer reads these instantly. A keyword search for “bottom hole assembly” finds nothing in a report that only ever writes BHA. Before we can search, summarise, or embed this text well, we need to expand it into language that means the same thing to a human and to a machine.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
@@ -298,11 +298,22 @@
     ]
   },
   {
+    "objectID": "chapters/chapter_02.html#field-notes",
+    "href": "chapters/chapter_02.html#field-notes",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.7 Field notes",
+    "text": "2.7 Field notes\n\n\n\n\n\n\nWarningField notes: the source already expands some abbreviations — but not the ones that matter\n\n\n\nAction: search every report for the literal string PJSM.\nResult: it appears in all ten sample reports — and every single time, it’s immediately followed by its own expansion, written by the source software itself: PJSM, pre job safety meeting.\nWhy: this archive’s report-generation software (WellEz) evidently has a template that spells “pre job safety meeting” out in full every time, right after the abbreviation. But run the same check against BHA, WOB, MWD, or SPP — the terms that actually carry operational meaning in the time breakdown — and none of them ever get that treatment, anywhere in the archive.\nLesson: don’t assume a real archive is consistently either abbreviated or expanded. This one is both, unevenly, by accident of whatever template a report-writing tool happened to use for one specific phrase. An automated expander has to cover every term regardless — you can’t rely on the source to have already done the job for the ones that matter.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
     "objectID": "chapters/chapter_02.html#challenge-exercise",
     "href": "chapters/chapter_02.html#challenge-exercise",
     "title": "2  Cleaning Operational Text",
-    "section": "2.7 Challenge exercise",
-    "text": "2.7 Challenge exercise\nChallenge: Extend ABBREVIATIONS using Appendix B, and handle the mud-table abbreviations (FV, WL, PV, YP, CL) — notice how short these are, and think carefully about whether blindly expanding a two-letter token like PV is actually safe against this archive’s real text, or whether it needs a narrower match context. A reference solution is in code/chapter_02/challenge/.",
+    "section": "2.8 Challenge exercise",
+    "text": "2.8 Challenge exercise\nChallenge: Extend ABBREVIATIONS using Appendix B, and handle the mud-table abbreviations (FV, WL, PV, YP, CL) — notice how short these are, and think carefully about whether blindly expanding a two-letter token like PV is actually safe against this archive’s real text, or whether it needs a narrower match context. A reference solution is in code/chapter_02/challenge/.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
@@ -312,8 +323,8 @@
     "objectID": "chapters/chapter_02.html#key-takeaways",
     "href": "chapters/chapter_02.html#key-takeaways",
     "title": "2  Cleaning Operational Text",
-    "section": "2.8 Key takeaways",
-    "text": "2.8 Key takeaways\n\nWord-boundary regex, not substring replacement, is the difference between a correct expander and a silently broken one.\nReal archives are inconsistent by nature — the same report can spell one abbreviation out in full while never expanding another. Don’t assume the source data will document itself.\nA transparent dictionary beats an opaque model here: every expansion is inspectable and testable.\nCleaning text is not optional groundwork — it’s what makes every later chapter’s search and retrieval actually work.",
+    "section": "2.9 Key takeaways",
+    "text": "2.9 Key takeaways\n\nWord-boundary regex, not substring replacement, is the difference between a correct expander and a silently broken one.\nReal archives are inconsistent by nature — the same report can spell one abbreviation out in full while never expanding another. Don’t assume the source data will document itself.\nA transparent dictionary beats an opaque model here: every expansion is inspectable and testable.\nCleaning text is not optional groundwork — it’s what makes every later chapter’s search and retrieval actually work.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
@@ -323,8 +334,8 @@
     "objectID": "chapters/chapter_02.html#repository-files",
     "href": "chapters/chapter_02.html#repository-files",
     "title": "2  Cleaning Operational Text",
-    "section": "2.9 Repository files",
-    "text": "2.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_02/expand_abbreviations.py\nWord-boundary abbreviation expander\n\n\ndatasets/ddr_text_expanded/\nExpanded output from Chapter 1’s extracted text\n\n\nnotebooks/chapter_02_explore.ipynb\nInteractive companion notebook",
+    "section": "2.10 Repository files",
+    "text": "2.10 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_02/expand_abbreviations.py\nWord-boundary abbreviation expander\n\n\ndatasets/ddr_text_expanded/\nExpanded output from Chapter 1’s extracted text\n\n\nnotebooks/chapter_02_explore.ipynb\nInteractive companion notebook",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
@@ -334,8 +345,8 @@
     "objectID": "chapters/chapter_02.html#suggested-next-step",
     "href": "chapters/chapter_02.html#suggested-next-step",
     "title": "2  Cleaning Operational Text",
-    "section": "2.10 Suggested next step",
-    "text": "2.10 Suggested next step\nWith clean, expanded text in hand, Chapter 3 builds the first tool an engineer would actually reach for: a keyword search engine that answers “which reports mention losses?” in milliseconds.",
+    "section": "2.11 Suggested next step",
+    "text": "2.11 Suggested next step\nWith clean, expanded text in hand, Chapter 3 builds the first tool an engineer would actually reach for: a keyword search engine that answers “which reports mention losses?” in milliseconds.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
@@ -419,11 +430,22 @@
     ]
   },
   {
+    "objectID": "chapters/chapter_03.html#field-notes",
+    "href": "chapters/chapter_03.html#field-notes",
+    "title": "3  Searching DDRs",
+    "section": "3.7 Field notes",
+    "text": "3.7 Field notes\n\n\n\n\n\n\nWarningField notes: the search that misses the day after\n\n\n\nQuery: \"stuck pipe\"\nResult: one hit — report #38 (2020-11-26), the day the assembly actually got stuck. Report #39, the very next day, is invisible to this query.\nWhy: report #39’s own words are:\n\n“Work tight hole at 6,526’.”\n“Due to high torque decision to pull out of hole”\n“Hole drag from 6,050’ to 5,901’ no issues”\n\nbut the word “stuck” never appears anywhere in report #39. pipe does (buried in a BHA table row, Drill Pipe-5'' HWDP), but the AND search still fails because stuck alone has zero matches outside report #38.\nLesson: an engineer researching “how did the stuck-pipe situation on this well develop” would want report #39 too — tight hole, high torque, and a decision to pull out of hole are exactly the kind of continued-risk language that matters the day after an incident. Keyword search can’t surface it, because report #39 never uses the word the query asked for. This isn’t a bug in the code above — it’s the fundamental limit of matching on exact words at all. Chapter 4 comes back to this same query.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
     "objectID": "chapters/chapter_03.html#challenge-exercise",
     "href": "chapters/chapter_03.html#challenge-exercise",
     "title": "3  Searching DDRs",
-    "section": "3.7 Challenge exercise",
-    "text": "3.7 Challenge exercise\nChallenge: Add phrase search (query tokens must appear adjacent and in order, not just co-occur anywhere in the document) and an OR operator. Test search(index, \"stuck\") against report #38, then try \"packers OR fishing\" and confirm it returns both report #49 (packers) and #50 (fishing). A reference solution is in code/chapter_03/challenge/.",
+    "section": "3.8 Challenge exercise",
+    "text": "3.8 Challenge exercise\nChallenge: Add phrase search (query tokens must appear adjacent and in order, not just co-occur anywhere in the document) and an OR operator. Test search(index, \"stuck\") against report #38, then try \"packers OR fishing\" and confirm it returns both report #49 (packers) and #50 (fishing). A reference solution is in code/chapter_03/challenge/.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
@@ -433,8 +455,8 @@
     "objectID": "chapters/chapter_03.html#key-takeaways",
     "href": "chapters/chapter_03.html#key-takeaways",
     "title": "3  Searching DDRs",
-    "section": "3.8 Key takeaways",
-    "text": "3.8 Key takeaways\n\nAn inverted index turns “search every file” into “look up a word,” which is the difference between milliseconds and minutes at scale.\nTokenization choices (case folding, punctuation handling) determine what counts as a match — get this wrong and searches silently fail.\nExact keyword matching is fast, simple, and fundamentally limited: it cannot find report #49 (“packers did not set… pick up Fishing BHA”) when you search “lost circulation,” even though report #19’s “seepage losses” line and report #49’s packer failure are both, in a loose sense, “things going wrong downhole” — a human would connect them faster than exact keywords can.",
+    "section": "3.9 Key takeaways",
+    "text": "3.9 Key takeaways\n\nAn inverted index turns “search every file” into “look up a word,” which is the difference between milliseconds and minutes at scale.\nTokenization choices (case folding, punctuation handling) determine what counts as a match — get this wrong and searches silently fail.\nExact keyword matching is fast, simple, and fundamentally limited: it cannot find report #49 (“packers did not set… pick up Fishing BHA”) when you search “lost circulation,” even though report #19’s “seepage losses” line and report #49’s packer failure are both, in a loose sense, “things going wrong downhole” — a human would connect them faster than exact keywords can.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
@@ -444,8 +466,8 @@
     "objectID": "chapters/chapter_03.html#repository-files",
     "href": "chapters/chapter_03.html#repository-files",
     "title": "3  Searching DDRs",
-    "section": "3.9 Repository files",
-    "text": "3.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_03/keyword_search.py\nInverted index and AND-query search\n\n\nnotebooks/chapter_03_explore.ipynb\nInteractive companion notebook",
+    "section": "3.10 Repository files",
+    "text": "3.10 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_03/keyword_search.py\nInverted index and AND-query search\n\n\nnotebooks/chapter_03_explore.ipynb\nInteractive companion notebook",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
@@ -455,8 +477,8 @@
     "objectID": "chapters/chapter_03.html#suggested-next-step",
     "href": "chapters/chapter_03.html#suggested-next-step",
     "title": "3  Searching DDRs",
-    "section": "3.10 Suggested next step",
-    "text": "3.10 Suggested next step\nKeyword search is exact and unforgiving — it doesn’t know that “packers did not set” and “fishing operation” are related ideas. Chapter 4 replaces exact matching with semantic search, so retrieval works by meaning, not just spelling.",
+    "section": "3.11 Suggested next step",
+    "text": "3.11 Suggested next step\nKeyword search is exact and unforgiving — it doesn’t know that “high torque decision to pull out of hole” and “stuck pipe” describe related trouble. Chapter 4 replaces exact matching with semantic search, so retrieval works by meaning, not just spelling — and comes back to this exact “stuck pipe” query to see how much that actually fixes.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
@@ -478,7 +500,7 @@
     "href": "chapters/chapter_04.html#learning-objectives",
     "title": "4  Semantic Search",
     "section": "",
-    "text": "Explain, without heavy math, what a text embedding is and why nearby vectors mean similar meaning.\nGenerate embeddings for a folder of DDR text using sentence-transformers.\nRetrieve the most semantically similar chunks to a query using cosine similarity, without any exact keyword overlap required.",
+    "text": "Explain, without heavy math, what a text embedding is and why nearby vectors mean similar meaning.\nGenerate embeddings for a folder of DDR text using sentence-transformers.\nRetrieve the most semantically similar chunks to a query using cosine similarity, without any exact keyword overlap required.\nRecognise that semantic search over whole documents is an improvement, not a complete fix — and that granularity is what actually determines how well it works.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -489,7 +511,7 @@
     "href": "chapters/chapter_04.html#operational-problem",
     "title": "4  Semantic Search",
     "section": "4.2 Operational problem",
-    "text": "4.2 Operational problem\nAn engineer searches “torque problems” and expects to find report #39, which says “Due to high torque decision to pull out of hole” — even though the word “problems” never appears there. Chapter 3’s keyword search can’t do this; it needs the exact token “problems” to appear somewhere, and it has no notion that “high torque… decision to pull out” describes a problem at all. Semantic search retrieves by meaning, not spelling.",
+    "text": "4.2 Operational problem\nChapter 3 ended on a real miss: the query \"stuck pipe\" found report #38 (the actual incident) but was blind to report #39, which describes tight hole, high torque, and a decision to pull out of hole — real continued-risk language, written the very next day — without ever using the word “stuck.” Semantic search is supposed to retrieve by meaning rather than exact words. Let’s find out, honestly, how much of that problem it actually solves.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -500,7 +522,7 @@
     "href": "chapters/chapter_04.html#example-ddr-extract",
     "title": "4  Semantic Search",
     "section": "4.3 Example DDR extract",
-    "text": "4.3 Example DDR extract\n\n\n\n\n\n\nNoteQuery that keyword search misses\n\n\n\nQuery: \"torque problems\"\nKeyword search (Chapter 3): 0 results (no exact token overlap)\nSemantic search (this chapter): report #39 ranks highest —\n  \"Work tight hole at 6,526'... Due to high torque decision to pull\n  out of hole\" — despite sharing no vocabulary with the query.",
+    "text": "4.3 Example DDR extract\n\n\n\n\n\n\nNoteThe same query, now by meaning\n\n\n\nQuery: \"stuck pipe\"  (same query Chapter 3 used)\n\nKeyword search (Chapter 3): report #39 not in results at all.\n\nSemantic search, whole-report embeddings (this chapter): report #39\n  ranks 5th out of 10 — findable, but not prominent. Report #38 (the\n  actual incident) ranks 2nd.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -522,7 +544,18 @@
     "href": "chapters/chapter_04.html#implementation",
     "title": "4  Semantic Search",
     "section": "4.5 Implementation",
-    "text": "4.5 Implementation\n\n# code/chapter_04/semantic_search.py\nfrom pathlib import Path\n\nimport numpy as np\nfrom sentence_transformers import SentenceTransformer\n\nMODEL_NAME = \"all-MiniLM-L6-v2\"\n\ndef load_chunks(text_dir: Path) -&gt; tuple[list[str], list[str]]:\n    filenames, texts = [], []\n    for path in sorted(text_dir.glob(\"*.txt\")):\n        filenames.append(path.name)\n        texts.append(path.read_text(encoding=\"utf-8\"))\n    return filenames, texts\n\ndef embed_texts(model: SentenceTransformer, texts: list[str]) -&gt; np.ndarray:\n    embeddings = model.encode(texts, normalize_embeddings=True)\n    return np.asarray(embeddings)\n\ndef search(model: SentenceTransformer, query: str, filenames: list[str],\n           embeddings: np.ndarray, top_k: int = 3) -&gt; list[tuple[str, float]]:\n    query_vec = model.encode([query], normalize_embeddings=True)[0]\n    scores = embeddings @ query_vec  # cosine similarity, since vectors are normalized\n    top_indices = np.argsort(-scores)[:top_k]\n    return [(filenames[i], float(scores[i])) for i in top_indices]\n\nBecause embeddings are normalized, the dot product embeddings @ query_vec is cosine similarity — no separate normalization step needed at query time.",
+    "text": "4.5 Implementation\n\n# code/chapter_04/semantic_search.py\nfrom pathlib import Path\n\nimport numpy as np\nfrom sentence_transformers import SentenceTransformer\n\nMODEL_NAME = \"all-MiniLM-L6-v2\"\n\ndef load_chunks(text_dir: Path) -&gt; tuple[list[str], list[str]]:\n    filenames, texts = [], []\n    for path in sorted(text_dir.glob(\"*.txt\")):\n        filenames.append(path.name)\n        texts.append(path.read_text(encoding=\"utf-8\"))\n    return filenames, texts\n\ndef embed_texts(model: SentenceTransformer, texts: list[str]) -&gt; np.ndarray:\n    embeddings = model.encode(texts, normalize_embeddings=True)\n    return np.asarray(embeddings)\n\ndef search(model: SentenceTransformer, query: str, filenames: list[str],\n           embeddings: np.ndarray, top_k: int = 3) -&gt; list[tuple[str, float]]:\n    query_vec = model.encode([query], normalize_embeddings=True)[0]\n    scores = embeddings @ query_vec  # cosine similarity, since vectors are normalized\n    top_indices = np.argsort(-scores)[:top_k]\n    return [(filenames[i], float(scores[i])) for i in top_indices]\n\nBecause embeddings are normalized, the dot product embeddings @ query_vec is cosine similarity — no separate normalization step needed at query time.\nRun this against all ten sample reports with query=\"stuck pipe\" and top_k=10 (the whole ranking, not just the top few), and you get the real numbers behind the callout above:\n1. 0.2239  Completion_003_2021-01-06\n2. 0.2076  Drilling_038_2020-11-26   &lt;- the actual stuck-pipe day\n3. 0.1731  Drilling_049_2020-12-07\n4. 0.1635  Drilling_003_2020-10-22\n5. 0.1496  Drilling_039_2020-11-27   &lt;- tight hole / high torque, findable now\n6. 0.1495  Drilling_048_2020-12-06\n7. 0.1458  Drilling_050_2020-12-08\n8. 0.1437  Drilling_019_2020-11-07\n9. 0.1366  Drilling_037_2020-11-25\n10. 0.1319 Drilling_036_2020-11-24\nReport #39 went from absent (Chapter 3) to rank 5 of 10 — a real improvement, worth having. But it’s not a clean win: the scores are bunched close together (0.13–0.22), and a busy engineer scanning only the top 2 or 3 results would still miss it.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#field-notes",
+    "href": "chapters/chapter_04.html#field-notes",
+    "title": "4  Semantic Search",
+    "section": "4.6 Field notes",
+    "text": "4.6 Field notes\n\n\n\n\n\n\nWarningField notes: why whole-document embeddings are noisy\n\n\n\nQuery: \"stuck pipe\", same as above.\nResult: report #39 ranks 5th of 10 when you embed each entire report as one vector — an improvement over keyword search’s zero, but not a clean fix.\nWhy: each report is one page, but that page holds seven distinct data tables (casing, mud, drill bits, pumps, BHA, survey data, consumables) plus the narrative time breakdown. Embedding the whole thing blends a handful of sentences of relevant narrative with a few hundred words of numeric table content. The relevant signal — “Work tight hole… high torque… pull out of hole” — is a small fraction of what actually goes into the vector.\nIsolate just the narrative lines instead of the whole report, and the picture changes completely:\n0.4868  report #38 — \"Work pipe, circulate lube sweep, work tool\n                       back in position, Pipe free\"\n0.3359  report #38 — \"During the slide lost tool face and became\n                       assembly became stuck\"\n0.2402  report #39 — \"Due to high torque decision to pull out of hole\"\n0.2329  report #49 — \"Attempted multiple times to set packers...\"\n0.2143  report #39 — \"Work tight hole at 6,526 feet.\"\n0.1892  report #39 — \"Hole drag from 6,050' to 5,901' no issues\"\n0.1892  report #36 — \"Trip out of hole with BHA #17 core assembly...\"\n        (genuinely unrelated coring operation, same score as above)\nAt line granularity, report #39’s high-torque line clearly separates from genuinely unrelated content (0.24 vs. 0.19) — something whole-document embedding couldn’t show at all.\nLesson: semantic search doesn’t fail because the technique is wrong — it fails here because the unit of retrieval is too coarse. This is exactly the problem Chapter 7’s chunking solves, and it’s worth remembering the next time a semantic search “isn’t working”: check what’s actually inside each embedded vector before blaming the model.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -532,8 +565,8 @@
     "objectID": "chapters/chapter_04.html#practical-exercise",
     "href": "chapters/chapter_04.html#practical-exercise",
     "title": "4  Semantic Search",
-    "section": "4.6 Practical exercise",
-    "text": "4.6 Practical exercise\nTry it yourself: Embed all ten sample DDRs and run search(model, \"torque problems\", filenames, embeddings).\nYou’ll know it worked when: FORGE-16A-78-32_Drilling_039_2020-11-27.txt ranks in the top results, despite no keyword overlap with “torque problems.”",
+    "section": "4.7 Practical exercise",
+    "text": "4.7 Practical exercise\nTry it yourself: Embed all ten sample DDRs and run search(model, \"stuck pipe\", filenames, embeddings, top_k=10).\nYou’ll know it worked when: FORGE-16A-78-32_Drilling_039_2020-11-27.txt appears somewhere in your ranked results — unlike Chapter 3, where it didn’t appear at all — even if it isn’t near the top.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -543,8 +576,8 @@
     "objectID": "chapters/chapter_04.html#challenge-exercise",
     "href": "chapters/chapter_04.html#challenge-exercise",
     "title": "4  Semantic Search",
-    "section": "4.7 Challenge exercise",
-    "text": "4.7 Challenge exercise\nChallenge: Chunk each report into individual TIME BREAKDOWN line items (rather than embedding the whole report as one vector) and re-run the search. Compare which granularity gives more precise, directly quotable results — a whole-report embedding blends the packer failure, the fishing operation, and the drilling narrative in report #49 together; does line-level chunking separate them more usefully? A reference solution is in code/chapter_04/challenge/.",
+    "section": "4.8 Challenge exercise",
+    "text": "4.8 Challenge exercise\nChallenge: Reproduce the Field Notes line-level result yourself. Manually pull three lines of text — report #39’s \"Due to high torque decision to pull out of hole\", report #39’s \"Hole drag from 6,050' to 5,901' no issues\", and report #36’s \"Trip out of hole with BHA #17 core assembly, lay down core barrels\" (a genuinely unrelated line) — embed just those three strings, and confirm the high-torque line scores meaningfully higher against \"stuck pipe\" than the other two, which should score close to each other. A reference solution is in code/chapter_04/challenge/.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -554,8 +587,8 @@
     "objectID": "chapters/chapter_04.html#key-takeaways",
     "href": "chapters/chapter_04.html#key-takeaways",
     "title": "4  Semantic Search",
-    "section": "4.8 Key takeaways",
-    "text": "4.8 Key takeaways\n\nEmbeddings represent meaning as geometry: similar meaning, nearby vectors.\nCosine similarity is the standard comparison because it isolates direction (meaning) from magnitude.\nSemantic search finds relevant text that shares no vocabulary with the query — the exact failure mode of Chapter 3’s keyword search.\nBrute-force cosine search (a matrix multiply) is entirely adequate at ten documents. It stops being adequate well before you reach the full 76-report archive’s scale — that’s Chapter 8’s problem to solve.",
+    "section": "4.9 Key takeaways",
+    "text": "4.9 Key takeaways\n\nEmbeddings represent meaning as geometry: similar meaning, nearby vectors.\nCosine similarity is the standard comparison because it isolates direction (meaning) from magnitude.\nSemantic search over whole documents is a real improvement on keyword search — report #39 goes from unfindable to rank 5 of 10 — but “an improvement” and “solved” are different claims. Don’t oversell it.\nGranularity is often the actual lever, not the embedding model. The same query, same model, same text — just isolated to individual narrative lines instead of a whole noisy report — turns a middling rank-5 result into a clear, checkable win.\nBrute-force cosine search (a matrix multiply) is entirely adequate at ten documents. It stops being adequate well before you reach the full 76-report archive’s scale — that’s Chapter 8’s problem to solve.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -565,8 +598,8 @@
     "objectID": "chapters/chapter_04.html#repository-files",
     "href": "chapters/chapter_04.html#repository-files",
     "title": "4  Semantic Search",
-    "section": "4.9 Repository files",
-    "text": "4.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_04/semantic_search.py\nEmbedding generation and brute-force cosine search\n\n\nnotebooks/chapter_04_explore.ipynb\nInteractive companion notebook",
+    "section": "4.10 Repository files",
+    "text": "4.10 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_04/semantic_search.py\nEmbedding generation and brute-force cosine search\n\n\nnotebooks/chapter_04_explore.ipynb\nInteractive companion notebook",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -576,8 +609,8 @@
     "objectID": "chapters/chapter_04.html#suggested-next-step",
     "href": "chapters/chapter_04.html#suggested-next-step",
     "title": "4  Semantic Search",
-    "section": "4.10 Suggested next step",
-    "text": "4.10 Suggested next step\nYou can now retrieve relevant passages by meaning. Chapter 5 turns retrieval into an answer: given a question, retrieve the right evidence, and generate a response that cites exactly where each claim came from.\n\n\n\n\n\n\nReimers, Nils, and Iryna Gurevych. 2019. “Sentence-BERT: Sentence Embeddings Using Siamese BERT-Networks.” Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing.",
+    "section": "4.11 Suggested next step",
+    "text": "4.11 Suggested next step\nYou can now retrieve relevant passages by meaning, and you’ve learned the honest limits of doing it at whole-document granularity. Chapter 5 turns retrieval into an answer: given a question, retrieve the right evidence, and generate a response that cites exactly where each claim came from. Chapter 7 comes back to fix the granularity problem directly.\n\n\n\n\n\n\nReimers, Nils, and Iryna Gurevych. 2019. “Sentence-BERT: Sentence Embeddings Using Siamese BERT-Networks.” Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
@@ -632,7 +665,7 @@
     "href": "chapters/chapter_05.html#theory",
     "title": "5  First RAG System",
     "section": "5.4 Theory",
-    "text": "5.4 Theory\nRAG (retrieval-augmented generation) (Lewis et al. 2020) is exactly the two chapters you just built, chained together: retrieve relevant evidence (Chapter 4), then hand that evidence to a language model and ask it to answer using only that evidence. The model is not answering from what it memorised during training — it’s answering from the specific passages you retrieved, which is what makes citation possible at all.\nThe critical design decision is the prompt: instruct the model explicitly to answer only from the provided context, and to cite which source each part of the answer came from. This doesn’t make hallucination impossible — Chapter 10 covers stronger mitigations — but it is the foundation everything else builds on.",
+    "text": "5.4 Theory\nRAG (retrieval-augmented generation) (Lewis et al. 2020) is exactly the two chapters you just built, chained together: retrieve relevant evidence (Chapter 4), then hand that evidence to a language model and ask it to answer using only that evidence. The model is not answering from what it memorised during training — it’s answering from the specific passages you retrieved, which is what makes citation possible at all.\nThe critical design decision is the prompt: instruct the model explicitly to answer only from the provided context, and to cite which source each part of the answer came from. This doesn’t make hallucination impossible — Chapter 10 covers stronger mitigations — but it is the foundation everything else builds on.\nHere’s the complete pipeline you’ve actually built, chapter by chapter — every arrow below is real, working code you’ve already written:\nDDR PDF\n   ↓\nExtraction              (Chapter 1 — pdfplumber)\n   ↓\nCleaning                (Chapter 2 — abbreviation expansion)\n   ↓\nEmbeddings              (Chapter 4 — sentence-transformers)\n   ↓\nRetriever               (Chapter 4 — cosine similarity search)\n   ↓\nLLM                     (this chapter — prompt + generation)\n   ↓\nAnswer + Citations\nThis is deliberately the simplest version of this pipeline that could possibly work — brute-force search, whole-document embeddings, no reranking, no traceability guardrails beyond a citation list. Part II rebuilds nearly every arrow in this diagram to survive a real, full-scale archive.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
@@ -995,7 +1028,7 @@
     "href": "chapters/chapter_08.html#building-the-real-index",
     "title": "8  Vector Databases at Scale",
     "section": "8.4 Building the real index",
-    "text": "8.4 Building the real index\nThe companion pipeline, DDR_UTAH_FORGE, builds two tiers of index:\n\nPer-document index (scripts/build_index.py) — one FAISS index per DDR, used when a question is scoped to a specific report. All 76 reports already have this: chunks, embeddings, and a faiss.index file sit in data/processed/&lt;doc_id&gt;/ for every report in the archive.\nGlobal index (scripts/build_global_index.py) — a single FAISS index over every chunk across every report, used for cross-document questions like “which reports involve fishing operations.”\n\nRunning build_global_index.py against this archive’s 76 pre-processed documents produces a real, verifiable result:\nFound 76 docs with embeddings\nConcatenating 2,943 chunks from 76 docs...\nBuilding FAISS IndexFlatIP ((2943, 384))...\n  faiss.index — 2,943 vectors × 384d\n  elapsed: 2.65s\n384 dimensions matches all-MiniLM-L6-v2, the same embedding model from Chapter 4 — this pipeline doesn’t switch models between the toy version and the production one, it just changes how the resulting vectors are indexed and queried.",
+    "text": "8.4 Building the real index\nThe companion pipeline, DDR_UTAH_FORGE, builds two tiers of index:\n\nPer-document index (scripts/build_index.py) — one FAISS index per DDR, used when a question is scoped to a specific report. All 76 reports already have this: chunks, embeddings, and a faiss.index file sit in data/processed/&lt;doc_id&gt;/ for every report in the archive.\nGlobal index (scripts/build_global_index.py) — a single FAISS index over every chunk across every report, used for cross-document questions like “which reports involve fishing operations.”\n\nRunning build_global_index.py against this archive’s 76 pre-processed documents produces a real, verifiable result:\nFound 76 docs with embeddings\nConcatenating 2,943 chunks from 76 docs...\nBuilding FAISS IndexFlatIP ((2943, 384))...\n  faiss.index — 2,943 vectors × 384d\n  elapsed: 2.65s\n384 dimensions matches all-MiniLM-L6-v2, the same embedding model from Chapter 4 — this pipeline doesn’t switch models between the toy version and the production one, it just changes how the resulting vectors are indexed and queried.\nThe two tiers branch from the same per-document work, then serve different questions:\n                    76 DDR PDFs\n                         |\n                         v\n              chunks + embeddings\n                (per report)\n                         |\n            +------------+------------+\n            |                         |\n            v                         v\n   Per-doc FAISS index       Global FAISS index\n   (one per report)          (2,943 chunks, all reports)\n            |                         |\n            v                         v\n  \"search THIS report\"       \"search ACROSS reports\"",
     "crumbs": [
       "Part II — Industrialising the System",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
@@ -1017,7 +1050,7 @@
     "href": "chapters/chapter_08.html#practical-exercise",
     "title": "8  Vector Databases at Scale",
     "section": "8.6 Practical exercise",
-    "text": "8.6 Practical exercise\nTry it yourself: Build a FAISS index over the ten sample DDR embeddings from Chapter 4, save it to disk, reload it in a fresh Python session, and confirm a query for “torque problems” returns the same top result as Chapter 4’s brute-force search.\nYou’ll know it worked when: the FAISS-based and brute-force results agree — because, mathematically, IndexFlatIP over normalized vectors is cosine similarity, just implemented differently.",
+    "text": "8.6 Practical exercise\nTry it yourself: Build a FAISS index over the ten sample DDR embeddings from Chapter 4, save it to disk, reload it in a fresh Python session, and confirm a query for “stuck pipe” returns the same ranked order as Chapter 4’s brute-force search — report #38 at rank 2, report #39 at rank 5.\nYou’ll know it worked when: the FAISS-based and brute-force results agree — because, mathematically, IndexFlatIP over normalized vectors is cosine similarity, just implemented differently.",
     "crumbs": [
       "Part II — Industrialising the System",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
@@ -1105,7 +1138,7 @@
     "href": "chapters/chapter_09.html#theory",
     "title": "9  Hybrid Retrieval and Reranking",
     "section": "9.3 Theory",
-    "text": "9.3 Theory\nBM25 (Robertson and Zaragoza 2009) scores a document by term frequency, adjusted by how rare each term is across the corpus (inverse document frequency, IDF) and normalised for document length. It’s decades old, computationally cheap, and excellent at exact and near-exact matches — the opposite profile from dense embeddings.\nReciprocal Rank Fusion (RRF) combines two ranked lists by rank, not raw score: for each document, sum weight / (k + rank) across both lists. This sidesteps a real problem — BM25 scores and cosine similarities live on completely different, incomparable scales, so averaging raw scores directly would let whichever signal happens to have larger numbers dominate regardless of which is actually more informative.\nCross-encoder reranking is the last, most expensive step, and deliberately runs on only the top handful of fused candidates, not the whole corpus. Unlike a dense embedding (which encodes the query and each document separately, then compares vectors), a cross-encoder scores the query and a candidate passage together, letting it capture interactions between them that no fixed vector representation can. This makes it substantially slower per comparison — which is exactly why it’s applied after fusion has already narrowed the field, not instead of it.",
+    "text": "9.3 Theory\nBM25 (Robertson and Zaragoza 2009) scores a document by term frequency, adjusted by how rare each term is across the corpus (inverse document frequency, IDF) and normalised for document length. It’s decades old, computationally cheap, and excellent at exact and near-exact matches — the opposite profile from dense embeddings.\nReciprocal Rank Fusion (RRF) combines two ranked lists by rank, not raw score: for each document, sum weight / (k + rank) across both lists. This sidesteps a real problem — BM25 scores and cosine similarities live on completely different, incomparable scales, so averaging raw scores directly would let whichever signal happens to have larger numbers dominate regardless of which is actually more informative.\n                       Query\n                         |\n            +------------+------------+\n            |                         |\n            v                         v\n     BM25 (sparse)             Dense (semantic)\n     exact terms                embedding search\n            |                         |\n            +------------+------------+\n                         |\n                         v\n              Reciprocal Rank Fusion\n              (combine by rank, not\n               raw score)\n                         |\n                         v\n             Cross-encoder rerank\n             (top candidates only)\n                         |\n                         v\n                      Results\nCross-encoder reranking is the last, most expensive step, and deliberately runs on only the top handful of fused candidates, not the whole corpus. Unlike a dense embedding (which encodes the query and each document separately, then compares vectors), a cross-encoder scores the query and a candidate passage together, letting it capture interactions between them that no fixed vector representation can. This makes it substantially slower per comparison — which is exactly why it’s applied after fusion has already narrowed the field, not instead of it.",
     "crumbs": [
       "Part II — Industrialising the System",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
@@ -1541,11 +1574,22 @@
     ]
   },
   {
+    "objectID": "chapters/chapter_12.html#the-complete-system",
+    "href": "chapters/chapter_12.html#the-complete-system",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.10 The complete system",
+    "text": "12.10 The complete system\nTwelve chapters ago, this was a single PDF and a five-line function. Here’s everything you built, end to end — every arrow below is a chapter you completed, not an aspiration:\nDDR PDF (scanned or digital)\n   ↓\nOCR quality gate                (Chapter 6)\n   ↓\nExtraction                      (Chapter 1)\n   ↓\nCleaning                        (Chapter 2)\n   ↓\nSegment-aware chunking          (Chapter 7)\n   ↓\nEmbeddings                      (Chapter 4)\n   ↓\nHybrid index — BM25 + FAISS     (Chapters 8-9)\n   ↓\nRetriever + Reranker            (Chapter 9)\n   ↓\nLLM + structured facts          (Chapter 5, 10)\n   ↓\nAnswer + Citations + Gaps flagged   (Chapter 10)\nTwo more pieces sit alongside this pipeline rather than inside it — they don’t run on every query, but they’re what make the rest of it trustworthy at scale:\nEvaluation (Chapter 11) ---------- measures how well the pipeline above\n                                    actually performs, against questions\n                                    with known correct answers\n\nSequence detection (Chapter 12) -- mines what the pipeline has already\n                                    indexed for patterns no single query\n                                    would surface on its own\nEvery stage exists because an earlier, simpler version of this system failed at it — a scanned page with no text, a chunk that split a stuck-pipe sentence in half, a query that missed a report because it used the wrong three words, a hallucinated number where a table lookup belonged. None of the complexity here is complexity for its own sake.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
     "objectID": "chapters/chapter_12.html#suggested-next-step",
     "href": "chapters/chapter_12.html#suggested-next-step",
     "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
-    "section": "12.10 Suggested next step",
-    "text": "12.10 Suggested next step\nYou’ve now built, chapter by chapter, a working RAG system grounded entirely in real, public DDRs — from extracting a single PDF’s text through checking a real numeric trend against a real narrative event. Appendix A shows how to set up the full companion pipeline and point it at your own DDR archive, whether that’s more Utah FORGE data as it becomes available, or a different well entirely.",
+    "section": "12.11 Suggested next step",
+    "text": "12.11 Suggested next step\nYou’ve now built, chapter by chapter, a working RAG system grounded entirely in real, public DDRs — from extracting a single PDF’s text through checking a real numeric trend against a real narrative event. Appendix A shows how to set up the full companion pipeline and point it at your own DDR archive, whether that’s more Utah FORGE data as it becomes available, or a different well entirely.",
     "crumbs": [
       "Part II — Industrialising the System",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
