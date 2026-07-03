@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>6&nbsp; Scanned Reports and OCR Quality Gates – Building Industrial RAG Systems from Daily Drilling Reports</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-59898bd1c6b9d2bb783127feaa000c76.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-452cbf14bb15c015b54b218970dfdb00.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b7de04e6702a1605c8643bead4b18795.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -353,7 +356,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-OCR output before and after quality gating
+<span class="screen-reader-only">Note</span>OCR output before and after quality gating
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -374,8 +377,8 @@ Degraded OCR output from a hypothetical poor scan of the same line:
 <section id="implementation" class="level2" data-number="6.5">
 <h2 data-number="6.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">6.5</span> Implementation</h2>
 <p>Build a simplified version of the same idea:</p>
-<div id="c2d38ff5" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_06/ocr_quality_gate.py</span></span>
+<div id="ebba957a" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_06/ocr_quality_gate.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> evaluate_ocr_quality(text: <span class="bu">str</span>, min_chars: <span class="bu">int</span> <span class="op">=</span> <span class="dv">200</span>,</span>
@@ -392,7 +395,7 @@ Degraded OCR output from a hypothetical poor scan of the same line:
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"high_symbol_ratio"</span>: symbol_ratio <span class="op">&gt;</span> max_symbol_ratio,</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    active <span class="op">=</span> [k <span class="cf">for</span> k, v <span class="kw">in</span> flags.items() <span class="cf">if</span> v]</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"reject_ocr"</span>: <span class="bu">len</span>(active) <span class="op">&gt;=</span> reject_min_flags, <span class="st">"flags"</span>: flags}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"reject_ocr"</span>: <span class="bu">len</span>(active) <span class="op">&gt;=</span> reject_min_flags, <span class="st">"flags"</span>: flags}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Test it against a real Utah FORGE report’s clean text (it should pass easily — that text has a healthy word count and almost no noise symbols) and against the corrupted example above (it should fail on both flags).</p>
 <p>The full production version — including the repeated-garbage detector and line-count check — is in the companion repository at <code>src/rag_pdf/ocr_quality.py</code>, alongside <code>src/rag_pdf/rotation_handler.py</code> for detecting and correcting upside-down or sideways scans, and <code>src/rag_pdf/table_ocr_handoff.py</code> for the case where a <em>table</em> (not narrative text) needs OCR fallback.</p>
@@ -504,13 +507,14 @@ Degraded OCR output from a hypothetical poor scan of the same line:
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -920,7 +924,7 @@ Degraded OCR output from a hypothetical poor scan of the same line:
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Scanned Reports and OCR Quality Gates {#sec-chapter-06}</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Scanned Reports and OCR Quality Gates {#sec-chapter-06}</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1062,7 +1066,7 @@ Degraded OCR output from a hypothetical poor scan of the same line:
 <span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>the next question is how to break it into pieces small enough to embed</span>
 <span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>and retrieve — without cutting a stuck-pipe narrative in half across two</span>
 <span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>chunks. That's Chapter 7.</span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

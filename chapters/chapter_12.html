@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>12&nbsp; Sequence Detection: Building Toward Cross-Well Intelligence – Building Industrial RAG Systems from Daily Drilling Reports</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-59898bd1c6b9d2bb783127feaa000c76.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-452cbf14bb15c015b54b218970dfdb00.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b7de04e6702a1605c8643bead4b18795.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -355,7 +358,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Real header data, reports #36-38
+<span class="screen-reader-only">Note</span>Real header data, reports #36-38
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -372,10 +375,10 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <section id="theory-how-the-production-tool-would-check-this-at-scale" class="level2" data-number="12.4">
 <h2 data-number="12.4" class="anchored" data-anchor-id="theory-how-the-production-tool-would-check-this-at-scale"><span class="header-section-number">12.4</span> Theory: how the production tool would check this at scale</h2>
 <p>The companion pipeline’s <code>src/ddr_rag/causality_analyzer.py</code> implements exactly this kind of check, generalized: for a given term, it compares frequency in a window before and after a boundary date, and labels a term <strong>causal</strong> only above a defined post-boundary NPT rate, and <strong>escalating</strong> only above a defined frequency-increase ratio. The real thresholds, read directly from the module:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>TRANSITION_WINDOW_DAYS <span class="op">=</span> <span class="dv">14</span>   <span class="co"># days before/after a boundary to compare</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>TRANSITION_WINDOW_DAYS <span class="op">=</span> <span class="dv">14</span>   <span class="co"># days before/after a boundary to compare</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>MIN_TERM_FREQ <span class="op">=</span> <span class="dv">3</span>             <span class="co"># minimum occurrences before a term counts at all</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>NPT_SIGNAL_THRESHOLD <span class="op">=</span> <span class="fl">0.40</span>   <span class="co"># post-boundary NPT rate to call a term "causal"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ESCALATION_FREQ_RATIO <span class="op">=</span> <span class="fl">1.5</span>   <span class="co"># frequency increase to call a term "escalating"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ESCALATION_FREQ_RATIO <span class="op">=</span> <span class="fl">1.5</span>   <span class="co"># frequency increase to call a term "escalating"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Every one of these is a plain, readable number you can inspect, change, and justify — not a weight buried inside a trained model.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="A real limitation worth understanding, not hiding">
 <div class="callout-header d-flex align-content-center">
@@ -383,7 +386,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-A real limitation worth understanding, not hiding
+<span class="screen-reader-only">Important</span>A real limitation worth understanding, not hiding
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -394,8 +397,8 @@ A real limitation worth understanding, not hiding
 </section>
 <section id="implementation" class="level2" data-number="12.5">
 <h2 data-number="12.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">12.5</span> Implementation</h2>
-<div id="2e80dbb0" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_12/torque_trend_check.py</span></span>
+<div id="ba1e830f" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_12/torque_trend_check.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> torque_trend(readings: <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>, <span class="bu">float</span>]]:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Given [(date, torque_value), ...] in chronological order, return</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">    each day's percentage change from the previous day."""</span></span>
@@ -403,10 +406,10 @@ A real limitation worth understanding, not hiding
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (prev_date, prev_val), (date, val) <span class="kw">in</span> <span class="bu">zip</span>(readings, readings[<span class="dv">1</span>:]):</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        pct_change <span class="op">=</span> (val <span class="op">-</span> prev_val) <span class="op">/</span> prev_val <span class="cf">if</span> prev_val <span class="cf">else</span> <span class="fl">0.0</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        trend.append((date, val, pct_change))</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> trend</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> trend</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="c55f1c0c" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>readings <span class="op">=</span> [</span>
+<div id="692a10a6" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>readings <span class="op">=</span> [</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-24"</span>, <span class="dv">4400</span>),</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-25"</span>, <span class="dv">4200</span>),</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-26"</span>, <span class="dv">5615</span>),</span>
@@ -414,7 +417,7 @@ A real limitation worth understanding, not hiding
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> date, val, pct <span class="kw">in</span> torque_trend(readings):</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>date<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>val<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>pct<span class="sc">:+.1%}</span><span class="ss">)"</span>)</span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2020-11-25: 4200 (-4.5%)</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2020-11-26: 5615 (+33.7%)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 2020-11-26: 5615 (+33.7%)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="practical-exercise" class="level2" data-number="12.6">
@@ -528,13 +531,14 @@ A real limitation worth understanding, not hiding
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -944,7 +948,7 @@ A real limitation worth understanding, not hiding
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Sequence Detection: Building Toward Cross-Well Intelligence {#sec-chapter-12}</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Sequence Detection: Building Toward Cross-Well Intelligence {#sec-chapter-12}</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1133,7 +1137,7 @@ A real limitation worth understanding, not hiding
 <span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>set up the full companion pipeline and point it at your own DDR archive,</span>
 <span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>whether that's more Utah FORGE data as it becomes available, or a</span>
 <span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>different well entirely.</span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

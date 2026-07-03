@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>References – Building Industrial RAG Systems from Daily Drilling Reports</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -91,10 +94,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-59898bd1c6b9d2bb783127feaa000c76.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-452cbf14bb15c015b54b218970dfdb00.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b7de04e6702a1605c8643bead4b18795.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -335,21 +338,18 @@ div.csl-indent {
 </header>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-ji2023hallucination" class="csl-entry" role="listitem">
-Ji, Ziwei, Nayeon Lee, Rita Frieske, Tiezheng Yu, Dan Su, Yan Xu, Etsuko
-Ishii, Ye Jin Bang, Andrea Madotto, and Pascale Fung. 2023.
-<span>“Survey of Hallucination in Natural Language Generation.”</span>
-<em>ACM Computing Surveys</em>.
+Ji, Ziwei, Nayeon Lee, Rita Frieske, et al. 2023. <span>“Survey of
+Hallucination in Natural Language Generation.”</span> In <em>ACM
+Computing Surveys</em>, No. 12, vol. 55.
 </div>
 <div id="ref-johnson2019faiss" class="csl-entry" role="listitem">
-Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2019.
-<span>“Billion-Scale Similarity Search with <span>GPUs</span>.”</span>
-<a href="https://arxiv.org/abs/1702.08734">https://arxiv.org/abs/1702.08734</a>.
+Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2019. <em>Billion-Scale
+Similarity Search with <span>GPUs</span></em>. <a href="https://arxiv.org/abs/1702.08734">https://arxiv.org/abs/1702.08734</a>.
 </div>
 <div id="ref-lewis2020rag" class="csl-entry" role="listitem">
-Lewis, Patrick, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir
-Karpukhin, Naman Goyal, Heinrich Küttler, et al. 2020.
+Lewis, Patrick, Ethan Perez, Aleksandra Piktus, et al. 2020.
 <span>“Retrieval-Augmented Generation for Knowledge-Intensive
 <span>NLP</span> Tasks.”</span> <em>Advances in Neural Information
 Processing Systems</em> 33: 9459–74.
@@ -366,8 +366,8 @@ Conference on Empirical Methods in Natural Language Processing</em>.
 </div>
 <div id="ref-robertson2009bm25" class="csl-entry" role="listitem">
 Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic
-Relevance Framework: <span>BM25</span> and Beyond.”</span> In
-<em>Foundations and Trends in Information Retrieval</em>, 3:333–89. 4.
+Relevance Framework: <span>BM25</span> and Beyond.”</span>
+<em>Foundations and Trends in Information Retrieval</em> 3: 333–89.
 </div>
 <div id="ref-spe_drilling_reports" class="csl-entry" role="listitem">
 Society of Petroleum Engineers. 2022. <span>“Digitalisation of Daily
@@ -432,13 +432,14 @@ Transformation Series</em>.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -845,10 +846,10 @@ Transformation Series</em>.
   <div class="nav-page nav-page-next">
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># References {.unnumbered}</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># References {.unnumbered}</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>::: {#refs}</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

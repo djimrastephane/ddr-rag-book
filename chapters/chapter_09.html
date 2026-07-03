@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.33">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>9&nbsp; Hybrid Retrieval and Reranking – Building Industrial RAG Systems from Daily Drilling Reports</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -59,7 +62,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -93,10 +95,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-59898bd1c6b9d2bb783127feaa000c76.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-452cbf14bb15c015b54b218970dfdb00.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b7de04e6702a1605c8643bead4b18795.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -381,11 +383,11 @@ div.csl-indent {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Detail 1: the IDF formula’s shape isn’t arbitrary
+<span class="screen-reader-only">Tip</span>Detail 1: the IDF formula’s shape isn’t arbitrary
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.idf[term] <span class="op">=</span> math.log(<span class="fl">1.0</span> <span class="op">+</span> ((<span class="va">self</span>.n_docs <span class="op">-</span> df <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> (df <span class="op">+</span> <span class="fl">0.5</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.idf[term] <span class="op">=</span> math.log(<span class="fl">1.0</span> <span class="op">+</span> ((<span class="va">self</span>.n_docs <span class="op">-</span> df <span class="op">+</span> <span class="fl">0.5</span>) <span class="op">/</span> (df <span class="op">+</span> <span class="fl">0.5</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Compare this to the classic Robertson-Sparse-Selection IDF, <code>log((N - df + 0.5) / (df + 0.5))</code> <em>without</em> the <code>1.0 +</code>. For a term that appears in almost every document (<code>df</code> close to <code>n_docs</code>), the classic formula’s ratio drops below 1 and the log goes <strong>negative</strong> — which then corrupts any downstream sum that assumes term contributions are non-negative. Wrapping the ratio as <code>1.0 + ratio</code> before taking the log guarantees the result stays non-negative for every possible <code>df</code>, because <code>1.0 + ratio</code> can never fall below 1. This single design choice removes an entire category of edge case, permanently, for a cost of one added constant.</p>
 </div>
 </div>
@@ -395,12 +397,12 @@ Detail 1: the IDF formula’s shape isn’t arbitrary
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Detail 2: normalization has to define its own tie-break
+<span class="screen-reader-only">Tip</span>Detail 2: normalization has to define its own tie-break
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> hi <span class="op">&lt;=</span> lo:</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {i: <span class="fl">0.0</span> <span class="cf">for</span> i <span class="kw">in</span> candidates}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> hi <span class="op">&lt;=</span> lo:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {i: <span class="fl">0.0</span> <span class="cf">for</span> i <span class="kw">in</span> candidates}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Min-max normalization rescales scores into <code>[0, 1]</code> by subtracting the minimum and dividing by the range. If every candidate in a batch scores identically, <code>hi - lo</code> is zero — a division that, left unguarded, would raise or produce <code>NaN</code>. The guard above catches that case explicitly and returns a neutral value (0.0 for everyone) instead, so a tie in <em>this</em> signal doesn’t crash the pipeline or corrupt the fused score — the other signal in the fusion is still free to discriminate between the tied candidates.</p>
 </div>
 </div>
@@ -408,8 +410,8 @@ Detail 2: normalization has to define its own tie-break
 </section>
 <section id="implementation" class="level2" data-number="9.5">
 <h2 data-number="9.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">9.5</span> Implementation</h2>
-<div id="c8b43624" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/hybrid_search.py</span></span>
+<div id="f81b389e" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/hybrid_search.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> reciprocal_rank_fusion(ranked_lists: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">str</span>]], k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">20</span>,</span>
@@ -419,7 +421,7 @@ Detail 2: normalization has to define its own tie-break
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> ranked_list, weight <span class="kw">in</span> <span class="bu">zip</span>(ranked_lists, weights):</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> rank, doc_id <span class="kw">in</span> <span class="bu">enumerate</span>(ranked_list, start<span class="op">=</span><span class="dv">1</span>):</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>            scores[doc_id] <span class="op">+=</span> weight <span class="op">*</span> (<span class="fl">1.0</span> <span class="op">/</span> (k <span class="op">+</span> rank))</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>(scores.items(), key<span class="op">=</span><span class="kw">lambda</span> item: item[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>(scores.items(), key<span class="op">=</span><span class="kw">lambda</span> item: item[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="practical-exercise" class="level2" data-number="9.6">
@@ -480,9 +482,9 @@ Detail 2: normalization has to define its own tie-break
 
 <!-- -->
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-robertson2009bm25" class="csl-entry" role="listitem">
-Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevance Framework: <span>BM25</span> and Beyond.”</span> In <em>Foundations and Trends in Information Retrieval</em>, 3:333–89. 4.
+Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevance Framework: <span>BM25</span> and Beyond.”</span> <em>Foundations and Trends in Information Retrieval</em> 3: 333–89.
 </div>
 </div>
 </section>
@@ -539,13 +541,14 @@ Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevanc
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -955,7 +958,7 @@ Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevanc
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Hybrid Retrieval and Reranking {#sec-chapter-09}</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Hybrid Retrieval and Reranking {#sec-chapter-09}</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1120,7 +1123,7 @@ Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevanc
 <span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a>tackles the harder problem: making sure every generated claim traces back</span>
 <span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a>to real evidence, and that the system tells you honestly when it doesn't</span>
 <span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a>know.</span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
