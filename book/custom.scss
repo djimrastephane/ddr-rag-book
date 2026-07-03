@@ -1,12 +1,5 @@
-/*-- scss:defaults --*/
-$body-color: #222;
-$link-color: #0b5394;
-$code-block-bg: #f6f8fa;
-
 /*-- scss:rules --*/
-.callout-tip {
-  border-left-color: #0b5394;
-}
+// Shared across light and dark themes.
 
 pre.sourceCode {
   font-size: 0.9em;

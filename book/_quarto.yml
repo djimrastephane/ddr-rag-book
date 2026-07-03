@@ -53,8 +53,8 @@ bibliography: references.bib
 format:
   html:
     theme:
-      - cosmo
-      - custom.scss
+      light: [cosmo, custom.scss, custom-light.scss]
+      dark: [darkly, custom.scss, custom-dark.scss]
     code-fold: false
     code-tools: true
     code-copy: true
