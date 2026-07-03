@@ -1,0 +1,1674 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Building Industrial RAG Systems from Daily Drilling Reports",
+    "section": "",
+    "text": "Welcome\nEvery rig produces a paper trail. Every well produces a story — told in Daily Drilling Reports (DDRs), scattered across shared drives, scanned PDFs, and email attachments, written by dozens of different hands in a shorthand that only the field understands.\nThat story holds answers your team needs today: Have we seen this stuck pipe signature before? What usually precedes a screenout on this formation? Which offset wells lost circulation at this depth?\nSomewhere in your archive, the answer already exists. Finding it is the problem.\nThis book builds, from scratch and in plain Python, a system that can read that archive and answer those questions — with evidence, not guesses. You will not start with theory. You will start with a single PDF and a script that reads it. By the end, you will have an Industrial DDR Intelligence Platform: a retrieval-augmented generation (RAG) system purpose-built for drilling and completions data, that you built chapter by chapter and understand end to end.\nEvery example in this book uses real Daily Drilling Reports — not invented ones. The archive is from Utah FORGE, a Department of Energy-funded geothermal research well (FORGE 16A(78)-32) whose reports are publicly available. No anonymisation, no synthetic stand-ins: you’ll read genuine rig-floor language, including a real stuck-pipe event and a real fishing operation, from page one.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#who-this-book-is-for",
+    "href": "index.html#who-this-book-is-for",
+    "title": "Building Industrial RAG Systems from Daily Drilling Reports",
+    "section": "Who this book is for",
+    "text": "Who this book is for\nYou should read this book if you are a drilling engineer, completions engineer, intervention engineer, production engineer, petroleum data scientist, or part of a digital transformation team in energy, and you:\n\nHave basic Python knowledge (variables, functions, loops, lists/dicts).\nHave never built a RAG system.\nHave never used a vector database or worked with embeddings.\nWant working tools, not a machine learning course.\n\nNo prior AI/ML background is assumed. Every concept is introduced exactly when you need it to solve the problem in front of you — not before.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#what-you-will-build",
+    "href": "index.html#what-you-will-build",
+    "title": "Building Industrial RAG Systems from Daily Drilling Reports",
+    "section": "What you will build",
+    "text": "What you will build\n\n\n\n\n\n\n\nChapter\nYou will be able to…\n\n\n\n\n1\nExtract text from a DDR PDF\n\n\n2\nExpand oilfield abbreviations (BHA, WOB, MWD…) automatically\n\n\n3\nKeyword-search your entire DDR archive\n\n\n4\nSearch DDRs by meaning, not just exact words\n\n\n5\nAsk a question and get a cited, evidence-backed answer\n\n\n6–12\nScale the system to scanned reports, large archives, hybrid retrieval, reranking, and full traceability",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#how-this-book-works",
+    "href": "index.html#how-this-book-works",
+    "title": "Building Industrial RAG Systems from Daily Drilling Reports",
+    "section": "How this book works",
+    "text": "How this book works\nEvery chapter solves one operational problem and ends with something you can run. There is no chapter you read passively — you will type code, run it against real DDR text, and see it work. Theory appears only when it explains why the code in front of you behaves the way it does.\nWe follow one rule throughout: engineering usefulness over AI novelty. Retrieval matters more than generation. Traceability matters more than eloquent prose. Engineers trust evidence, not predictions — so this system is built to show its work, every time.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#companion-repository",
+    "href": "index.html#companion-repository",
+    "title": "Building Industrial RAG Systems from Daily Drilling Reports",
+    "section": "Companion repository",
+    "text": "Companion repository\nAll code, sample datasets, and notebooks referenced in this book live in the companion repository. See Appendix A for setup instructions. Every chapter lists exactly which files you need under Repository files.\nLet’s read our first DDR.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "preface.html",
+    "href": "preface.html",
+    "title": "Preface",
+    "section": "",
+    "text": "Why this book exists\nI wrote this book because I kept seeing the same gap on drilling and completions teams: the field generates enormous amounts of written operational knowledge — Daily Drilling Reports, end-of-well reports, morning reports, NPT logs — and almost none of it is usable by the next engineer who needs it (Society of Petroleum Engineers 2022). It sits in PDF form, scanned or digital, named inconsistently, scattered across SharePoint folders and email threads. When a rig hits a screenout at 9,200 ft, the fastest way to find out if this has happened before is usually to ask the oldest person in the room.\nLarge language models and retrieval-augmented generation (RAG) are genuinely useful here — not because they are new or exciting, but because they solve a real, boring, expensive problem: turning an unstructured archive into something you can query. This book teaches you to build that system yourself, understand every part of it, and trust its output, rather than adopting a black-box product you cannot inspect.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "preface.html#why-industrial",
+    "href": "preface.html#why-industrial",
+    "title": "Preface",
+    "section": "Why “industrial”",
+    "text": "Why “industrial”\nA demo that answers one question about one PDF is easy to build and easy to find online. An industrial system is different. It has to:\n\nHandle scanned reports as well as digital ones.\nScale to thousands of DDRs across dozens of wells.\nNever silently invent an answer — every claim must trace back to a specific report and page.\nBe auditable by someone who was not in the room when it was built.\n\nEvery chapter in Part II exists because a toy RAG system fails at one of these requirements. We fix them one at a time, in the order you would actually hit them in the field.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "preface.html#how-to-read-this-book",
+    "href": "preface.html#how-to-read-this-book",
+    "title": "Preface",
+    "section": "How to read this book",
+    "text": "How to read this book\nThis book follows the practical-first, project-based teaching style of Python Crash Course (Matthes 2023): small wins early, theory only when the code in front of you needs it, and a working artifact at the end of every chapter. Read it in order the first time. Each chapter assumes the code from the previous one exists and works — this is a build, not a reference manual. After your first pass, use it as a reference: jump to the chapter that matches the problem you currently have (Chapter 6 if your PDFs are scanned, Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers aren’t trustworthy yet).\nType the code yourself. Do not copy-paste from the companion repository until you have typed it once and watched it run. This is slower and it is worth it.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "preface.html#a-note-on-data",
+    "href": "preface.html#a-note-on-data",
+    "title": "Preface",
+    "section": "A note on data",
+    "text": "A note on data\nMost Daily Drilling Reports are operationally sensitive and confidential — which is exactly why this book doesn’t use one from a commercial operator. Every example here comes from Utah FORGE, a Department of Energy-funded enhanced geothermal system research well (FORGE 16A(78)-32) whose reports are public: real well name, real dates, real personnel, real events, exactly as filed. No anonymisation was applied, because none was needed — this is what “publicly available” means in practice, and it lets this book show you genuine field language instead of an approximation of it.\nThat said, the technique generalises directly to a confidential archive: everything from Chapter 6 onward — OCR gating, traceability, corpus-completeness checks — exists precisely because production archives are messier and more sensitive than this one. If you point this book’s code at your own organisation’s DDRs, do not commit them to a public repository, and see Appendix A for a data-handling checklist.\n\n\n\n\n\n\nMatthes, Eric. 2023. Python Crash Course: A Hands-on, Project-Based Introduction to Programming. 3rd ed. No Starch Press.\n\n\nSociety of Petroleum Engineers. 2022. “Digitalisation of Daily Drilling Reports: Challenges and Opportunities.” SPE Digital Transformation Series.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "acknowledgements.html",
+    "href": "acknowledgements.html",
+    "title": "Acknowledgements",
+    "section": "",
+    "text": "This book exists because of the drilling and completions engineers who patiently explained, over many years and many wells, why the report says “POOH to change BHA due to erratic torque” and what that sentence actually means for the next twelve hours of operations. Domain knowledge like that does not live in a textbook — it lives in people, and in the daily reports they write under time pressure at the end of a twelve-hour tour.\nThanks are due to the open-source communities behind the tools this book relies on throughout: Python, Quarto, Jupyter, pandas, and the broader Python data and NLP ecosystem. None of the engineering in this book would be reproducible without them.\nFinally, thanks to every reader working through this material on a real archive of real reports. If you find an error, an oilfield abbreviation that’s wrong for your basin, or a chapter that assumes something it shouldn’t, please open an issue in the companion repository — corrections from practitioners are what keep a book like this honest.",
+    "crumbs": [
+      "Acknowledgements"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html",
+    "href": "chapters/chapter_01.html",
+    "title": "1  Reading Your First DDR",
+    "section": "",
+    "text": "1.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#learning-objectives",
+    "href": "chapters/chapter_01.html#learning-objectives",
+    "title": "1  Reading Your First DDR",
+    "section": "",
+    "text": "Explain why DDR PDFs are hard for software to read, and the difference between a digital-native PDF and a scanned one.\nExtract raw text from a digital-native PDF using Python.\nWrite a script that processes a single DDR, or an entire folder of them, from the command line.\nSave extracted text so it’s ready for the cleaning work in Chapter 2.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#operational-problem",
+    "href": "chapters/chapter_01.html#operational-problem",
+    "title": "1  Reading Your First DDR",
+    "section": "1.2 Operational problem",
+    "text": "1.2 Operational problem\nThis book uses a real, publicly available archive: the Daily Drilling Reports from Utah FORGE — a Department of Energy-funded research project at the University of Utah, drilling and testing an enhanced geothermal system (EGS) well, FORGE 16A(78)-32, in Beaver County, Utah. Because it’s a public research well rather than a commercial operator’s confidential asset, its DDRs are openly available — which means every example in this book is real, traceable text, not an invented stand-in.\nPicture the same folder problem any operations team faces: 76 DDR PDFs, one per day of drilling and completion work, named inconsistently by whatever software produced them. Somewhere in that folder is the report that matters most this week — the day the drill string got stuck, or the day a fishing run recovered lost bit pieces. Opening 76 PDFs one at a time to find the right paragraph is exactly the kind of task a short Python script should do for you.\nThat’s the whole job of this chapter: given one PDF, get its text into a Python string you can work with. Nothing clever yet — no search, no abbreviation handling, no AI. Just a reliable way to turn a PDF into text. Everything in this book is built on top of getting this first step right.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#example-ddr-extract",
+    "href": "chapters/chapter_01.html#example-ddr-extract",
+    "title": "1  Reading Your First DDR",
+    "section": "1.3 Example DDR extract",
+    "text": "1.3 Example DDR extract\n\n\n\n\n\n\nReal DDR excerpt — report #38, FORGE 16A(78)-32, 2020-11-26\n\n\n\nRPT DATE:11/26/2020\nDAILY DRILLING REPORT RPT NUM.:38\nWELL NAME:FORGE 16A [78]-32 JOB:Drilling 65° Tangent\nPRESENT OPERATIONS:PIPE FREE, TRIP OUT OF HOLE FOR BHA INSPECTION\n\nTIME BREAKDOWN\n23:30 04:00 4.5 Drill From 6,360' to 6,507', (147') Total, 32.6' feet per hour.\nWOB 20 TO 35k, Rotary 50, Torque 6,500, SPP 3200-3400 GPM 560, DIFF 200-300psi\nDuring the slide lost tool face and became assembly became stuck\n04:00 06:00 2.0 Work pipe, circulate lube sweep, work tool back in position\nPipe free\n\n\nThis is one of ten real reports curated for Part I, spanning the well’s actual timeline from rig-up in October 2020 through this stuck-pipe day in November and a fishing operation in December. Every excerpt in Part I is genuine, unedited report text — no anonymisation was needed, because this data is already public.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#theory",
+    "href": "chapters/chapter_01.html#theory",
+    "title": "1  Reading Your First DDR",
+    "section": "1.4 Theory",
+    "text": "1.4 Theory\nA PDF is not a text file wearing a costume. It’s a page-description format: instructions for drawing characters at specific coordinates, not a stream of text with a beginning and an end. Two DDRs that look identical on screen can be built completely differently under the hood:\n\nDigital-native PDFs were generated directly from software (in this case, WellEz, the drilling data system that produced every report in this archive). The text was placed on the page as actual character data, so a library can recover it.\nScanned PDFs are photographs of paper reports. There is no character data at all — just a picture of a page. Extracting text from these requires optical character recognition (OCR), which we cover in Chapter 6.\n\nThe Utah FORGE archive is entirely digital-native — every report was produced by the same software, so extraction is reliable throughout Part I. This won’t always be true of a real archive (Chapter 6 deals with the scanned-report case), but it’s the right place to start.\nWe’ll use pdfplumber, a Python library that reads a PDF’s internal structure and hands back the text (and, later in the book, tables and layout) on each page. There are other libraries that do this — PyPDF2, pymupdf — and they’re worth knowing about, but pdfplumber is a good default: actively maintained, and its text extraction is reliable on the kind of structured reports we’re working with.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#implementation",
+    "href": "chapters/chapter_01.html#implementation",
+    "title": "1  Reading Your First DDR",
+    "section": "1.5 Implementation",
+    "text": "1.5 Implementation\n\n1.5.1 Step 1: get the sample archive\nThe ten curated reports used throughout Part I are already in datasets/sample_ddrs/ in this repository — real PDFs, committed directly, since Utah FORGE data is public. You don’t need to generate or download anything to start.\n\nimport pathlib\nsorted(pathlib.Path(\"datasets/sample_ddrs\").glob(\"*.pdf\"))\n\nIf you want to build this curated subset yourself from a full local copy of the public archive (or extend it with more reports), see code/chapter_01/build_sample_archive.py — it’s documented in Appendix A.\n\n\n1.5.2 Step 2: extract text from one PDF\nHere is the core of code/chapter_01/read_ddr.py, built up piece by piece.\nFirst, open a PDF and read one page:\n\nimport pdfplumber\n\nwith pdfplumber.open(\"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf\") as pdf:\n    first_page = pdf.pages[0]\n    print(first_page.extract_text())\n\nRun that and you’ll see the report’s text printed straight to your terminal — the full header block (well name, spud date, days from spud), casing and mud tables, the BHA component list, survey data, and the time breakdown — all as a plain Python string. Real DDRs pack in far more than a simple narrative: this one report alone has seven distinct data sections.\nEvery DDR in this archive is a single page, but that won’t be true of every report you’ll ever encounter. Loop over every page and keep track of which page each chunk of text came from — you’ll need that later for citations:\n\nfrom pathlib import Path\nimport pdfplumber\n\ndef extract_text(pdf_path: Path) -&gt; str:\n    pages_text = []\n    with pdfplumber.open(pdf_path) as pdf:\n        for page_number, page in enumerate(pdf.pages, start=1):\n            text = page.extract_text() or \"\"\n            pages_text.append(f\"--- Page {page_number} ---\\n{text}\")\n    return \"\\n\\n\".join(pages_text)\n\nNote the or \"\". If a page has no extractable text — a scanned page mixed into an otherwise digital report, for example — extract_text() returns None, and every downstream step in this book expects a string, not None. This one line is a small example of a pattern you’ll see throughout the book: assume real data is messier than the happy path.\n\n\n1.5.3 Step 3: make it a script you can run from the command line\nThe full script, code/chapter_01/read_ddr.py, wraps this in a command-line interface so you can point it at one file or a whole folder:\n# One file, printed to the terminal\npython code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf\n\n# A whole folder, saved as .txt files\npython code/chapter_01/read_ddr.py datasets/sample_ddrs/ --batch --out datasets/ddr_text\nTry the first command now. You should see the full report text, including the line: During the slide lost tool face and became assembly became stuck — real language from a real rig report, not a paraphrase.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#practical-exercise",
+    "href": "chapters/chapter_01.html#practical-exercise",
+    "title": "1  Reading Your First DDR",
+    "section": "1.6 Practical exercise",
+    "text": "1.6 Practical exercise\nTry it yourself: Run read_ddr.py in batch mode against datasets/sample_ddrs/, saving the output to datasets/ddr_text/. Then open FORGE-16A-78-32_Drilling_050_2020-12-08.txt and find the line describing what the crew milled up that day.\nYou’ll know it worked when: you have ten .txt files in datasets/ddr_text/, one per PDF, and you can find the word “Fishing” in report 050’s text without opening the original PDF.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#challenge-exercise",
+    "href": "chapters/chapter_01.html#challenge-exercise",
+    "title": "1  Reading Your First DDR",
+    "section": "1.7 Challenge exercise",
+    "text": "1.7 Challenge exercise\nChallenge: Extend the script to also print, for each PDF, the total number of pages and the total character count extracted. Then compare report #3 (October 22, before the well was spudded — PRESENT OPERATIONS: RIGGING UP...) against report #38 (the stuck-pipe day): how much richer is the later report’s text, and why might that be? (Hint: check the SPUD DATE and DFS/DOL fields in each report’s header.) A reference solution is in code/chapter_01/challenge/.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#key-takeaways",
+    "href": "chapters/chapter_01.html#key-takeaways",
+    "title": "1  Reading Your First DDR",
+    "section": "1.8 Key takeaways",
+    "text": "1.8 Key takeaways\n\nA PDF’s internal structure, not its on-screen appearance, determines whether text can be extracted directly. Digital-native PDFs can; scanned PDFs need OCR (Chapter 6).\npdfplumber turns a PDF into plain Python strings, one page at a time.\nHandle None from extract_text() explicitly — real-world DDR archives will contain pages that don’t extract cleanly, and your code should never crash on them.\nA five-line function (extract_text) plus a thin command-line wrapper is already a genuinely useful tool. You don’t need machine learning to save an engineer an hour of searching PDFs by hand — and it works identically whether the PDF is a synthetic example or, as here, a real report from a real well.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#repository-files",
+    "href": "chapters/chapter_01.html#repository-files",
+    "title": "1  Reading Your First DDR",
+    "section": "1.9 Repository files",
+    "text": "1.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_01/read_ddr.py\nExtracts text from one PDF or a folder of PDFs\n\n\ncode/chapter_01/build_sample_archive.py\nReproduces the curated Part I subset from the full public archive\n\n\ndatasets/sample_ddrs/\nTen real, curated Utah FORGE DDR PDFs used throughout Part I\n\n\nnotebooks/chapter_01_explore.ipynb\nInteractive notebook version of this chapter",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_01.html#suggested-next-step",
+    "href": "chapters/chapter_01.html#suggested-next-step",
+    "title": "1  Reading Your First DDR",
+    "section": "1.10 Suggested next step",
+    "text": "1.10 Suggested next step\nThe text you just extracted uses real oilfield shorthand and drilling terminology — BHA, WOB, SPP, PJSM — some spelled out, some abbreviated, exactly as the field actually writes it. Chapter 2 builds an abbreviation expansion engine grounded in what’s actually in this archive, turning this raw text into something both humans and machines can search reliably.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html",
+    "href": "chapters/chapter_02.html",
+    "title": "2  Cleaning Operational Text",
+    "section": "",
+    "text": "2.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#learning-objectives",
+    "href": "chapters/chapter_02.html#learning-objectives",
+    "title": "2  Cleaning Operational Text",
+    "section": "",
+    "text": "Explain why oilfield shorthand breaks naive text search and NLP.\nBuild a dictionary-based abbreviation expander that respects word boundaries so it doesn’t corrupt unrelated text.\nApply the expander across every .txt file produced in Chapter 1.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#operational-problem",
+    "href": "chapters/chapter_02.html#operational-problem",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.2 Operational problem",
+    "text": "2.2 Operational problem\nOpen one of the .txt files you extracted in Chapter 1 and read it as a computer would. Report #38’s time breakdown says: “During the slide lost tool face and became assembly became stuck” — plain enough. But the same report is full of terms a keyword search or language model has no way to interpret: BHA, WOB, MWD, SPP, NMDC, DLS, ECD. A drilling engineer reads these instantly. A keyword search for “bottom hole assembly” finds nothing in a report that only ever writes BHA. Before we can search, summarise, or embed this text well, we need to expand it into language that means the same thing to a human and to a machine.\nInterestingly, this archive’s own software (WellEz) sometimes expands its own abbreviations — every report writes PJSM, pre job safety meeting in full, spelled out inline. But BHA, WOB, MWD, SPP, and a dozen others never get that treatment anywhere in the archive. Real-world consistency is exactly this uneven — which is precisely why an automated expander is worth building rather than relying on reports to document themselves.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#example-ddr-extract",
+    "href": "chapters/chapter_02.html#example-ddr-extract",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.3 Example DDR extract",
+    "text": "2.3 Example DDR extract\n\n\n\n\n\n\nReal excerpt — report #38, showing both patterns\n\n\n\nPJSM, pre job safety meeting.                     &lt;- self-expanded by the source\n...\nPick up Curve assembly 2, BHA 21, Reed Hycalog     &lt;- BHA never expanded\nSKC613M-01C Trip in hole to 5,200'\n...\nWOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded\n3200-3400 GPM 560, DIFF 200-300psi",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#theory",
+    "href": "chapters/chapter_02.html#theory",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.4 Theory",
+    "text": "2.4 Theory\nAn abbreviation expander is just a dictionary lookup — {\"BHA\": \"bottom hole assembly\", \"WOB\": \"weight on bit\", ...} — but two details make or break it:\n\nWord boundaries. str.replace(\"MD\", ...) will happily mangle a word that merely contains “MD” as a substring. Match on whole words using regex \\b...\\b, not raw substring replacement.\nCase. DDRs mix cases inconsistently — this archive’s headers are often all-caps while narrative text is mixed-case — so expansion needs to be case-insensitive without forcing the rest of the sentence to change case.\n\nThis is deliberately not a machine-learning problem. A few dozen well-chosen abbreviations, expanded correctly, solve most of the readability problem — and unlike a model, a dictionary is auditable: you can list every expansion it will ever make.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#implementation",
+    "href": "chapters/chapter_02.html#implementation",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.5 Implementation",
+    "text": "2.5 Implementation\n\n# code/chapter_02/expand_abbreviations.py\nimport re\n\nABBREVIATIONS = {\n    \"BHA\": \"bottom hole assembly\",\n    \"WOB\": \"weight on bit\",\n    \"RPM\": \"revolutions per minute\",\n    \"ROP\": \"rate of penetration\",\n    \"MD\": \"measured depth\",\n    \"TVD\": \"true vertical depth\",\n    \"SPP\": \"stand pipe pressure\",\n    \"GPM\": \"gallons per minute\",\n    \"DLS\": \"dogleg severity\",\n    \"MWD\": \"measurement while drilling\",\n    \"NMDC\": \"non-magnetic drill collar\",\n    \"UBHO\": \"universal bottom hole orientation sub\",\n    \"NPT\": \"non-productive time\",\n    \"ECD\": \"equivalent circulating density\",\n    \"MW\": \"mud weight\",\n    \"DFS\": \"days from spud\",\n    \"DOL\": \"days on location\",\n    \"PDC\": \"polycrystalline diamond compact\",\n}\n\ndef expand_text(text: str, abbreviations: dict[str, str] = ABBREVIATIONS) -&gt; str:\n    for abbr, expansion in abbreviations.items():\n        pattern = r\"\\b\" + re.escape(abbr) + r\"\\b\"\n        text = re.sub(pattern, expansion, text, flags=re.IGNORECASE)\n    return text\n\nRun it against the text files from Chapter 1’s datasets/ddr_text/ folder and save the expanded versions to datasets/ddr_text_expanded/.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#practical-exercise",
+    "href": "chapters/chapter_02.html#practical-exercise",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.6 Practical exercise",
+    "text": "2.6 Practical exercise\nTry it yourself: Run the expander against FORGE-16A-78-32_Drilling_038_2020-11-26.txt.\nYou’ll know it worked when: Pick up Curve assembly 2, BHA 21 becomes Pick up Curve assembly 2, bottom hole assembly 21, and no unrelated word (check the MD/TVD survey table carefully — short abbreviations are the ones most likely to collide with real words) gets corrupted.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#challenge-exercise",
+    "href": "chapters/chapter_02.html#challenge-exercise",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.7 Challenge exercise",
+    "text": "2.7 Challenge exercise\nChallenge: Extend ABBREVIATIONS using Appendix B, and handle the mud-table abbreviations (FV, WL, PV, YP, CL) — notice how short these are, and think carefully about whether blindly expanding a two-letter token like PV is actually safe against this archive’s real text, or whether it needs a narrower match context. A reference solution is in code/chapter_02/challenge/.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#key-takeaways",
+    "href": "chapters/chapter_02.html#key-takeaways",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.8 Key takeaways",
+    "text": "2.8 Key takeaways\n\nWord-boundary regex, not substring replacement, is the difference between a correct expander and a silently broken one.\nReal archives are inconsistent by nature — the same report can spell one abbreviation out in full while never expanding another. Don’t assume the source data will document itself.\nA transparent dictionary beats an opaque model here: every expansion is inspectable and testable.\nCleaning text is not optional groundwork — it’s what makes every later chapter’s search and retrieval actually work.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#repository-files",
+    "href": "chapters/chapter_02.html#repository-files",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.9 Repository files",
+    "text": "2.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_02/expand_abbreviations.py\nWord-boundary abbreviation expander\n\n\ndatasets/ddr_text_expanded/\nExpanded output from Chapter 1’s extracted text\n\n\nnotebooks/chapter_02_explore.ipynb\nInteractive companion notebook",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_02.html#suggested-next-step",
+    "href": "chapters/chapter_02.html#suggested-next-step",
+    "title": "2  Cleaning Operational Text",
+    "section": "2.10 Suggested next step",
+    "text": "2.10 Suggested next step\nWith clean, expanded text in hand, Chapter 3 builds the first tool an engineer would actually reach for: a keyword search engine that answers “which reports mention losses?” in milliseconds.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html",
+    "href": "chapters/chapter_03.html",
+    "title": "3  Searching DDRs",
+    "section": "",
+    "text": "3.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#learning-objectives",
+    "href": "chapters/chapter_03.html#learning-objectives",
+    "title": "3  Searching DDRs",
+    "section": "",
+    "text": "Build an inverted index over a folder of cleaned DDR text.\nAnswer keyword queries like “which reports mention losses?” in milliseconds instead of minutes.\nExplain why exact keyword matching, while fast and simple, will eventually miss things a drilling engineer would consider an obvious hit.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#operational-problem",
+    "href": "chapters/chapter_03.html#operational-problem",
+    "title": "3  Searching DDRs",
+    "section": "3.2 Operational problem",
+    "text": "3.2 Operational problem\nYou now have clean, expanded text for every DDR. The next question is the one an engineer actually asks out loud: “Which reports mention losses?” or “Show me the report where they had to fish for something.” Opening files one by one doesn’t scale past a handful of reports — you need an index.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#example-ddr-extract",
+    "href": "chapters/chapter_03.html#example-ddr-extract",
+    "title": "3  Searching DDRs",
+    "section": "3.3 Example DDR extract",
+    "text": "3.3 Example DDR extract\n\n\n\n\n\n\nReal query and expected hit\n\n\n\nQuery: \"losses\"\nExpected hit: FORGE-16A-78-32_Drilling_019_2020-11-07.txt\n  → \"Mud fluids seepage losses in six hours 9 bbls\"\n\n\nThat’s report #19 — a minor, real seepage-loss event, easy to miss by eye across 76 reports, trivial to find once indexed.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#theory",
+    "href": "chapters/chapter_03.html#theory",
+    "title": "3  Searching DDRs",
+    "section": "3.4 Theory",
+    "text": "3.4 Theory\nAn inverted index flips the natural document → words relationship around: instead of asking “what words are in this document,” it stores, for every word, which documents contain it. Looking up “losses” becomes a single dictionary lookup instead of scanning every file. This is the same core idea behind every search engine, from grep to Google — the difference is scale and ranking sophistication, not the fundamental mechanism.\nTokenization matters here: “losses” and “LOSSES” should be the same token, and punctuation shouldn’t create spurious tokens (6,507' should not prevent 6507 or nearby words from matching cleanly).",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#implementation",
+    "href": "chapters/chapter_03.html#implementation",
+    "title": "3  Searching DDRs",
+    "section": "3.5 Implementation",
+    "text": "3.5 Implementation\n\n# code/chapter_03/keyword_search.py\nimport re\nfrom collections import defaultdict\nfrom pathlib import Path\n\ndef tokenize(text: str) -&gt; list[str]:\n    return re.findall(r\"[a-z0-9]+\", text.lower())\n\ndef build_index(text_dir: Path) -&gt; dict[str, set[str]]:\n    index: dict[str, set[str]] = defaultdict(set)\n    for path in sorted(text_dir.glob(\"*.txt\")):\n        tokens = set(tokenize(path.read_text(encoding=\"utf-8\")))\n        for token in tokens:\n            index[token].add(path.name)\n    return index\n\ndef search(index: dict[str, set[str]], query: str) -&gt; set[str]:\n    query_tokens = tokenize(query)\n    if not query_tokens:\n        return set()\n    results = index.get(query_tokens[0], set()).copy()\n    for token in query_tokens[1:]:\n        results &= index.get(token, set())\n    return results\n\nsearch() here implements an AND query: a document must contain every query token to match — appropriate for a first version, and the challenge exercise asks you to add OR and phrase queries.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#practical-exercise",
+    "href": "chapters/chapter_03.html#practical-exercise",
+    "title": "3  Searching DDRs",
+    "section": "3.6 Practical exercise",
+    "text": "3.6 Practical exercise\nTry it yourself: Build the index over datasets/ddr_text_expanded/ and run search(index, \"fishing\").\nYou’ll know it worked when: the result set contains exactly {\"FORGE-16A-78-32_Drilling_050_2020-12-08.txt\"} — the day the crew milled up lost pieces of bit, right after packers failed to set the day before.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#challenge-exercise",
+    "href": "chapters/chapter_03.html#challenge-exercise",
+    "title": "3  Searching DDRs",
+    "section": "3.7 Challenge exercise",
+    "text": "3.7 Challenge exercise\nChallenge: Add phrase search (query tokens must appear adjacent and in order, not just co-occur anywhere in the document) and an OR operator. Test search(index, \"stuck\") against report #38, then try \"packers OR fishing\" and confirm it returns both report #49 (packers) and #50 (fishing). A reference solution is in code/chapter_03/challenge/.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#key-takeaways",
+    "href": "chapters/chapter_03.html#key-takeaways",
+    "title": "3  Searching DDRs",
+    "section": "3.8 Key takeaways",
+    "text": "3.8 Key takeaways\n\nAn inverted index turns “search every file” into “look up a word,” which is the difference between milliseconds and minutes at scale.\nTokenization choices (case folding, punctuation handling) determine what counts as a match — get this wrong and searches silently fail.\nExact keyword matching is fast, simple, and fundamentally limited: it cannot find report #49 (“packers did not set… pick up Fishing BHA”) when you search “lost circulation,” even though report #19’s “seepage losses” line and report #49’s packer failure are both, in a loose sense, “things going wrong downhole” — a human would connect them faster than exact keywords can.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#repository-files",
+    "href": "chapters/chapter_03.html#repository-files",
+    "title": "3  Searching DDRs",
+    "section": "3.9 Repository files",
+    "text": "3.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_03/keyword_search.py\nInverted index and AND-query search\n\n\nnotebooks/chapter_03_explore.ipynb\nInteractive companion notebook",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_03.html#suggested-next-step",
+    "href": "chapters/chapter_03.html#suggested-next-step",
+    "title": "3  Searching DDRs",
+    "section": "3.10 Suggested next step",
+    "text": "3.10 Suggested next step\nKeyword search is exact and unforgiving — it doesn’t know that “packers did not set” and “fishing operation” are related ideas. Chapter 4 replaces exact matching with semantic search, so retrieval works by meaning, not just spelling.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Searching DDRs</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html",
+    "href": "chapters/chapter_04.html",
+    "title": "4  Semantic Search",
+    "section": "",
+    "text": "4.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#learning-objectives",
+    "href": "chapters/chapter_04.html#learning-objectives",
+    "title": "4  Semantic Search",
+    "section": "",
+    "text": "Explain, without heavy math, what a text embedding is and why nearby vectors mean similar meaning.\nGenerate embeddings for a folder of DDR text using sentence-transformers.\nRetrieve the most semantically similar chunks to a query using cosine similarity, without any exact keyword overlap required.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#operational-problem",
+    "href": "chapters/chapter_04.html#operational-problem",
+    "title": "4  Semantic Search",
+    "section": "4.2 Operational problem",
+    "text": "4.2 Operational problem\nAn engineer searches “torque problems” and expects to find report #39, which says “Due to high torque decision to pull out of hole” — even though the word “problems” never appears there. Chapter 3’s keyword search can’t do this; it needs the exact token “problems” to appear somewhere, and it has no notion that “high torque… decision to pull out” describes a problem at all. Semantic search retrieves by meaning, not spelling.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#example-ddr-extract",
+    "href": "chapters/chapter_04.html#example-ddr-extract",
+    "title": "4  Semantic Search",
+    "section": "4.3 Example DDR extract",
+    "text": "4.3 Example DDR extract\n\n\n\n\n\n\nQuery that keyword search misses\n\n\n\nQuery: \"torque problems\"\nKeyword search (Chapter 3): 0 results (no exact token overlap)\nSemantic search (this chapter): report #39 ranks highest —\n  \"Work tight hole at 6,526'... Due to high torque decision to pull\n  out of hole\" — despite sharing no vocabulary with the query.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#theory",
+    "href": "chapters/chapter_04.html#theory",
+    "title": "4  Semantic Search",
+    "section": "4.4 Theory",
+    "text": "4.4 Theory\nAn embedding model converts a piece of text into a fixed-length vector of numbers — typically a few hundred dimensions — such that texts with similar meaning end up as vectors that are close together in that space. You don’t need to understand the neural network that produces this vector; you need to understand what it gives you: a numeric representation of meaning you can compare with simple arithmetic.\nCosine similarity measures the angle between two vectors — 1.0 for identical direction, 0 for unrelated, negative for opposite. It’s the standard way to compare embeddings because it ignores vector length and focuses purely on direction, which is what carries the meaning here.\nWe use sentence-transformers (Reimers and Gurevych 2019) with a small, fast model (all-MiniLM-L6-v2) — good enough to prove the concept and small enough to run on a laptop CPU. Chapter 8 replaces the brute-force search here with a proper vector database once the corpus grows past what fits comfortably in memory.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#implementation",
+    "href": "chapters/chapter_04.html#implementation",
+    "title": "4  Semantic Search",
+    "section": "4.5 Implementation",
+    "text": "4.5 Implementation\n\n# code/chapter_04/semantic_search.py\nfrom pathlib import Path\n\nimport numpy as np\nfrom sentence_transformers import SentenceTransformer\n\nMODEL_NAME = \"all-MiniLM-L6-v2\"\n\ndef load_chunks(text_dir: Path) -&gt; tuple[list[str], list[str]]:\n    filenames, texts = [], []\n    for path in sorted(text_dir.glob(\"*.txt\")):\n        filenames.append(path.name)\n        texts.append(path.read_text(encoding=\"utf-8\"))\n    return filenames, texts\n\ndef embed_texts(model: SentenceTransformer, texts: list[str]) -&gt; np.ndarray:\n    embeddings = model.encode(texts, normalize_embeddings=True)\n    return np.asarray(embeddings)\n\ndef search(model: SentenceTransformer, query: str, filenames: list[str],\n           embeddings: np.ndarray, top_k: int = 3) -&gt; list[tuple[str, float]]:\n    query_vec = model.encode([query], normalize_embeddings=True)[0]\n    scores = embeddings @ query_vec  # cosine similarity, since vectors are normalized\n    top_indices = np.argsort(-scores)[:top_k]\n    return [(filenames[i], float(scores[i])) for i in top_indices]\n\nBecause embeddings are normalized, the dot product embeddings @ query_vec is cosine similarity — no separate normalization step needed at query time.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#practical-exercise",
+    "href": "chapters/chapter_04.html#practical-exercise",
+    "title": "4  Semantic Search",
+    "section": "4.6 Practical exercise",
+    "text": "4.6 Practical exercise\nTry it yourself: Embed all ten sample DDRs and run search(model, \"torque problems\", filenames, embeddings).\nYou’ll know it worked when: FORGE-16A-78-32_Drilling_039_2020-11-27.txt ranks in the top results, despite no keyword overlap with “torque problems.”",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#challenge-exercise",
+    "href": "chapters/chapter_04.html#challenge-exercise",
+    "title": "4  Semantic Search",
+    "section": "4.7 Challenge exercise",
+    "text": "4.7 Challenge exercise\nChallenge: Chunk each report into individual TIME BREAKDOWN line items (rather than embedding the whole report as one vector) and re-run the search. Compare which granularity gives more precise, directly quotable results — a whole-report embedding blends the packer failure, the fishing operation, and the drilling narrative in report #49 together; does line-level chunking separate them more usefully? A reference solution is in code/chapter_04/challenge/.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#key-takeaways",
+    "href": "chapters/chapter_04.html#key-takeaways",
+    "title": "4  Semantic Search",
+    "section": "4.8 Key takeaways",
+    "text": "4.8 Key takeaways\n\nEmbeddings represent meaning as geometry: similar meaning, nearby vectors.\nCosine similarity is the standard comparison because it isolates direction (meaning) from magnitude.\nSemantic search finds relevant text that shares no vocabulary with the query — the exact failure mode of Chapter 3’s keyword search.\nBrute-force cosine search (a matrix multiply) is entirely adequate at ten documents. It stops being adequate well before you reach the full 76-report archive’s scale — that’s Chapter 8’s problem to solve.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#repository-files",
+    "href": "chapters/chapter_04.html#repository-files",
+    "title": "4  Semantic Search",
+    "section": "4.9 Repository files",
+    "text": "4.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_04/semantic_search.py\nEmbedding generation and brute-force cosine search\n\n\nnotebooks/chapter_04_explore.ipynb\nInteractive companion notebook",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_04.html#suggested-next-step",
+    "href": "chapters/chapter_04.html#suggested-next-step",
+    "title": "4  Semantic Search",
+    "section": "4.10 Suggested next step",
+    "text": "4.10 Suggested next step\nYou can now retrieve relevant passages by meaning. Chapter 5 turns retrieval into an answer: given a question, retrieve the right evidence, and generate a response that cites exactly where each claim came from.\n\n\n\n\n\n\nReimers, Nils, and Iryna Gurevych. 2019. “Sentence-BERT: Sentence Embeddings Using Siamese BERT-Networks.” Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Semantic Search</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html",
+    "href": "chapters/chapter_05.html",
+    "title": "5  First RAG System",
+    "section": "",
+    "text": "5.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#learning-objectives",
+    "href": "chapters/chapter_05.html#learning-objectives",
+    "title": "5  First RAG System",
+    "section": "",
+    "text": "Explain retrieval-augmented generation (RAG) as two separate, inspectable steps: retrieve, then generate.\nAssemble retrieved chunks into a prompt that forces a language model to answer only from the evidence it’s given.\nProduce an answer with an explicit, per-claim evidence list — report number and page — rather than an unsupported paragraph.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#operational-problem",
+    "href": "chapters/chapter_05.html#operational-problem",
+    "title": "5  First RAG System",
+    "section": "5.2 Operational problem",
+    "text": "5.2 Operational problem\nRetrieval (Chapter 4) gets you the right passages. What an engineer actually wants is an answer: “What led to the fishing operation on report #50?” — not two ranked text chunks they have to read and synthesise themselves. But a generated answer that isn’t traceable back to specific reports is worse than no answer at all in an engineering context, because it invites misplaced trust. This chapter builds the smallest system that does both: synthesise an answer, and show exactly where every part of it came from.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#example-ddr-extract",
+    "href": "chapters/chapter_05.html#example-ddr-extract",
+    "title": "5  First RAG System",
+    "section": "5.3 Example DDR extract",
+    "text": "5.3 Example DDR extract\n\n\n\n\n\n\nTarget interaction, grounded in two real, adjacent reports\n\n\n\nQuestion: What led to the fishing operation on report #50?\n\nAnswer: On report #49 (2020-12-07), the crew attempted multiple times\nto set packers on BHA #32, but pressure readings showed the ball did\nnot seat and the packers failed to set. They tripped out with the\npacker assembly and picked up a fishing BHA (#33) that same day. On\nreport #50 (2020-12-08), that fishing run milled up lost pieces of bit.\n\nEvidence:\n  FORGE-16A-78-32_Drilling_049_2020-12-07.pdf\n  FORGE-16A-78-32_Drilling_050_2020-12-08.pdf\n\n\nBoth claims here are directly quoted from real report text — nothing in this answer was inferred beyond what the two reports state.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#theory",
+    "href": "chapters/chapter_05.html#theory",
+    "title": "5  First RAG System",
+    "section": "5.4 Theory",
+    "text": "5.4 Theory\nRAG (retrieval-augmented generation) (Lewis et al. 2020) is exactly the two chapters you just built, chained together: retrieve relevant evidence (Chapter 4), then hand that evidence to a language model and ask it to answer using only that evidence. The model is not answering from what it memorised during training — it’s answering from the specific passages you retrieved, which is what makes citation possible at all.\nThe critical design decision is the prompt: instruct the model explicitly to answer only from the provided context, and to cite which source each part of the answer came from. This doesn’t make hallucination impossible — Chapter 10 covers stronger mitigations — but it is the foundation everything else builds on.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#implementation",
+    "href": "chapters/chapter_05.html#implementation",
+    "title": "5  First RAG System",
+    "section": "5.5 Implementation",
+    "text": "5.5 Implementation\n\n# code/chapter_05/first_rag.py\nfrom pathlib import Path\n\nfrom semantic_search import embed_texts, load_chunks, search  # from Chapter 4\n\nPROMPT_TEMPLATE = \"\"\"Answer the question using ONLY the evidence below.\nIf the evidence doesn't contain the answer, say so — do not guess.\nCite which report each part of your answer comes from.\n\nEvidence:\n{evidence}\n\nQuestion: {question}\nAnswer:\"\"\"\n\ndef build_prompt(question: str, retrieved: list[tuple[str, float]],\n                  filenames: list[str], texts: list[str]) -&gt; str:\n    evidence_blocks = []\n    for filename, _score in retrieved:\n        text = texts[filenames.index(filename)]\n        evidence_blocks.append(f\"[{filename}]\\n{text}\")\n    return PROMPT_TEMPLATE.format(\n        evidence=\"\\n\\n\".join(evidence_blocks),\n        question=question,\n    )\n\ndef answer_question(question: str, model, filenames, texts, embeddings,\n                     llm_call) -&gt; tuple[str, list[str]]:\n    retrieved = search(model, question, filenames, embeddings, top_k=3)\n    prompt = build_prompt(question, retrieved, filenames, texts)\n    answer_text = llm_call(prompt)  # plug in your LLM of choice\n    evidence = [filename for filename, _score in retrieved]\n    return answer_text, evidence\n\nllm_call is intentionally a plain function argument, not a hardcoded API client: plug in a local model, an API-based model, or — while you’re first testing the retrieval and prompt logic — a stub that just echoes the evidence back, so you can verify the pipeline end to end before spending a single API call.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#practical-exercise",
+    "href": "chapters/chapter_05.html#practical-exercise",
+    "title": "5  First RAG System",
+    "section": "5.6 Practical exercise",
+    "text": "5.6 Practical exercise\nTry it yourself: Wire up answer_question with a stub llm_call that simply returns the evidence text, and confirm the evidence list for “What led to the fishing operation on report #50?” contains FORGE-16A-78-32_Drilling_049_2020-12-07.pdf and FORGE-16A-78-32_Drilling_050_2020-12-08.pdf.\nYou’ll know it worked when: the evidence list is correct before you plug in a real language model — retrieval quality, not generation fluency, is what determines whether this system is trustworthy.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#challenge-exercise",
+    "href": "chapters/chapter_05.html#challenge-exercise",
+    "title": "5  First RAG System",
+    "section": "5.7 Challenge exercise",
+    "text": "5.7 Challenge exercise\nChallenge: Connect a real LLM (local via transformers/ollama, or a hosted API) as llm_call, and add a check that rejects the answer if it mentions a report filename that wasn’t in the retrieved evidence list — a first, crude hallucination guard. Then ask it a question the ten-report sample archive genuinely can’t answer (e.g. “what happened on report #100?”) and confirm it says so rather than inventing an answer. A reference solution is in code/chapter_05/challenge/.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#key-takeaways",
+    "href": "chapters/chapter_05.html#key-takeaways",
+    "title": "5  First RAG System",
+    "section": "5.8 Key takeaways",
+    "text": "5.8 Key takeaways\n\nRAG is retrieval, then generation — two separate, individually debuggable steps, not one opaque black box.\nIf retrieval is wrong, generation cannot save you — always verify the evidence list before trusting the generated answer.\nA prompt that instructs “answer only from evidence, cite sources” is necessary but not sufficient for trustworthy answers. Part II builds the guardrails that make it sufficient.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#repository-files",
+    "href": "chapters/chapter_05.html#repository-files",
+    "title": "5  First RAG System",
+    "section": "5.9 Repository files",
+    "text": "5.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_05/first_rag.py\nPrompt assembly and evidence-tracked question answering\n\n\nnotebooks/chapter_05_explore.ipynb\nInteractive companion notebook",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_05.html#suggested-next-step",
+    "href": "chapters/chapter_05.html#suggested-next-step",
+    "title": "5  First RAG System",
+    "section": "5.10 Suggested next step",
+    "text": "5.10 Suggested next step\nWhat you’ve built in Part I works — on ten clean, digital, hand-picked reports out of the full 76-report Utah FORGE archive. Part II industrialises this system against the reality of a full archive: retrieval that has to be both fast and precise across every report, and answers that have to survive scrutiny from someone who wasn’t in the room when they were generated. Chapter 6 starts with the first thing that breaks in a typical real-world archive: scanned reports with no extractable text at all.\n\n\n\n\n\n\nLewis, Patrick, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, et al. 2020. “Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.” Advances in Neural Information Processing Systems 33: 9459–74.",
+    "crumbs": [
+      "Part I — Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>First RAG System</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html",
+    "href": "chapters/chapter_06.html",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "",
+    "text": "6.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#learning-objectives",
+    "href": "chapters/chapter_06.html#learning-objectives",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "",
+    "text": "Recognise when a DDR PDF has no extractable text and needs OCR.\nRun OCR on a scanned page and understand why the raw output is often too noisy to index as-is.\nBuild a quality gate that rejects bad OCR output before it enters your search index, rather than trying to fix it after the fact.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#operational-problem",
+    "href": "chapters/chapter_06.html#operational-problem",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.2 Operational problem",
+    "text": "6.2 Operational problem\nEvery one of the 76 Utah FORGE reports used in this book is digital-native — the archive’s QA/QC pass confirms 0 unparsed PDFs across 227 source files. You got lucky: WellEz, the software that generated these reports, embeds real character data on every page. Not every archive is this well-behaved. Faxed reports, reports scanned from paper files, and photos of a logbook page all produce PDFs with no character data at all — just a picture of text. Chapter 1’s extract_text() handled this gracefully (an empty string, not a crash), but a real, larger archive needs more than graceful failure: it needs OCR to recover the text, and a way to know whether to trust what OCR gives back.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#example-ddr-extract",
+    "href": "chapters/chapter_06.html#example-ddr-extract",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.3 Example DDR extract",
+    "text": "6.3 Example DDR extract\n\n\n\n\n\n\nOCR output before and after quality gating\n\n\n\nClean digital extraction (this is what every Utah FORGE report gives):\n  \"During the slide lost tool face and became assembly became stuck\"\n\nDegraded OCR output from a hypothetical poor scan of the same line:\n  \"Dur1ng the s1ide los+ t00l face and became assembIy became stu(k\"\nThe second block is exactly the kind of text a naive pipeline would embed and index without complaint — and exactly the kind of text a quality gate should catch and route to a review queue instead.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#theory",
+    "href": "chapters/chapter_06.html#theory",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.4 Theory",
+    "text": "6.4 Theory\nGetting OCR to run is the easy part — pytesseract, cloud OCR APIs, and PDF-rendering libraries all do a competent job of turning a page image into text. The hard part, and the one that actually determines whether your downstream system is trustworthy, is deciding whether to trust the output at all. A quality gate scores OCR text against a handful of cheap heuristics — is there enough text, is the alphabetic-to-symbol ratio sane, is there suspicious repeated garbage — and rejects anything that fails, routing it to manual review instead of silently indexing noise.\nThis chapter’s companion pipeline, DDR_UTAH_FORGE, implements exactly this pattern in src/rag_pdf/ocr_quality.py — even though, as noted above, this particular archive never needs to exercise it. That’s by design: the quality gate runs unconditionally on every extracted page, digital or scanned, as a defensive check. Its evaluate_ocr_quality() function checks four independent flags — low_text_density, high_symbol_ratio, repeated_garbage, low_line_count — and rejects a page only once two or more flags fire, so no single noisy-but-legitimate page (e.g. a short report with a lot of numeric data) gets discarded on one false positive.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#implementation",
+    "href": "chapters/chapter_06.html#implementation",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.5 Implementation",
+    "text": "6.5 Implementation\nBuild a simplified version of the same idea:\n\n# code/chapter_06/ocr_quality_gate.py\nimport re\n\ndef evaluate_ocr_quality(text: str, min_chars: int = 200,\n                          min_alpha_words: int = 30,\n                          max_symbol_ratio: float = 0.35,\n                          reject_min_flags: int = 2) -&gt; dict:\n    alpha_tokens = re.findall(r\"[A-Za-z]+\", text)\n    non_ws = [c for c in text if not c.isspace()]\n    noisy = sum(1 for c in non_ws if not c.isalnum() and c not in set(\"%.,()/-:'\"))\n    symbol_ratio = noisy / max(len(non_ws), 1)\n\n    flags = {\n        \"low_text_density\": len(text) &lt; min_chars or len(alpha_tokens) &lt; min_alpha_words,\n        \"high_symbol_ratio\": symbol_ratio &gt; max_symbol_ratio,\n    }\n    active = [k for k, v in flags.items() if v]\n    return {\"reject_ocr\": len(active) &gt;= reject_min_flags, \"flags\": flags}\n\nTest it against a real Utah FORGE report’s clean text (it should pass easily — that text has a healthy word count and almost no noise symbols) and against the corrupted example above (it should fail on both flags).\nThe full production version — including the repeated-garbage detector and line-count check — is in the companion repository at src/rag_pdf/ocr_quality.py, alongside src/rag_pdf/rotation_handler.py for detecting and correcting upside-down or sideways scans, and src/rag_pdf/table_ocr_handoff.py for the case where a table (not narrative text) needs OCR fallback.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#practical-exercise",
+    "href": "chapters/chapter_06.html#practical-exercise",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.6 Practical exercise",
+    "text": "6.6 Practical exercise\nTry it yourself: Run evaluate_ocr_quality() against the extracted text of report #38 (clean) and the degraded example string above.\nYou’ll know it worked when: the real report text passes cleanly, and you can explain, from the flags returned, exactly why the degraded text fails.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#challenge-exercise",
+    "href": "chapters/chapter_06.html#challenge-exercise",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.7 Challenge exercise",
+    "text": "6.7 Challenge exercise\nChallenge: This archive is 100% digital, so you can’t test the gate against a real scanned Utah FORGE page. Instead, write a small function that synthetically corrupts clean text (swap random characters for lookalikes, inject repeated tokens) at increasing severity, and find the corruption level at which evaluate_ocr_quality() starts rejecting it. This is a legitimate way to stress-test a quality gate before you ever encounter the real noisy data it’s meant to catch.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#key-takeaways",
+    "href": "chapters/chapter_06.html#key-takeaways",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.8 Key takeaways",
+    "text": "6.8 Key takeaways\n\nOCR quality gating is cheap, heuristic, and worth running unconditionally — even an archive that’s currently 100% digital may not stay that way, and the check costs almost nothing on clean text.\nRequire multiple independent signals to agree before rejecting a page; a single heuristic alone produces too many false positives.\nReject-and-flag-for-review beats silently-index-anyway every time traceability matters more than completeness.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#repository-files",
+    "href": "chapters/chapter_06.html#repository-files",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.9 Repository files",
+    "text": "6.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_06/ocr_quality_gate.py\nSimplified OCR quality gate\n\n\nDDR_UTAH_FORGE/src/rag_pdf/ocr_quality.py\nProduction quality gate (companion repo)\n\n\nDDR_UTAH_FORGE/src/rag_pdf/rotation_handler.py\nScan rotation detection (companion repo)",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_06.html#suggested-next-step",
+    "href": "chapters/chapter_06.html#suggested-next-step",
+    "title": "6  Scanned Reports and OCR Quality Gates",
+    "section": "6.10 Suggested next step",
+    "text": "6.10 Suggested next step\nOnce you trust the text coming out of OCR and digital extraction alike, the next question is how to break it into pieces small enough to embed and retrieve — without cutting a stuck-pipe narrative in half across two chunks. That’s Chapter 7.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Scanned Reports and OCR Quality Gates</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html",
+    "href": "chapters/chapter_07.html",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "",
+    "text": "7.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#learning-objectives",
+    "href": "chapters/chapter_07.html#learning-objectives",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "",
+    "text": "Explain why chunk size is measured in tokens, not characters or words.\nImplement token-based chunking with overlap using tiktoken.\nImplement segment-aware chunking that breaks at natural report boundaries (section headers) instead of at an arbitrary character count.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#operational-problem",
+    "href": "chapters/chapter_07.html#operational-problem",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.2 Operational problem",
+    "text": "7.2 Operational problem\nChapters 1–5 embedded each report as a single unit — fine for a ten-report sample corpus, unworkable at the full archive’s scale. A single Utah FORGE report already has seven distinct sections (WELL/JOB INFORMATION, BOP, CASING, MUD, DRILL BITS, PUMPS, BHA, SURVEY DATA, CONSUMABLES, TIME BREAKDOWN) packed onto one page. Embed too much of that in one vector and the embedding blurs the casing programme together with the stuck-pipe narrative, hurting retrieval precision. Split naively at a fixed character count and you’ll cut report #38’s stuck-pipe sentence in half mid-word, right across a chunk boundary — the exact passage you most need to retrieve becomes the two chunks least likely to score well.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#example-ddr-extract",
+    "href": "chapters/chapter_07.html#example-ddr-extract",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.3 Example DDR extract",
+    "text": "7.3 Example DDR extract\n\n\n\n\n\n\nWhy naive splitting fails, using real report #38 text\n\n\n\nNaive fixed-character split, mid-sentence:\n\nChunk A: \"...23:30 04:00 4.5 Drill From 6,360' to 6,507', (147') Total,\n          32.6' feet per hour. WOB 20 TO 35k, Rotary 50, Torque 6,500,\n          SPP 3200-3400 GPM 560, DIFF 200-300psi During the slide lost\n          tool face and became assembly became st\"\nChunk B: \"uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work\n          tool back in position Pipe free\"\nA query about “what happened when the assembly got stuck” now has its key evidence split across two separately-scored chunks — neither of which alone contains the complete sentence.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#theory",
+    "href": "chapters/chapter_07.html#theory",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.4 Theory",
+    "text": "7.4 Theory\nTwo ideas, used together, fix this:\n\nToken-based sizing. Language models and embedding models operate on tokens, not characters — and token count is what actually determines whether a chunk fits a model’s context window and how much a given chunk “costs” downstream. Chunking by token count (with a library like tiktoken) is more accurate than chunking by character or word count.\nSegment-aware boundaries. Rather than cutting at a fixed token count regardless of content, detect natural boundaries — section headers like TIME BREAKDOWN or SURVEY DATA, which every Utah FORGE report uses consistently — and prefer to split there. A chunk that ends at a genuine section break is far more likely to be a self-contained, retrievable unit of meaning than one that ends mid-sentence because a counter hit its limit.\n\nThe companion pipeline, DDR_UTAH_FORGE, implements both in src/rag_pdf/chunking.py. chunk_text_by_tokens() does token-based splitting with configurable overlap (so context isn’t lost entirely at a boundary), falling back to a word-based approximation if tiktoken isn’t available. split_text_for_segment_aware_chunking() goes further: it walks the text line by line, detects boundary patterns, and returns a list of SegmentBlock objects — each with a title, its text, and a boundary_type (MATCH, INSERT, or CONTINUATION) recording why the segment starts where it does.\nRun against the real 76-report archive, this pipeline’s chunking produces 2,943 chunks — an average of about 39 chunks per report, reflecting just how much structured content (header, seven data tables, and a narrative time breakdown) each single-page DDR actually contains.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#implementation",
+    "href": "chapters/chapter_07.html#implementation",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.5 Implementation",
+    "text": "7.5 Implementation\n\n# code/chapter_07/token_chunking.py\nimport tiktoken\n\ndef chunk_text_by_tokens(text: str, chunk_tokens: int = 200,\n                          overlap_tokens: int = 40) -&gt; list[str]:\n    enc = tiktoken.get_encoding(\"cl100k_base\")\n    tokens = enc.encode(text.strip())\n    chunks, start = [], 0\n    while start &lt; len(tokens):\n        end = min(len(tokens), start + chunk_tokens)\n        chunks.append(enc.decode(tokens[start:end]).strip())\n        if end == len(tokens):\n            break\n        start = max(0, end - overlap_tokens)\n    return chunks\n\nThis is a direct simplification of chunk_text_by_tokens() in the companion repository — same sliding-window-with-overlap logic, without the word-based fallback path. Read the full version, plus split_text_for_segment_aware_chunking_with_patterns(), in src/rag_pdf/chunking.py.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#practical-exercise",
+    "href": "chapters/chapter_07.html#practical-exercise",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.6 Practical exercise",
+    "text": "7.6 Practical exercise\nTry it yourself: Chunk report #38’s full text with chunk_tokens=60, overlap_tokens=15, and confirm the stuck-pipe sentence (“During the slide lost tool face and became assembly became stuck”) appears complete within at least one chunk rather than split across two.\nYou’ll know it worked when: you can point to a single chunk that contains the full sentence, from “During the slide” through “became stuck.”",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#challenge-exercise",
+    "href": "chapters/chapter_07.html#challenge-exercise",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.7 Challenge exercise",
+    "text": "7.7 Challenge exercise\nChallenge: Implement a minimal segment-aware splitter that treats any all-caps line under 6 words (like MUD, DRILL BITS, SURVEY DATA, TIME BREAKDOWN) as a section heading and starts a new segment there. Run it against report #38’s full text and confirm it produces one segment per section rather than one blended mass of casing, mud, and time-breakdown text. A reference solution — and the full production logic — is in code/chapter_07/challenge/ and DDR_UTAH_FORGE/src/rag_pdf/chunking.py respectively.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#key-takeaways",
+    "href": "chapters/chapter_07.html#key-takeaways",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.8 Key takeaways",
+    "text": "7.8 Key takeaways\n\nChunk size belongs in tokens, because that’s the unit every downstream model actually consumes.\nOverlap prevents context from vanishing at a chunk boundary, at the cost of some redundancy in the index.\nSegment-aware boundaries produce chunks that are more likely to be self-contained, retrievable units — worth the extra complexity once reports have real internal structure, which every DDR in this archive does.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#repository-files",
+    "href": "chapters/chapter_07.html#repository-files",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.9 Repository files",
+    "text": "7.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_07/token_chunking.py\nSimplified token-based chunker\n\n\nDDR_UTAH_FORGE/src/rag_pdf/chunking.py\nProduction token + segment-aware chunking (companion repo)",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_07.html#suggested-next-step",
+    "href": "chapters/chapter_07.html#suggested-next-step",
+    "title": "7  Chunking That Respects Report Structure",
+    "section": "7.10 Suggested next step",
+    "text": "7.10 Suggested next step\nWell-formed chunks still need somewhere fast to live. Chapter 8 replaces Chapter 4’s brute-force cosine search with a real vector database, and scales retrieval from ten documents to the full 76-report archive.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html",
+    "href": "chapters/chapter_08.html",
+    "title": "8  Vector Databases at Scale",
+    "section": "",
+    "text": "8.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#learning-objectives",
+    "href": "chapters/chapter_08.html#learning-objectives",
+    "title": "8  Vector Databases at Scale",
+    "section": "",
+    "text": "Explain why brute-force cosine search stops being adequate as a corpus grows, in concrete terms (memory and latency).\nBuild and query a FAISS index over DDR chunk embeddings.\nUnderstand the difference between a per-document index and a campaign-wide global index, and when each is the right tool.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#operational-problem",
+    "href": "chapters/chapter_08.html#operational-problem",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.2 Operational problem",
+    "text": "8.2 Operational problem\nChapter 4’s embeddings @ query_vec brute-force search works fine over ten documents — it’s a single matrix multiply. The full Utah FORGE archive is 76 reports. Run this book’s companion pipeline’s chunking and embedding steps against all of them and you get 2,943 chunks — still small by industrial standards, but already the point where you want a persistent, queryable index rather than an in-memory NumPy array you rebuild every session. And a production system needs more than one query mode: per-document search (fast, scoped to one report) and campaign-wide search across every chunk are genuinely different operations.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#theory",
+    "href": "chapters/chapter_08.html#theory",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.3 Theory",
+    "text": "8.3 Theory\nA vector database (or vector index library, like FAISS (Johnson, Douze, and Jégou 2019)) organises embeddings so that similarity search doesn’t require comparing the query against every single vector. At this book’s scale, even the simplest FAISS index — IndexFlatIP (flat, inner-product) — is the right choice: it’s an exact nearest-neighbour search, mathematically equivalent to Chapter 4’s brute-force approach, just implemented in optimised C++ with a persistent, loadable index file. (Larger-scale approximate indexes — IVF, HNSW — trade a small amount of accuracy for speed at millions of vectors; not a tradeoff this book’s scale needs.)\nBecause embeddings are normalized (Chapter 4), inner product is cosine similarity — which is exactly why IndexFlatIP is the right index type rather than a distance-based one.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#building-the-real-index",
+    "href": "chapters/chapter_08.html#building-the-real-index",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.4 Building the real index",
+    "text": "8.4 Building the real index\nThe companion pipeline, DDR_UTAH_FORGE, builds two tiers of index:\n\nPer-document index (scripts/build_index.py) — one FAISS index per DDR, used when a question is scoped to a specific report. All 76 reports already have this: chunks, embeddings, and a faiss.index file sit in data/processed/&lt;doc_id&gt;/ for every report in the archive.\nGlobal index (scripts/build_global_index.py) — a single FAISS index over every chunk across every report, used for cross-document questions like “which reports involve fishing operations.”\n\nRunning build_global_index.py against this archive’s 76 pre-processed documents produces a real, verifiable result:\nFound 76 docs with embeddings\nConcatenating 2,943 chunks from 76 docs...\nBuilding FAISS IndexFlatIP ((2943, 384))...\n  faiss.index — 2,943 vectors × 384d\n  elapsed: 2.65s\n384 dimensions matches all-MiniLM-L6-v2, the same embedding model from Chapter 4 — this pipeline doesn’t switch models between the toy version and the production one, it just changes how the resulting vectors are indexed and queried.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#implementation",
+    "href": "chapters/chapter_08.html#implementation",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.5 Implementation",
+    "text": "8.5 Implementation\n\n# code/chapter_08/build_faiss_index.py\nfrom pathlib import Path\n\nimport faiss\nimport numpy as np\n\ndef build_index(embeddings: np.ndarray) -&gt; faiss.IndexFlatIP:\n    dimension = embeddings.shape[1]\n    index = faiss.IndexFlatIP(dimension)\n    index.add(embeddings.astype(\"float32\"))\n    return index\n\ndef save_index(index: faiss.Index, path: Path) -&gt; None:\n    faiss.write_index(index, str(path))\n\ndef load_index(path: Path) -&gt; faiss.Index:\n    return faiss.read_index(str(path))\n\ndef search(index: faiss.Index, query_vec: np.ndarray, top_k: int = 5):\n    scores, indices = index.search(query_vec.reshape(1, -1).astype(\"float32\"), top_k)\n    return list(zip(indices[0].tolist(), scores[0].tolist()))\n\nThis mirrors the indexing pattern in the companion pipeline’s src/rag_pdf/services/search_service.py, which builds IndexFlatIP over chunk embeddings and persists it to faiss.index alongside each document’s other artefacts.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#practical-exercise",
+    "href": "chapters/chapter_08.html#practical-exercise",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.6 Practical exercise",
+    "text": "8.6 Practical exercise\nTry it yourself: Build a FAISS index over the ten sample DDR embeddings from Chapter 4, save it to disk, reload it in a fresh Python session, and confirm a query for “torque problems” returns the same top result as Chapter 4’s brute-force search.\nYou’ll know it worked when: the FAISS-based and brute-force results agree — because, mathematically, IndexFlatIP over normalized vectors is cosine similarity, just implemented differently.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#challenge-exercise",
+    "href": "chapters/chapter_08.html#challenge-exercise",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.7 Challenge exercise",
+    "text": "8.7 Challenge exercise\nChallenge: If you have the full 76-report Utah FORGE archive (datasets/forge_archive/) and can run the heavier dependencies (sentence-transformers, faiss-cpu), chunk and embed all 76 reports yourself and confirm you land close to the real 2,943-chunk count above. Small differences are expected — your chunking parameters won’t be identical to the production pipeline’s — but you should be in the same order of magnitude. A reference solution is in code/chapter_08/challenge/.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#key-takeaways",
+    "href": "chapters/chapter_08.html#key-takeaways",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.8 Key takeaways",
+    "text": "8.8 Key takeaways\n\nIndexFlatIP at this book’s scale is exact, not approximate — you’re not trading away accuracy, only reimplementing brute-force search more efficiently and persistently.\nPer-document and global indexes serve genuinely different questions; build both rather than forcing one index to do both jobs.\nScaling the index doesn’t fix retrieval quality — that’s the next chapter’s problem.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#repository-files",
+    "href": "chapters/chapter_08.html#repository-files",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.9 Repository files",
+    "text": "8.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_08/build_faiss_index.py\nFAISS IndexFlatIP build/save/load/search\n\n\ncode/chapter_08/build_full_archive.py\nReproduces the full 76-report archive from the public source\n\n\ndatasets/forge_archive/\nThe full 76-report Utah FORGE archive\n\n\nDDR_UTAH_FORGE/scripts/build_index.py\nPer-document index builder (companion repo)\n\n\nDDR_UTAH_FORGE/scripts/build_global_index.py\nCampaign-wide global index builder (companion repo)",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_08.html#suggested-next-step",
+    "href": "chapters/chapter_08.html#suggested-next-step",
+    "title": "8  Vector Databases at Scale",
+    "section": "8.10 Suggested next step",
+    "text": "8.10 Suggested next step\nA fast index doesn’t guarantee good retrieval. Chapter 9 looks at the retrieval scoring code itself — how sparse and dense signals get combined, and what it takes to make that combination numerically sound.\n\n\n\n\n\n\nJohnson, Jeff, Matthijs Douze, and Hervé Jégou. 2019. “Billion-Scale Similarity Search with GPUs.” https://arxiv.org/abs/1702.08734.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Vector Databases at Scale</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html",
+    "href": "chapters/chapter_09.html",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "",
+    "text": "9.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#learning-objectives",
+    "href": "chapters/chapter_09.html#learning-objectives",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "",
+    "text": "Explain why semantic search alone underperforms on precise, entity- or number-heavy queries.\nCombine BM25 (sparse/exact) and dense (semantic) retrieval using Reciprocal Rank Fusion (RRF).\nApply a cross-encoder to rerank a small candidate set for higher precision than either retrieval method alone.\nRead production retrieval-scoring code closely enough to explain why a specific formula is written the way it is, not just what it computes.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#operational-problem",
+    "href": "chapters/chapter_09.html#operational-problem",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.2 Operational problem",
+    "text": "9.2 Operational problem\nA query like “which report had packers fail to set?” has both a semantic component (packers, setting, failure — a topic) and effectively an exact-match component (you want report #49 specifically, not every report that mentions packers in passing). Dense embeddings capture the topical meaning well but blur precise distinctions; keyword search (Chapter 3) nails the exact terms but misses paraphrase entirely. Neither alone is enough — production retrieval systems combine both.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#theory",
+    "href": "chapters/chapter_09.html#theory",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.3 Theory",
+    "text": "9.3 Theory\nBM25 (Robertson and Zaragoza 2009) scores a document by term frequency, adjusted by how rare each term is across the corpus (inverse document frequency, IDF) and normalised for document length. It’s decades old, computationally cheap, and excellent at exact and near-exact matches — the opposite profile from dense embeddings.\nReciprocal Rank Fusion (RRF) combines two ranked lists by rank, not raw score: for each document, sum weight / (k + rank) across both lists. This sidesteps a real problem — BM25 scores and cosine similarities live on completely different, incomparable scales, so averaging raw scores directly would let whichever signal happens to have larger numbers dominate regardless of which is actually more informative.\nCross-encoder reranking is the last, most expensive step, and deliberately runs on only the top handful of fused candidates, not the whole corpus. Unlike a dense embedding (which encodes the query and each document separately, then compares vectors), a cross-encoder scores the query and a candidate passage together, letting it capture interactions between them that no fixed vector representation can. This makes it substantially slower per comparison — which is exactly why it’s applied after fusion has already narrowed the field, not instead of it.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#reading-the-real-fusion-code",
+    "href": "chapters/chapter_09.html#reading-the-real-fusion-code",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.4 Reading the real fusion code",
+    "text": "9.4 Reading the real fusion code\nThe companion pipeline’s src/rag_pdf/retrieval/hybrid_utils.py and src/rag_pdf/services/search_service.py implement exactly this pipeline. Two details in the real code are worth understanding closely, because they’re the kind of thing that looks like a stylistic choice until you see what breaks without it.\n\n\n\n\n\n\nDetail 1: the IDF formula’s shape isn’t arbitrary\n\n\n\nself.idf[term] = math.log(1.0 + ((self.n_docs - df + 0.5) / (df + 0.5)))\nCompare this to the classic Robertson-Sparse-Selection IDF, log((N - df + 0.5) / (df + 0.5)) without the 1.0 +. For a term that appears in almost every document (df close to n_docs), the classic formula’s ratio drops below 1 and the log goes negative — which then corrupts any downstream sum that assumes term contributions are non-negative. Wrapping the ratio as 1.0 + ratio before taking the log guarantees the result stays non-negative for every possible df, because 1.0 + ratio can never fall below 1. This single design choice removes an entire category of edge case, permanently, for a cost of one added constant.\n\n\n\n\n\n\n\n\nDetail 2: normalization has to define its own tie-break\n\n\n\nif hi &lt;= lo:\n    return {i: 0.0 for i in candidates}\nMin-max normalization rescales scores into [0, 1] by subtracting the minimum and dividing by the range. If every candidate in a batch scores identically, hi - lo is zero — a division that, left unguarded, would raise or produce NaN. The guard above catches that case explicitly and returns a neutral value (0.0 for everyone) instead, so a tie in this signal doesn’t crash the pipeline or corrupt the fused score — the other signal in the fusion is still free to discriminate between the tied candidates.\n\n\nNeither of these edge cases shows up by running “more queries” against typical text — they only show up by reasoning about the math at its boundaries: what happens when a term is universal, what happens when every score ties. Retrieval scoring is numerical code, and it deserves the same edge-case discipline you’d apply to any other numerical code. The fusion weights themselves are also plain, readable constants in search_service.py: RRF_K = 20, RRF_DENSE_WEIGHT = 0.5, RRF_BM25_WEIGHT = 2.0 — the exact-match signal is weighted four times higher than the semantic one in this pipeline’s fused ranking, reflecting that for DDR text, exact-term matching often carries more precision than pure similarity.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#implementation",
+    "href": "chapters/chapter_09.html#implementation",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.5 Implementation",
+    "text": "9.5 Implementation\n\n# code/chapter_09/hybrid_search.py\nfrom collections import defaultdict\n\ndef reciprocal_rank_fusion(ranked_lists: list[list[str]], k: int = 20,\n                            weights: list[float] | None = None) -&gt; list[tuple[str, float]]:\n    weights = weights or [1.0] * len(ranked_lists)\n    scores: dict[str, float] = defaultdict(float)\n    for ranked_list, weight in zip(ranked_lists, weights):\n        for rank, doc_id in enumerate(ranked_list, start=1):\n            scores[doc_id] += weight * (1.0 / (k + rank))\n    return sorted(scores.items(), key=lambda item: item[1], reverse=True)",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#practical-exercise",
+    "href": "chapters/chapter_09.html#practical-exercise",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.6 Practical exercise",
+    "text": "9.6 Practical exercise\nTry it yourself: Rank the ten sample DDRs for “packers fishing” using Chapter 3’s keyword search and Chapter 4’s semantic search separately, then fuse the two ranked lists with reciprocal_rank_fusion(lists, k=20, weights=[2.0, 0.5]) — matching the companion pipeline’s real weighting.\nYou’ll know it worked when: report #49 (packers) and #50 (fishing) both rank near the top of the fused list, and you can explain why the weighting favours the keyword signal here.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#challenge-exercise",
+    "href": "chapters/chapter_09.html#challenge-exercise",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.7 Challenge exercise",
+    "text": "9.7 Challenge exercise\nChallenge: Implement the two guards from the code study above against deliberately constructed edge cases: a term that appears in every sample document (test that your IDF stays non-negative), and a batch where every candidate scores identically (test that your normalization doesn’t divide by zero). Confirm an unguarded version fails first. A reference solution is in code/chapter_09/challenge/.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#key-takeaways",
+    "href": "chapters/chapter_09.html#key-takeaways",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.8 Key takeaways",
+    "text": "9.8 Key takeaways\n\nSparse and dense retrieval fail on different, complementary query types — combine them rather than picking one.\nRank-based fusion (RRF) avoids the scale-mismatch problem that plagues naive score-averaging across different retrieval methods.\nCross-encoder reranking buys precision at a real latency cost — apply it only to a small, already-fused candidate set.\nRetrieval scoring is numerical code. Boundary conditions — universal terms, tied scores — deserve explicit guards, and reading why a formula is shaped the way it is tells you more than reading what it computes.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#repository-files",
+    "href": "chapters/chapter_09.html#repository-files",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.9 Repository files",
+    "text": "9.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_09/hybrid_search.py\nReciprocal Rank Fusion implementation\n\n\nDDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py\nBM25 index, IDF formula, score fusion (companion repo)\n\n\nDDR_UTAH_FORGE/src/rag_pdf/retrieval/canonical_hybrid.py\nFull hybrid retrieval pipeline (companion repo)\n\n\nDDR_UTAH_FORGE/src/rag_pdf/services/search_service.py\nCross-encoder rerank + fusion weights (companion repo)",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_09.html#suggested-next-step",
+    "href": "chapters/chapter_09.html#suggested-next-step",
+    "title": "9  Hybrid Retrieval and Reranking",
+    "section": "9.10 Suggested next step",
+    "text": "9.10 Suggested next step\nBetter retrieval still isn’t the same as a trustworthy answer. Chapter 10 tackles the harder problem: making sure every generated claim traces back to real evidence, and that the system tells you honestly when it doesn’t know.\n\n\n\n\n\n\nRobertson, Stephen, and Hugo Zaragoza. 2009. “The Probabilistic Relevance Framework: BM25 and Beyond.” In Foundations and Trends in Information Retrieval, 3:333–89. 4.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html",
+    "href": "chapters/chapter_10.html",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "",
+    "text": "10.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#learning-objectives",
+    "href": "chapters/chapter_10.html#learning-objectives",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "",
+    "text": "Distinguish questions that should be answered by generation from questions that should be answered by structured data lookup.\nAttach a verifiable citation (report number, page) to every claim a system produces.\nDetect and surface gaps in your own source archive, so the system’s silence about a period isn’t mistaken for “nothing happened.”",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#operational-problem",
+    "href": "chapters/chapter_10.html#operational-problem",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.2 Operational problem",
+    "text": "10.2 Operational problem\nChapter 5 built a prompt that asks a language model to cite sources — necessary, but not sufficient. A model can still cite a plausible-sounding report number for a number it invented, especially for arithmetic questions (“how many hours of non-productive time in November?”) that language models are statistically bad at answering exactly, no matter how good the prompt is. Separately, this archive — like any real archive — has a genuine gap, and a system that answers confidently from what it has, without flagging what it’s missing, can quietly mislead an engineer who assumes silence means nothing happened.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#structured-facts-already-extracted",
+    "href": "chapters/chapter_10.html#structured-facts-already-extracted",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.3 Structured facts, already extracted",
+    "text": "10.3 Structured facts, already extracted\nLanguage models can produce fluent, plausible claims that are simply false — a well-documented failure mode called hallucination (Ji et al. 2023). The single most effective mitigation in this book is a rule of thumb, not a model trick: if a question can be answered by looking something up or computing it from structured data, don’t generate the answer — compute it.\nEvery report in this archive has already been parsed into a real, structured ddr_facts.parquet table by the companion pipeline. Here’s an actual row from report #38 (2020-11-26):\n\n\n\n\n\n\nA real row from ddr_facts.parquet, report #38\n\n\n\nreport_date: 2020-11-26        wellbore: FORGE-16A-78-32\nstart_time:  06:00              end_time:      11:00\nduration_hr: 5.0                 phase:         Production Drilling\nop_code:     Wire Line Logs      is_npt:        False\noperation_text: \"PJSM, pre job safety meeting. Rig up Schlumberger\n                  run the UBI log from 5.200 to surface. Rig down\n                  logging tools.\"\n\n\nA question like “how many hours did report #38 spend on wireline logging?” has an exact answer sitting in this table — duration_hr = 5.0 — computed once during extraction, not re-derived by a language model each time it’s asked. Generation is reserved for what it’s actually good at — narrative synthesis across multiple passages — and even then, every claim carries its source.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#a-real-honest-gap-in-this-archive",
+    "href": "chapters/chapter_10.html#a-real-honest-gap-in-this-archive",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.4 A real, honest gap in this archive",
+    "text": "10.4 A real, honest gap in this archive\nThe second mitigation is corpus-completeness awareness. This archive has a genuine one: the last Drilling report is #76, dated 2021-01-03. The Completion report (a DFIT — Diagnostic Fracture Injection Test) is dated 2021-01-06. Two calendar days — January 4th and 5th — have no report of any kind. Every other day in the drilling programme, from spud on October 30, 2020 through report #76, has exactly one report, so this gap is real and specific to the Drilling-to-Completion handover, not an artefact of messy source data.\nA RAG system only knows what’s in its index. If you ask it “what happened on January 5th, 2021?” without gap-awareness, a poorly built system might either hallucinate an answer or simply retrieve the nearest chunks (report #76 or the Completion report) without ever telling you neither actually covers that date. Detecting the gap is a matter of checking the sequence of report numbers and dates for holes — not the content, just the presence.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#implementation",
+    "href": "chapters/chapter_10.html#implementation",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.5 Implementation",
+    "text": "10.5 Implementation\n\n# code/chapter_10/traceable_answers.py\nfrom dataclasses import dataclass\n\n@dataclass\nclass Citation:\n    report: str\n    page: int | None = None\n\ndef format_evidence(citations: list[Citation]) -&gt; str:\n    lines = [f\"  {c.report}\" + (f\" page {c.page}\" if c.page else \"\") for c in citations]\n    return \"Evidence:\\n\" + \"\\n\".join(lines)\n\ndef find_date_gaps(report_dates: list[str]) -&gt; list[tuple[str, str]]:\n    \"\"\"Return (start, end) date ranges with no report, given a sorted\n    list of ISO date strings covering a continuous daily-reporting period.\"\"\"\n    from datetime import date, timedelta\n\n    dates = sorted(date.fromisoformat(d) for d in report_dates)\n    gaps = []\n    for prev, curr in zip(dates, dates[1:]):\n        missing_days = (curr - prev).days - 1\n        if missing_days &gt; 0:\n            gaps.append(((prev + timedelta(days=1)).isoformat(), (curr - timedelta(days=1)).isoformat()))\n    return gaps",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#practical-exercise",
+    "href": "chapters/chapter_10.html#practical-exercise",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.6 Practical exercise",
+    "text": "10.6 Practical exercise\nTry it yourself: Run find_date_gaps() against the report dates in this book’s ten-report sample — [\"2020-10-22\", \"2020-11-07\", \"2020-11-24\", \"2020-11-25\", \"2020-11-26\", \"2020-11-27\", \"2020-12-06\", \"2020-12-07\", \"2020-12-08\", \"2021-01-06\"].\nYou’ll know it worked when: the function reports several gaps — most of them simply reflecting that Part I’s curated subset skips most of the archive’s days on purpose. Then run it against the full 76-report archive’s dates (datasets/forge_archive/) and confirm it finds exactly one real gap: January 4th–5th, 2021, right before the Completion report.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#challenge-exercise",
+    "href": "chapters/chapter_10.html#challenge-exercise",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.7 Challenge exercise",
+    "text": "10.7 Challenge exercise\nChallenge: Extend find_date_gaps() to classify each gap’s severity (e.g. a gap under 3 days is Low; a gap that crosses a report-type boundary — Drilling to Completion, as this one does — is High regardless of length, since it likely represents an unrecorded operational transition). A reference solution is in code/chapter_10/challenge/.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#key-takeaways",
+    "href": "chapters/chapter_10.html#key-takeaways",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.8 Key takeaways",
+    "text": "10.8 Key takeaways\n\nPrefer structured lookup over generation whenever the question is answerable from data you already extracted — it’s exact, not just plausible.\nEvery generated claim needs a citation an engineer can independently check, not just a citation-shaped sentence.\nA system that can tell you what it doesn’t have is more trustworthy than one that answers fluently regardless of coverage — this archive’s real two-day gap at the Drilling-to-Completion handover is exactly the kind of silence worth surfacing explicitly, not filling in.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#repository-files",
+    "href": "chapters/chapter_10.html#repository-files",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.9 Repository files",
+    "text": "10.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_10/traceable_answers.py\nCitation formatting and date-gap detection\n\n\nDDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv\nReal, computed gap-detection output (companion repo)",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_10.html#suggested-next-step",
+    "href": "chapters/chapter_10.html#suggested-next-step",
+    "title": "10  Traceable Answers and Hallucination Mitigation",
+    "section": "10.10 Suggested next step",
+    "text": "10.10 Suggested next step\nYou now have a system that retrieves well and answers honestly. Chapter 11 asks the question every system like this eventually needs answered with numbers, not impressions: how good is it, really — and where specifically does it still fail?\n\n\n\n\n\n\nJi, Ziwei, Nayeon Lee, Rita Frieske, Tiezheng Yu, Dan Su, Yan Xu, Etsuko Ishii, Ye Jin Bang, Andrea Madotto, and Pascale Fung. 2023. “Survey of Hallucination in Natural Language Generation.” ACM Computing Surveys.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Traceable Answers and Hallucination Mitigation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html",
+    "href": "chapters/chapter_11.html",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "",
+    "text": "11.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#learning-objectives",
+    "href": "chapters/chapter_11.html#learning-objectives",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "",
+    "text": "Build a hand-labeled evaluation set that records, per question, the expected source report and page.\nCompute recall@k, Mean Reciprocal Rank (MRR), and NDCG@k, and explain what each number actually tells you.\nBreak results down by question category and difficulty to find where a system fails, not just whether it does.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#operational-problem",
+    "href": "chapters/chapter_11.html#operational-problem",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.2 Operational problem",
+    "text": "11.2 Operational problem\n“It feels like it’s working” is not a standard you should ship an engineering decision-support tool against. Before this system goes in front of drilling engineers, you need a defensible answer to “how good is it” — and, more usefully, “which kinds of questions does it get wrong.” The companion pipeline ships an evaluation harness for exactly this, scripts/run_eval.py, built against a real question set for a different (private, North Sea) campaign it was originally developed on. It has not yet been run against the Utah FORGE archive — no evaluation question set exists for this well yet. That’s not a gap in the tooling; it’s the natural next step, and this chapter walks you through doing it for real, against the same archive you’ve used throughout this book.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#building-your-own-question-set",
+    "href": "chapters/chapter_11.html#building-your-own-question-set",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.3 Building your own question set",
+    "text": "11.3 Building your own question set\nRather than presenting borrowed results, build a small evaluation set against the ten-report Part I sample, where you already know the ground truth from having read the reports yourself in Chapters 1–5:\n\n\n\n\n\n\nA starter evaluation set for the Part I sample\n\n\n\nQ1: \"Which report describes pipe becoming stuck during a slide?\"\n    expected: FORGE-16A-78-32_Drilling_038_2020-11-26.pdf\n\nQ2: \"Which report shows packers failing to set?\"\n    expected: FORGE-16A-78-32_Drilling_049_2020-12-07.pdf\n\nQ3: \"Which report describes milling up lost pieces of bit?\"\n    expected: FORGE-16A-78-32_Drilling_050_2020-12-08.pdf\n\nQ4: \"Which report mentions mud fluid seepage losses?\"\n    expected: FORGE-16A-78-32_Drilling_019_2020-11-07.pdf\n\nQ5: \"Which report shows the crew rigging up before spud?\"\n    expected: FORGE-16A-78-32_Drilling_003_2020-10-22.pdf\n\n\nEach question has exactly one verifiable correct answer, because you picked these five reports for their distinct, checkable events in Chapters 1–5. This is the right way to start an evaluation set: begin with cases you can verify by eye, before scaling to enough volume that you can no longer read every answer yourself.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#theory",
+    "href": "chapters/chapter_11.html#theory",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.4 Theory",
+    "text": "11.4 Theory\nThree metrics, each answering a slightly different question:\n\nrecall@k — did the correct answer appear anywhere in the top k results? Simple, and the right first metric to compute.\nMean Reciprocal Rank (MRR) — averages 1 / rank of the correct answer across all questions. Rewards getting the right answer to rank #1, not just somewhere in the top 10 — closer to what a user actually experiences.\nNDCG@k (Normalized Discounted Cumulative Gain) — like recall, but weights a hit at rank 1 more than a hit at rank 5, and normalizes so the score is comparable across queries with different numbers of correct answers.\n\nNone of these require deep statistics to use well — they require a good evaluation set: real questions, with a real, known correct source recorded in advance. Building that set by hand, from your own archive, is more valuable than the metric computation itself, because writing the questions forces you to think like the engineer who will actually use the system.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#implementation",
+    "href": "chapters/chapter_11.html#implementation",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.5 Implementation",
+    "text": "11.5 Implementation\n\n# code/chapter_11/eval_metrics.py\ndef recall_at_k(results: list[dict], k: int) -&gt; float:\n    hits = [r for r in results if r.get(\"rank\") is not None and r[\"rank\"] &lt;= k]\n    return len(hits) / len(results) if results else 0.0\n\ndef mrr(results: list[dict]) -&gt; float:\n    scores = [1.0 / r[\"rank\"] if r.get(\"rank\") else 0.0 for r in results]\n    return sum(scores) / len(scores) if scores else 0.0\n\ndef ndcg_at_k(results: list[dict], k: int) -&gt; float:\n    import math\n    scores = []\n    for r in results:\n        rank = r.get(\"rank\")\n        scores.append(1.0 / math.log2(rank + 1) if rank and rank &lt;= k else 0.0)\n    return sum(scores) / len(scores) if scores else 0.0\n\nEach result dict records, per evaluation question, the rank at which the known-correct report was retrieved (or None if it wasn’t in the top k considered). This mirrors the shape of _recall_at_k(), _mrr(), and _ndcg_at_k() in the companion repository’s scripts/run_eval.py.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#practical-exercise",
+    "href": "chapters/chapter_11.html#practical-exercise",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.6 Practical exercise",
+    "text": "11.6 Practical exercise\nTry it yourself: Run the five questions above through Chapter 9’s hybrid search over the ten-report sample archive, record each correct report’s rank, and compute recall@3 by hand.\nYou’ll know it worked when: you have a small CSV or JSON file mapping question → expected report → observed rank, and a recall@3 score you can quote and defend — because you wrote and verified every question yourself.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#challenge-exercise",
+    "href": "chapters/chapter_11.html#challenge-exercise",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.7 Challenge exercise",
+    "text": "11.7 Challenge exercise\nChallenge: Extend your five-question set to at least 15 questions against the full 76-report archive (datasets/forge_archive/), and compute recall@5. This is genuinely useful, unpublished work: as far as this book’s companion pipeline is concerned, you’ll be building the first real evaluation set for Utah FORGE. Save your question set alongside your results — it’s the seed of exactly the kind of evaluation harness scripts/run_eval.py runs at scale once one exists. A reference solution approach is in code/chapter_11/challenge/.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#key-takeaways",
+    "href": "chapters/chapter_11.html#key-takeaways",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.8 Key takeaways",
+    "text": "11.8 Key takeaways\n\nAn evaluation set with known correct answers is more valuable than any single retrieval technique — it’s what tells you whether a technique helped.\nrecall@k, MRR, and NDCG@k answer different questions; report more than one.\nDon’t trust a system’s evaluation results from a different dataset as a proxy for how it performs on yours — a harness that scored well on one campaign says nothing certain about a new well until you build and run a question set against that well’s own archive, which is exactly what this chapter had you do.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#repository-files",
+    "href": "chapters/chapter_11.html#repository-files",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.9 Repository files",
+    "text": "11.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_11/eval_metrics.py\nrecall@k, MRR, NDCG@k implementations\n\n\nDDR_UTAH_FORGE/scripts/run_eval.py\nEvaluation harness (companion repo) — ready to point at a Utah FORGE question set once you build one",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_11.html#suggested-next-step",
+    "href": "chapters/chapter_11.html#suggested-next-step",
+    "title": "11  Evaluating Retrieval Quality",
+    "section": "11.10 Suggested next step",
+    "text": "11.10 Suggested next step\nEvery discipline from Chapters 6–11 — OCR gating, structured chunking, hybrid retrieval, traceability, evaluation — exists in service of a single payoff: finding things in an archive a human reading it linearly would miss. Chapter 12 builds toward that payoff, using a real sequence of events already in this archive.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Evaluating Retrieval Quality</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html",
+    "href": "chapters/chapter_12.html",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "",
+    "text": "12.1 Learning objectives\nBy the end of this chapter, you will be able to:",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#learning-objectives",
+    "href": "chapters/chapter_12.html#learning-objectives",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "",
+    "text": "Combine structured numeric trends (torque, ROP) with narrative operation text to build a single, checkable operational story.\nExplain how a windowed leading-indicator detector works — and verify, from real thresholds in production code, exactly what “causal” and “escalating” mean before trusting either label.\nUnderstand honestly what this book’s single-well archive can and can’t demonstrate, and what it would take to scale this technique to genuine cross-well intelligence.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#operational-problem",
+    "href": "chapters/chapter_12.html#operational-problem",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.2 Operational problem",
+    "text": "12.2 Operational problem\nThis is the payoff question every previous chapter has been building toward: did something earlier predict trouble later? A human reading 76 reports in sequence can, with effort, spot a pattern — but a system that has structured, classified, and indexed the same text can hold every report in mind at once, and check numeric trends a human would have to read a table on every single page to notice.\nThis chapter is deliberately honest about scale: Utah FORGE’s public archive is one well, one continuous drilling programme — not the multi-well, multi-phase campaign this book’s companion pipeline was originally built to analyse. So instead of presenting a large statistical finding, this chapter shows you exactly how to check a real, small pattern by hand, using the same technique — and shows you precisely what production code exists to scale that technique up once you have more than one well’s worth of data.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#a-real-checkable-pattern",
+    "href": "chapters/chapter_12.html#a-real-checkable-pattern",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.3 A real, checkable pattern",
+    "text": "12.3 A real, checkable pattern\nReport #38’s TORQUE header field — a single number recorded every day regardless of what happens — tells a real story across three consecutive days:\n\n\n\n\n\n\nReal header data, reports #36-38\n\n\n\nReport #36 (2020-11-24): TORQUE: 4,400\nReport #37 (2020-11-25): TORQUE: 4,200\nReport #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)\n                          \"During the slide lost tool face and became\n                           assembly became stuck\"\n\n\nTorque was flat — even slightly down — for two days, then jumped by roughly a third on the same day the assembly became stuck. This is a same-day correlation between a structured number and a narrative event, not a multi-day advance warning — and that distinction matters. Don’t claim a leading indicator you haven’t actually verified extends before the event; this pattern says “torque and the stuck-pipe event moved together,” not “torque predicted the stuck pipe two days out.”\nChapter 5’s other real sequence — report #49’s packers failing to set, followed same-day by picking up a fishing BHA, followed by report #50’s actual fishing operation — is a genuine two-report causal chain, directly traceable and already fully verified with real text.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#theory-how-the-production-tool-would-check-this-at-scale",
+    "href": "chapters/chapter_12.html#theory-how-the-production-tool-would-check-this-at-scale",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.4 Theory: how the production tool would check this at scale",
+    "text": "12.4 Theory: how the production tool would check this at scale\nThe companion pipeline’s src/ddr_rag/causality_analyzer.py implements exactly this kind of check, generalized: for a given term, it compares frequency in a window before and after a boundary date, and labels a term causal only above a defined post-boundary NPT rate, and escalating only above a defined frequency-increase ratio. The real thresholds, read directly from the module:\nTRANSITION_WINDOW_DAYS = 14   # days before/after a boundary to compare\nMIN_TERM_FREQ = 3             # minimum occurrences before a term counts at all\nNPT_SIGNAL_THRESHOLD = 0.40   # post-boundary NPT rate to call a term \"causal\"\nESCALATION_FREQ_RATIO = 1.5   # frequency increase to call a term \"escalating\"\nEvery one of these is a plain, readable number you can inspect, change, and justify — not a weight buried inside a trained model.\n\n\n\n\n\n\nA real limitation worth understanding, not hiding\n\n\n\nThis module’s default phase configuration — [\"MIRU\", \"COND1\", \"INTRM1\", \"INTRM2\", \"PROD1\", \"COMPZN\"] — comes from operator_alpha, a different (private, North Sea) campaign’s phase vocabulary. Utah FORGE’s real data doesn’t have that phase structure: its ddr_facts.parquet phase field is \"Production Drilling\" for essentially the entire programme, right up to the Completion-DFIT report. Running causality_analyzer.py against this archive as-is would compare windows around phase boundaries that don’t meaningfully exist in this well’s data — the code would run, but the output wouldn’t mean anything useful yet.\nThis is a genuinely common situation in real engineering work: code built and validated on one dataset doesn’t automatically transfer to another just because the file paths line up. Before trusting output from an adapted pipeline, check that the assumptions baked into its configuration (here, a phase vocabulary) actually match your data. The src/ddr_rag/npt_classifier.py module, by contrast, has been adapted for Utah FORGE specifically — classify_utah_forge_npt() exists and recognises this archive’s real fields — which tells you adaptation here is partial, not absent: some layers of this pipeline are ready for this well’s data, and some aren’t yet.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#implementation",
+    "href": "chapters/chapter_12.html#implementation",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.5 Implementation",
+    "text": "12.5 Implementation\n\n# code/chapter_12/torque_trend_check.py\ndef torque_trend(readings: list[tuple[str, float]]) -&gt; list[tuple[str, float, float]]:\n    \"\"\"Given [(date, torque_value), ...] in chronological order, return\n    each day's percentage change from the previous day.\"\"\"\n    trend = []\n    for (prev_date, prev_val), (date, val) in zip(readings, readings[1:]):\n        pct_change = (val - prev_val) / prev_val if prev_val else 0.0\n        trend.append((date, val, pct_change))\n    return trend\n\n\nreadings = [\n    (\"2020-11-24\", 4400),\n    (\"2020-11-25\", 4200),\n    (\"2020-11-26\", 5615),\n]\nfor date, val, pct in torque_trend(readings):\n    print(f\"{date}: {val} ({pct:+.1%})\")\n# 2020-11-25: 4200 (-4.5%)\n# 2020-11-26: 5615 (+33.7%)",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#practical-exercise",
+    "href": "chapters/chapter_12.html#practical-exercise",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.6 Practical exercise",
+    "text": "12.6 Practical exercise\nTry it yourself: Extend readings with report #39’s header torque value (check the PDF yourself — Chapter 1’s read_ddr.py will get it for you) and confirm whether the elevated torque persisted after the pipe was freed, or dropped back toward the pre-event baseline.\nYou’ll know it worked when: you can state the real percentage change for each day, sourced from header fields you extracted yourself, not from this chapter’s text.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#challenge-exercise",
+    "href": "chapters/chapter_12.html#challenge-exercise",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.7 Challenge exercise",
+    "text": "12.7 Challenge exercise\nChallenge: Pull the TORQUE header value for all 76 reports in datasets/forge_archive/ (Chapter 1’s extraction plus a small regex), plot it as a time series, and identify every day where torque jumps more than 25% from the previous day. Cross-reference each jump against that day’s narrative text — how many of them correspond to a real operational event like report #38’s, and how many are unremarkable? A reference solution is in code/chapter_12/challenge/.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#key-takeaways",
+    "href": "chapters/chapter_12.html#key-takeaways",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.8 Key takeaways",
+    "text": "12.8 Key takeaways\n\nA single structured number, tracked day over day, can corroborate a narrative event — but be precise about what you’ve actually shown: same-day correlation is not the same claim as a multi-day leading indicator, and this chapter deliberately didn’t claim more than the real data supports.\nProduction causality-detection code carries real, inspectable thresholds — read them before trusting output, and check that its configuration (like a phase vocabulary) actually matches your dataset before running it.\nGenuine cross-well intelligence needs more than one well’s worth of data to compare against — Utah FORGE’s data/fields/UtahForge/wells/ structure in the companion pipeline is already organized to support additional wells as this research programme (or your own multi-well archive) grows.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#repository-files",
+    "href": "chapters/chapter_12.html#repository-files",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.9 Repository files",
+    "text": "12.9 Repository files\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\ncode/chapter_12/torque_trend_check.py\nDay-over-day trend check on a structured header field\n\n\nDDR_UTAH_FORGE/src/ddr_rag/causality_analyzer.py\nWindowed leading-indicator detection (companion repo)\n\n\nDDR_UTAH_FORGE/src/ddr_rag/npt_classifier.py\nUtah-FORGE-adapted NPT classification (companion repo)\n\n\nDDR_UTAH_FORGE/data/fields/UtahForge/wells/\nMulti-well data structure, ready for expansion (companion repo)",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_12.html#suggested-next-step",
+    "href": "chapters/chapter_12.html#suggested-next-step",
+    "title": "12  Sequence Detection: Building Toward Cross-Well Intelligence",
+    "section": "12.10 Suggested next step",
+    "text": "12.10 Suggested next step\nYou’ve now built, chapter by chapter, a working RAG system grounded entirely in real, public DDRs — from extracting a single PDF’s text through checking a real numeric trend against a real narrative event. Appendix A shows how to set up the full companion pipeline and point it at your own DDR archive, whether that’s more Utah FORGE data as it becomes available, or a different well entirely.",
+    "crumbs": [
+      "Part II — Industrialising the System",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Sequence Detection: Building Toward Cross-Well Intelligence</span>"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html",
+    "href": "appendix/appendix_a_environment_setup.html",
+    "title": "Appendix A: Environment Setup",
+    "section": "",
+    "text": "1. Prerequisites\nThis appendix covers everything you need before Chapter 1: installing dependencies, rendering the book, and understanding how Chapters 6–12 relate to the companion DDR Intelligence Platform pipeline.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html#prerequisites",
+    "href": "appendix/appendix_a_environment_setup.html#prerequisites",
+    "title": "Appendix A: Environment Setup",
+    "section": "",
+    "text": "Python 3.11 or later\nQuarto 1.7 or later (quarto --version to check)\nGit\nPositron (recommended) or any editor with a Python and Quarto extension",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html#set-up-the-books-python-environment",
+    "href": "appendix/appendix_a_environment_setup.html#set-up-the-books-python-environment",
+    "title": "Appendix A: Environment Setup",
+    "section": "2. Set up the book’s Python environment",
+    "text": "2. Set up the book’s Python environment\nFrom the book/ directory:\npython3 -m venv .venv\nsource .venv/bin/activate          # Windows: .venv\\Scripts\\activate\npip install -r requirements.txt\nOr, if you prefer conda/mamba:\nconda env create -f environment.yml\nconda activate ddr-rag-book",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html#the-sample-dataset",
+    "href": "appendix/appendix_a_environment_setup.html#the-sample-dataset",
+    "title": "Appendix A: Environment Setup",
+    "section": "3. The sample dataset",
+    "text": "3. The sample dataset\nChapters 1–5 use ten real, curated Daily Drilling Reports from the public Utah FORGE archive (well FORGE 16A(78)-32) — already committed as PDFs in datasets/sample_ddrs/, since this is public data with no confidentiality concerns. Part II’s “at scale” chapters use the full 76-report archive, committed at datasets/forge_archive/. Nothing needs to be generated or downloaded to start: git clone gives you the full dataset.\nIf you want to reproduce either curated subset from your own copy of the full public archive, or extend it with more reports, see code/chapter_01/build_sample_archive.py and code/chapter_08/build_full_archive.py.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html#render-the-book",
+    "href": "appendix/appendix_a_environment_setup.html#render-the-book",
+    "title": "Appendix A: Environment Setup",
+    "section": "4. Render the book",
+    "text": "4. Render the book\nquarto render\nOutput is written to _book/. For live-editing a single chapter while you write:\nquarto preview chapters/chapter_01.qmd",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html#working-in-positron",
+    "href": "appendix/appendix_a_environment_setup.html#working-in-positron",
+    "title": "Appendix A: Environment Setup",
+    "section": "5. Working in Positron",
+    "text": "5. Working in Positron\nPositron runs Quarto documents natively — open any .qmd file and use the Render button in the editor toolbar, or run individual code cells interactively (each ```{python} block behaves like a Jupyter cell). Recommended setup:\n\nOpen the book/ folder as your Positron workspace root.\nSelect the .venv interpreter created in Step 2 via the interpreter picker (bottom status bar).\nUse the Quarto: Preview command for live reload while editing a chapter.\nUse the Console pane to run chapter scripts interactively (python code/chapter_01/read_ddr.py ...) — this is the fastest way to experiment with the code before committing it to a .qmd.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii",
+    "href": "appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii",
+    "title": "Appendix A: Environment Setup",
+    "section": "6. The companion pipeline (for Part II)",
+    "text": "6. The companion pipeline (for Part II)\nChapters 6–12 reference DDR_UTAH_FORGE, a real, working DDR intelligence pipeline built specifically against this book’s public archive — same architecture as the reference platform this project grew from (per-document extraction, hybrid retrieval, structured facts, causality analysis), adapted for Utah FORGE’s real filenames and data. It’s a separate repository — clone it alongside this book’s repository, not inside it:\ncd ..                      # up from book/ to your projects root\ngit clone https://github.com/djimrastephane/DDR_UTAH_FORGE.git\ncd DDR_UTAH_FORGE\npython -m venv .venv && source .venv/bin/activate\npip install -r requirements.txt\nIts own data/ folder is gitignored — the repository is code only. Copy this book’s datasets/forge_archive/ into DDR_UTAH_FORGE/data/raw/ (or point it at your own copy of the public Utah FORGE archive) and follow its README.md Quickstart to run the full pipeline and Streamlit dashboard.\n\n\n\n\n\n\nYou don’t need it to follow along\n\n\n\nPart II chapters are written so every technique works fully standalone: the simplified code in code/chapter_06/ through code/chapter_12/ in this book’s repository requires no access to the companion pipeline. Where a chapter cites a specific file or a specific result from DDR_UTAH_FORGE (for example, the real 2,943-chunk global index in Chapter 8, or the real report-gap dates in Chapter 10), that result was independently verified against the pipeline’s actual output before being written into the book, so you can trust the numbers even without running the pipeline yourself.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html#a-note-on-data-handling",
+    "href": "appendix/appendix_a_environment_setup.html#a-note-on-data-handling",
+    "title": "Appendix A: Environment Setup",
+    "section": "7. A note on data handling",
+    "text": "7. A note on data handling\nThis book’s own data (datasets/sample_ddrs/, datasets/forge_archive/) is public and safe to commit, share, and publish — that’s true throughout this repository. The moment you point this book’s code at your own organisation’s DDRs instead, that changes:\n\nNever commit real, confidential DDR PDFs, extracted text, or derived artefacts (embeddings, indexes) to a public repository.\nIf you’re experimenting on a shared machine, confirm your organisation’s data classification policy covers running third-party Python packages (embedding models, OCR engines) against confidential well data.\nAdd your own archive’s path to .gitignore before dropping any confidential PDFs into a local datasets/ folder for testing.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a_environment_setup.html#troubleshooting",
+    "href": "appendix/appendix_a_environment_setup.html#troubleshooting",
+    "title": "Appendix A: Environment Setup",
+    "section": "8. Troubleshooting",
+    "text": "8. Troubleshooting\n\n\n\n\n\n\n\nSymptom\nLikely cause\n\n\n\n\nquarto render fails on a code cell\nActivate .venv before rendering — Quarto uses whichever Python is on PATH. Confirm with which python and python -c \"import pdfplumber\".\n\n\nModuleNotFoundError: sentence_transformers (Chapter 4+)\nRe-run pip install -r requirements.txt; this is a heavier dependency and sometimes needs a separate pip install torch first on some platforms.\n\n\nFAISS import error on Apple Silicon (Chapter 8+)\nEnsure you installed faiss-cpu, not faiss-gpu — the latter has no macOS wheel.\n\n\nread_ddr.py reports no text extracted\nConfirm you’re pointing at a file in datasets/sample_ddrs/ or datasets/forge_archive/ — both are committed directly, so this shouldn’t happen unless the path is wrong.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_b_oilfield_glossary.html",
+    "href": "appendix/appendix_b_oilfield_glossary.html",
+    "title": "Appendix B: Oilfield Abbreviation Glossary",
+    "section": "",
+    "text": "This glossary supports Chapter 2’s abbreviation expansion engine and the Chapter 2 challenge exercise. It is broader than the ABBREVIATIONS dict built in Chapter 2 itself — that chapter’s dictionary is deliberately scoped to terms verified present in this book’s real Utah FORGE archive. This appendix adds enough additional common oilfield terms to give the expander real coverage on a first pass against a different archive. It is still not exhaustive — abbreviation usage varies by operator, rig contractor, and basin.\nTerms marked (FORGE) are confirmed present in this book’s real sample archive; the rest are common industry terms not found in this particular dataset but likely to appear in others.\n\n\n\n\n\n\n\nAbbreviation\nExpansion\n\n\n\n\nAFE\nauthorization for expenditure (FORGE)\n\n\nBHA\nbottom hole assembly (FORGE)\n\n\nBOP\nblowout preventer\n\n\nCBL\ncement bond log\n\n\nCIRC\ncirculate\n\n\nCOND\ncondition\n\n\nCSG\ncasing\n\n\nDFIT\ndiagnostic fracture injection test (FORGE)\n\n\nDFS\ndays from spud (FORGE)\n\n\nDHSV\ndownhole safety valve\n\n\nDLS\ndogleg severity (FORGE)\n\n\nDOL\ndays on location (FORGE)\n\n\nDP\ndrill pipe\n\n\nECD\nequivalent circulating density (FORGE)\n\n\nEMW\nequivalent mud weight\n\n\nFIT\nformation integrity test\n\n\nFR\nfrom\n\n\nGPM\ngallons per minute (FORGE)\n\n\nHWDP\nheavy weight drill pipe (FORGE)\n\n\nKOP\nkick-off point\n\n\nLOT\nleak-off test\n\n\nMD\nmeasured depth (FORGE)\n\n\nMIRU\nmove in, rig up\n\n\nMW\nmud weight\n\n\nMWD\nmeasurement while drilling (FORGE)\n\n\nNMDC\nnon-magnetic drill collar (FORGE)\n\n\nNPT\nnon-productive time (FORGE)\n\n\nOBSD\nobserved\n\n\nPBTD\nplugged back total depth\n\n\nPDC\npolycrystalline diamond compact (bit type) (FORGE)\n\n\nPJSM\npre-job safety meeting (FORGE)\n\n\nPOOH\npull out of hole\n\n\nPPG\npounds per gallon\n\n\nPU\npick up (pipe)\n\n\nPUW\npick up weight\n\n\nRIH\nrun in hole\n\n\nRKB\nrotary kelly bushing (FORGE)\n\n\nROP\nrate of penetration (FORGE)\n\n\nRPM\nrevolutions per minute (FORGE)\n\n\nSICP\nshut-in casing pressure\n\n\nSIDPP\nshut-in drill pipe pressure\n\n\nSLM\nslow (rate), or short for “slim hole” depending on context — verify against operator style guide\n\n\nSPP\nstand pipe pressure (FORGE)\n\n\nSTDS\nstands (of drill pipe) (FORGE)\n\n\nSTK\nstuck\n\n\nTD\ntotal depth\n\n\nTIH\ntrip in hole\n\n\nTOOH\ntrip out of hole\n\n\nTVD\ntrue vertical depth (FORGE)\n\n\nUBHO\nuniversal bottom hole orientation sub (FORGE)\n\n\nUBI\nultrasonic borehole imager (wireline log) (FORGE)\n\n\nWOB\nweight on bit (FORGE)\n\n\nWOC\nwait on cement\n\n\nWOW\nwait on weather\n\n\nXO\ncrossover (sub)\n\n\n\n\n\n\n\n\n\nAbbreviations are not universal\n\n\n\nThe same three letters can mean different things across operators and basins — build your abbreviation dictionary from your archive’s actual usage before trusting it against your own reports, and treat any ambiguous abbreviation (like SLM above) as a signal to check context rather than expand automatically.",
+    "crumbs": [
+      "Appendices",
+      "Appendix B: Oilfield Abbreviation Glossary"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Ji, Ziwei, Nayeon Lee, Rita Frieske, Tiezheng Yu, Dan Su, Yan Xu, Etsuko\nIshii, Ye Jin Bang, Andrea Madotto, and Pascale Fung. 2023.\n“Survey of Hallucination in Natural Language Generation.”\nACM Computing Surveys.\n\n\nJohnson, Jeff, Matthijs Douze, and Hervé Jégou. 2019.\n“Billion-Scale Similarity Search with GPUs.”\nhttps://arxiv.org/abs/1702.08734.\n\n\nLewis, Patrick, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir\nKarpukhin, Naman Goyal, Heinrich Küttler, et al. 2020.\n“Retrieval-Augmented Generation for Knowledge-Intensive\nNLP Tasks.” Advances in Neural Information\nProcessing Systems 33: 9459–74.\n\n\nMatthes, Eric. 2023. Python Crash Course: A Hands-on, Project-Based\nIntroduction to Programming. 3rd ed. No Starch Press.\n\n\nReimers, Nils, and Iryna Gurevych. 2019.\n“Sentence-BERT: Sentence Embeddings Using\nSiamese BERT-Networks.” Proceedings of the 2019\nConference on Empirical Methods in Natural Language Processing.\n\n\nRobertson, Stephen, and Hugo Zaragoza. 2009. “The Probabilistic\nRelevance Framework: BM25 and Beyond.” In\nFoundations and Trends in Information Retrieval, 3:333–89. 4.\n\n\nSociety of Petroleum Engineers. 2022. “Digitalisation of Daily\nDrilling Reports: Challenges and Opportunities.” SPE Digital\nTransformation Series.",
+    "crumbs": [
+      "References"
+    ]
+  }
+]
