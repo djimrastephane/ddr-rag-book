@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b7de04e6702a1605c8643bead4b18795.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-611755d51b4d1ffad88ecffef9e67371.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -391,7 +391,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 </section>
 <section id="implementation" class="level2" data-number="11.5">
 <h2 data-number="11.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">11.5</span> Implementation</h2>
-<div id="9598df77" class="cell" data-execution_count="1">
+<div id="7590fe07" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_11/eval_metrics.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recall_at_k(results: <span class="bu">list</span>[<span class="bu">dict</span>], k: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> [r <span class="cf">for</span> r <span class="kw">in</span> results <span class="cf">if</span> r.get(<span class="st">"rank"</span>) <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> r[<span class="st">"rank"</span>] <span class="op">&lt;=</span> k]</span>

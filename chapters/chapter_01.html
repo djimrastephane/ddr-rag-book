@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b7de04e6702a1605c8643bead4b18795.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-611755d51b4d1ffad88ecffef9e67371.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -398,7 +398,7 @@ Pipe free</code></pre>
 <section id="step-1-get-the-sample-archive" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="step-1-get-the-sample-archive"><span class="header-section-number">1.5.1</span> Step 1: get the sample archive</h3>
 <p>The ten curated reports used throughout Part I are already in <code>datasets/sample_ddrs/</code> in this repository — real PDFs, committed directly, since Utah FORGE data is public. You don’t need to generate or download anything to start.</p>
-<div id="2b880cff" class="cell" data-execution_count="1">
+<div id="4327daba" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -408,7 +408,7 @@ Pipe free</code></pre>
 <h3 data-number="1.5.2" class="anchored" data-anchor-id="step-2-extract-text-from-one-pdf"><span class="header-section-number">1.5.2</span> Step 2: extract text from one PDF</h3>
 <p>Here is the core of <code>code/chapter_01/read_ddr.py</code>, built up piece by piece.</p>
 <p>First, open a PDF and read one page:</p>
-<div id="a2dfabb6" class="cell" data-execution_count="2">
+<div id="c02748f3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
@@ -417,7 +417,7 @@ Pipe free</code></pre>
 </div>
 <p>Run that and you’ll see the report’s text printed straight to your terminal — the full header block (well name, spud date, days from spud), casing and mud tables, the BHA component list, survey data, and the time breakdown — all as a plain Python string. Real DDRs pack in far more than a simple narrative: this one report alone has seven distinct data sections.</p>
 <p>Every DDR in this archive is a single page, but that won’t be true of every report you’ll ever encounter. Loop over every page and keep track of which page each chunk of text came from — you’ll need that later for citations:</p>
-<div id="1ecb5da8" class="cell" data-execution_count="3">
+<div id="9cd08b43" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
