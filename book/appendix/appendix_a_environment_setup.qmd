@@ -75,23 +75,38 @@ cell). Recommended setup:
 
 ## 6. The companion pipeline (for Part II)
 
-Chapters 6–12 reference **DDR_UTAH_FORGE**, a real, working DDR
-intelligence pipeline built specifically against this book's public
-archive — same architecture as the reference platform this project grew
-from (per-document extraction, hybrid retrieval, structured facts,
-causality analysis), adapted for Utah FORGE's real filenames and data.
+Chapters 6–12 reference [**DDR_UTAH_FORGE**](https://github.com/djimrastephane/DDR_UTAH_FORGE),
+a real, working DDR intelligence pipeline built specifically against this
+book's public archive — same architecture as the reference platform this
+project grew from (per-document extraction, hybrid retrieval, structured
+facts, causality analysis), adapted for Utah FORGE's real filenames and
+data. It's a separate repository — clone it alongside this book's
+repository, not inside it:
 
-::: {.callout-important title="Companion pipeline availability"}
-`DDR_UTAH_FORGE` is a separate project from this book and is not yet
-published. Part II chapters are written so every technique works fully
-standalone: the simplified code in `code/chapter_06/` through
-`code/chapter_12/` in *this* book's repository requires no access to the
-companion pipeline. Where a chapter cites a specific file or a specific
-result from `DDR_UTAH_FORGE` (for example, the real 2,943-chunk global
-index in Chapter 8, or the real report-gap dates in Chapter 10), that
-result was independently verified against the pipeline's actual output
-before being written into the book, so you can trust the numbers even
-without running the pipeline yourself.
+```bash
+cd ..                      # up from book/ to your projects root
+git clone https://github.com/djimrastephane/DDR_UTAH_FORGE.git
+cd DDR_UTAH_FORGE
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Its own `data/` folder is gitignored — the repository is code only. Copy
+this book's `datasets/forge_archive/` into `DDR_UTAH_FORGE/data/raw/` (or
+point it at your own copy of the public Utah FORGE archive) and follow
+its `README.md` Quickstart to run the full pipeline and Streamlit
+dashboard.
+
+::: {.callout-tip title="You don't need it to follow along"}
+Part II chapters are written so every technique works fully standalone:
+the simplified code in `code/chapter_06/` through `code/chapter_12/` in
+*this* book's repository requires no access to the companion pipeline.
+Where a chapter cites a specific file or a specific result from
+`DDR_UTAH_FORGE` (for example, the real 2,943-chunk global index in
+Chapter 8, or the real report-gap dates in Chapter 10), that result was
+independently verified against the pipeline's actual output before being
+written into the book, so you can trust the numbers even without running
+the pipeline yourself.
 :::
 
 ## 7. A note on data handling

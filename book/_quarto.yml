@@ -11,7 +11,7 @@ book:
   page-footer:
     left: "Building Industrial RAG Systems from Daily Drilling Reports"
     right: "Built with Quarto"
-  repo-url: https://github.com/your-org/ddr-rag-book
+  repo-url: https://github.com/djimrastephane/ddr-rag-book
   repo-actions: [edit, issue]
   downloads: [pdf]
   sidebar:
