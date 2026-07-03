@@ -12,8 +12,9 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# Generated datasets and derived artefacts (never commit real DDR data)
-datasets/sample_ddrs/*.pdf
+# Real Utah FORGE DDR PDFs in datasets/sample_ddrs/ and datasets/forge_archive/
+# ARE committed -- they are publicly available DOE/Utah FORGE reports, not
+# confidential operator data. Only derived/generated artefacts are ignored.
 datasets/ddr_text/
 datasets/ddr_text_expanded/
 datasets/*.index

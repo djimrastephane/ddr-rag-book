@@ -13,12 +13,22 @@ By the end of this chapter, you will be able to:
 
 ## Operational problem
 
-Picture a folder on a shared drive: `Well_EXAMPLE-1H/DDRs/`. Inside it, 40
-PDFs, one per day, named things like `DDR_017_EXAMPLE-1H.pdf`. Somewhere in
-report 18 is the sentence that matters most this week: *"STK PIPE @ 9,960'.
-WORKED PIPE, CIRC & PUMPED PILL."* Nobody remembers which report it's in.
-Opening 40 PDFs by hand to find one line is exactly the kind of task a
-short Python script should be doing for you.
+This book uses a real, publicly available archive: the Daily Drilling
+Reports from **Utah FORGE** — a Department of Energy-funded research
+project at the University of Utah, drilling and testing an enhanced
+geothermal system (EGS) well, **FORGE 16A(78)-32**, in Beaver County,
+Utah. Because it's a public research well rather than a commercial
+operator's confidential asset, its DDRs are openly available — which
+means every example in this book is real, traceable text, not an
+invented stand-in.
+
+Picture the same folder problem any operations team faces: 76 DDR PDFs,
+one per day of drilling and completion work, named inconsistently by
+whatever software produced them. Somewhere in that folder is the report
+that matters most this week — the day the drill string got stuck, or the
+day a fishing run recovered lost bit pieces. Opening 76 PDFs one at a
+time to find the right paragraph is exactly the kind of task a short
+Python script should do for you.
 
 That's the whole job of this chapter: given one PDF, get its text into a
 Python string you can work with. Nothing clever yet — no search, no
@@ -27,21 +37,27 @@ Everything in this book is built on top of getting this first step right.
 
 ## Example DDR extract
 
-::: {.callout-note title="Sample DDR excerpt (DDR_017_EXAMPLE-1H.pdf)"}
+::: {.callout-note title="Real DDR excerpt — report #38, FORGE 16A(78)-32, 2020-11-26"}
 ```
-DAILY DRILLING REPORT
-WELL: EXAMPLE-1H  DATE: 2025-03-14  REPORT NO: 17  DEPTH: 9,842 ft MD
+RPT DATE:11/26/2020
+DAILY DRILLING REPORT RPT NUM.:38
+WELL NAME:FORGE 16A [78]-32 JOB:Drilling 65° Tangent
+PRESENT OPERATIONS:PIPE FREE, TRIP OUT OF HOLE FOR BHA INSPECTION
 
-24-HR OPERATIONS SUMMARY
-0600-1130  POOH FR 9,842' TO CHANGE BHA. ERRATIC TORQUE OBSD LAST 3 STDS.
-1130-1400  RIH W/ NEW BHA TO 9,700'. NO ISSUES.
-1400-2400  DRLG AHEAD 9,700' TO 9,912'. ROP AVG 22 FT/HR.
+TIME BREAKDOWN
+23:30 04:00 4.5 Drill From 6,360' to 6,507', (147') Total, 32.6' feet per hour.
+WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP 3200-3400 GPM 560, DIFF 200-300psi
+During the slide lost tool face and became assembly became stuck
+04:00 06:00 2.0 Work pipe, circulate lube sweep, work tool back in position
+Pipe free
 ```
 :::
 
-This is one of five synthetic DDRs you'll generate in a moment. They follow
-the shorthand style real DDRs use — abbreviations, timestamps, depths — so
-everything you build against them transfers directly to real reports.
+This is one of ten real reports curated for Part I, spanning the well's
+actual timeline from rig-up in October 2020 through this stuck-pipe day
+in November and a fishing operation in December. Every excerpt in Part I
+is genuine, unedited report text — no anonymisation was needed, because
+this data is already public.
 
 ## Theory
 
@@ -50,40 +66,47 @@ instructions for *drawing* characters at specific coordinates, not a
 stream of text with a beginning and an end. Two DDRs that look identical on
 screen can be built completely differently under the hood:
 
-- **Digital-native PDFs** were generated directly from software (Word, a
-  drilling data system, a report generator). The text was placed on the
-  page as actual character data, so a library can recover it.
+- **Digital-native PDFs** were generated directly from software (in this
+  case, WellEz, the drilling data system that produced every report in
+  this archive). The text was placed on the page as actual character
+  data, so a library can recover it.
 - **Scanned PDFs** are photographs of paper reports. There is no character
   data at all — just a picture of a page. Extracting text from these
   requires optical character recognition (OCR), which we cover in
   Chapter 6.
 
-This chapter deals only with digital-native PDFs — the more common case for
-recent reports, and the right place to start. We'll use
-[`pdfplumber`](https://github.com/jsvine/pdfplumber), a Python library that
-reads a PDF's internal structure and hands back the text (and, later in
-the book, tables and layout) on each page. There are other libraries that
-do this — `PyPDF2`, `pymupdf` — and they're worth knowing about, but
-`pdfplumber` is a good default: actively maintained, and its text
-extraction is reliable on the kind of structured reports we're working
-with.
+The Utah FORGE archive is entirely digital-native — every report was
+produced by the same software, so extraction is reliable throughout Part
+I. This won't always be true of a real archive (Chapter 6 deals with the
+scanned-report case), but it's the right place to start.
+
+We'll use [`pdfplumber`](https://github.com/jsvine/pdfplumber), a Python
+library that reads a PDF's internal structure and hands back the text
+(and, later in the book, tables and layout) on each page. There are other
+libraries that do this — `PyPDF2`, `pymupdf` — and they're worth knowing
+about, but `pdfplumber` is a good default: actively maintained, and its
+text extraction is reliable on the kind of structured reports we're
+working with.
 
 ## Implementation
 
-### Step 1: get some DDRs to work with
+### Step 1: get the sample archive
 
-Real DDRs are confidential, so this book uses synthetic ones that read
-like the real thing. Generate a small sample archive:
+The ten curated reports used throughout Part I are already in
+`datasets/sample_ddrs/` in this repository — real PDFs, committed
+directly, since Utah FORGE data is public. You don't need to generate or
+download anything to start.
 
 ```{python}
 #| eval: false
-# code/chapter_01/generate_sample_ddr.py
-python code/chapter_01/generate_sample_ddr.py
+import pathlib
+sorted(pathlib.Path("datasets/sample_ddrs").glob("*.pdf"))
 ```
 
-This writes five PDFs into `datasets/sample_ddrs/` — reports 15, 16, 17,
-and 18 for well EXAMPLE-1H (including the stuck pipe event on report 18),
-and report 22 for well EXAMPLE-2H.
+If you want to build this curated subset yourself from a full local copy
+of the public archive (or extend it with more reports), see
+`code/chapter_01/build_sample_archive.py` — it's documented in
+[Appendix A](../appendix/appendix_a_environment_setup.qmd).
 
 ### Step 2: extract text from one PDF
 
@@ -95,18 +118,22 @@ First, open a PDF and read one page:
 #| eval: false
 import pdfplumber
 
-with pdfplumber.open("datasets/sample_ddrs/DDR_017_EXAMPLE-1H.pdf") as pdf:
+with pdfplumber.open("datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf") as pdf:
     first_page = pdf.pages[0]
     print(first_page.extract_text())
 ```
 
 Run that and you'll see the report's text printed straight to your
-terminal — depth, timestamps, operations summary, all of it as a plain
-Python string.
+terminal — the full header block (well name, spud date, days from spud),
+casing and mud tables, the BHA component list, survey data, and the time
+breakdown — all as a plain Python string. Real DDRs pack in far more than
+a simple narrative: this one report alone has seven distinct data
+sections.
 
-Most DDRs are a single page, but some aren't. Loop over every page and
-keep track of which page each chunk of text came from — you'll need that
-later for citations:
+Every DDR in this archive is a single page, but that won't be true of
+every report you'll ever encounter. Loop over every page and keep track
+of which page each chunk of text came from — you'll need that later for
+citations:
 
 ```{python}
 #| eval: false
@@ -135,48 +162,36 @@ interface so you can point it at one file or a whole folder:
 
 ```bash
 # One file, printed to the terminal
-python code/chapter_01/read_ddr.py datasets/sample_ddrs/DDR_017_EXAMPLE-1H.pdf
+python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
 
 # A whole folder, saved as .txt files
 python code/chapter_01/read_ddr.py datasets/sample_ddrs/ --batch --out datasets/ddr_text
 ```
 
-Try the first command now. You should see:
-
-```
-===== DDR_017_EXAMPLE-1H.pdf =====
---- Page 1 ---
-DAILY DRILLING REPORT
-WELL: EXAMPLE-1H DATE: 2025-03-14 REPORT NO: 17 DEPTH: 9,842 ft MD
-24-HR OPERATIONS SUMMARY
-0600-1130 POOH FR 9,842' TO CHANGE BHA. ERRATIC TORQUE OBSD LAST 3 STDS.
-1130-1400 RIH W/ NEW BHA TO 9,700'. NO ISSUES.
-1400-2400 DRLG AHEAD 9,700' TO 9,912'. ROP AVG 22 FT/HR.
-```
-
-That's it — you've just built a tool that reads DDRs faster than you can
-open Adobe Acrobat.
+Try the first command now. You should see the full report text, including
+the line: `During the slide lost tool face and became assembly became
+stuck` — real language from a real rig report, not a paraphrase.
 
 ## Practical exercise
 
 **Try it yourself:** Run `read_ddr.py` in batch mode against
 `datasets/sample_ddrs/`, saving the output to `datasets/ddr_text/`. Then
-open `DDR_018_EXAMPLE-1H.txt` and confirm the stuck pipe event is in
-there, word for word.
+open `FORGE-16A-78-32_Drilling_050_2020-12-08.txt` and find the line
+describing what the crew milled up that day.
 
-**You'll know it worked when:** you have five `.txt` files in
-`datasets/ddr_text/`, one per PDF, and you can find the line
-`STK PIPE @ 9,960'` in `DDR_018_EXAMPLE-1H.txt` without opening the
-original PDF.
+**You'll know it worked when:** you have ten `.txt` files in
+`datasets/ddr_text/`, one per PDF, and you can find the word "Fishing" in
+report 050's text without opening the original PDF.
 
 ## Challenge exercise
 
 **Challenge:** Extend the script to also print, for each PDF, the total
-number of pages and the total character count extracted. Then generate
-one more synthetic DDR yourself (add a new tuple to `SAMPLE_REPORTS` in
-`generate_sample_ddr.py`) describing a lost-circulation event, and confirm
-your script extracts it correctly. A reference solution is in
-`code/chapter_01/challenge/` in the companion repository.
+number of pages and the total character count extracted. Then compare
+report #3 (October 22, before the well was spudded — `PRESENT
+OPERATIONS: RIGGING UP...`) against report #38 (the stuck-pipe day): how
+much richer is the later report's text, and why might that be? (Hint:
+check the `SPUD DATE` and `DFS`/`DOL` fields in each report's header.) A
+reference solution is in `code/chapter_01/challenge/`.
 
 ## Key takeaways
 
@@ -189,22 +204,24 @@ your script extracts it correctly. A reference solution is in
   never crash on them.
 - A five-line function (`extract_text`) plus a thin command-line wrapper
   is already a genuinely useful tool. You don't need machine learning to
-  save an engineer an hour of searching PDFs by hand.
+  save an engineer an hour of searching PDFs by hand — and it works
+  identically whether the PDF is a synthetic example or, as here, a real
+  report from a real well.
 
 ## Repository files
 
 | File | Purpose |
 |---|---|
-| `code/chapter_01/generate_sample_ddr.py` | Creates the synthetic sample DDR archive |
 | `code/chapter_01/read_ddr.py` | Extracts text from one PDF or a folder of PDFs |
-| `datasets/sample_ddrs/` | Five synthetic DDR PDFs used throughout Part I |
+| `code/chapter_01/build_sample_archive.py` | Reproduces the curated Part I subset from the full public archive |
+| `datasets/sample_ddrs/` | Ten real, curated Utah FORGE DDR PDFs used throughout Part I |
 | `notebooks/chapter_01_explore.ipynb` | Interactive notebook version of this chapter |
 
 ## Suggested next step
 
-The text you just extracted is full of field shorthand — `POOH`, `BHA`,
-`STK PIPE`, `WOC` — that means everything to a drilling engineer and
-nothing to a keyword search or a language model. Chapter 2 builds an
-abbreviation expansion engine so `POOH` becomes `pull out of hole`
-everywhere it appears, turning this raw text into something both humans
-and machines can search reliably.
+The text you just extracted uses real oilfield shorthand and drilling
+terminology — `BHA`, `WOB`, `SPP`, `PJSM` — some spelled out, some
+abbreviated, exactly as the field actually writes it. Chapter 2 builds an
+abbreviation expansion engine grounded in what's actually in this
+archive, turning this raw text into something both humans and machines
+can search reliably.

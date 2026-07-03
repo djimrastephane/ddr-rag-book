@@ -17,32 +17,44 @@ By the end of this chapter, you will be able to:
 engineering decision-support tool against. Before this system goes in
 front of drilling engineers, you need a defensible answer to "how good is
 it" — and, more usefully, "which kinds of questions does it get wrong."
-The companion repository's evaluation harness
-(`scripts/run_eval.py`) runs 42 hand-built questions against the
-171-report campaign, split across five categories (factual, NPT incident,
-operational sequence, technical, cross-document) and three difficulty
-bands (easy, medium, hard), each scored against a known correct source
-DDR and page.
+The companion pipeline ships an evaluation harness for exactly this,
+`scripts/run_eval.py`, built against a real question set for a different
+(private, North Sea) campaign it was originally developed on. It has
+**not yet been run against the Utah FORGE archive** — no evaluation
+question set exists for this well yet. That's not a gap in the tooling;
+it's the natural next step, and this chapter walks you through doing it
+for real, against the same archive you've used throughout this book.
 
-## Example DDR extract
+## Building your own question set
 
-::: {.callout-note title="A real result from the companion repository's evaluation"}
+Rather than presenting borrowed results, build a small evaluation set
+against the ten-report Part I sample, where you already know the ground
+truth from having read the reports yourself in Chapters 1–5:
+
+::: {.callout-note title="A starter evaluation set for the Part I sample"}
 ```
-Metric          @1     @3     @5     @10
-Primary hit     70.7%  85.4%  85.4%  92.7%
-Page hit        84.2%  94.7%  94.7%  100%
+Q1: "Which report describes pipe becoming stuck during a slide?"
+    expected: FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
 
-MRR 78.6% · NDCG@1 70.7% · NDCG@5 79.6%
+Q2: "Which report shows packers failing to set?"
+    expected: FORGE-16A-78-32_Drilling_049_2020-12-07.pdf
 
-Recall@5 by category: cross-document 100% · factual 90% ·
-  operational sequence 90% · NPT incident 87.5% · technical 62.5%
+Q3: "Which report describes milling up lost pieces of bit?"
+    expected: FORGE-16A-78-32_Drilling_050_2020-12-08.pdf
+
+Q4: "Which report mentions mud fluid seepage losses?"
+    expected: FORGE-16A-78-32_Drilling_019_2020-11-07.pdf
+
+Q5: "Which report shows the crew rigging up before spud?"
+    expected: FORGE-16A-78-32_Drilling_003_2020-10-22.pdf
 ```
-The weakest category — technical, at 62.5% for `@5` — is questions that hinge
-on one specific value buried in dense narrative. That single number is
-worth more than an overall "85% accurate" headline: it tells you *exactly
-where* to invest next (a keyword/regex pass over structured fields, per
-the companion repository's own conclusion).
 :::
+
+Each question has exactly one verifiable correct answer, because you
+picked these five reports for their distinct, checkable events in
+Chapters 1–5. This is the right way to start an evaluation set: begin
+with cases you can verify by eye, before scaling to enough volume that
+you can no longer read every answer yourself.
 
 ## Theory
 
@@ -89,27 +101,31 @@ def ndcg_at_k(results: list[dict], k: int) -> float:
 ```
 
 Each `result` dict records, per evaluation question, the rank at which
-the known-correct DDR was retrieved (or `None` if it wasn't in the top
+the known-correct report was retrieved (or `None` if it wasn't in the top
 k considered). This mirrors the shape of `_recall_at_k()`, `_mrr()`, and
 `_ndcg_at_k()` in the companion repository's `scripts/run_eval.py`.
 
 ## Practical exercise
 
-**Try it yourself:** Write five evaluation questions against the sample
-DDR corpus from Part I (e.g. "which report describes the stuck pipe
-event?" → expected: `DDR_018_EXAMPLE-1H.pdf`), run them through Chapter
-9's hybrid search, and compute `recall@3` by hand.
+**Try it yourself:** Run the five questions above through Chapter 9's
+hybrid search over the ten-report sample archive, record each correct
+report's rank, and compute `recall@3` by hand.
 
 **You'll know it worked when:** you have a small CSV or JSON file mapping
-question → expected report, and a `recall@3` score you can quote and defend.
+question → expected report → observed rank, and a `recall@3` score you
+can quote and defend — because you wrote and verified every question
+yourself.
 
 ## Challenge exercise
 
-**Challenge:** Extend your five-question set to at least 15, spanning at
-least three of the companion repository's five categories, and compute
-`recall@5` broken down by category — mirroring the companion repository's
-`print_summary()` output. A reference solution is in
-`code/chapter_11/challenge/`.
+**Challenge:** Extend your five-question set to at least 15 questions
+against the *full* 76-report archive (`datasets/forge_archive/`), and
+compute `recall@5`. This is genuinely useful, unpublished work: as far as
+this book's companion pipeline is concerned, you'll be building the first
+real evaluation set for Utah FORGE. Save your question set alongside your
+results — it's the seed of exactly the kind of evaluation harness
+`scripts/run_eval.py` runs at scale once one exists. A reference solution
+approach is in `code/chapter_11/challenge/`.
 
 ## Key takeaways
 
@@ -118,21 +134,23 @@ least three of the companion repository's five categories, and compute
   helped.
 - `recall@k`, MRR, and `NDCG@k` answer different questions; report more
   than one.
-- A category/difficulty breakdown turns "85% accurate" into an actionable
-  finding — the companion repository's real weak spot (technical
-  questions, 62.5% for `@5`) only shows up once you slice the results.
+- Don't trust a system's evaluation results from a different dataset as a
+  proxy for how it performs on yours — a harness that scored well on one
+  campaign says nothing certain about a new well until you build and run
+  a question set against that well's own archive, which is exactly what
+  this chapter had you do.
 
 ## Repository files
 
 | File | Purpose |
 |---|---|
 | `code/chapter_11/eval_metrics.py` | `recall@k`, MRR, `NDCG@k` implementations |
-| `DDR_RAG_Pipeline/scripts/run_eval.py` | Full evaluation harness (companion repo) |
+| `DDR_UTAH_FORGE/scripts/run_eval.py` | Evaluation harness (companion repo) — ready to point at a Utah FORGE question set once you build one |
 
 ## Suggested next step
 
 Every discipline from Chapters 6–11 — OCR gating, structured chunking,
 hybrid retrieval, traceability, evaluation — exists in service of a
 single payoff: finding things in an archive a human reading it linearly
-would miss. Chapter 12 builds that payoff directly, connecting patterns
-across wells and operational phases.
+would miss. Chapter 12 builds toward that payoff, using a real sequence
+of events already in this archive.

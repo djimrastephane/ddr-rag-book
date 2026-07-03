@@ -12,7 +12,6 @@ dependencies:
   - pip
   - pip:
       - pdfplumber==0.11.4
-      - reportlab==4.2.5
       - sentence-transformers==3.1.1
       - faiss-cpu==1.8.0.post1
       - rank-bm25==0.2.2

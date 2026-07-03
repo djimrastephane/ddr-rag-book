@@ -13,40 +13,59 @@ By the end of this chapter, you will be able to:
 ## Operational problem
 
 Chapter 4's `embeddings @ query_vec` brute-force search works fine over
-five documents — it's a single matrix multiply. The companion repository's
-real archive has **171 reports and 14,879 indexed chunks**. Brute force
-still technically *works* at that scale on a laptop, but a production
-system needs to support per-document search (fast, scoped to one report),
-campaign-wide search across every chunk, and incremental updates as new
-reports arrive — none of which a flat NumPy array is built to do
-efficiently or conveniently.
+ten documents — it's a single matrix multiply. The full Utah FORGE
+archive is 76 reports. Run this book's companion pipeline's chunking and
+embedding steps against all of them and you get **2,943 chunks** — still
+small by industrial standards, but already the point where you want a
+persistent, queryable index rather than an in-memory NumPy array you
+rebuild every session. And a production system needs more than one query
+mode: per-document search (fast, scoped to one report) and campaign-wide
+search across every chunk are genuinely different operations.
 
 ## Theory
 
 A **vector database** (or vector index library, like FAISS
-[@johnson2019faiss]) organises
-embeddings so that similarity search doesn't require comparing the query
-against every single vector. At the scale this book deals with, even the
-simplest FAISS index — `IndexFlatIP` (flat, inner-product) — is the right
-choice: it's an *exact* nearest-neighbour search, mathematically
-equivalent to Chapter 4's brute-force approach, just implemented in
-optimised C++ with a persistent, loadable index file. (Larger-scale
-approximate indexes — IVF, HNSW — trade a small amount of accuracy for
-speed at millions of vectors; not a tradeoff this book's scale needs.)
+[@johnson2019faiss]) organises embeddings so that similarity search
+doesn't require comparing the query against every single vector. At this
+book's scale, even the simplest FAISS index — `IndexFlatIP` (flat,
+inner-product) — is the right choice: it's an *exact* nearest-neighbour
+search, mathematically equivalent to Chapter 4's brute-force approach,
+just implemented in optimised C++ with a persistent, loadable index file.
+(Larger-scale approximate indexes — IVF, HNSW — trade a small amount of
+accuracy for speed at millions of vectors; not a tradeoff this book's
+scale needs.)
 
 Because embeddings are normalized (Chapter 4), inner product *is* cosine
-similarity — which is exactly why the companion repository uses
-`faiss.IndexFlatIP` rather than a distance-based index.
+similarity — which is exactly why `IndexFlatIP` is the right index type
+rather than a distance-based one.
 
-The companion repository builds two tiers of index, matching the two
-retrieval pathways described in its README:
+## Building the real index
+
+The companion pipeline, **DDR_UTAH_FORGE**, builds two tiers of index:
 
 - **Per-document index** (`scripts/build_index.py`) — one FAISS index per
-  DDR, used when a question is scoped to a specific report.
-- **Global index** (`scripts/build_global_index.py`, materialised under
-  `data/global_index/`) — a single FAISS index over all 14,879 chunks
-  across all 171 reports, used for cross-document questions like "what
-  caused X across the campaign."
+  DDR, used when a question is scoped to a specific report. All 76
+  reports already have this: chunks, embeddings, and a `faiss.index` file
+  sit in `data/processed/<doc_id>/` for every report in the archive.
+- **Global index** (`scripts/build_global_index.py`) — a single FAISS
+  index over every chunk across every report, used for cross-document
+  questions like "which reports involve fishing operations."
+
+Running `build_global_index.py` against this archive's 76 pre-processed
+documents produces a real, verifiable result:
+
+```
+Found 76 docs with embeddings
+Concatenating 2,943 chunks from 76 docs...
+Building FAISS IndexFlatIP ((2943, 384))...
+  faiss.index — 2,943 vectors × 384d
+  elapsed: 2.65s
+```
+
+384 dimensions matches `all-MiniLM-L6-v2`, the same embedding model from
+Chapter 4 — this pipeline doesn't switch models between the toy version
+and the production one, it just changes how the resulting vectors are
+indexed and queried.
 
 ## Implementation
 
@@ -75,14 +94,14 @@ def search(index: faiss.Index, query_vec: np.ndarray, top_k: int = 5):
     return list(zip(indices[0].tolist(), scores[0].tolist()))
 ```
 
-This mirrors the indexing pattern in the companion repository's
+This mirrors the indexing pattern in the companion pipeline's
 `src/rag_pdf/services/search_service.py`, which builds `IndexFlatIP` over
 chunk embeddings and persists it to `faiss.index` alongside each
 document's other artefacts.
 
 ## Practical exercise
 
-**Try it yourself:** Build a FAISS index over the five sample DDR
+**Try it yourself:** Build a FAISS index over the ten sample DDR
 embeddings from Chapter 4, save it to disk, reload it in a fresh Python
 session, and confirm a query for "torque problems" returns the same
 top result as Chapter 4's brute-force search.
@@ -93,11 +112,13 @@ agree — because, mathematically, `IndexFlatIP` over normalized vectors
 
 ## Challenge exercise
 
-**Challenge:** Build two indexes — a per-document index for each sample
-DDR individually, and one global index across all five — and write a
-function that decides which to query based on whether a question mentions
-a specific report number. A reference solution is in
-`code/chapter_08/challenge/`.
+**Challenge:** If you have the full 76-report Utah FORGE archive
+(`datasets/forge_archive/`) and can run the heavier dependencies
+(`sentence-transformers`, `faiss-cpu`), chunk and embed all 76 reports
+yourself and confirm you land close to the real 2,943-chunk count above.
+Small differences are expected — your chunking parameters won't be
+identical to the production pipeline's — but you should be in the same
+order of magnitude. A reference solution is in `code/chapter_08/challenge/`.
 
 ## Key takeaways
 
@@ -114,12 +135,13 @@ a specific report number. A reference solution is in
 | File | Purpose |
 |---|---|
 | `code/chapter_08/build_faiss_index.py` | FAISS `IndexFlatIP` build/save/load/search |
-| `DDR_RAG_Pipeline/scripts/build_index.py` | Per-document index builder (companion repo) |
-| `DDR_RAG_Pipeline/scripts/build_global_index.py` | Campaign-wide global index builder (companion repo) |
+| `code/chapter_08/build_full_archive.py` | Reproduces the full 76-report archive from the public source |
+| `datasets/forge_archive/` | The full 76-report Utah FORGE archive |
+| `DDR_UTAH_FORGE/scripts/build_index.py` | Per-document index builder (companion repo) |
+| `DDR_UTAH_FORGE/scripts/build_global_index.py` | Campaign-wide global index builder (companion repo) |
 
 ## Suggested next step
 
-A fast index doesn't guarantee good retrieval. Chapter 9 shows a query the
-companion repository's real evaluation flags as a weak point — a precise
-numeric query like "overpull below 20 klbs" — and builds hybrid retrieval
-to fix it.
+A fast index doesn't guarantee good retrieval. Chapter 9 looks at the
+retrieval scoring code itself — how sparse and dense signals get combined,
+and what it takes to make that combination numerically sound.

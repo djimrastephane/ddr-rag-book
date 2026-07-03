@@ -20,6 +20,13 @@ Platform: a retrieval-augmented generation (RAG) system purpose-built for
 drilling and completions data, that you built chapter by chapter and
 understand end to end.
 
+Every example in this book uses real Daily Drilling Reports — not
+invented ones. The archive is from **Utah FORGE**, a Department of
+Energy-funded geothermal research well (FORGE 16A(78)-32) whose reports
+are publicly available. No anonymisation, no synthetic stand-ins: you'll
+read genuine rig-floor language, including a real stuck-pipe event and a
+real fishing operation, from page one.
+
 ## Who this book is for
 
 You should read this book if you are a drilling engineer, completions
@@ -39,7 +46,7 @@ when you need it to solve the problem in front of you — not before.
 | Chapter | You will be able to... |
 |---|---|
 | 1 | Extract text from a DDR PDF |
-| 2 | Expand oilfield abbreviations (POOH, RIH, BHA...) automatically |
+| 2 | Expand oilfield abbreviations (BHA, WOB, MWD...) automatically |
 | 3 | Keyword-search your entire DDR archive |
 | 4 | Search DDRs by meaning, not just exact words |
 | 5 | Ask a question and get a cited, evidence-backed answer |
@@ -49,7 +56,7 @@ when you need it to solve the problem in front of you — not before.
 
 Every chapter solves one operational problem and ends with something you can
 run. There is no chapter you read passively — you will type code, run it
-against real (or realistic, anonymised) DDR text, and see it work. Theory
+against real DDR text, and see it work. Theory
 appears only when it explains *why* the code in front of you behaves the way
 it does.
 

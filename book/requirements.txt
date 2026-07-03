@@ -1,6 +1,5 @@
 # Core PDF and text processing (Chapter 1-2)
 pdfplumber==0.11.4
-reportlab==4.2.5
 
 # Search and retrieval (Chapter 3-4, 8-9)
 numpy==1.26.4

@@ -1,52 +1,72 @@
 # Appendix B: Oilfield Abbreviation Glossary {#sec-appendix-b .unnumbered}
 
 This glossary supports Chapter 2's abbreviation expansion engine and the
-Chapter 2 challenge exercise. It is not exhaustive — abbreviation usage
-varies by operator, rig contractor, and basin — but covers the
-terms used throughout this book's sample DDRs, plus enough additional
-common terms to give the expander real coverage on a first pass against
-your own archive.
+Chapter 2 challenge exercise. It is broader than the `ABBREVIATIONS` dict
+built in Chapter 2 itself — that chapter's dictionary is deliberately
+scoped to terms verified present in this book's real Utah FORGE archive.
+This appendix adds enough additional common oilfield terms to give the
+expander real coverage on a first pass against a different archive. It is
+still not exhaustive — abbreviation usage varies by operator, rig
+contractor, and basin.
+
+Terms marked **(FORGE)** are confirmed present in this book's real sample
+archive; the rest are common industry terms not found in this particular
+dataset but likely to appear in others.
 
 | Abbreviation | Expansion |
 |---|---|
-| BHA | bottom hole assembly |
+| AFE | authorization for expenditure (FORGE) |
+| BHA | bottom hole assembly (FORGE) |
 | BOP | blowout preventer |
 | CBL | cement bond log |
 | CIRC | circulate |
 | COND | condition |
 | CSG | casing |
+| DFIT | diagnostic fracture injection test (FORGE) |
+| DFS | days from spud (FORGE) |
 | DHSV | downhole safety valve |
+| DLS | dogleg severity (FORGE) |
+| DOL | days on location (FORGE) |
 | DP | drill pipe |
-| ECD | equivalent circulating density |
+| ECD | equivalent circulating density (FORGE) |
 | EMW | equivalent mud weight |
 | FIT | formation integrity test |
 | FR | from |
-| GPM | gallons per minute |
+| GPM | gallons per minute (FORGE) |
+| HWDP | heavy weight drill pipe (FORGE) |
 | KOP | kick-off point |
 | LOT | leak-off test |
-| MD | measured depth |
+| MD | measured depth (FORGE) |
 | MIRU | move in, rig up |
 | MW | mud weight |
-| NPT | non-productive time |
+| MWD | measurement while drilling (FORGE) |
+| NMDC | non-magnetic drill collar (FORGE) |
+| NPT | non-productive time (FORGE) |
 | OBSD | observed |
 | PBTD | plugged back total depth |
+| PDC | polycrystalline diamond compact (bit type) (FORGE) |
+| PJSM | pre-job safety meeting (FORGE) |
 | POOH | pull out of hole |
 | PPG | pounds per gallon |
 | PU | pick up (pipe) |
 | PUW | pick up weight |
 | RIH | run in hole |
-| ROP | rate of penetration |
-| RPM | revolutions per minute |
+| RKB | rotary kelly bushing (FORGE) |
+| ROP | rate of penetration (FORGE) |
+| RPM | revolutions per minute (FORGE) |
 | SICP | shut-in casing pressure |
 | SIDPP | shut-in drill pipe pressure |
 | SLM | slow (rate), or short for "slim hole" depending on context — verify against operator style guide |
-| STDS | stands (of drill pipe) |
+| SPP | stand pipe pressure (FORGE) |
+| STDS | stands (of drill pipe) (FORGE) |
 | STK | stuck |
 | TD | total depth |
 | TIH | trip in hole |
 | TOOH | trip out of hole |
-| TVD | true vertical depth |
-| WOB | weight on bit |
+| TVD | true vertical depth (FORGE) |
+| UBHO | universal bottom hole orientation sub (FORGE) |
+| UBI | ultrasonic borehole imager (wireline log) (FORGE) |
+| WOB | weight on bit (FORGE) |
 | WOC | wait on cement |
 | WOW | wait on weather |
 | XO | crossover (sub) |

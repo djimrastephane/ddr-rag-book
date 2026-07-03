@@ -1,8 +1,8 @@
 # Appendix A: Environment Setup {#sec-appendix-a .unnumbered}
 
 This appendix covers everything you need before Chapter 1: installing
-dependencies, rendering the book, and — for Chapters 6–12 — cloning the
-companion DDR Intelligence Platform repository.
+dependencies, rendering the book, and understanding how Chapters 6–12
+relate to the companion DDR Intelligence Platform pipeline.
 
 ## 1. Prerequisites
 
@@ -29,16 +29,20 @@ conda env create -f environment.yml
 conda activate ddr-rag-book
 ```
 
-## 3. Generate the sample dataset
+## 3. The sample dataset
 
-Chapters 1–5 use a small synthetic DDR archive generated on demand (never
-committed as PDFs, to keep the repository lightweight):
+Chapters 1–5 use ten real, curated Daily Drilling Reports from the public
+Utah FORGE archive (well FORGE 16A(78)-32) — already committed as PDFs in
+`datasets/sample_ddrs/`, since this is public data with no
+confidentiality concerns. Part II's "at scale" chapters use the full
+76-report archive, committed at `datasets/forge_archive/`. Nothing needs
+to be generated or downloaded to start: `git clone` gives you the full
+dataset.
 
-```bash
-python code/chapter_01/generate_sample_ddr.py
-```
-
-This populates `datasets/sample_ddrs/` with five synthetic reports.
+If you want to reproduce either curated subset from your own copy of the
+full public archive, or extend it with more reports, see
+`code/chapter_01/build_sample_archive.py` and
+`code/chapter_08/build_full_archive.py`.
 
 ## 4. Render the book
 
@@ -69,47 +73,41 @@ cell). Recommended setup:
    (`python code/chapter_01/read_ddr.py ...`) — this is the fastest way
    to experiment with the code before committing it to a `.qmd`.
 
-## 6. Cloning the companion pipeline (for Part II)
+## 6. The companion pipeline (for Part II)
 
-Chapters 6–12 reference [DDR_RAG_Pipeline](https://github.com/djimrastephane/DDR_RAG_Pipeline),
-a real, working DDR intelligence platform built and validated against a
-171-report drilling campaign. It's a separate repository — clone it
-alongside this book's repository, not inside it:
+Chapters 6–12 reference **DDR_UTAH_FORGE**, a real, working DDR
+intelligence pipeline built specifically against this book's public
+archive — same architecture as the reference platform this project grew
+from (per-document extraction, hybrid retrieval, structured facts,
+causality analysis), adapted for Utah FORGE's real filenames and data.
 
-```bash
-cd ..                      # up from book/ to your projects root
-git clone https://github.com/djimrastephane/DDR_RAG_Pipeline.git
-cd DDR_RAG_Pipeline
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-Follow its own `README.md` Quickstart to run the full pipeline and
-Streamlit dashboard against its sample data, or your own DDR archive.
-
-::: {.callout-important title="This repository is private"}
-`DDR_RAG_Pipeline` is currently a private repository. If you're reading
-this as part of the author's own workflow, you already have access. If
-you're a reader without access, Part II chapters still teach every
-technique in full — the simplified code in `code/chapter_06/` through
-`code/chapter_12/` in *this* book's repository runs standalone and
-requires no access to the companion repository.
+::: {.callout-important title="Companion pipeline availability"}
+`DDR_UTAH_FORGE` is a separate project from this book and is not yet
+published. Part II chapters are written so every technique works fully
+standalone: the simplified code in `code/chapter_06/` through
+`code/chapter_12/` in *this* book's repository requires no access to the
+companion pipeline. Where a chapter cites a specific file or a specific
+result from `DDR_UTAH_FORGE` (for example, the real 2,943-chunk global
+index in Chapter 8, or the real report-gap dates in Chapter 10), that
+result was independently verified against the pipeline's actual output
+before being written into the book, so you can trust the numbers even
+without running the pipeline yourself.
 :::
 
 ## 7. A note on data handling
 
-Daily Drilling Reports are operationally sensitive. Before running any of
-this book's code against your own archive:
+This book's own data (`datasets/sample_ddrs/`, `datasets/forge_archive/`)
+is public and safe to commit, share, and publish — that's true throughout
+this repository. The moment you point this book's code at your own
+organisation's DDRs instead, that changes:
 
-- Never commit real DDR PDFs, extracted text, or derived artefacts
-  (embeddings, indexes) to a public repository. Both `datasets/` (this
-  book) and `data/` (the companion repository) are gitignored by default
-  for exactly this reason.
+- Never commit real, confidential DDR PDFs, extracted text, or derived
+  artefacts (embeddings, indexes) to a public repository.
 - If you're experimenting on a shared machine, confirm your organisation's
   data classification policy covers running third-party Python packages
   (embedding models, OCR engines) against confidential well data.
-- The synthetic sample DDRs used throughout Part I are fully fictional —
-  safe to commit, share, and publish.
+- Add your own archive's path to `.gitignore` before dropping any
+  confidential PDFs into a local `datasets/` folder for testing.
 
 ## 8. Troubleshooting
 
@@ -118,4 +116,4 @@ this book's code against your own archive:
 | `quarto render` fails on a code cell | Activate `.venv` before rendering — Quarto uses whichever Python is on `PATH`. Confirm with `which python` and `python -c "import pdfplumber"`. |
 | `ModuleNotFoundError: sentence_transformers` (Chapter 4+) | Re-run `pip install -r requirements.txt`; this is a heavier dependency and sometimes needs a separate `pip install torch` first on some platforms. |
 | FAISS import error on Apple Silicon (Chapter 8+) | Ensure you installed `faiss-cpu`, not `faiss-gpu` — the latter has no macOS wheel. |
-| PDF generation script produces no output | Confirm you're running it from the `book/` directory, so its relative output path resolves to `datasets/sample_ddrs/`. |
+| `read_ddr.py` reports no text extracted | Confirm you're pointing at a file in `datasets/sample_ddrs/` or `datasets/forge_archive/` — both are committed directly, so this shouldn't happen unless the path is wrong. |

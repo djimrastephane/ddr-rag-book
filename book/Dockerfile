@@ -17,6 +17,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python code/chapter_01/generate_sample_ddr.py
-
 CMD ["quarto", "render"]

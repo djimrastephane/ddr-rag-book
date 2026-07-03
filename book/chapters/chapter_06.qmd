@@ -12,24 +12,26 @@ By the end of this chapter, you will be able to:
 
 ## Operational problem
 
-Chapter 1's `extract_text()` handled the case where `page.extract_text()`
-returns `None` by substituting an empty string and moving on — a
-reasonable choice for a five-file teaching example, but a real archive
-will contain faxed reports, badly scanned pages, and rotated images where
-that "empty string" is actually hiding real operational content. Worse:
-OCR on a low-quality scan can produce text that *looks* plausible but is
-substantially garbled — and if that garbled text makes it into your search
-index, every downstream chapter inherits the corruption silently.
+Every one of the 76 Utah FORGE reports used in this book is
+digital-native — the archive's QA/QC pass confirms 0 unparsed PDFs across
+227 source files. You got lucky: WellEz, the software that generated
+these reports, embeds real character data on every page. Not every
+archive is this well-behaved. Faxed reports, reports scanned from paper
+files, and photos of a logbook page all produce PDFs with no character
+data at all — just a picture of text. Chapter 1's `extract_text()`
+handled this gracefully (an empty string, not a crash), but a real,
+larger archive needs more than graceful failure: it needs OCR to recover
+the text, and a way to know whether to trust what OCR gives back.
 
 ## Example DDR extract
 
 ::: {.callout-note title="OCR output before and after quality gating"}
 ```
-Clean digital extraction:
-  "0600-1130  POOH FR 9,842' TO CHANGE BHA."
+Clean digital extraction (this is what every Utah FORGE report gives):
+  "During the slide lost tool face and became assembly became stuck"
 
-Degraded OCR output from a poor scan:
-  "O6OO-1l3O POO+I FR 9,84Z' T0 CHANGE B+IA -- -- -- -- --"
+Degraded OCR output from a hypothetical poor scan of the same line:
+  "Dur1ng the s1ide los+ t00l face and became assembIy became stu(k"
 ```
 The second block is exactly the kind of text a naive pipeline would embed
 and index without complaint — and exactly the kind of text a quality gate
@@ -47,13 +49,16 @@ heuristics — is there enough text, is the alphabetic-to-symbol ratio
 sane, is there suspicious repeated garbage — and rejects anything that
 fails, routing it to manual review instead of silently indexing noise.
 
-This chapter's companion repository, [DDR_RAG_Pipeline](https://github.com/djimrastephane/DDR_RAG_Pipeline),
-implements exactly this pattern in `src/rag_pdf/ocr_quality.py`. Its
-`evaluate_ocr_quality()` function checks four independent flags —
-`low_text_density`, `high_symbol_ratio`, `repeated_garbage`,
-`low_line_count` — and rejects a page only once **two or more** flags
-fire, so no single noisy-but-legitimate page (e.g. a short report with a
-lot of numeric data) gets discarded on one false positive.
+This chapter's companion pipeline, **DDR_UTAH_FORGE**, implements exactly
+this pattern in `src/rag_pdf/ocr_quality.py` — even though, as noted
+above, this particular archive never needs to exercise it. That's by
+design: the quality gate runs unconditionally on every extracted page,
+digital or scanned, as a defensive check. Its `evaluate_ocr_quality()`
+function checks four independent flags — `low_text_density`,
+`high_symbol_ratio`, `repeated_garbage`, `low_line_count` — and rejects a
+page only once **two or more** flags fire, so no single noisy-but-legitimate
+page (e.g. a short report with a lot of numeric data) gets discarded on
+one false positive.
 
 ## Implementation
 
@@ -63,7 +68,6 @@ Build a simplified version of the same idea:
 #| eval: false
 # code/chapter_06/ocr_quality_gate.py
 import re
-from collections import Counter
 
 def evaluate_ocr_quality(text: str, min_chars: int = 200,
                           min_alpha_words: int = 30,
@@ -82,6 +86,10 @@ def evaluate_ocr_quality(text: str, min_chars: int = 200,
     return {"reject_ocr": len(active) >= reject_min_flags, "flags": flags}
 ```
 
+Test it against a real Utah FORGE report's clean text (it should pass
+easily — that text has a healthy word count and almost no noise symbols)
+and against the corrupted example above (it should fail on both flags).
+
 The full production version — including the repeated-garbage detector and
 line-count check — is in the companion repository at
 `src/rag_pdf/ocr_quality.py`, alongside `src/rag_pdf/rotation_handler.py`
@@ -91,24 +99,28 @@ narrative text) needs OCR fallback.
 
 ## Practical exercise
 
-**Try it yourself:** Feed both the clean and degraded example strings
-above through `evaluate_ocr_quality()`. Confirm the clean text passes and
-the degraded text is rejected.
+**Try it yourself:** Run `evaluate_ocr_quality()` against the extracted
+text of report #38 (clean) and the degraded example string above.
 
-**You'll know it worked when:** you can explain, from the flags returned,
-*why* the degraded text failed — not just that it did.
+**You'll know it worked when:** the real report text passes cleanly, and
+you can explain, from the flags returned, exactly why the degraded text
+fails.
 
 ## Challenge exercise
 
-**Challenge:** Clone the companion repository and read
-`src/rag_pdf/ocr_quality.py` in full. Identify one flag the production
-version has that the simplified version above doesn't, and explain what
-failure mode it catches that the simplified version would miss.
+**Challenge:** This archive is 100% digital, so you can't test the gate
+against a real scanned Utah FORGE page. Instead, write a small function
+that synthetically corrupts clean text (swap random characters for
+lookalikes, inject repeated tokens) at increasing severity, and find the
+corruption level at which `evaluate_ocr_quality()` starts rejecting it.
+This is a legitimate way to stress-test a quality gate before you ever
+encounter the real noisy data it's meant to catch.
 
 ## Key takeaways
 
-- OCR quality gating is cheap, heuristic, and non-negotiable — an
-  unfiltered noisy page corrupts every downstream chapter's retrieval.
+- OCR quality gating is cheap, heuristic, and worth running
+  unconditionally — even an archive that's currently 100% digital may not
+  stay that way, and the check costs almost nothing on clean text.
 - Require multiple independent signals to agree before rejecting a page;
   a single heuristic alone produces too many false positives.
 - Reject-and-flag-for-review beats silently-index-anyway every time
@@ -119,8 +131,8 @@ failure mode it catches that the simplified version would miss.
 | File | Purpose |
 |---|---|
 | `code/chapter_06/ocr_quality_gate.py` | Simplified OCR quality gate |
-| `DDR_RAG_Pipeline/src/rag_pdf/ocr_quality.py` | Production quality gate (companion repo) |
-| `DDR_RAG_Pipeline/src/rag_pdf/rotation_handler.py` | Scan rotation detection (companion repo) |
+| `DDR_UTAH_FORGE/src/rag_pdf/ocr_quality.py` | Production quality gate (companion repo) |
+| `DDR_UTAH_FORGE/src/rag_pdf/rotation_handler.py` | Scan rotation detection (companion repo) |
 
 ## Suggested next step
 

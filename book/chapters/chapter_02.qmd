@@ -12,33 +12,49 @@ By the end of this chapter, you will be able to:
 ## Operational problem
 
 Open one of the `.txt` files you extracted in Chapter 1 and read it as a
-computer would: `POOH FR 9,842' TO CHANGE BHA. ERRATIC TORQUE OBSD LAST 3
-STDS.` A drilling engineer reads that instantly. A keyword search for
-"pipe" finds nothing, because the report never says "pipe" — it says
-"POOH," "BHA," "STDS." Before we can search, summarise, or embed this
-text, we need to expand it into language that means the same thing to a
-human and to a machine.
+computer would. Report #38's time breakdown says: *"During the slide lost
+tool face and became assembly became stuck"* — plain enough. But the same
+report is full of terms a keyword search or language model has no way to
+interpret: `BHA`, `WOB`, `MWD`, `SPP`, `NMDC`, `DLS`, `ECD`. A drilling
+engineer reads these instantly. A keyword search for "bottom hole
+assembly" finds nothing in a report that only ever writes `BHA`. Before we
+can search, summarise, or embed this text well, we need to expand it into
+language that means the same thing to a human and to a machine.
+
+Interestingly, this archive's own software (WellEz) sometimes expands its
+own abbreviations — every report writes `PJSM, pre job safety meeting`
+in full, spelled out inline. But `BHA`, `WOB`, `MWD`, `SPP`, and a dozen
+others never get that treatment anywhere in the archive. Real-world
+consistency is exactly this uneven — which is precisely why an automated
+expander is worth building rather than relying on reports to document
+themselves.
 
 ## Example DDR extract
 
-::: {.callout-note title="Sample DDR excerpt (DDR_018_EXAMPLE-1H.pdf)"}
+::: {.callout-note title="Real excerpt — report #38, showing both patterns"}
 ```
-0300-0700  STK PIPE @ 9,960'. WORKED PIPE, CIRC & PUMPED PILL.
-0700-1100  FREED PIPE. POOH TO 9,500' TO ASSESS BHA CONDITION.
-1100-2400  RIH TO 9,960'. WOC OVERNIGHT PER MUD ENGINEER RECOMMENDATION.
+PJSM, pre job safety meeting.                     <- self-expanded by the source
+...
+Pick up Curve assembly 2, BHA 21, Reed Hycalog     <- BHA never expanded
+SKC613M-01C Trip in hole to 5,200'
+...
+WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        <- WOB, SPP never expanded
+3200-3400 GPM 560, DIFF 200-300psi
 ```
 :::
 
 ## Theory
 
-An abbreviation expander is just a dictionary lookup — `{"POOH": "pull out
-of hole", "RIH": "run in hole", ...}` — but two details make or break it:
+An abbreviation expander is just a dictionary lookup — `{"BHA": "bottom
+hole assembly", "WOB": "weight on bit", ...}` — but two details make or
+break it:
 
-1. **Word boundaries.** `str.replace("RIH", ...)` will happily mangle a
-   word that merely *contains* "RIH" as a substring. Match on whole words
+1. **Word boundaries.** `str.replace("MD", ...)` will happily mangle a
+   word that merely *contains* "MD" as a substring. Match on whole words
    using regex `\b...\b`, not raw substring replacement.
-2. **Case.** DDRs are written in all caps; expansions should read
-   naturally in lowercase without forcing the rest of the sentence to
+2. **Case.** DDRs mix cases inconsistently — this archive's headers are
+   often all-caps while narrative text is mixed-case — so expansion needs
+   to be case-insensitive without forcing the rest of the sentence to
    change case.
 
 This is deliberately not a machine-learning problem. A few dozen
@@ -54,16 +70,24 @@ can list every expansion it will ever make.
 import re
 
 ABBREVIATIONS = {
-    "POOH": "pull out of hole",
-    "RIH": "run in hole",
     "BHA": "bottom hole assembly",
+    "WOB": "weight on bit",
+    "RPM": "revolutions per minute",
+    "ROP": "rate of penetration",
+    "MD": "measured depth",
+    "TVD": "true vertical depth",
+    "SPP": "stand pipe pressure",
+    "GPM": "gallons per minute",
+    "DLS": "dogleg severity",
+    "MWD": "measurement while drilling",
+    "NMDC": "non-magnetic drill collar",
+    "UBHO": "universal bottom hole orientation sub",
     "NPT": "non-productive time",
-    "LOT": "leak-off test",
-    "FIT": "formation integrity test",
-    "WOC": "wait on cement",
-    "STK": "stuck",
-    "CIRC": "circulate",
-    "OBSD": "observed",
+    "ECD": "equivalent circulating density",
+    "MW": "mud weight",
+    "DFS": "days from spud",
+    "DOL": "days on location",
+    "PDC": "polycrystalline diamond compact",
 }
 
 def expand_text(text: str, abbreviations: dict[str, str] = ABBREVIATIONS) -> str:
@@ -78,24 +102,31 @@ folder and save the expanded versions to `datasets/ddr_text_expanded/`.
 
 ## Practical exercise
 
-**Try it yourself:** Run the expander against `DDR_018_EXAMPLE-1H.txt`.
+**Try it yourself:** Run the expander against
+`FORGE-16A-78-32_Drilling_038_2020-11-26.txt`.
 
-**You'll know it worked when:** the line `STK PIPE @ 9,960'` becomes
-`stuck PIPE @ 9,960'` and no unrelated word (e.g. any word merely
-containing "rih" or "poo") gets corrupted.
+**You'll know it worked when:** `Pick up Curve assembly 2, BHA 21` becomes
+`Pick up Curve assembly 2, bottom hole assembly 21`, and no unrelated
+word (check the `MD`/`TVD` survey table carefully — short abbreviations
+are the ones most likely to collide with real words) gets corrupted.
 
 ## Challenge exercise
 
 **Challenge:** Extend `ABBREVIATIONS` using [Appendix
-B](../appendix/appendix_b_oilfield_glossary.qmd), and handle multi-word
-source abbreviations correctly (e.g. distinguishing `WOC` from a
-hypothetical `WOW` — wait on weather). A reference solution is in
+B](../appendix/appendix_b_oilfield_glossary.qmd), and handle the mud-table
+abbreviations (`FV`, `WL`, `PV`, `YP`, `CL`) — notice how short these are,
+and think carefully about whether blindly expanding a two-letter token
+like `PV` is actually safe against this archive's real text, or whether
+it needs a narrower match context. A reference solution is in
 `code/chapter_02/challenge/`.
 
 ## Key takeaways
 
 - Word-boundary regex, not substring replacement, is the difference
   between a correct expander and a silently broken one.
+- Real archives are inconsistent by nature — the same report can spell
+  one abbreviation out in full while never expanding another. Don't
+  assume the source data will document itself.
 - A transparent dictionary beats an opaque model here: every expansion is
   inspectable and testable.
 - Cleaning text is not optional groundwork — it's what makes every later
@@ -113,4 +144,4 @@ hypothetical `WOW` — wait on weather). A reference solution is in
 
 With clean, expanded text in hand, Chapter 3 builds the first tool an
 engineer would actually reach for: a keyword search engine that answers
-"which reports mention stuck pipe?" in milliseconds.
+"which reports mention losses?" in milliseconds.

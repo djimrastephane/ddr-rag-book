@@ -14,38 +14,43 @@ By the end of this chapter, you will be able to:
 ## Operational problem
 
 Retrieval (Chapter 4) gets you the right passages. What an engineer
-actually wants is an answer: *"Which events preceded the stuck pipe
-event?"* — not three ranked text chunks they have to read and synthesise
-themselves. But a generated answer that isn't traceable back to specific
-reports is worse than no answer at all in an engineering context, because
-it invites misplaced trust. This chapter builds the smallest system that
-does both: synthesise an answer, and show exactly where every part of it
-came from.
+actually wants is an answer: *"What led to the fishing operation on
+report #50?"* — not two ranked text chunks they have to read and
+synthesise themselves. But a generated answer that isn't traceable back
+to specific reports is worse than no answer at all in an engineering
+context, because it invites misplaced trust. This chapter builds the
+smallest system that does both: synthesise an answer, and show exactly
+where every part of it came from.
 
 ## Example DDR extract
 
-::: {.callout-note title="Target interaction"}
+::: {.callout-note title="Target interaction, grounded in two real, adjacent reports"}
 ```
-Question: Which events preceded the stuck pipe event?
+Question: What led to the fishing operation on report #50?
 
-Answer: Torque became erratic over the three stands before the stuck
-pipe event (DDR 16), leading to a BHA change (DDR 17) before drilling
-resumed at the depth where the pipe later became stuck (DDR 17).
+Answer: On report #49 (2020-12-07), the crew attempted multiple times
+to set packers on BHA #32, but pressure readings showed the ball did
+not seat and the packers failed to set. They tripped out with the
+packer assembly and picked up a fishing BHA (#33) that same day. On
+report #50 (2020-12-08), that fishing run milled up lost pieces of bit.
 
 Evidence:
-  DDR_016_EXAMPLE-1H.txt
-  DDR_017_EXAMPLE-1H.txt
+  FORGE-16A-78-32_Drilling_049_2020-12-07.pdf
+  FORGE-16A-78-32_Drilling_050_2020-12-08.pdf
 ```
 :::
+
+Both claims here are directly quoted from real report text — nothing in
+this answer was inferred beyond what the two reports state.
 
 ## Theory
 
 **RAG (retrieval-augmented generation)** [@lewis2020rag] is exactly the
 two chapters you just built, chained together: retrieve relevant evidence
 (Chapter 4), then hand that evidence to a language model and ask it to
-answer *using only that evidence*. The model is not answering from what it memorised during
-training — it's answering from the specific passages you retrieved, which
-is what makes citation possible at all.
+answer *using only that evidence*. The model is not answering from what it
+memorised during training — it's answering from the specific passages you
+retrieved, which is what makes citation possible at all.
 
 The critical design decision is the prompt: instruct the model explicitly
 to answer only from the provided context, and to cite which source each
@@ -102,8 +107,9 @@ single API call.
 
 **Try it yourself:** Wire up `answer_question` with a stub `llm_call` that
 simply returns the evidence text, and confirm the evidence list for
-"Which events preceded the stuck pipe event?" contains
-`DDR_016_EXAMPLE-1H.txt` and `DDR_017_EXAMPLE-1H.txt`.
+"What led to the fishing operation on report #50?" contains
+`FORGE-16A-78-32_Drilling_049_2020-12-07.pdf` and
+`FORGE-16A-78-32_Drilling_050_2020-12-08.pdf`.
 
 **You'll know it worked when:** the evidence list is correct *before* you
 plug in a real language model — retrieval quality, not generation
@@ -114,8 +120,10 @@ fluency, is what determines whether this system is trustworthy.
 **Challenge:** Connect a real LLM (local via `transformers`/`ollama`, or a
 hosted API) as `llm_call`, and add a check that rejects the answer if it
 mentions a report filename that wasn't in the retrieved evidence list — a
-first, crude hallucination guard. A reference solution is in
-`code/chapter_05/challenge/`.
+first, crude hallucination guard. Then ask it a question the ten-report
+sample archive genuinely can't answer (e.g. "what happened on report
+#100?") and confirm it says so rather than inventing an answer. A
+reference solution is in `code/chapter_05/challenge/`.
 
 ## Key takeaways
 
@@ -136,10 +144,11 @@ first, crude hallucination guard. A reference solution is in
 
 ## Suggested next step
 
-What you've built in Part I works — on five clean, digital, hand-picked
-PDFs. Part II industrialises this system against the reality of a real
-archive: hundreds of scanned and digital reports, retrieval that has to
-be both fast and precise, and answers that have to survive scrutiny from
-someone who wasn't in the room when they were generated. Chapter 6 starts
-with the first thing that breaks: scanned reports with no extractable
-text at all.
+What you've built in Part I works — on ten clean, digital, hand-picked
+reports out of the full 76-report Utah FORGE archive. Part II
+industrialises this system against the reality of a full archive:
+retrieval that has to be both fast and precise across every report, and
+answers that have to survive scrutiny from someone who wasn't in the room
+when they were generated. Chapter 6 starts with the first thing that
+breaks in a typical real-world archive: scanned reports with no
+extractable text at all.

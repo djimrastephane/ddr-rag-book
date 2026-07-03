@@ -1,166 +1,189 @@
-# Cross-Well Intelligence and the Industrial DDR Platform {#sec-chapter-12}
+# Sequence Detection: Building Toward Cross-Well Intelligence {#sec-chapter-12}
 
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
 
-- Classify operational text by phase and NPT status.
-- Build a co-occurrence graph of operational terms as a lightweight,
-  inspectable alternative to a full knowledge graph.
-- Explain how a leading-indicator causal pattern is detected across a
-  phase boundary using simple, auditable thresholds — no black-box model
-  required.
-- See how everything from Chapters 1–11 combines into the kind of finding
-  that justifies building a system like this at all.
+- Combine structured numeric trends (torque, ROP) with narrative
+  operation text to build a single, checkable operational story.
+- Explain how a windowed leading-indicator detector works — and verify,
+  from real thresholds in production code, exactly what "causal" and
+  "escalating" mean before trusting either label.
+- Understand honestly what this book's single-well archive can and can't
+  demonstrate, and what it would take to scale this technique to genuine
+  cross-well intelligence.
 
 ## Operational problem
 
 This is the payoff question every previous chapter has been building
-toward: *did something in an earlier operational phase predict trouble in
-a later one?* A human reading 171 PDFs in sequence, months apart, is
-unlikely to connect a debris-recovery run in July to a completion-phase
-overpull pattern in August — not because the connection isn't visible in
-the text, but because no one reads 171 reports in one sitting while
-holding all of them in mind at once. A system that has structured,
-classified, and indexed the same text *can* hold all of it at once.
+toward: *did something earlier predict trouble later?* A human reading 76
+reports in sequence can, with effort, spot a pattern — but a system that
+has structured, classified, and indexed the same text can hold every
+report in mind at once, and check numeric trends a human would have to
+read a table on every single page to notice.
 
-## Example DDR extract
+This chapter is deliberately honest about scale: Utah FORGE's public
+archive is **one well, one continuous drilling programme** — not the
+multi-well, multi-phase campaign this book's companion pipeline was
+originally built to analyse. So instead of presenting a large statistical
+finding, this chapter shows you exactly how to check a real, small
+pattern by hand, using the same technique — and shows you precisely what
+production code exists to scale that technique up once you have more
+than one well's worth of data.
 
-::: {.callout-note title="A real cross-phase finding from the companion repository"}
-> 26 magnet-BHA passes across the frac sleeve profiles during the
-> production-phase debris recovery campaign correlate with overpull
-> events escalating **8.4×** once the completion phase began at the same
-> depths — 5 occurrences in PROD1's final fortnight became 42 in COMPZN's
-> first, which also shows up month-over-month as 29 occurrences in July
-> becoming 71 in August.
->
-> The system's auto-generated recommendation: check sleeve condition from
-> the final magnet run log *before* FIA tool selection finalises — the
-> kind of handover note that usually only exists if someone happens to
-> remember it three months on.
+## A real, checkable pattern
 
-The ten days bridging the two phases (DDRs 110–119, 29 Jul–9 Aug 2024) are
-entirely missing from the corpus — the system built this finding *around*
-a hole in its own source record, using Chapter 10's gap-awareness to know
-exactly what it didn't have.
+Report #38's `TORQUE` header field — a single number recorded every day
+regardless of what happens — tells a real story across three consecutive
+days:
+
+::: {.callout-note title="Real header data, reports #36-38"}
+```
+Report #36 (2020-11-24): TORQUE: 4,400
+Report #37 (2020-11-25): TORQUE: 4,200
+Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
+                          "During the slide lost tool face and became
+                           assembly became stuck"
+```
 :::
 
-## Theory
+Torque was flat — even slightly down — for two days, then jumped by
+roughly a third on the same day the assembly became stuck. This is a
+same-day correlation between a structured number and a narrative event,
+not a multi-day advance warning — and that distinction matters. Don't
+claim a leading indicator you haven't actually verified extends before
+the event; this pattern says "torque and the stuck-pipe event moved
+together," not "torque predicted the stuck pipe two days out."
 
-Three components, layered:
+Chapter 5's other real sequence — report #49's packers failing to set,
+followed same-day by picking up a fishing BHA, followed by report #50's
+actual fishing operation — is a genuine two-report causal chain, directly
+traceable and already fully verified with real text.
 
-1. **Phase classification.** Each operations line is tagged with an
-   operational phase (e.g. `PROD1`, `COMPZN`) by matching op-code
-   prefixes against a lookup table — a `PHASE_MAP`, not a trained
-   classifier. Simple, and precisely as good as the mapping you maintain.
-2. **Co-occurrence graphs.** Rather than building a full knowledge graph
-   with typed relationships, track which operational terms appear
-   *together* within a report or a time window, and how often. This is
-   dramatically cheaper to build and easier to inspect than a knowledge
-   graph, while still surfacing the kind of "these things keep showing up
-   together" signal an engineer would call meaningful.
-3. **Leading-indicator detection across phase boundaries.** For a term
-   like "overpull," track its frequency in a window (e.g. 14 days) before
-   and after each phase transition. Call it **causal** only above a
-   defined post-phase NPT rate threshold (e.g. ≥40%), and **escalating**
-   only above a defined frequency-increase threshold (e.g. ≥50%). These
-   thresholds are plain numbers you can read, change, and justify — not
-   weights inside a trained model you'd need to interpret indirectly.
+## Theory: how the production tool would check this at scale
 
-The discipline that makes a finding like the one above trustworthy is
-that **every number in it is re-derivable**: the 8.4× figure, the 26
-passes, the 18 report dates — all computed from the same structured
-`ddr_facts.parquet` and event tables the rest of this book has been
-building toward, not asserted by a model. That's the difference between
-"the system found a pattern" and "the system found a pattern you can
-check."
+The companion pipeline's `src/ddr_rag/causality_analyzer.py` implements
+exactly this kind of check, generalized: for a given term, it compares
+frequency in a window before and after a boundary date, and labels a term
+**causal** only above a defined post-boundary NPT rate, and **escalating**
+only above a defined frequency-increase ratio. The real thresholds, read
+directly from the module:
+
+```python
+TRANSITION_WINDOW_DAYS = 14   # days before/after a boundary to compare
+MIN_TERM_FREQ = 3             # minimum occurrences before a term counts at all
+NPT_SIGNAL_THRESHOLD = 0.40   # post-boundary NPT rate to call a term "causal"
+ESCALATION_FREQ_RATIO = 1.5   # frequency increase to call a term "escalating"
+```
+
+Every one of these is a plain, readable number you can inspect, change,
+and justify — not a weight buried inside a trained model.
+
+::: {.callout-important title="A real limitation worth understanding, not hiding"}
+This module's default phase configuration —
+`["MIRU", "COND1", "INTRM1", "INTRM2", "PROD1", "COMPZN"]` — comes from
+`operator_alpha`, a different (private, North Sea) campaign's phase
+vocabulary. Utah FORGE's real data doesn't have that phase structure: its
+`ddr_facts.parquet` phase field is `"Production Drilling"` for
+essentially the entire programme, right up to the Completion-DFIT report.
+Running `causality_analyzer.py` against this archive as-is would compare
+windows around phase boundaries that don't meaningfully exist in this
+well's data — the code would run, but the output wouldn't mean anything
+useful yet.
+
+This is a genuinely common situation in real engineering work: code
+built and validated on one dataset doesn't automatically transfer to
+another just because the file paths line up. Before trusting output from
+an adapted pipeline, check that the assumptions baked into its
+configuration (here, a phase vocabulary) actually match your data. The
+`src/ddr_rag/npt_classifier.py` module, by contrast, *has* been adapted
+for Utah FORGE specifically — `classify_utah_forge_npt()` exists and
+recognises this archive's real fields — which tells you adaptation here
+is partial, not absent: some layers of this pipeline are ready for this
+well's data, and some aren't yet.
+:::
 
 ## Implementation
 
 ```{python}
 #| eval: false
-# code/chapter_12/phase_transition_signal.py
-from collections import Counter
-
-def term_frequency_by_window(events: list[dict], term: str,
-                               phase_boundary_date, window_days: int = 14):
-    """Count occurrences of `term` in the N days before and after a
-    phase boundary date. `events` is a list of {"date", "text"} dicts."""
-    from datetime import timedelta
-
-    before = phase_boundary_date - timedelta(days=window_days)
-    after = phase_boundary_date + timedelta(days=window_days)
-
-    before_count = sum(
-        1 for e in events
-        if before <= e["date"] < phase_boundary_date and term in e["text"].lower()
-    )
-    after_count = sum(
-        1 for e in events
-        if phase_boundary_date <= e["date"] < after and term in e["text"].lower()
-    )
-    return before_count, after_count
-
-def is_escalating(before_count: int, after_count: int, threshold: float = 1.5) -> bool:
-    if before_count == 0:
-        return after_count > 0
-    return (after_count / before_count) >= threshold
+# code/chapter_12/torque_trend_check.py
+def torque_trend(readings: list[tuple[str, float]]) -> list[tuple[str, float, float]]:
+    """Given [(date, torque_value), ...] in chronological order, return
+    each day's percentage change from the previous day."""
+    trend = []
+    for (prev_date, prev_val), (date, val) in zip(readings, readings[1:]):
+        pct_change = (val - prev_val) / prev_val if prev_val else 0.0
+        trend.append((date, val, pct_change))
+    return trend
 ```
 
-This is a minimal version of the windowing logic behind the companion
-repository's `src/ddr_rag/causality_analyzer.py`, which additionally
-computes post-phase NPT rate, classifies terms as "causal," and chains
-multiple such findings into the leading-indicator risk scan shown on the
-Cross-Phase Causality dashboard page. Phase classification itself lives
-in `src/ddr_rag/npt_classifier.py` (`PHASE_MAP`), and the co-occurrence
-graph construction is in `src/ddr_rag/graph_builder.py`.
+```{python}
+#| eval: false
+readings = [
+    ("2020-11-24", 4400),
+    ("2020-11-25", 4200),
+    ("2020-11-26", 5615),
+]
+for date, val, pct in torque_trend(readings):
+    print(f"{date}: {val} ({pct:+.1%})")
+# 2020-11-25: 4200 (-4.5%)
+# 2020-11-26: 5615 (+33.7%)
+```
 
 ## Practical exercise
 
-**Try it yourself:** Using the five sample DDRs from Part I, tag each
-report's date and phase by hand, and use `term_frequency_by_window()` to
-check whether "torque" mentions increase in the days immediately before
-the stuck pipe event on DDR 18.
+**Try it yourself:** Extend `readings` with report #39's header torque
+value (check the PDF yourself — Chapter 1's `read_ddr.py` will get it for
+you) and confirm whether the elevated torque persisted after the pipe was
+freed, or dropped back toward the pre-event baseline.
 
-**You'll know it worked when:** you can state, with the actual counts,
-whether "torque" is escalating in the window before the stuck pipe event
-— and you can point to exactly which reports you counted.
+**You'll know it worked when:** you can state the real percentage change
+for each day, sourced from header fields you extracted yourself, not from
+this chapter's text.
 
 ## Challenge exercise
 
-**Challenge:** Clone the companion repository, run its full pipeline
-against its sample data, and open the **Cross-Phase Causality** dashboard
-page. Find one leading-indicator finding, and trace it back — using the
-DDR citations the dashboard provides — to the actual report text that
-produced it.
+**Challenge:** Pull the `TORQUE` header value for all 76 reports in
+`datasets/forge_archive/` (Chapter 1's extraction plus a small regex),
+plot it as a time series, and identify every day where torque jumps more
+than 25% from the previous day. Cross-reference each jump against that
+day's narrative text — how many of them correspond to a real operational
+event like report #38's, and how many are unremarkable? A reference
+solution is in `code/chapter_12/challenge/`.
 
 ## Key takeaways
 
-- Phase classification, co-occurrence graphs, and threshold-based
-  causal detection are individually simple techniques; their combination,
-  applied across a full campaign, produces findings a human reading
-  linearly is unlikely to catch.
-- Every threshold in a system like this should be a number you can name
-  and justify, not a hyperparameter buried in a trained model.
-- This is the payoff for every discipline earlier chapters insisted on:
-  OCR gating so the text is trustworthy, structured chunking so it's
-  retrievable, hybrid retrieval so it's findable, traceability so it's
-  checkable, evaluation so you know where it's weak. None of it was
-  optional — this chapter is why.
+- A single structured number, tracked day over day, can corroborate a
+  narrative event — but be precise about what you've actually shown:
+  same-day correlation is not the same claim as a multi-day leading
+  indicator, and this chapter deliberately didn't claim more than the
+  real data supports.
+- Production causality-detection code carries real, inspectable
+  thresholds — read them before trusting output, and check that its
+  configuration (like a phase vocabulary) actually matches your dataset
+  before running it.
+- Genuine cross-well intelligence needs more than one well's worth of
+  data to compare against — Utah FORGE's `data/fields/UtahForge/wells/`
+  structure in the companion pipeline is already organized to support
+  additional wells as this research programme (or your own multi-well
+  archive) grows.
 
 ## Repository files
 
 | File | Purpose |
 |---|---|
-| `code/chapter_12/phase_transition_signal.py` | Minimal windowed frequency/escalation check |
-| `DDR_RAG_Pipeline/src/ddr_rag/npt_classifier.py` | Phase classification (companion repo) |
-| `DDR_RAG_Pipeline/src/ddr_rag/graph_builder.py` | Co-occurrence graph construction (companion repo) |
-| `DDR_RAG_Pipeline/src/ddr_rag/causality_analyzer.py` | Leading-indicator causal detection (companion repo) |
+| `code/chapter_12/torque_trend_check.py` | Day-over-day trend check on a structured header field |
+| `DDR_UTAH_FORGE/src/ddr_rag/causality_analyzer.py` | Windowed leading-indicator detection (companion repo) |
+| `DDR_UTAH_FORGE/src/ddr_rag/npt_classifier.py` | Utah-FORGE-adapted NPT classification (companion repo) |
+| `DDR_UTAH_FORGE/data/fields/UtahForge/wells/` | Multi-well data structure, ready for expansion (companion repo) |
 
 ## Suggested next step
 
-You've now built, chapter by chapter, a smaller version of the same
-system running as [DDR_RAG_Pipeline](https://github.com/djimrastephane/DDR_RAG_Pipeline).
+You've now built, chapter by chapter, a working RAG system grounded
+entirely in real, public DDRs — from extracting a single PDF's text
+through checking a real numeric trend against a real narrative event.
 [Appendix A](../appendix/appendix_a_environment_setup.qmd) shows how to
-clone and run the full platform — OCR, hybrid retrieval, 17-page
-dashboard, and all — against your own DDR archive.
+set up the full companion pipeline and point it at your own DDR archive,
+whether that's more Utah FORGE data as it becomes available, or a
+different well entirely.

@@ -13,12 +13,13 @@ By the end of this chapter, you will be able to:
 
 ## Operational problem
 
-An engineer searches "torque problems" and expects to find the report that
-says *"ERRATIC TORQUE OBSD LAST 3 STDS"* — even though not one word
-matches. Chapter 3's keyword search can't do this; it needs the exact
-token "torque" to appear, and even then it has no notion of "problems"
-relating to "erratic" or "increasing." Semantic search retrieves by
-*meaning*, not spelling.
+An engineer searches "torque problems" and expects to find report #39,
+which says *"Due to high torque decision to pull out of hole"* — even
+though the word "problems" never appears there. Chapter 3's keyword
+search can't do this; it needs the exact token "problems" to appear
+somewhere, and it has no notion that "high torque... decision to pull
+out" describes a problem at all. Semantic search retrieves by *meaning*,
+not spelling.
 
 ## Example DDR extract
 
@@ -26,9 +27,9 @@ relating to "erratic" or "increasing." Semantic search retrieves by
 ```
 Query: "torque problems"
 Keyword search (Chapter 3): 0 results (no exact token overlap)
-Semantic search (this chapter): DDR_016 and DDR_017 rank highest —
-  both describe erratic/increasing torque, without the word "problems"
-  appearing anywhere.
+Semantic search (this chapter): report #39 ranks highest —
+  "Work tight hole at 6,526'... Due to high torque decision to pull
+  out of hole" — despite sharing no vocabulary with the query.
 ```
 :::
 
@@ -89,19 +90,21 @@ at query time.
 
 ## Practical exercise
 
-**Try it yourself:** Embed all five sample DDRs and run
+**Try it yourself:** Embed all ten sample DDRs and run
 `search(model, "torque problems", filenames, embeddings)`.
 
-**You'll know it worked when:** `DDR_016_EXAMPLE-1H.txt` or
-`DDR_017_EXAMPLE-1H.txt` (both mention erratic/increasing torque) rank in
-the top 2 results, despite no keyword overlap with "torque problems."
+**You'll know it worked when:** `FORGE-16A-78-32_Drilling_039_2020-11-27.txt`
+ranks in the top results, despite no keyword overlap with "torque problems."
 
 ## Challenge exercise
 
-**Challenge:** Chunk each report into individual operations-summary lines
-(rather than embedding the whole report as one vector) and re-run the
-search. Compare which granularity gives more precise, directly quotable
-results. A reference solution is in `code/chapter_04/challenge/`.
+**Challenge:** Chunk each report into individual `TIME BREAKDOWN` line
+items (rather than embedding the whole report as one vector) and re-run
+the search. Compare which granularity gives more precise, directly
+quotable results — a whole-report embedding blends the packer failure,
+the fishing operation, and the drilling narrative in report #49 together;
+does line-level chunking separate them more usefully? A reference
+solution is in `code/chapter_04/challenge/`.
 
 ## Key takeaways
 
@@ -112,8 +115,8 @@ results. A reference solution is in `code/chapter_04/challenge/`.
 - Semantic search finds relevant text that shares no vocabulary with the
   query — the exact failure mode of Chapter 3's keyword search.
 - Brute-force cosine search (a matrix multiply) is entirely adequate at
-  five documents. It stops being adequate well before you reach a real
-  archive's scale — that's Chapter 8's problem to solve.
+  ten documents. It stops being adequate well before you reach the full
+  76-report archive's scale — that's Chapter 8's problem to solve.
 
 ## Repository files
 
