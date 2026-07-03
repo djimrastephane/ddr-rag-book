@@ -1,0 +1,28 @@
+# Quarto build output
+/_book/
+/.quarto/
+/_freeze/
+*_files/
+*_cache/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Generated datasets and derived artefacts (never commit real DDR data)
+datasets/sample_ddrs/*.pdf
+datasets/ddr_text/
+datasets/ddr_text_expanded/
+datasets/*.index
+datasets/*.faiss
+datasets/global_index/
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.positron/

@@ -1,0 +1,166 @@
+# Cross-Well Intelligence and the Industrial DDR Platform {#sec-chapter-12}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Classify operational text by phase and NPT status.
+- Build a co-occurrence graph of operational terms as a lightweight,
+  inspectable alternative to a full knowledge graph.
+- Explain how a leading-indicator causal pattern is detected across a
+  phase boundary using simple, auditable thresholds — no black-box model
+  required.
+- See how everything from Chapters 1–11 combines into the kind of finding
+  that justifies building a system like this at all.
+
+## Operational problem
+
+This is the payoff question every previous chapter has been building
+toward: *did something in an earlier operational phase predict trouble in
+a later one?* A human reading 171 PDFs in sequence, months apart, is
+unlikely to connect a debris-recovery run in July to a completion-phase
+overpull pattern in August — not because the connection isn't visible in
+the text, but because no one reads 171 reports in one sitting while
+holding all of them in mind at once. A system that has structured,
+classified, and indexed the same text *can* hold all of it at once.
+
+## Example DDR extract
+
+::: {.callout-note title="A real cross-phase finding from the companion repository"}
+> 26 magnet-BHA passes across the frac sleeve profiles during the
+> production-phase debris recovery campaign correlate with overpull
+> events escalating **8.4×** once the completion phase began at the same
+> depths — 5 occurrences in PROD1's final fortnight became 42 in COMPZN's
+> first, which also shows up month-over-month as 29 occurrences in July
+> becoming 71 in August.
+>
+> The system's auto-generated recommendation: check sleeve condition from
+> the final magnet run log *before* FIA tool selection finalises — the
+> kind of handover note that usually only exists if someone happens to
+> remember it three months on.
+
+The ten days bridging the two phases (DDRs 110–119, 29 Jul–9 Aug 2024) are
+entirely missing from the corpus — the system built this finding *around*
+a hole in its own source record, using Chapter 10's gap-awareness to know
+exactly what it didn't have.
+:::
+
+## Theory
+
+Three components, layered:
+
+1. **Phase classification.** Each operations line is tagged with an
+   operational phase (e.g. `PROD1`, `COMPZN`) by matching op-code
+   prefixes against a lookup table — a `PHASE_MAP`, not a trained
+   classifier. Simple, and precisely as good as the mapping you maintain.
+2. **Co-occurrence graphs.** Rather than building a full knowledge graph
+   with typed relationships, track which operational terms appear
+   *together* within a report or a time window, and how often. This is
+   dramatically cheaper to build and easier to inspect than a knowledge
+   graph, while still surfacing the kind of "these things keep showing up
+   together" signal an engineer would call meaningful.
+3. **Leading-indicator detection across phase boundaries.** For a term
+   like "overpull," track its frequency in a window (e.g. 14 days) before
+   and after each phase transition. Call it **causal** only above a
+   defined post-phase NPT rate threshold (e.g. ≥40%), and **escalating**
+   only above a defined frequency-increase threshold (e.g. ≥50%). These
+   thresholds are plain numbers you can read, change, and justify — not
+   weights inside a trained model you'd need to interpret indirectly.
+
+The discipline that makes a finding like the one above trustworthy is
+that **every number in it is re-derivable**: the 8.4× figure, the 26
+passes, the 18 report dates — all computed from the same structured
+`ddr_facts.parquet` and event tables the rest of this book has been
+building toward, not asserted by a model. That's the difference between
+"the system found a pattern" and "the system found a pattern you can
+check."
+
+## Implementation
+
+```{python}
+#| eval: false
+# code/chapter_12/phase_transition_signal.py
+from collections import Counter
+
+def term_frequency_by_window(events: list[dict], term: str,
+                               phase_boundary_date, window_days: int = 14):
+    """Count occurrences of `term` in the N days before and after a
+    phase boundary date. `events` is a list of {"date", "text"} dicts."""
+    from datetime import timedelta
+
+    before = phase_boundary_date - timedelta(days=window_days)
+    after = phase_boundary_date + timedelta(days=window_days)
+
+    before_count = sum(
+        1 for e in events
+        if before <= e["date"] < phase_boundary_date and term in e["text"].lower()
+    )
+    after_count = sum(
+        1 for e in events
+        if phase_boundary_date <= e["date"] < after and term in e["text"].lower()
+    )
+    return before_count, after_count
+
+def is_escalating(before_count: int, after_count: int, threshold: float = 1.5) -> bool:
+    if before_count == 0:
+        return after_count > 0
+    return (after_count / before_count) >= threshold
+```
+
+This is a minimal version of the windowing logic behind the companion
+repository's `src/ddr_rag/causality_analyzer.py`, which additionally
+computes post-phase NPT rate, classifies terms as "causal," and chains
+multiple such findings into the leading-indicator risk scan shown on the
+Cross-Phase Causality dashboard page. Phase classification itself lives
+in `src/ddr_rag/npt_classifier.py` (`PHASE_MAP`), and the co-occurrence
+graph construction is in `src/ddr_rag/graph_builder.py`.
+
+## Practical exercise
+
+**Try it yourself:** Using the five sample DDRs from Part I, tag each
+report's date and phase by hand, and use `term_frequency_by_window()` to
+check whether "torque" mentions increase in the days immediately before
+the stuck pipe event on DDR 18.
+
+**You'll know it worked when:** you can state, with the actual counts,
+whether "torque" is escalating in the window before the stuck pipe event
+— and you can point to exactly which reports you counted.
+
+## Challenge exercise
+
+**Challenge:** Clone the companion repository, run its full pipeline
+against its sample data, and open the **Cross-Phase Causality** dashboard
+page. Find one leading-indicator finding, and trace it back — using the
+DDR citations the dashboard provides — to the actual report text that
+produced it.
+
+## Key takeaways
+
+- Phase classification, co-occurrence graphs, and threshold-based
+  causal detection are individually simple techniques; their combination,
+  applied across a full campaign, produces findings a human reading
+  linearly is unlikely to catch.
+- Every threshold in a system like this should be a number you can name
+  and justify, not a hyperparameter buried in a trained model.
+- This is the payoff for every discipline earlier chapters insisted on:
+  OCR gating so the text is trustworthy, structured chunking so it's
+  retrievable, hybrid retrieval so it's findable, traceability so it's
+  checkable, evaluation so you know where it's weak. None of it was
+  optional — this chapter is why.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_12/phase_transition_signal.py` | Minimal windowed frequency/escalation check |
+| `DDR_RAG_Pipeline/src/ddr_rag/npt_classifier.py` | Phase classification (companion repo) |
+| `DDR_RAG_Pipeline/src/ddr_rag/graph_builder.py` | Co-occurrence graph construction (companion repo) |
+| `DDR_RAG_Pipeline/src/ddr_rag/causality_analyzer.py` | Leading-indicator causal detection (companion repo) |
+
+## Suggested next step
+
+You've now built, chapter by chapter, a smaller version of the same
+system running as [DDR_RAG_Pipeline](https://github.com/djimrastephane/DDR_RAG_Pipeline).
+[Appendix A](../appendix/appendix_a_environment_setup.qmd) shows how to
+clone and run the full platform — OCR, hybrid retrieval, 17-page
+dashboard, and all — against your own DDR archive.

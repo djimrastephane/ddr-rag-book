@@ -1,0 +1,116 @@
+# Cleaning Operational Text {#sec-chapter-02}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Explain why oilfield shorthand breaks naive text search and NLP.
+- Build a dictionary-based abbreviation expander that respects word
+  boundaries so it doesn't corrupt unrelated text.
+- Apply the expander across every `.txt` file produced in Chapter 1.
+
+## Operational problem
+
+Open one of the `.txt` files you extracted in Chapter 1 and read it as a
+computer would: `POOH FR 9,842' TO CHANGE BHA. ERRATIC TORQUE OBSD LAST 3
+STDS.` A drilling engineer reads that instantly. A keyword search for
+"pipe" finds nothing, because the report never says "pipe" — it says
+"POOH," "BHA," "STDS." Before we can search, summarise, or embed this
+text, we need to expand it into language that means the same thing to a
+human and to a machine.
+
+## Example DDR extract
+
+::: {.callout-note title="Sample DDR excerpt (DDR_018_EXAMPLE-1H.pdf)"}
+```
+0300-0700  STK PIPE @ 9,960'. WORKED PIPE, CIRC & PUMPED PILL.
+0700-1100  FREED PIPE. POOH TO 9,500' TO ASSESS BHA CONDITION.
+1100-2400  RIH TO 9,960'. WOC OVERNIGHT PER MUD ENGINEER RECOMMENDATION.
+```
+:::
+
+## Theory
+
+An abbreviation expander is just a dictionary lookup — `{"POOH": "pull out
+of hole", "RIH": "run in hole", ...}` — but two details make or break it:
+
+1. **Word boundaries.** `str.replace("RIH", ...)` will happily mangle a
+   word that merely *contains* "RIH" as a substring. Match on whole words
+   using regex `\b...\b`, not raw substring replacement.
+2. **Case.** DDRs are written in all caps; expansions should read
+   naturally in lowercase without forcing the rest of the sentence to
+   change case.
+
+This is deliberately not a machine-learning problem. A few dozen
+well-chosen abbreviations, expanded correctly, solve most of the
+readability problem — and unlike a model, a dictionary is auditable: you
+can list every expansion it will ever make.
+
+## Implementation
+
+```{python}
+#| eval: false
+# code/chapter_02/expand_abbreviations.py
+import re
+
+ABBREVIATIONS = {
+    "POOH": "pull out of hole",
+    "RIH": "run in hole",
+    "BHA": "bottom hole assembly",
+    "NPT": "non-productive time",
+    "LOT": "leak-off test",
+    "FIT": "formation integrity test",
+    "WOC": "wait on cement",
+    "STK": "stuck",
+    "CIRC": "circulate",
+    "OBSD": "observed",
+}
+
+def expand_text(text: str, abbreviations: dict[str, str] = ABBREVIATIONS) -> str:
+    for abbr, expansion in abbreviations.items():
+        pattern = r"\b" + re.escape(abbr) + r"\b"
+        text = re.sub(pattern, expansion, text, flags=re.IGNORECASE)
+    return text
+```
+
+Run it against the text files from Chapter 1's `datasets/ddr_text/`
+folder and save the expanded versions to `datasets/ddr_text_expanded/`.
+
+## Practical exercise
+
+**Try it yourself:** Run the expander against `DDR_018_EXAMPLE-1H.txt`.
+
+**You'll know it worked when:** the line `STK PIPE @ 9,960'` becomes
+`stuck PIPE @ 9,960'` and no unrelated word (e.g. any word merely
+containing "rih" or "poo") gets corrupted.
+
+## Challenge exercise
+
+**Challenge:** Extend `ABBREVIATIONS` using [Appendix
+B](../appendix/appendix_b_oilfield_glossary.qmd), and handle multi-word
+source abbreviations correctly (e.g. distinguishing `WOC` from a
+hypothetical `WOW` — wait on weather). A reference solution is in
+`code/chapter_02/challenge/`.
+
+## Key takeaways
+
+- Word-boundary regex, not substring replacement, is the difference
+  between a correct expander and a silently broken one.
+- A transparent dictionary beats an opaque model here: every expansion is
+  inspectable and testable.
+- Cleaning text is not optional groundwork — it's what makes every later
+  chapter's search and retrieval actually work.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_02/expand_abbreviations.py` | Word-boundary abbreviation expander |
+| `datasets/ddr_text_expanded/` | Expanded output from Chapter 1's extracted text |
+| `notebooks/chapter_02_explore.ipynb` | Interactive companion notebook |
+
+## Suggested next step
+
+With clean, expanded text in hand, Chapter 3 builds the first tool an
+engineer would actually reach for: a keyword search engine that answers
+"which reports mention stuck pipe?" in milliseconds.

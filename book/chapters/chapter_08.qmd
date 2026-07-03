@@ -1,0 +1,125 @@
+# Vector Databases at Scale {#sec-chapter-08}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Explain why brute-force cosine search stops being adequate as a corpus
+  grows, in concrete terms (memory and latency).
+- Build and query a FAISS index over DDR chunk embeddings.
+- Understand the difference between a per-document index and a
+  campaign-wide global index, and when each is the right tool.
+
+## Operational problem
+
+Chapter 4's `embeddings @ query_vec` brute-force search works fine over
+five documents — it's a single matrix multiply. The companion repository's
+real archive has **171 reports and 14,879 indexed chunks**. Brute force
+still technically *works* at that scale on a laptop, but a production
+system needs to support per-document search (fast, scoped to one report),
+campaign-wide search across every chunk, and incremental updates as new
+reports arrive — none of which a flat NumPy array is built to do
+efficiently or conveniently.
+
+## Theory
+
+A **vector database** (or vector index library, like FAISS
+[@johnson2019faiss]) organises
+embeddings so that similarity search doesn't require comparing the query
+against every single vector. At the scale this book deals with, even the
+simplest FAISS index — `IndexFlatIP` (flat, inner-product) — is the right
+choice: it's an *exact* nearest-neighbour search, mathematically
+equivalent to Chapter 4's brute-force approach, just implemented in
+optimised C++ with a persistent, loadable index file. (Larger-scale
+approximate indexes — IVF, HNSW — trade a small amount of accuracy for
+speed at millions of vectors; not a tradeoff this book's scale needs.)
+
+Because embeddings are normalized (Chapter 4), inner product *is* cosine
+similarity — which is exactly why the companion repository uses
+`faiss.IndexFlatIP` rather than a distance-based index.
+
+The companion repository builds two tiers of index, matching the two
+retrieval pathways described in its README:
+
+- **Per-document index** (`scripts/build_index.py`) — one FAISS index per
+  DDR, used when a question is scoped to a specific report.
+- **Global index** (`scripts/build_global_index.py`, materialised under
+  `data/global_index/`) — a single FAISS index over all 14,879 chunks
+  across all 171 reports, used for cross-document questions like "what
+  caused X across the campaign."
+
+## Implementation
+
+```{python}
+#| eval: false
+# code/chapter_08/build_faiss_index.py
+from pathlib import Path
+
+import faiss
+import numpy as np
+
+def build_index(embeddings: np.ndarray) -> faiss.IndexFlatIP:
+    dimension = embeddings.shape[1]
+    index = faiss.IndexFlatIP(dimension)
+    index.add(embeddings.astype("float32"))
+    return index
+
+def save_index(index: faiss.Index, path: Path) -> None:
+    faiss.write_index(index, str(path))
+
+def load_index(path: Path) -> faiss.Index:
+    return faiss.read_index(str(path))
+
+def search(index: faiss.Index, query_vec: np.ndarray, top_k: int = 5):
+    scores, indices = index.search(query_vec.reshape(1, -1).astype("float32"), top_k)
+    return list(zip(indices[0].tolist(), scores[0].tolist()))
+```
+
+This mirrors the indexing pattern in the companion repository's
+`src/rag_pdf/services/search_service.py`, which builds `IndexFlatIP` over
+chunk embeddings and persists it to `faiss.index` alongside each
+document's other artefacts.
+
+## Practical exercise
+
+**Try it yourself:** Build a FAISS index over the five sample DDR
+embeddings from Chapter 4, save it to disk, reload it in a fresh Python
+session, and confirm a query for "torque problems" returns the same
+top result as Chapter 4's brute-force search.
+
+**You'll know it worked when:** the FAISS-based and brute-force results
+agree — because, mathematically, `IndexFlatIP` over normalized vectors
+*is* cosine similarity, just implemented differently.
+
+## Challenge exercise
+
+**Challenge:** Build two indexes — a per-document index for each sample
+DDR individually, and one global index across all five — and write a
+function that decides which to query based on whether a question mentions
+a specific report number. A reference solution is in
+`code/chapter_08/challenge/`.
+
+## Key takeaways
+
+- `IndexFlatIP` at this book's scale is exact, not approximate — you're
+  not trading away accuracy, only reimplementing brute-force search more
+  efficiently and persistently.
+- Per-document and global indexes serve genuinely different questions;
+  build both rather than forcing one index to do both jobs.
+- Scaling the *index* doesn't fix retrieval *quality* — that's the next
+  chapter's problem.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_08/build_faiss_index.py` | FAISS `IndexFlatIP` build/save/load/search |
+| `DDR_RAG_Pipeline/scripts/build_index.py` | Per-document index builder (companion repo) |
+| `DDR_RAG_Pipeline/scripts/build_global_index.py` | Campaign-wide global index builder (companion repo) |
+
+## Suggested next step
+
+A fast index doesn't guarantee good retrieval. Chapter 9 shows a query the
+companion repository's real evaluation flags as a weak point — a precise
+numeric query like "overpull below 20 klbs" — and builds hybrid retrieval
+to fix it.

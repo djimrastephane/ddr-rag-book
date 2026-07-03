@@ -1,0 +1,210 @@
+# Reading Your First DDR {#sec-chapter-01}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Explain why DDR PDFs are hard for software to read, and the difference
+  between a *digital-native* PDF and a *scanned* one.
+- Extract raw text from a digital-native PDF using Python.
+- Write a script that processes a single DDR, or an entire folder of them,
+  from the command line.
+- Save extracted text so it's ready for the cleaning work in Chapter 2.
+
+## Operational problem
+
+Picture a folder on a shared drive: `Well_EXAMPLE-1H/DDRs/`. Inside it, 40
+PDFs, one per day, named things like `DDR_017_EXAMPLE-1H.pdf`. Somewhere in
+report 18 is the sentence that matters most this week: *"STK PIPE @ 9,960'.
+WORKED PIPE, CIRC & PUMPED PILL."* Nobody remembers which report it's in.
+Opening 40 PDFs by hand to find one line is exactly the kind of task a
+short Python script should be doing for you.
+
+That's the whole job of this chapter: given one PDF, get its text into a
+Python string you can work with. Nothing clever yet — no search, no
+abbreviation handling, no AI. Just a reliable way to turn a PDF into text.
+Everything in this book is built on top of getting this first step right.
+
+## Example DDR extract
+
+::: {.callout-note title="Sample DDR excerpt (DDR_017_EXAMPLE-1H.pdf)"}
+```
+DAILY DRILLING REPORT
+WELL: EXAMPLE-1H  DATE: 2025-03-14  REPORT NO: 17  DEPTH: 9,842 ft MD
+
+24-HR OPERATIONS SUMMARY
+0600-1130  POOH FR 9,842' TO CHANGE BHA. ERRATIC TORQUE OBSD LAST 3 STDS.
+1130-1400  RIH W/ NEW BHA TO 9,700'. NO ISSUES.
+1400-2400  DRLG AHEAD 9,700' TO 9,912'. ROP AVG 22 FT/HR.
+```
+:::
+
+This is one of five synthetic DDRs you'll generate in a moment. They follow
+the shorthand style real DDRs use — abbreviations, timestamps, depths — so
+everything you build against them transfers directly to real reports.
+
+## Theory
+
+A PDF is not a text file wearing a costume. It's a page-description format:
+instructions for *drawing* characters at specific coordinates, not a
+stream of text with a beginning and an end. Two DDRs that look identical on
+screen can be built completely differently under the hood:
+
+- **Digital-native PDFs** were generated directly from software (Word, a
+  drilling data system, a report generator). The text was placed on the
+  page as actual character data, so a library can recover it.
+- **Scanned PDFs** are photographs of paper reports. There is no character
+  data at all — just a picture of a page. Extracting text from these
+  requires optical character recognition (OCR), which we cover in
+  Chapter 6.
+
+This chapter deals only with digital-native PDFs — the more common case for
+recent reports, and the right place to start. We'll use
+[`pdfplumber`](https://github.com/jsvine/pdfplumber), a Python library that
+reads a PDF's internal structure and hands back the text (and, later in
+the book, tables and layout) on each page. There are other libraries that
+do this — `PyPDF2`, `pymupdf` — and they're worth knowing about, but
+`pdfplumber` is a good default: actively maintained, and its text
+extraction is reliable on the kind of structured reports we're working
+with.
+
+## Implementation
+
+### Step 1: get some DDRs to work with
+
+Real DDRs are confidential, so this book uses synthetic ones that read
+like the real thing. Generate a small sample archive:
+
+```{python}
+#| eval: false
+# code/chapter_01/generate_sample_ddr.py
+python code/chapter_01/generate_sample_ddr.py
+```
+
+This writes five PDFs into `datasets/sample_ddrs/` — reports 15, 16, 17,
+and 18 for well EXAMPLE-1H (including the stuck pipe event on report 18),
+and report 22 for well EXAMPLE-2H.
+
+### Step 2: extract text from one PDF
+
+Here is the core of `code/chapter_01/read_ddr.py`, built up piece by piece.
+
+First, open a PDF and read one page:
+
+```{python}
+#| eval: false
+import pdfplumber
+
+with pdfplumber.open("datasets/sample_ddrs/DDR_017_EXAMPLE-1H.pdf") as pdf:
+    first_page = pdf.pages[0]
+    print(first_page.extract_text())
+```
+
+Run that and you'll see the report's text printed straight to your
+terminal — depth, timestamps, operations summary, all of it as a plain
+Python string.
+
+Most DDRs are a single page, but some aren't. Loop over every page and
+keep track of which page each chunk of text came from — you'll need that
+later for citations:
+
+```{python}
+#| eval: false
+from pathlib import Path
+import pdfplumber
+
+def extract_text(pdf_path: Path) -> str:
+    pages_text = []
+    with pdfplumber.open(pdf_path) as pdf:
+        for page_number, page in enumerate(pdf.pages, start=1):
+            text = page.extract_text() or ""
+            pages_text.append(f"--- Page {page_number} ---\n{text}")
+    return "\n\n".join(pages_text)
+```
+
+Note the `or ""`. If a page has no extractable text — a scanned page mixed
+into an otherwise digital report, for example — `extract_text()` returns
+`None`, and every downstream step in this book expects a string, not
+`None`. This one line is a small example of a pattern you'll see
+throughout the book: assume real data is messier than the happy path.
+
+### Step 3: make it a script you can run from the command line
+
+The full script, `code/chapter_01/read_ddr.py`, wraps this in a command-line
+interface so you can point it at one file or a whole folder:
+
+```bash
+# One file, printed to the terminal
+python code/chapter_01/read_ddr.py datasets/sample_ddrs/DDR_017_EXAMPLE-1H.pdf
+
+# A whole folder, saved as .txt files
+python code/chapter_01/read_ddr.py datasets/sample_ddrs/ --batch --out datasets/ddr_text
+```
+
+Try the first command now. You should see:
+
+```
+===== DDR_017_EXAMPLE-1H.pdf =====
+--- Page 1 ---
+DAILY DRILLING REPORT
+WELL: EXAMPLE-1H DATE: 2025-03-14 REPORT NO: 17 DEPTH: 9,842 ft MD
+24-HR OPERATIONS SUMMARY
+0600-1130 POOH FR 9,842' TO CHANGE BHA. ERRATIC TORQUE OBSD LAST 3 STDS.
+1130-1400 RIH W/ NEW BHA TO 9,700'. NO ISSUES.
+1400-2400 DRLG AHEAD 9,700' TO 9,912'. ROP AVG 22 FT/HR.
+```
+
+That's it — you've just built a tool that reads DDRs faster than you can
+open Adobe Acrobat.
+
+## Practical exercise
+
+**Try it yourself:** Run `read_ddr.py` in batch mode against
+`datasets/sample_ddrs/`, saving the output to `datasets/ddr_text/`. Then
+open `DDR_018_EXAMPLE-1H.txt` and confirm the stuck pipe event is in
+there, word for word.
+
+**You'll know it worked when:** you have five `.txt` files in
+`datasets/ddr_text/`, one per PDF, and you can find the line
+`STK PIPE @ 9,960'` in `DDR_018_EXAMPLE-1H.txt` without opening the
+original PDF.
+
+## Challenge exercise
+
+**Challenge:** Extend the script to also print, for each PDF, the total
+number of pages and the total character count extracted. Then generate
+one more synthetic DDR yourself (add a new tuple to `SAMPLE_REPORTS` in
+`generate_sample_ddr.py`) describing a lost-circulation event, and confirm
+your script extracts it correctly. A reference solution is in
+`code/chapter_01/challenge/` in the companion repository.
+
+## Key takeaways
+
+- A PDF's internal structure, not its on-screen appearance, determines
+  whether text can be extracted directly. Digital-native PDFs can;
+  scanned PDFs need OCR (Chapter 6).
+- `pdfplumber` turns a PDF into plain Python strings, one page at a time.
+- Handle `None` from `extract_text()` explicitly — real-world DDR archives
+  will contain pages that don't extract cleanly, and your code should
+  never crash on them.
+- A five-line function (`extract_text`) plus a thin command-line wrapper
+  is already a genuinely useful tool. You don't need machine learning to
+  save an engineer an hour of searching PDFs by hand.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_01/generate_sample_ddr.py` | Creates the synthetic sample DDR archive |
+| `code/chapter_01/read_ddr.py` | Extracts text from one PDF or a folder of PDFs |
+| `datasets/sample_ddrs/` | Five synthetic DDR PDFs used throughout Part I |
+| `notebooks/chapter_01_explore.ipynb` | Interactive notebook version of this chapter |
+
+## Suggested next step
+
+The text you just extracted is full of field shorthand — `POOH`, `BHA`,
+`STK PIPE`, `WOC` — that means everything to a drilling engineer and
+nothing to a keyword search or a language model. Chapter 2 builds an
+abbreviation expansion engine so `POOH` becomes `pull out of hole`
+everywhere it appears, turning this raw text into something both humans
+and machines can search reliably.

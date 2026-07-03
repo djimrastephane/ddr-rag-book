@@ -1,0 +1,132 @@
+# Chunking That Respects Report Structure {#sec-chapter-07}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Explain why chunk size is measured in tokens, not characters or words.
+- Implement token-based chunking with overlap using `tiktoken`.
+- Implement segment-aware chunking that breaks at natural report
+  boundaries (headings, section markers) instead of at an arbitrary
+  character count.
+
+## Operational problem
+
+Chapters 1–5 embedded each report as a single unit — fine for a one-page
+sample DDR, unworkable for a real report that runs several pages with
+multiple sections (header, ops summary, weather, personnel, costs). Embed
+too much text in one vector and the embedding blurs across unrelated
+content, hurting retrieval precision. Split naively at a fixed character
+count and you'll cut a stuck-pipe narrative in half mid-sentence, right
+across a chunk boundary — the exact passage you most need to retrieve
+becomes the two chunks least likely to score well.
+
+## Example DDR extract
+
+::: {.callout-note title="Why naive splitting fails"}
+```
+Naive 200-character split, mid-sentence:
+
+Chunk A: "...0300-0700  STK PIPE @ 9,960'. WORKED PIPE, CIRC & PUMPED
+          PILL. 0700-1100  FREED PIPE. POOH TO 9,500' TO ASSESS BHA"
+Chunk B: "CONDITION. 1100-2400  RIH TO 9,960'. WOC OVERNIGHT PER MUD..."
+```
+A query about "BHA condition after stuck pipe" now has its evidence split
+across two separately-scored chunks — neither of which alone tells the
+full story.
+:::
+
+## Theory
+
+Two ideas, used together, fix this:
+
+1. **Token-based sizing.** Language models and embedding models operate on
+   tokens, not characters — and token count is what actually determines
+   whether a chunk fits a model's context window and how much a given
+   chunk "costs" downstream. Chunking by token count (with a library like
+   `tiktoken`) is more accurate than chunking by character or word count.
+2. **Segment-aware boundaries.** Rather than cutting at a fixed token
+   count regardless of content, detect natural boundaries — headings,
+   section markers, all-caps titles — and prefer to split there. A chunk
+   that ends at a genuine section break is far more likely to be a
+   self-contained, retrievable unit of meaning than one that ends
+   mid-sentence because a counter hit its limit.
+
+The companion repository's `src/rag_pdf/chunking.py` implements both.
+`chunk_text_by_tokens()` does token-based splitting with configurable
+overlap (so context isn't lost entirely at a boundary), falling back to a
+word-based approximation if `tiktoken` isn't available.
+`split_text_for_segment_aware_chunking()` goes further: it walks the text
+line by line, detects boundary patterns (including synthetic boundaries
+inserted for flattened OCR text, where headings and body text have been
+squashed onto one line), and returns a list of `SegmentBlock` objects —
+each with a title, its text, and a `boundary_type` (`MATCH`, `INSERT`, or
+`CONTINUATION`) recording *why* the segment starts where it does.
+
+## Implementation
+
+```{python}
+#| eval: false
+# code/chapter_07/token_chunking.py
+import tiktoken
+
+def chunk_text_by_tokens(text: str, chunk_tokens: int = 200,
+                          overlap_tokens: int = 40) -> list[str]:
+    enc = tiktoken.get_encoding("cl100k_base")
+    tokens = enc.encode(text.strip())
+    chunks, start = [], 0
+    while start < len(tokens):
+        end = min(len(tokens), start + chunk_tokens)
+        chunks.append(enc.decode(tokens[start:end]).strip())
+        if end == len(tokens):
+            break
+        start = max(0, end - overlap_tokens)
+    return chunks
+```
+
+This is a direct simplification of `chunk_text_by_tokens()` in the
+companion repository — same sliding-window-with-overlap logic, without
+the word-based fallback path. Read the full version, plus
+`split_text_for_segment_aware_chunking_with_patterns()`, in
+`src/rag_pdf/chunking.py`.
+
+## Practical exercise
+
+**Try it yourself:** Chunk `DDR_018_EXAMPLE-1H.txt` with
+`chunk_tokens=40, overlap_tokens=10`, and confirm the stuck-pipe sentence
+appears complete within at least one chunk rather than split across two.
+
+**You'll know it worked when:** you can point to a single chunk that
+contains the full "STK PIPE... FREED PIPE... POOH TO ASSESS BHA" sequence.
+
+## Challenge exercise
+
+**Challenge:** Implement a minimal segment-aware splitter that treats any
+all-caps line under 14 words as a section heading and starts a new segment
+there, then compare its output against fixed-token chunking on a
+multi-section sample report. A reference solution — and the full
+production logic — is in `code/chapter_07/challenge/` and
+`DDR_RAG_Pipeline/src/rag_pdf/chunking.py` respectively.
+
+## Key takeaways
+
+- Chunk size belongs in tokens, because that's the unit every downstream
+  model actually consumes.
+- Overlap prevents context from vanishing at a chunk boundary, at the cost
+  of some redundancy in the index.
+- Segment-aware boundaries produce chunks that are more likely to be
+  self-contained, retrievable units — worth the extra complexity once
+  reports have real internal structure.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_07/token_chunking.py` | Simplified token-based chunker |
+| `DDR_RAG_Pipeline/src/rag_pdf/chunking.py` | Production token + segment-aware chunking (companion repo) |
+
+## Suggested next step
+
+Well-formed chunks still need somewhere fast to live. Chapter 8 replaces
+Chapter 4's brute-force cosine search with a real vector database, and
+scales retrieval from five documents to thousands.

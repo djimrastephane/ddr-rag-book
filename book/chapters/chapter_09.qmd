@@ -1,0 +1,168 @@
+# Hybrid Retrieval and Reranking {#sec-chapter-09}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Explain why semantic search alone underperforms on precise, entity- or
+  number-heavy queries.
+- Combine BM25 (sparse/exact) and dense (semantic) retrieval using
+  Reciprocal Rank Fusion (RRF).
+- Apply a cross-encoder to rerank a small candidate set for higher
+  precision than either retrieval method alone.
+- Recognise that retrieval scoring code needs the same numerical rigor as
+  any other production code — illustrated with two real bugs from the
+  companion repository.
+
+## Operational problem
+
+The companion repository's real evaluation (42 hand-built questions
+against the 171-report campaign) shows semantic-only retrieval scoring
+worst on exactly the query type engineers ask most often about specific
+thresholds: *"overpull below 20 klbs."* Dense embeddings capture topical
+meaning well, but they blur exact numbers and entity names — "20 klbs"
+and "25 klbs" can end up embedded almost identically, because the
+*surrounding* language is nearly the same. Keyword search (Chapter 3)
+handles that exact number perfectly but misses paraphrase. Neither alone
+is enough; you need both, combined.
+
+## Example DDR extract
+
+::: {.callout-note title="A query that needs both retrieval signals"}
+```
+Query: "overpull below 20 klbs"
+
+BM25 alone: finds every report containing "overpull" and "klbs" —
+  high recall, but ranks them by term frequency, not by whether the
+  actual number satisfies "below 20."
+
+Dense alone: ranks by topical similarity to "overpull" — may rank a
+  report with "overpull of 45 klbs" above one with "18 klbs," since
+  both are topically about overpull events.
+
+Hybrid + structured filter: combines both signals, and (Chapter 10)
+  can answer the numeric threshold directly from structured fields
+  rather than relying on retrieval alone.
+```
+:::
+
+## Theory
+
+**BM25** [@robertson2009bm25] scores a document by term frequency, adjusted by how rare each
+term is across the corpus (inverse document frequency) and normalised for
+document length. It's decades old, computationally cheap, and excellent
+at exact and near-exact matches — the opposite profile from dense
+embeddings.
+
+**Reciprocal Rank Fusion (RRF)** combines two ranked lists by *rank*, not
+raw score: for each document, sum `1 / (k + rank)` across both lists. This
+sidesteps a real problem — BM25 scores and cosine similarities live on
+completely different, incomparable scales, so averaging raw scores
+directly would let whichever signal happens to have larger numbers
+dominate regardless of which is actually more informative. The companion
+repository weights BM25 in this fusion via a tunable constant
+(`RRF_BM25_WEIGHT`), reflecting that for DDR text, exact-term matching
+often deserves more trust than similarity alone.
+
+**Cross-encoder reranking** is the last, most expensive step, and
+deliberately runs on only the top handful of fused candidates, not the
+whole corpus. Unlike a dense embedding (which encodes the query and each
+document *separately*, then compares vectors), a cross-encoder scores the
+query and a candidate passage *together*, letting it capture interactions
+between them that no fixed vector representation can. This makes it
+substantially slower per comparison — which is exactly why it's applied
+after fusion has already narrowed the field, not instead of it.
+
+::: {.callout-tip title="Case study: two real bugs at the edges of a scoring system"}
+The companion repository's `README.md` documents an audit that found two
+scoring bugs that no ordinary query would trigger:
+
+1. BM25's Robertson IDF formula goes **negative** for terms that appear in
+   almost every document, which — left unguarded — corrupts score fusion
+   by injecting negative values into what should be a positive relevance
+   signal. The fix was a one-line guard: clamp with `max(0.0, idf)`.
+2. Min-max score normalisation — rescaling scores into `[0, 1]` by
+   subtracting the minimum and dividing by the range — **collapses to
+   zero** when every candidate in a batch scores identically, silently
+   zeroing out half of the hybrid blend for that query. The fix: return
+   `1.0` on a tie, so the *other* signal in the fusion can still
+   discriminate between candidates.
+
+Neither bug shows up by running "more queries" — they only show up by
+reasoning about the math at its boundaries: what happens when a term is
+universal, what happens when every score ties. Retrieval scoring is
+numerical code, and it deserves the same edge-case discipline you'd apply
+to any other numerical code.
+:::
+
+## Implementation
+
+```{python}
+#| eval: false
+# code/chapter_09/hybrid_search.py
+from collections import defaultdict
+
+def reciprocal_rank_fusion(ranked_lists: list[list[str]], k: int = 60,
+                            weights: list[float] | None = None) -> list[tuple[str, float]]:
+    weights = weights or [1.0] * len(ranked_lists)
+    scores: dict[str, float] = defaultdict(float)
+    for ranked_list, weight in zip(ranked_lists, weights):
+        for rank, doc_id in enumerate(ranked_list, start=1):
+            scores[doc_id] += weight * (1.0 / (k + rank))
+    return sorted(scores.items(), key=lambda item: item[1], reverse=True)
+```
+
+This mirrors the fusion logic behind `RRF_BM25_WEIGHT` in the companion
+repository's `src/rag_pdf/services/search_service.py`. The full hybrid
+pipeline — BM25 index construction, dense retrieval, RRF fusion, and
+cross-encoder reranking via `sentence-transformers.CrossEncoder` — lives
+in `src/rag_pdf/retrieval/canonical_hybrid.py`,
+`src/rag_pdf/retrieval/hybrid_utils.py`, and
+`src/rag_pdf/retrieval/rerank.py`.
+
+## Practical exercise
+
+**Try it yourself:** Rank the five sample DDRs for "torque problems"
+using Chapter 3's keyword search and Chapter 4's semantic search
+separately, then fuse the two ranked lists with `reciprocal_rank_fusion()`.
+
+**You'll know it worked when:** you can explain, for at least one
+document, why its fused rank differs from its rank in either individual
+list.
+
+## Challenge exercise
+
+**Challenge:** Implement the two guards from the case study above —
+clamp negative IDF to zero, and return `1.0` for a normalisation tie —
+against a deliberately constructed edge case (a query term that appears
+in every sample document; a batch where every candidate scores
+identically). Confirm your unguarded version fails first. A reference
+solution is in `code/chapter_09/challenge/`.
+
+## Key takeaways
+
+- Sparse and dense retrieval fail on different, complementary query
+  types — combine them rather than picking one.
+- Rank-based fusion (RRF) avoids the scale-mismatch problem that plagues
+  naive score-averaging across different retrieval methods.
+- Cross-encoder reranking buys precision at a real latency cost — apply
+  it only to a small, already-fused candidate set.
+- Retrieval scoring is numerical code. Boundary conditions — universal
+  terms, tied scores — deserve explicit tests, not just "it works on my
+  queries."
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_09/hybrid_search.py` | Reciprocal Rank Fusion implementation |
+| `DDR_RAG_Pipeline/src/rag_pdf/retrieval/canonical_hybrid.py` | Production hybrid retrieval (companion repo) |
+| `DDR_RAG_Pipeline/src/rag_pdf/retrieval/rerank.py` | Rerank heuristics (companion repo) |
+| `DDR_RAG_Pipeline/src/rag_pdf/services/search_service.py` | Cross-encoder rerank + RRF fusion (companion repo) |
+
+## Suggested next step
+
+Better retrieval still isn't the same as a trustworthy answer. Chapter 10
+tackles the harder problem: making sure every generated claim traces back
+to real evidence, and that the system tells you honestly when it doesn't
+know.

@@ -1,0 +1,60 @@
+# Appendix B: Oilfield Abbreviation Glossary {#sec-appendix-b .unnumbered}
+
+This glossary supports Chapter 2's abbreviation expansion engine and the
+Chapter 2 challenge exercise. It is not exhaustive — abbreviation usage
+varies by operator, rig contractor, and basin — but covers the
+terms used throughout this book's sample DDRs, plus enough additional
+common terms to give the expander real coverage on a first pass against
+your own archive.
+
+| Abbreviation | Expansion |
+|---|---|
+| BHA | bottom hole assembly |
+| BOP | blowout preventer |
+| CBL | cement bond log |
+| CIRC | circulate |
+| COND | condition |
+| CSG | casing |
+| DHSV | downhole safety valve |
+| DP | drill pipe |
+| ECD | equivalent circulating density |
+| EMW | equivalent mud weight |
+| FIT | formation integrity test |
+| FR | from |
+| GPM | gallons per minute |
+| KOP | kick-off point |
+| LOT | leak-off test |
+| MD | measured depth |
+| MIRU | move in, rig up |
+| MW | mud weight |
+| NPT | non-productive time |
+| OBSD | observed |
+| PBTD | plugged back total depth |
+| POOH | pull out of hole |
+| PPG | pounds per gallon |
+| PU | pick up (pipe) |
+| PUW | pick up weight |
+| RIH | run in hole |
+| ROP | rate of penetration |
+| RPM | revolutions per minute |
+| SICP | shut-in casing pressure |
+| SIDPP | shut-in drill pipe pressure |
+| SLM | slow (rate), or short for "slim hole" depending on context — verify against operator style guide |
+| STDS | stands (of drill pipe) |
+| STK | stuck |
+| TD | total depth |
+| TIH | trip in hole |
+| TOOH | trip out of hole |
+| TVD | true vertical depth |
+| WOB | weight on bit |
+| WOC | wait on cement |
+| WOW | wait on weather |
+| XO | crossover (sub) |
+
+::: {.callout-warning title="Abbreviations are not universal"}
+The same three letters can mean different things across operators and
+basins — build your abbreviation dictionary from *your* archive's actual
+usage before trusting it against your own reports, and treat any
+ambiguous abbreviation (like `SLM` above) as a signal to check context
+rather than expand automatically.
+:::

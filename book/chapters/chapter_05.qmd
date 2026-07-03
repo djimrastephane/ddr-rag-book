@@ -1,0 +1,145 @@
+# First RAG System {#sec-chapter-05}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Explain retrieval-augmented generation (RAG) as two separate,
+  inspectable steps: retrieve, then generate.
+- Assemble retrieved chunks into a prompt that forces a language model to
+  answer only from the evidence it's given.
+- Produce an answer with an explicit, per-claim evidence list — report
+  number and page — rather than an unsupported paragraph.
+
+## Operational problem
+
+Retrieval (Chapter 4) gets you the right passages. What an engineer
+actually wants is an answer: *"Which events preceded the stuck pipe
+event?"* — not three ranked text chunks they have to read and synthesise
+themselves. But a generated answer that isn't traceable back to specific
+reports is worse than no answer at all in an engineering context, because
+it invites misplaced trust. This chapter builds the smallest system that
+does both: synthesise an answer, and show exactly where every part of it
+came from.
+
+## Example DDR extract
+
+::: {.callout-note title="Target interaction"}
+```
+Question: Which events preceded the stuck pipe event?
+
+Answer: Torque became erratic over the three stands before the stuck
+pipe event (DDR 16), leading to a BHA change (DDR 17) before drilling
+resumed at the depth where the pipe later became stuck (DDR 17).
+
+Evidence:
+  DDR_016_EXAMPLE-1H.txt
+  DDR_017_EXAMPLE-1H.txt
+```
+:::
+
+## Theory
+
+**RAG (retrieval-augmented generation)** [@lewis2020rag] is exactly the
+two chapters you just built, chained together: retrieve relevant evidence
+(Chapter 4), then hand that evidence to a language model and ask it to
+answer *using only that evidence*. The model is not answering from what it memorised during
+training — it's answering from the specific passages you retrieved, which
+is what makes citation possible at all.
+
+The critical design decision is the prompt: instruct the model explicitly
+to answer only from the provided context, and to cite which source each
+part of the answer came from. This doesn't make hallucination impossible —
+Chapter 10 covers stronger mitigations — but it is the foundation
+everything else builds on.
+
+## Implementation
+
+```{python}
+#| eval: false
+# code/chapter_05/first_rag.py
+from pathlib import Path
+
+from semantic_search import embed_texts, load_chunks, search  # from Chapter 4
+
+PROMPT_TEMPLATE = """Answer the question using ONLY the evidence below.
+If the evidence doesn't contain the answer, say so — do not guess.
+Cite which report each part of your answer comes from.
+
+Evidence:
+{evidence}
+
+Question: {question}
+Answer:"""
+
+def build_prompt(question: str, retrieved: list[tuple[str, float]],
+                  filenames: list[str], texts: list[str]) -> str:
+    evidence_blocks = []
+    for filename, _score in retrieved:
+        text = texts[filenames.index(filename)]
+        evidence_blocks.append(f"[{filename}]\n{text}")
+    return PROMPT_TEMPLATE.format(
+        evidence="\n\n".join(evidence_blocks),
+        question=question,
+    )
+
+def answer_question(question: str, model, filenames, texts, embeddings,
+                     llm_call) -> tuple[str, list[str]]:
+    retrieved = search(model, question, filenames, embeddings, top_k=3)
+    prompt = build_prompt(question, retrieved, filenames, texts)
+    answer_text = llm_call(prompt)  # plug in your LLM of choice
+    evidence = [filename for filename, _score in retrieved]
+    return answer_text, evidence
+```
+
+`llm_call` is intentionally a plain function argument, not a hardcoded
+API client: plug in a local model, an API-based model, or — while you're
+first testing the retrieval and prompt logic — a stub that just echoes the
+evidence back, so you can verify the pipeline end to end before spending a
+single API call.
+
+## Practical exercise
+
+**Try it yourself:** Wire up `answer_question` with a stub `llm_call` that
+simply returns the evidence text, and confirm the evidence list for
+"Which events preceded the stuck pipe event?" contains
+`DDR_016_EXAMPLE-1H.txt` and `DDR_017_EXAMPLE-1H.txt`.
+
+**You'll know it worked when:** the evidence list is correct *before* you
+plug in a real language model — retrieval quality, not generation
+fluency, is what determines whether this system is trustworthy.
+
+## Challenge exercise
+
+**Challenge:** Connect a real LLM (local via `transformers`/`ollama`, or a
+hosted API) as `llm_call`, and add a check that rejects the answer if it
+mentions a report filename that wasn't in the retrieved evidence list — a
+first, crude hallucination guard. A reference solution is in
+`code/chapter_05/challenge/`.
+
+## Key takeaways
+
+- RAG is retrieval, then generation — two separate, individually
+  debuggable steps, not one opaque black box.
+- If retrieval is wrong, generation cannot save you — always verify the
+  evidence list before trusting the generated answer.
+- A prompt that instructs "answer only from evidence, cite sources" is
+  necessary but not sufficient for trustworthy answers. Part II builds the
+  guardrails that make it sufficient.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_05/first_rag.py` | Prompt assembly and evidence-tracked question answering |
+| `notebooks/chapter_05_explore.ipynb` | Interactive companion notebook |
+
+## Suggested next step
+
+What you've built in Part I works — on five clean, digital, hand-picked
+PDFs. Part II industrialises this system against the reality of a real
+archive: hundreds of scanned and digital reports, retrieval that has to
+be both fast and precise, and answers that have to survive scrutiny from
+someone who wasn't in the room when they were generated. Chapter 6 starts
+with the first thing that breaks: scanned reports with no extractable
+text at all.

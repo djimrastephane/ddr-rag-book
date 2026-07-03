@@ -1,0 +1,63 @@
+# Preface {.unnumbered}
+
+## Why this book exists
+
+I wrote this book because I kept seeing the same gap on drilling and
+completions teams: the field generates enormous amounts of written
+operational knowledge — Daily Drilling Reports, end-of-well reports, morning
+reports, NPT logs — and almost none of it is *usable* by the next engineer
+who needs it [@spe_drilling_reports]. It sits in PDF form, scanned or digital, named inconsistently,
+scattered across SharePoint folders and email threads. When a rig hits a
+screenout at 9,200 ft, the fastest way to find out if this has happened
+before is usually to ask the oldest person in the room.
+
+Large language models and retrieval-augmented generation (RAG) are
+genuinely useful here — not because they are new or exciting, but because
+they solve a real, boring, expensive problem: turning an unstructured
+archive into something you can query. This book teaches you to build that
+system yourself, understand every part of it, and trust its output, rather
+than adopting a black-box product you cannot inspect.
+
+## Why "industrial"
+
+A demo that answers one question about one PDF is easy to build and easy to
+find online. An industrial system is different. It has to:
+
+- Handle scanned reports as well as digital ones.
+- Scale to thousands of DDRs across dozens of wells.
+- Never silently invent an answer — every claim must trace back to a
+  specific report and page.
+- Be auditable by someone who was not in the room when it was built.
+
+Every chapter in Part II exists because a toy RAG system fails at one of
+these requirements. We fix them one at a time, in the order you would
+actually hit them in the field.
+
+## How to read this book
+
+This book follows the practical-first, project-based teaching style of
+*Python Crash Course* [@matthes2023python]: small wins early, theory only
+when the code in front of you needs it, and a working artifact at the end
+of every chapter. Read it in order the first time. Each chapter assumes
+the code from the previous one exists and works — this is a build, not a
+reference manual.
+After your first pass, use it as a reference: jump to the chapter that
+matches the problem you currently have (Chapter 6 if your PDFs are scanned,
+Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers
+aren't trustworthy yet).
+
+Type the code yourself. Do not copy-paste from the companion repository
+until you have typed it once and watched it run. This is slower and it is
+worth it.
+
+## A note on data
+
+Daily Drilling Reports are operationally sensitive and often confidential.
+Every DDR used as an example in this book is either fully synthetic or has
+been anonymised beyond recognition — well names, operators, coordinates,
+and personnel are fictional. The abbreviations, event sequences, and
+formation language are representative of real field practice. Do not use
+this book's sample data to infer anything about a real well, and do not
+commit your own confidential DDRs to a public repository — see
+[Appendix A](appendix/appendix_a_environment_setup.qmd) for a data-handling
+checklist.

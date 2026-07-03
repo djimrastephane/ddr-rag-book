@@ -1,0 +1,112 @@
+<!--
+CHAPTER TEMPLATE
+================
+Copy this file into chapters/chapter_NN.qmd and fill in every section.
+Do not delete a section — if it doesn't apply, write one sentence saying why.
+
+Style rules (Python Crash Course philosophy):
+- Practical first. Don't explain a concept before the reader needs it to
+  make the current code work.
+- Every chapter must produce a runnable artifact the reader can point to
+  and say "I built that."
+- Minimal mathematics. If you need an equation, put the intuition in prose
+  first and the equation second, not the other way around.
+- No chapter should run past ~20 pages without a practical exercise
+  checkpoint.
+- Code blocks must run as-is against the companion repository's sample
+  data. Do not show elided/pseudocode as if it were runnable.
+-->
+
+# Chapter Title Goes Here {#sec-chapter-NN}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Objective 1 (a concrete capability, not a topic — "extract text from a
+  digital-native PDF DDR using pdfplumber", not "learn about PDFs")
+- Objective 2
+- Objective 3
+
+## Operational problem
+
+<!-- One or two paragraphs. Describe the real field problem this chapter
+solves, in language a drilling/completions/production engineer would use.
+Ground it in a scenario: a specific well, a specific question someone
+needed answered, a specific way the current (manual) process fails. -->
+
+## Example DDR extract
+
+<!-- A short, realistic (synthetic or anonymised) DDR excerpt that motivates
+the chapter's technique. Show it as a callout so it's visually distinct
+from narrative text. -->
+
+::: {.callout-note title="Sample DDR excerpt"}
+```
+WELL: EXAMPLE-1H          DATE: 2025-03-14          REPORT NO: 17
+DEPTH: 9,842 ft MD        24-HR OPS SUMMARY:
+
+0600-1130  POOH FR 9,842' TO CHANGE BHA. ERRATIC TORQUE OBSD LAST 3 STDS.
+1130-1400  RIH W/ NEW BHA TO 9,700'. NO ISSUES.
+1400-2400  DRLG AHEAD 9,700' TO 9,912'. ROP AVG 22 FT/HR.
+```
+:::
+
+## Theory
+
+<!-- The minimum theory required to understand *why* the implementation
+below works. If this section would exceed ~1.5 pages, you are including
+theory the reader doesn't need yet — cut it or defer it to a later
+chapter. Prefer diagrams and worked examples over formal definitions. -->
+
+## Implementation
+
+<!-- Step-by-step, runnable code. Build it incrementally: show a minimal
+version working first, then extend it. Every code block should be
+something the reader can paste into a script or notebook and execute
+immediately, using files from datasets/ or code/ in the companion repo. -->
+
+```{python}
+#| eval: false
+# Minimal working example — replace with chapter-specific code.
+print("Hello, DDR")
+```
+
+## Practical exercise
+
+<!-- A guided exercise using the sample dataset, with a clear, checkable
+"you'll know you got it right when..." condition. This is not optional —
+every chapter has one. -->
+
+**Try it yourself:** ...
+
+**You'll know it worked when:** ...
+
+## Challenge exercise
+
+<!-- A harder, more open-ended extension for readers who want to go
+further. No solution is provided in the main text; a reference solution
+lives in the companion repository under `code/chapter_NN/challenge/`. -->
+
+**Challenge:** ...
+
+## Key takeaways
+
+- Takeaway 1
+- Takeaway 2
+- Takeaway 3
+
+## Repository files
+
+<!-- Exact paths in the companion repo relevant to this chapter. -->
+
+| File | Purpose |
+|---|---|
+| `code/chapter_NN/script.py` | ... |
+| `datasets/...` | ... |
+| `notebooks/chapter_NN_explore.ipynb` | Interactive companion notebook |
+
+## Suggested next step
+
+<!-- One paragraph bridging to the next chapter: what limitation of
+today's artifact motivates tomorrow's work? -->

@@ -1,0 +1,117 @@
+# Searching DDRs {#sec-chapter-03}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Build an inverted index over a folder of cleaned DDR text.
+- Answer keyword queries like "which reports mention stuck pipe?" in
+  milliseconds instead of minutes.
+- Explain why exact keyword matching, while fast and simple, will
+  eventually miss things a drilling engineer would consider an obvious hit.
+
+## Operational problem
+
+You now have clean, expanded text for every DDR. The next question is the
+one an engineer actually asks out loud: *"Which reports mention stuck
+pipe?"* or *"Show me every report that mentions losses."* Opening files one
+by one doesn't scale past a handful of reports — you need an index.
+
+## Example DDR extract
+
+::: {.callout-note title="Sample query and expected hits"}
+```
+Query: "stuck pipe"
+Expected hit: DDR_018_EXAMPLE-1H.txt
+  → "0300-0700  stuck PIPE @ 9,960'. WORKED PIPE, CIRC & PUMPED PILL."
+```
+:::
+
+## Theory
+
+An **inverted index** flips the natural document → words relationship
+around: instead of asking "what words are in this document," it stores,
+for every word, *which documents contain it*. Looking up "stuck" becomes a
+single dictionary lookup instead of scanning every file. This is the same
+core idea behind every search engine, from `grep` to Google — the
+difference is scale and ranking sophistication, not the fundamental
+mechanism.
+
+Tokenization matters here: "stuck" and "STUCK" should be the same token,
+and punctuation shouldn't create spurious tokens (`9,960'` should not
+prevent `9960` or nearby words from matching cleanly).
+
+## Implementation
+
+```{python}
+#| eval: false
+# code/chapter_03/keyword_search.py
+import re
+from collections import defaultdict
+from pathlib import Path
+
+def tokenize(text: str) -> list[str]:
+    return re.findall(r"[a-z0-9]+", text.lower())
+
+def build_index(text_dir: Path) -> dict[str, set[str]]:
+    index: dict[str, set[str]] = defaultdict(set)
+    for path in sorted(text_dir.glob("*.txt")):
+        tokens = set(tokenize(path.read_text(encoding="utf-8")))
+        for token in tokens:
+            index[token].add(path.name)
+    return index
+
+def search(index: dict[str, set[str]], query: str) -> set[str]:
+    query_tokens = tokenize(query)
+    if not query_tokens:
+        return set()
+    results = index.get(query_tokens[0], set()).copy()
+    for token in query_tokens[1:]:
+        results &= index.get(token, set())
+    return results
+```
+
+`search()` here implements an AND query: a document must contain every
+query token to match — appropriate for a first version, and the challenge
+exercise asks you to add OR and phrase queries.
+
+## Practical exercise
+
+**Try it yourself:** Build the index over `datasets/ddr_text_expanded/`
+and run `search(index, "stuck pipe")`.
+
+**You'll know it worked when:** the result set contains exactly
+`{"DDR_018_EXAMPLE-1H.txt"}` and no other file.
+
+## Challenge exercise
+
+**Challenge:** Add phrase search (query tokens must appear *adjacent* and
+in order, not just co-occur anywhere in the document) and an OR operator.
+Test it against "losses OR screenout" once you've extended the sample
+corpus with a losses example. A reference solution is in
+`code/chapter_03/challenge/`.
+
+## Key takeaways
+
+- An inverted index turns "search every file" into "look up a word,"
+  which is the difference between milliseconds and minutes at scale.
+- Tokenization choices (case folding, punctuation handling) determine
+  what counts as a match — get this wrong and searches silently fail.
+- Exact keyword matching is fast, simple, and fundamentally limited: it
+  cannot find a report that says "erratic torque" when you search for
+  "stuck pipe warning signs," even though a human would call that
+  relevant.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_03/keyword_search.py` | Inverted index and AND-query search |
+| `notebooks/chapter_03_explore.ipynb` | Interactive companion notebook |
+
+## Suggested next step
+
+Keyword search is exact and unforgiving — it doesn't know that "erratic
+torque" and "torque trending up" are related ideas. Chapter 4 replaces
+exact matching with semantic search, so retrieval works by meaning, not
+just spelling.

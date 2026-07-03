@@ -1,0 +1,130 @@
+# Scanned Reports and OCR Quality Gates {#sec-chapter-06}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Recognise when a DDR PDF has no extractable text and needs OCR.
+- Run OCR on a scanned page and understand why the raw output is often
+  too noisy to index as-is.
+- Build a quality gate that rejects bad OCR output *before* it enters your
+  search index, rather than trying to fix it after the fact.
+
+## Operational problem
+
+Chapter 1's `extract_text()` handled the case where `page.extract_text()`
+returns `None` by substituting an empty string and moving on — a
+reasonable choice for a five-file teaching example, but a real archive
+will contain faxed reports, badly scanned pages, and rotated images where
+that "empty string" is actually hiding real operational content. Worse:
+OCR on a low-quality scan can produce text that *looks* plausible but is
+substantially garbled — and if that garbled text makes it into your search
+index, every downstream chapter inherits the corruption silently.
+
+## Example DDR extract
+
+::: {.callout-note title="OCR output before and after quality gating"}
+```
+Clean digital extraction:
+  "0600-1130  POOH FR 9,842' TO CHANGE BHA."
+
+Degraded OCR output from a poor scan:
+  "O6OO-1l3O POO+I FR 9,84Z' T0 CHANGE B+IA -- -- -- -- --"
+```
+The second block is exactly the kind of text a naive pipeline would embed
+and index without complaint — and exactly the kind of text a quality gate
+should catch and route to a review queue instead.
+:::
+
+## Theory
+
+Getting OCR to run is the easy part — `pytesseract`, cloud OCR APIs, and
+PDF-rendering libraries all do a competent job of turning a page image
+into text. The hard part, and the one that actually determines whether
+your downstream system is trustworthy, is deciding **whether to trust the
+output at all**. A quality gate scores OCR text against a handful of cheap
+heuristics — is there enough text, is the alphabetic-to-symbol ratio
+sane, is there suspicious repeated garbage — and rejects anything that
+fails, routing it to manual review instead of silently indexing noise.
+
+This chapter's companion repository, [DDR_RAG_Pipeline](https://github.com/djimrastephane/DDR_RAG_Pipeline),
+implements exactly this pattern in `src/rag_pdf/ocr_quality.py`. Its
+`evaluate_ocr_quality()` function checks four independent flags —
+`low_text_density`, `high_symbol_ratio`, `repeated_garbage`,
+`low_line_count` — and rejects a page only once **two or more** flags
+fire, so no single noisy-but-legitimate page (e.g. a short report with a
+lot of numeric data) gets discarded on one false positive.
+
+## Implementation
+
+Build a simplified version of the same idea:
+
+```{python}
+#| eval: false
+# code/chapter_06/ocr_quality_gate.py
+import re
+from collections import Counter
+
+def evaluate_ocr_quality(text: str, min_chars: int = 200,
+                          min_alpha_words: int = 30,
+                          max_symbol_ratio: float = 0.35,
+                          reject_min_flags: int = 2) -> dict:
+    alpha_tokens = re.findall(r"[A-Za-z]+", text)
+    non_ws = [c for c in text if not c.isspace()]
+    noisy = sum(1 for c in non_ws if not c.isalnum() and c not in set("%.,()/-:'"))
+    symbol_ratio = noisy / max(len(non_ws), 1)
+
+    flags = {
+        "low_text_density": len(text) < min_chars or len(alpha_tokens) < min_alpha_words,
+        "high_symbol_ratio": symbol_ratio > max_symbol_ratio,
+    }
+    active = [k for k, v in flags.items() if v]
+    return {"reject_ocr": len(active) >= reject_min_flags, "flags": flags}
+```
+
+The full production version — including the repeated-garbage detector and
+line-count check — is in the companion repository at
+`src/rag_pdf/ocr_quality.py`, alongside `src/rag_pdf/rotation_handler.py`
+for detecting and correcting upside-down or sideways scans, and
+`src/rag_pdf/table_ocr_handoff.py` for the case where a *table* (not
+narrative text) needs OCR fallback.
+
+## Practical exercise
+
+**Try it yourself:** Feed both the clean and degraded example strings
+above through `evaluate_ocr_quality()`. Confirm the clean text passes and
+the degraded text is rejected.
+
+**You'll know it worked when:** you can explain, from the flags returned,
+*why* the degraded text failed — not just that it did.
+
+## Challenge exercise
+
+**Challenge:** Clone the companion repository and read
+`src/rag_pdf/ocr_quality.py` in full. Identify one flag the production
+version has that the simplified version above doesn't, and explain what
+failure mode it catches that the simplified version would miss.
+
+## Key takeaways
+
+- OCR quality gating is cheap, heuristic, and non-negotiable — an
+  unfiltered noisy page corrupts every downstream chapter's retrieval.
+- Require multiple independent signals to agree before rejecting a page;
+  a single heuristic alone produces too many false positives.
+- Reject-and-flag-for-review beats silently-index-anyway every time
+  traceability matters more than completeness.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_06/ocr_quality_gate.py` | Simplified OCR quality gate |
+| `DDR_RAG_Pipeline/src/rag_pdf/ocr_quality.py` | Production quality gate (companion repo) |
+| `DDR_RAG_Pipeline/src/rag_pdf/rotation_handler.py` | Scan rotation detection (companion repo) |
+
+## Suggested next step
+
+Once you trust the text coming out of OCR and digital extraction alike,
+the next question is how to break it into pieces small enough to embed
+and retrieve — without cutting a stuck-pipe narrative in half across two
+chunks. That's Chapter 7.

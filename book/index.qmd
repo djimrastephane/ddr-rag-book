@@ -1,0 +1,68 @@
+# Welcome {.unnumbered}
+
+Every rig produces a paper trail. Every well produces a story — told in Daily
+Drilling Reports (DDRs), scattered across shared drives, scanned PDFs, and
+email attachments, written by dozens of different hands in a shorthand that
+only the field understands.
+
+That story holds answers your team needs today: *Have we seen this stuck pipe
+signature before? What usually precedes a screenout on this formation? Which
+offset wells lost circulation at this depth?*
+
+Somewhere in your archive, the answer already exists. Finding it is the
+problem.
+
+This book builds, from scratch and in plain Python, a system that can read
+that archive and answer those questions — with evidence, not guesses. You
+will not start with theory. You will start with a single PDF and a script
+that reads it. By the end, you will have an Industrial DDR Intelligence
+Platform: a retrieval-augmented generation (RAG) system purpose-built for
+drilling and completions data, that you built chapter by chapter and
+understand end to end.
+
+## Who this book is for
+
+You should read this book if you are a drilling engineer, completions
+engineer, intervention engineer, production engineer, petroleum data
+scientist, or part of a digital transformation team in energy, and you:
+
+- Have basic Python knowledge (variables, functions, loops, lists/dicts).
+- Have never built a RAG system.
+- Have never used a vector database or worked with embeddings.
+- Want working tools, not a machine learning course.
+
+No prior AI/ML background is assumed. Every concept is introduced exactly
+when you need it to solve the problem in front of you — not before.
+
+## What you will build
+
+| Chapter | You will be able to... |
+|---|---|
+| 1 | Extract text from a DDR PDF |
+| 2 | Expand oilfield abbreviations (POOH, RIH, BHA...) automatically |
+| 3 | Keyword-search your entire DDR archive |
+| 4 | Search DDRs by meaning, not just exact words |
+| 5 | Ask a question and get a cited, evidence-backed answer |
+| 6–12 | Scale the system to scanned reports, large archives, hybrid retrieval, reranking, and full traceability |
+
+## How this book works
+
+Every chapter solves one operational problem and ends with something you can
+run. There is no chapter you read passively — you will type code, run it
+against real (or realistic, anonymised) DDR text, and see it work. Theory
+appears only when it explains *why* the code in front of you behaves the way
+it does.
+
+We follow one rule throughout: **engineering usefulness over AI novelty**.
+Retrieval matters more than generation. Traceability matters more than
+eloquent prose. Engineers trust evidence, not predictions — so this system is
+built to show its work, every time.
+
+## Companion repository
+
+All code, sample datasets, and notebooks referenced in this book live in the
+companion repository. See [Appendix A](appendix/appendix_a_environment_setup.qmd)
+for setup instructions. Every chapter lists exactly which files you need
+under **Repository files**.
+
+Let's read our first DDR.

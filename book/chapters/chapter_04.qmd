@@ -1,0 +1,129 @@
+# Semantic Search {#sec-chapter-04}
+
+## Learning objectives
+
+By the end of this chapter, you will be able to:
+
+- Explain, without heavy math, what a text embedding is and why nearby
+  vectors mean similar meaning.
+- Generate embeddings for a folder of DDR text using
+  `sentence-transformers`.
+- Retrieve the most semantically similar chunks to a query using cosine
+  similarity, without any exact keyword overlap required.
+
+## Operational problem
+
+An engineer searches "torque problems" and expects to find the report that
+says *"ERRATIC TORQUE OBSD LAST 3 STDS"* — even though not one word
+matches. Chapter 3's keyword search can't do this; it needs the exact
+token "torque" to appear, and even then it has no notion of "problems"
+relating to "erratic" or "increasing." Semantic search retrieves by
+*meaning*, not spelling.
+
+## Example DDR extract
+
+::: {.callout-note title="Query that keyword search misses"}
+```
+Query: "torque problems"
+Keyword search (Chapter 3): 0 results (no exact token overlap)
+Semantic search (this chapter): DDR_016 and DDR_017 rank highest —
+  both describe erratic/increasing torque, without the word "problems"
+  appearing anywhere.
+```
+:::
+
+## Theory
+
+An **embedding model** converts a piece of text into a fixed-length vector
+of numbers — typically a few hundred dimensions — such that texts with
+similar meaning end up as vectors that are close together in that space.
+You don't need to understand the neural network that produces this vector;
+you need to understand what it gives you: a numeric representation of
+meaning you can compare with simple arithmetic.
+
+**Cosine similarity** measures the angle between two vectors — 1.0 for
+identical direction, 0 for unrelated, negative for opposite. It's the
+standard way to compare embeddings because it ignores vector *length* and
+focuses purely on *direction*, which is what carries the meaning here.
+
+We use `sentence-transformers` [@reimers2019sbert] with a small, fast
+model (`all-MiniLM-L6-v2`) — good enough to prove the concept and small
+enough to run on a laptop CPU. Chapter 8 replaces the brute-force search here
+with a proper vector database once the corpus grows past what fits
+comfortably in memory.
+
+## Implementation
+
+```{python}
+#| eval: false
+# code/chapter_04/semantic_search.py
+from pathlib import Path
+
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
+MODEL_NAME = "all-MiniLM-L6-v2"
+
+def load_chunks(text_dir: Path) -> tuple[list[str], list[str]]:
+    filenames, texts = [], []
+    for path in sorted(text_dir.glob("*.txt")):
+        filenames.append(path.name)
+        texts.append(path.read_text(encoding="utf-8"))
+    return filenames, texts
+
+def embed_texts(model: SentenceTransformer, texts: list[str]) -> np.ndarray:
+    embeddings = model.encode(texts, normalize_embeddings=True)
+    return np.asarray(embeddings)
+
+def search(model: SentenceTransformer, query: str, filenames: list[str],
+           embeddings: np.ndarray, top_k: int = 3) -> list[tuple[str, float]]:
+    query_vec = model.encode([query], normalize_embeddings=True)[0]
+    scores = embeddings @ query_vec  # cosine similarity, since vectors are normalized
+    top_indices = np.argsort(-scores)[:top_k]
+    return [(filenames[i], float(scores[i])) for i in top_indices]
+```
+
+Because embeddings are normalized, the dot product `embeddings @
+query_vec` *is* cosine similarity — no separate normalization step needed
+at query time.
+
+## Practical exercise
+
+**Try it yourself:** Embed all five sample DDRs and run
+`search(model, "torque problems", filenames, embeddings)`.
+
+**You'll know it worked when:** `DDR_016_EXAMPLE-1H.txt` or
+`DDR_017_EXAMPLE-1H.txt` (both mention erratic/increasing torque) rank in
+the top 2 results, despite no keyword overlap with "torque problems."
+
+## Challenge exercise
+
+**Challenge:** Chunk each report into individual operations-summary lines
+(rather than embedding the whole report as one vector) and re-run the
+search. Compare which granularity gives more precise, directly quotable
+results. A reference solution is in `code/chapter_04/challenge/`.
+
+## Key takeaways
+
+- Embeddings represent meaning as geometry: similar meaning, nearby
+  vectors.
+- Cosine similarity is the standard comparison because it isolates
+  direction (meaning) from magnitude.
+- Semantic search finds relevant text that shares no vocabulary with the
+  query — the exact failure mode of Chapter 3's keyword search.
+- Brute-force cosine search (a matrix multiply) is entirely adequate at
+  five documents. It stops being adequate well before you reach a real
+  archive's scale — that's Chapter 8's problem to solve.
+
+## Repository files
+
+| File | Purpose |
+|---|---|
+| `code/chapter_04/semantic_search.py` | Embedding generation and brute-force cosine search |
+| `notebooks/chapter_04_explore.ipynb` | Interactive companion notebook |
+
+## Suggested next step
+
+You can now retrieve relevant passages by meaning. Chapter 5 turns
+retrieval into an answer: given a question, retrieve the right evidence,
+and generate a response that cites exactly where each claim came from.
