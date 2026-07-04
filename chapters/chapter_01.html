@@ -580,7 +580,7 @@ one Python string, ready for Chapter 2</code></pre>
 <section id="step-1-get-the-sample-archive" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="step-1-get-the-sample-archive"><span class="header-section-number">1.5.1</span> Step 1: get the sample archive</h3>
 <p>The ten curated reports used throughout Part I are already in <code>datasets/sample_ddrs/</code> in this repository — real PDFs, committed directly, since Utah FORGE data is public. You don’t need to generate or download anything to start.</p>
-<div id="eac6bb79" class="cell" data-execution_count="1">
+<div id="d201976b" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -590,7 +590,7 @@ one Python string, ready for Chapter 2</code></pre>
 <h3 data-number="1.5.2" class="anchored" data-anchor-id="step-2-extract-text-from-one-pdf"><span class="header-section-number">1.5.2</span> Step 2: extract text from one PDF</h3>
 <p>Here is the core of <code>code/chapter_01/read_ddr.py</code>, built up piece by piece.</p>
 <p>First, open a PDF and read one page:</p>
-<div id="e22822c7" class="cell" data-execution_count="2">
+<div id="c0a09a7f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
@@ -599,7 +599,7 @@ one Python string, ready for Chapter 2</code></pre>
 </div>
 <p>Run that and you’ll see the report’s text printed straight to your terminal — the full header block (well name, spud date, days from spud), casing and mud tables, the BHA component list, survey data, and the time breakdown — all as a plain Python string. Real DDRs pack in far more than a simple narrative: this one report alone has seven distinct data sections.</p>
 <p>Every DDR in this archive is a single page, but that won’t be true of every report you’ll ever encounter. Loop over every page and keep track of which page each chunk of text came from — you’ll need that later for citations:</p>
-<div id="15d58f02" class="cell" data-execution_count="3">
+<div id="88d28182" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
