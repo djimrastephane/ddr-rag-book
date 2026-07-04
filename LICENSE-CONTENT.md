@@ -5,7 +5,7 @@ appendices, field notes, and other prose in `book/*.qmd` and
 `book/chapters/`, `book/appendix/` -- is licensed under the
 [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
 
-Copyright (c) 2026 Stephane Djimra
+Copyright (c) 2026 Djimra Stephane Soulanoudjingar
 
 You are free to:
 
