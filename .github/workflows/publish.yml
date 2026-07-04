@@ -13,6 +13,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -27,8 +28,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Python dependencies
-        run: pip install -r book/requirements.txt
+      # Every code cell in the book is eval:false -- Quarto still starts a
+      # Jupyter kernel per chapter, but never executes or imports anything
+      # inside it. Only jupyter/ipykernel are needed for that; installing
+      # the full requirements.txt (torch, sentence-transformers, faiss...)
+      # here just adds minutes of unnecessary install time and risk for a
+      # render that never uses any of it.
+      - name: Install minimal render dependencies
+        run: pip install jupyter ipykernel
 
       - name: Register Jupyter kernel
         run: python -m ipykernel install --user --name python3
