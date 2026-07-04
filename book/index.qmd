@@ -52,6 +52,7 @@ building useful engineering tools.
 
 | Chapter | You will be able to... |
 |---|---|
+| 0 | Set up a working Python environment, in whichever editor or notebook tool you prefer |
 | 1 | Extract text from a DDR PDF |
 | 2 | Expand oilfield abbreviations (BHA, WOB, MWD...) automatically |
 | 3 | Keyword-search your entire DDR archive |
@@ -75,8 +76,16 @@ built to show its work, every time.
 ## Companion repository
 
 All code, sample datasets, and notebooks referenced in this book live in the
-companion repository. See [Appendix A](appendix/appendix_a_environment_setup.qmd)
-for setup instructions. Every chapter lists exactly which files you need
+companion repository. Every chapter lists exactly which files you need
 under **Repository files**.
+
+If you've never installed Python or don't know which editor to use, start
+with **Part 0 — Preparing Your Python Workshop**: it walks through
+everything from scratch, works with any of five common setups (Jupyter
+Notebook, VS Code, PyCharm Community, Positron, or a terminal alone), and
+ends with your first script actually running. If you already have Python
+and a working setup, jump straight to Chapter 1 — Appendix A has the rest
+of the reference material (the sample dataset, rendering the book, the
+companion pipeline) if you need it later.
 
 Let's read our first DDR.

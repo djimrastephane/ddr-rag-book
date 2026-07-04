@@ -25,6 +25,10 @@ book:
     - preface.qmd
     - acknowledgements.qmd
 
+    - part: "Part 0 — Preparing Your Python Workshop"
+      chapters:
+        - chapters/chapter_00.qmd
+
     - part: "Part I — Foundations"
       chapters:
         - chapters/chapter_01.qmd
@@ -46,6 +50,11 @@ book:
     - part: "Appendices"
       chapters:
         - appendix/appendix_a_environment_setup.qmd
+        - appendix/appendix_a1_jupyter.qmd
+        - appendix/appendix_a2_vscode.qmd
+        - appendix/appendix_a3_pycharm.qmd
+        - appendix/appendix_a4_positron.qmd
+        - appendix/appendix_a5_terminal.qmd
         - appendix/appendix_b_oilfield_glossary.qmd
 
     - references.qmd

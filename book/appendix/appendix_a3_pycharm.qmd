@@ -1,0 +1,61 @@
+# Appendix A3: Using PyCharm Community {#sec-appendix-a3 .unnumbered}
+
+This appendix assumes you've completed [Part 0](../chapters/chapter_00.qmd) —
+Python installed, `.venv` created and active, packages installed.
+Everything below is specific to working in PyCharm Community (the free
+edition — this book needs nothing from the paid Professional edition).
+
+## Install PyCharm Community
+
+Download it from
+[jetbrains.com/pycharm/download](https://www.jetbrains.com/pycharm/download/)
+— select the **Community** edition, which is free, and run the
+installer.
+
+## Open the project
+
+From PyCharm's welcome screen, choose **Open** and select the
+`ddr-rag-book` folder you created in Part 0. PyCharm treats this folder
+as one project.
+
+## Select the existing .venv
+
+PyCharm may offer to create its own virtual environment — decline that
+and point it at the `.venv` you already created in Part 0 instead, so you
+don't end up with two separate toolboxes:
+
+1. Go to **PyCharm → Settings** (Mac) or **File → Settings**
+   (Windows/Linux).
+2. Navigate to **Project: ddr-rag-book → Python Interpreter**.
+3. Click the gear icon → **Add** → **Existing environment**.
+4. Browse to `.venv/bin/python` (Mac/Linux) or
+   `.venv\Scripts\python.exe` (Windows) inside your project folder, and
+   select it.
+
+## Open a terminal
+
+PyCharm has a built-in terminal along the bottom of the window — click
+the **Terminal** tab. It opens already positioned inside your project
+folder, and should show `(.venv)` in the prompt once the interpreter
+above is set correctly.
+
+## Run a script
+
+Two options, same result:
+
+- Type the command into PyCharm's terminal tab:
+
+  ```bash
+  python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
+  ```
+
+- Or open the `.py` file in the editor and click the green **Run** (▶)
+  arrow next to the file, or right-click inside the file and choose
+  **Run**.
+
+## Run a Python file directly
+
+Right-clicking any `.py` file in PyCharm's project sidebar and choosing
+**Run '<filename>'** does the same thing as typing `python
+<path/to/file.py>` in the terminal — pick whichever is more comfortable
+as you go through the book.

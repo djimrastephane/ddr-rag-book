@@ -44,6 +44,11 @@ or a loop is before Chapter 1; each concept is explained in plain
 language, translated into terms an engineer already knows, exactly when
 you need it to solve the problem in front of you.
 
+If you've never installed Python or set up a project folder before,
+start with Part 0 — it gets you to a working setup in whichever editor
+or notebook tool you're most comfortable with, with no assumption that
+you've done this before.
+
 Read it in order the first time. Each chapter assumes the code from the
 previous one exists and works — this is a build, not a reference manual.
 After your first pass, use it as a reference: jump to the chapter that

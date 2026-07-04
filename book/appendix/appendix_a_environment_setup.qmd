@@ -1,84 +1,45 @@
 # Appendix A: Environment Setup {#sec-appendix-a .unnumbered}
 
-Before you can type a single line of Chapter 1's code, your computer
-needs somewhere safe to install exactly the tools this book uses —
-without disturbing any other software already on your machine, and
-without any other software on your machine interfering with this book's
-code. That's the whole job of this appendix: get that safe, isolated
-setup in place once, so every chapter from here on is just "open a file
-and run it."
+[Part 0](../chapters/chapter_00.qmd) covers everything you need to
+install Python, create a virtual environment, and run the book's chapter
+scripts — start there if you haven't already. This appendix covers a few
+things Part 0 doesn't: the sample dataset's layout, rendering this book
+itself (not just running its code), the companion DDR Intelligence
+Platform pipeline referenced in Chapters 6–12, a data-handling note for
+your own archives, and troubleshooting for a few less common errors.
 
-This appendix covers everything you need before Chapter 1: installing
-dependencies, rendering the book, and understanding how Chapters 6–12
-relate to the companion DDR Intelligence Platform pipeline.
+If you'd like a guide specific to the editor or notebook environment you
+chose in Part 0, see Appendices A1–A5 instead.
 
-## 1. Prerequisites
-
-- Python 3.11 or later
-- [Quarto](https://quarto.org) 1.7 or later (`quarto --version` to check)
-- Git
-- [Positron](https://positron.posit.co) (recommended) or any editor with
-  a Python and Quarto extension
-
-::: {.callout-tip title="Engineering Translation: git clone"}
-This book's entire repository — every chapter's text and code, plus the
-sample DDR PDFs — lives on GitHub. `git clone <url>` copies that whole
-repository onto your own computer, once, as a real folder you can open,
-edit, and run — the same idea as copying a shared project folder onto
-your laptop instead of only viewing it in a browser.
-:::
-
-## 2. Set up the book's Python environment
-
-From the `book/` directory:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-Or, if you prefer conda/mamba:
-
-```bash
-conda env create -f environment.yml
-conda activate ddr-rag-book
-```
-
-::: {.callout-tip title="Engineering Translation: Virtual environment"}
-A **virtual environment** (`.venv`) is a clean, separate toolbox that
-belongs only to this book's project — the software equivalent of a
-dedicated tool crib kept apart from everyone else's gear. Installing
-packages inside it can never conflict with, break, or get mixed up with
-any other Python software already on your computer. `source
-.venv/bin/activate` is the step that says "use tools from *this* crib for
-now" — you'll see your terminal prompt change to show it's active.
-:::
-
-::: {.callout-tip title="Engineering Translation: pip install -r requirements.txt"}
-`requirements.txt` is a parts list — one library per line, with the exact
-version this book was tested against. `pip` is the ordering system: `pip
-install -r requirements.txt` reads that list and installs every part on
-it in one go, instead of you tracking down and installing each library
-by hand.
-:::
-
-## 3. The sample dataset
+## 1. The sample dataset
 
 Chapters 1–5 use ten real, curated Daily Drilling Reports from the public
 Utah FORGE archive (well FORGE 16A(78)-32) — already committed as PDFs in
 `datasets/sample_ddrs/`, since this is public data with no
 confidentiality concerns. Part II's "at scale" chapters use the full
 76-report archive, committed at `datasets/forge_archive/`. Nothing needs
-to be generated or downloaded to start: `git clone` gives you the full
-dataset.
+to be generated or downloaded to start: cloning the repository (Part 0,
+Section 0.6) gives you the full dataset.
 
 If you want to reproduce either curated subset from your own copy of the
 full public archive, or extend it with more reports, see
 `code/chapter_01/build_sample_archive.py` and
 `code/chapter_08/build_full_archive.py`.
 
-## 4. Render the book
+## 2. Rendering the book with Quarto
+
+Running the chapter scripts (Part 0) doesn't require anything beyond
+Python. Rebuilding this book itself — the HTML and PDF you're reading —
+is a separate step that needs [Quarto](https://quarto.org) 1.7 or later:
+
+```bash
+quarto --version
+```
+
+If that's not recognised, install Quarto from
+[quarto.org](https://quarto.org) for your operating system.
+
+With Quarto installed and your virtual environment active:
 
 ```bash
 quarto render
@@ -91,23 +52,14 @@ you write:
 quarto preview chapters/chapter_01.qmd
 ```
 
-## 5. Working in Positron
+Or, if you prefer conda/mamba instead of the `.venv` approach from Part 0:
 
-Positron runs Quarto documents natively — open any `.qmd` file and use
-the **Render** button in the editor toolbar, or run individual code
-cells interactively (each ` ```{python} ` block behaves like a Jupyter
-cell). Recommended setup:
+```bash
+conda env create -f environment.yml
+conda activate ddr-rag-book
+```
 
-1. Open the `book/` folder as your Positron workspace root.
-2. Select the `.venv` interpreter created in Step 2 via the interpreter
-   picker (bottom status bar).
-3. Use the **Quarto: Preview** command for live reload while editing a
-   chapter.
-4. Use the **Console** pane to run chapter scripts interactively
-   (`python code/chapter_01/read_ddr.py ...`) — this is the fastest way
-   to experiment with the code before committing it to a `.qmd`.
-
-## 6. The companion pipeline (for Part II)
+## 3. The companion pipeline (for Part II)
 
 Chapters 6–12 reference [**DDR_UTAH_FORGE**](https://github.com/djimrastephane/DDR_UTAH_FORGE),
 a real, working DDR intelligence pipeline built specifically against this
@@ -143,7 +95,7 @@ written into the book, so you can trust the numbers even without running
 the pipeline yourself.
 :::
 
-## 7. A note on data handling
+## 4. A note on data handling
 
 This book's own data (`datasets/sample_ddrs/`, `datasets/forge_archive/`)
 is public and safe to commit, share, and publish — that's true throughout
@@ -158,16 +110,11 @@ organisation's DDRs instead, that changes:
 - Add your own archive's path to `.gitignore` before dropping any
   confidential PDFs into a local `datasets/` folder for testing.
 
-## 8. Troubleshooting
+## 5. Troubleshooting
 
-::: {.callout-tip title="Engineering Translation: PATH"}
-`PATH` is your computer's list of "which program to run by default when
-I type a command" — a lookup table, checked top to bottom, the first
-time you type something like `python`. Activating `.venv` (Step 2)
-temporarily moves this book's Python to the front of that list, so
-`python` means *this project's* Python until you close the terminal or
-deactivate it.
-:::
+Part 0, Section 0.11 covers the common setup errors (Python not found,
+virtual environment not active, and so on). A few more specific to
+rendering the book or running Part II's heavier packages:
 
 | Symptom | Likely cause |
 |---|---|

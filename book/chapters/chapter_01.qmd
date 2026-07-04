@@ -17,6 +17,25 @@ By the end of this chapter, you will be able to:
   from the command line.
 - Save extracted text so it's ready for the cleaning work in Chapter 2.
 
+::: {.callout-important title="Before you start"}
+This chapter assumes your Python workshop is already set up. If you
+haven't done that yet, complete [Part 0](chapter_00.qmd) first and
+confirm:
+
+- Python runs (`python --version` or `python3 --version` shows 3.11 or
+  later).
+- Your virtual environment is active (your terminal prompt shows
+  `(.venv)`).
+- Packages are installed (`pip install -r requirements.txt` finished
+  without errors).
+- The sample DDR files exist (`datasets/sample_ddrs/` has ten PDFs).
+- `python code/setup_check.py` prints `DDR RAG workshop is ready.`
+
+If all five are true, you're ready for this chapter. If any of them
+aren't, Part 0, Section 0.11 has a troubleshooting table for exactly this
+situation.
+:::
+
 ## Operational Problem
 
 It's Monday morning. Someone on the call asks: *"Have we had a stuck pipe
@@ -153,6 +172,21 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf
 import pathlib
 sorted(pathlib.Path("datasets/sample_ddrs").glob("*.pdf"))
 ```
+
+::: {.callout-note title="Notebook, script, and IDE users"}
+This is the first code you'll run in this book — however you set up
+Part 0, here's how each option runs it:
+
+- **Notebook users:** paste this into a new cell and run it directly
+  (Shift+Enter in Jupyter or Positron).
+- **Script users:** save it as a `.py` file and run it from the terminal
+  with `python your_file.py`.
+- **IDE users:** use your editor's Run button, or the terminal command
+  shown above — both produce identical output.
+
+Every code block in this book works the same way; this note won't repeat
+after this point.
+:::
 
 ## What just happened?
 

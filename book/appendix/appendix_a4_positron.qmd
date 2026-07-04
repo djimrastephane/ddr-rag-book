@@ -1,0 +1,49 @@
+# Appendix A4: Using Positron {#sec-appendix-a4 .unnumbered}
+
+This appendix assumes you've completed [Part 0](../chapters/chapter_00.qmd) —
+Python installed, `.venv` created and active, packages installed.
+Positron isn't required to follow this book — it's simply one of several
+environments that work well, particularly if you like moving between
+notebooks and plain scripts in the same window. Everything below is
+specific to working in Positron instead of a plain terminal.
+
+## Install Positron
+
+Download it from [positron.posit.co](https://positron.posit.co) and run
+the installer for your operating system.
+
+## Open the project folder
+
+Use **File → Open Folder...** and select the `ddr-rag-book` folder from
+Part 0. Positron uses this as your workspace root.
+
+## Select the Python environment
+
+Positron shows an interpreter picker in the bottom status bar. Click it
+and select the `.venv` you created in Part 0 — the same environment every
+other tool in this appendix set points at.
+
+## Open a terminal
+
+Use **Terminal → New Terminal** from the top menu, or the terminal icon
+in the bottom panel. If the right interpreter is selected above, this
+terminal should already show `(.venv)` in its prompt.
+
+## Run a script
+
+```bash
+python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
+```
+
+Or open the `.py` file and use Positron's **Run** button in the editor
+toolbar.
+
+## Run notebooks
+
+Positron runs Jupyter notebooks (`.ipynb`) and Quarto documents (`.qmd`)
+natively — open `notebooks/chapter_01_explore.ipynb` directly, and run
+each cell with **Shift+Enter**, the same shortcut as Jupyter Notebook
+(Appendix A1). For a `.qmd` file — this book's own chapters are written
+as `.qmd` — each ` ```{python} ` block behaves like a notebook cell, and
+the **Render** button in the editor toolbar builds the whole document,
+code and all.

@@ -1,0 +1,62 @@
+# Appendix A5: Terminal-Only Workflow {#sec-appendix-a5 .unnumbered}
+
+This appendix assumes you've completed [Part 0](../chapters/chapter_00.qmd).
+If you'd rather not install any editor at all, everything in this book
+runs from the terminal alone — you'll just open and edit files with
+whatever plain text editor came with your system (Notepad on Windows,
+TextEdit on Mac, `nano` or `vim` on Linux) instead of a dedicated code
+editor.
+
+## Navigate to the project
+
+```bash
+cd ddr-rag-book
+```
+
+Confirm you're in the right place with `pwd` (Mac/Linux) or `cd` alone
+(Windows) — it should end in `ddr-rag-book`.
+
+## Activate the environment
+
+**Mac/Linux:**
+
+```bash
+source .venv/bin/activate
+```
+
+**Windows:**
+
+```bash
+.venv\Scripts\activate
+```
+
+**Expected output:** your prompt now starts with `(.venv)`. Do this every
+time you open a new terminal window to work on this book — activation
+doesn't persist between sessions.
+
+## Install packages
+
+Only needed once, or again if `requirements.txt` changes:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Run scripts
+
+Every chapter's script runs the same way:
+
+```bash
+python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
+```
+
+Swap in whichever chapter and arguments that chapter's text shows you.
+
+## Render the book
+
+If you want to build the book itself (this document, as HTML or PDF)
+rather than just running the chapter scripts, [Quarto](https://quarto.org)
+needs to be installed separately — see [Appendix A, Section
+2](appendix_a_environment_setup.qmd) for the render command and output
+location. This step is entirely optional: nothing about following the
+chapters and running their code requires rendering the book yourself.

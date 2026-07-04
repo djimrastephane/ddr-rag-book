@@ -1,0 +1,61 @@
+# Appendix A2: Using VS Code {#sec-appendix-a2 .unnumbered}
+
+This appendix assumes you've completed [Part 0](../chapters/chapter_00.qmd) —
+Python installed, `.venv` created and active, packages installed. Everything
+below is specific to working in VS Code instead of a plain terminal.
+
+## Install VS Code
+
+Download it from [code.visualstudio.com](https://code.visualstudio.com)
+and run the installer for your operating system — no special options
+needed.
+
+## Install the Python extension
+
+VS Code doesn't understand Python out of the box; a small add-on teaches
+it to. Open VS Code, click the square-icon **Extensions** tab in the left
+sidebar, search for **Python** (published by Microsoft), and click
+**Install**.
+
+## Open the project folder
+
+Use **File → Open Folder...** and select the `ddr-rag-book` folder you
+created in Part 0. VS Code will use this as its workspace — every file in
+the sidebar is now part of this project.
+
+## Select the interpreter
+
+::: {.callout-tip title="Engineering Translation: Interpreter"}
+An **interpreter** is simply which copy of Python VS Code should run your
+code with. You want it pointed at the `.venv` toolbox from Part 0, not
+some other Python installation on your machine.
+:::
+
+Press **Cmd+Shift+P** (Mac) or **Ctrl+Shift+P** (Windows/Linux) to open
+the command palette, type `Python: Select Interpreter`, and choose the
+one showing a path ending in `.venv/bin/python` (Mac/Linux) or
+`.venv\Scripts\python.exe` (Windows). If you don't see it listed, click
+"Enter interpreter path" and browse to that file directly.
+
+## Open a terminal
+
+Use **Terminal → New Terminal** from the top menu. VS Code opens a
+terminal already positioned inside your project folder — and if you
+selected the right interpreter above, it should already show `(.venv)` at
+the start of the prompt.
+
+## Run a script
+
+Either:
+
+- Type the command directly into the terminal you just opened, e.g.:
+
+  ```bash
+  python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
+  ```
+
+- Or open the `.py` file in the editor and click the **Run** (▶) button
+  in the top-right corner — VS Code runs it in an integrated terminal for
+  you.
+
+Both produce identical output — use whichever feels more natural.

@@ -22,8 +22,14 @@ quarto render                       # builds the book to _book/
 The sample DDR archive is already committed under `datasets/` — no
 generation or download step needed.
 
-See [Appendix A](appendix/appendix_a_environment_setup.qmd) for full setup
-instructions, Positron IDE configuration, and Docker instructions.
+New to Python or unsure where to start? **Part 0 — Preparing Your Python
+Workshop** (`chapters/chapter_00.qmd`) walks through the setup above one
+command at a time, with plain-English explanations and no assumed prior
+experience. It works with any editor — Jupyter Notebook, VS Code, PyCharm
+Community, Positron, or a terminal alone — with a short dedicated guide
+for each in Appendices A1–A5. [Appendix
+A](appendix/appendix_a_environment_setup.qmd) covers what's left: the
+sample dataset, rendering the book, and the companion pipeline.
 
 ## Project structure
 
@@ -41,6 +47,7 @@ book/
 │   └── chapter_template.qmd  Copy this to draft a new chapter
 │
 ├── code/                     One subfolder per chapter, e.g. code/chapter_01/
+│   ├── setup_check.py        Part 0's one-line environment check
 │   └── chapter_NN/
 │       ├── *.py              Runnable scripts referenced in the chapter
 │       └── challenge/         Reference solutions to challenge exercises
@@ -52,11 +59,21 @@ book/
 ├── notebooks/                 Interactive Jupyter/Quarto companion notebooks
 ├── figures/                   Book figures and diagrams
 └── appendix/
-    ├── appendix_a_environment_setup.qmd
+    ├── appendix_a_environment_setup.qmd    Dataset, rendering, companion pipeline
+    ├── appendix_a1_jupyter.qmd             Jupyter Notebook guide
+    ├── appendix_a2_vscode.qmd              VS Code guide
+    ├── appendix_a3_pycharm.qmd             PyCharm Community guide
+    ├── appendix_a4_positron.qmd            Positron guide
+    ├── appendix_a5_terminal.qmd            Terminal-only guide
     └── appendix_b_oilfield_glossary.qmd
 ```
 
 ## Chapter map
+
+**Part 0 — Preparing Your Python Workshop** (`chapters/chapter_00.qmd`):
+environment setup for readers with no prior programming experience,
+IDE-agnostic — Jupyter Notebook, VS Code, PyCharm Community, Positron, or
+terminal only, each with a short dedicated guide in Appendices A1–A5.
 
 **Part I — Foundations** (10 real, curated Utah FORGE DDRs — a genuine
 stuck-pipe event, a packers-fail-to-fishing sequence, and more — fully
@@ -99,10 +116,15 @@ from this archive.
 [**DDR_UTAH_FORGE**](https://github.com/djimrastephane/DDR_UTAH_FORGE) is
 a separate, public repository from this book. This book's own code never
 depends on it — every chapter's `code/chapter_NN/` scripts run standalone
-against the committed `datasets/` archive. See [Appendix A, section 6](appendix/appendix_a_environment_setup.qmd#6-the-companion-pipeline-for-part-ii)
+against the committed `datasets/` archive. See [Appendix A, section 3](appendix/appendix_a_environment_setup.qmd#3-the-companion-pipeline-for-part-ii)
 for how to clone it and how the two projects relate.
 
-## Recommended workflow in Positron
+## Recommended workflow in Positron (for authors drafting new chapters)
+
+This section describes the author's own workflow for *writing* new
+chapters — it is not a requirement for readers. Readers following the
+book should start with Part 0 and Appendices A1–A5, which cover five
+different editors on equal footing.
 
 1. Open `book/` as the Positron workspace root.
 2. Create and select the `.venv` interpreter (see Quickstart above).
