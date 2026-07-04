@@ -52,6 +52,11 @@ book/
 │       ├── *.py              Runnable scripts referenced in the chapter
 │       └── challenge/         Reference solutions to challenge exercises
 │
+├── tests/                     pytest suite exercising every chapter's real code
+│   ├── conftest.py            Shared fixtures (sample archive paths, sys.path setup)
+│   └── test_chapter_NN.py     One file per chapter with testable code
+├── pytest.ini                 pytest configuration (testpaths, markers)
+│
 ├── datasets/
 │   ├── sample_ddrs/           10 real, curated Utah FORGE DDR PDFs (Part I)
 │   └── forge_archive/         Full 76-report Utah FORGE archive (Part II)
@@ -148,6 +153,25 @@ quarto render
 Output is written to `_book/`. No API keys or paid services are required
 for Part I; Chapter 5's `llm_call` argument is provider-agnostic — plug in
 a local or hosted model of your choice.
+
+## Running tests
+
+`tests/` exercises the real functions in every chapter's `code/chapter_NN/`
+script against the real sample DDR archive — the same `extract_text()`,
+`expand_text()`, `search()`, `evaluate_ocr_quality()`, and so on that the
+chapters themselves document, not simplified stand-ins. CI runs the full
+suite on Linux, Windows, and macOS on every push and pull request that
+touches `book/**` (see `.github/workflows/tests-linux.yml`,
+`tests-windows.yml`, `tests-macos.yml`).
+
+```bash
+pip install -r requirements.txt
+pytest -v
+```
+
+Tests marked `slow` (Chapters 4, 5, 7, 8) download a small embedding
+model and a tokenizer's vocabulary file on first run; skip them locally
+with `pytest -v -m "not slow"` if you're offline.
 
 ## License
 
