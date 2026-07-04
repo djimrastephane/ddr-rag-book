@@ -572,7 +572,7 @@ find the weakest category -&gt; that's where to improve next</code></pre>
 </section>
 <section id="implementation" class="level2" data-number="11.5">
 <h2 data-number="11.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">11.5</span> Implementation</h2>
-<div id="562aaa73" class="cell" data-execution_count="1">
+<div id="664dc742" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_11/eval_metrics.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recall_at_k(results: <span class="bu">list</span>[<span class="bu">dict</span>], k: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> [r <span class="cf">for</span> r <span class="kw">in</span> results <span class="cf">if</span> r.get(<span class="st">"rank"</span>) <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> r[<span class="st">"rank"</span>] <span class="op">&lt;=</span> k]</span>
