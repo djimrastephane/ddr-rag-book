@@ -576,7 +576,7 @@ nearby vectors = similar meaning, regardless of shared vocabulary</code></pre>
 </section>
 <section id="implementation" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">4.5</span> Implementation</h2>
-<div id="2b129acc" class="cell" data-execution_count="1">
+<div id="54337e45" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -605,17 +605,17 @@ nearby vectors = similar meaning, regardless of shared vocabulary</code></pre>
 </div>
 <p>Because embeddings are normalized, the dot product <code>embeddings @ query_vec</code> <em>is</em> cosine similarity — no separate normalization step needed at query time.</p>
 <p>Run this against all ten sample reports with <code>query="stuck pipe"</code> and <code>top_k=10</code> (the whole ranking, not just the top few), and you get the real numbers behind the callout above:</p>
-<pre><code>1. 0.2239  Completion_003_2021-01-06
-2. 0.2076  Drilling_038_2020-11-26   &lt;- the actual stuck-pipe day
-3. 0.1731  Drilling_049_2020-12-07
-4. 0.1635  Drilling_003_2020-10-22
-5. 0.1496  Drilling_039_2020-11-27   &lt;- tight hole / high torque, findable now
-6. 0.1495  Drilling_048_2020-12-06
-7. 0.1458  Drilling_050_2020-12-08
-8. 0.1437  Drilling_019_2020-11-07
-9. 0.1366  Drilling_037_2020-11-25
-10. 0.1319 Drilling_036_2020-11-24</code></pre>
-<p>Report #39 went from <em>absent</em> (Chapter 3) to <em>rank 5 of 10</em> — a real improvement, worth having. But it’s not a clean win: the scores are bunched close together (0.13–0.22), and a busy engineer scanning only the top 2 or 3 results would still miss it.</p>
+<pre><code>1. 0.2416  Completion_003_2021-01-06
+2. 0.1978  Drilling_038_2020-11-26   &lt;- the actual stuck-pipe day
+3. 0.1713  Drilling_049_2020-12-07
+4. 0.1657  Drilling_003_2020-10-22
+5. 0.1498  Drilling_039_2020-11-27   &lt;- tight hole / high torque, findable now
+6. 0.1406  Drilling_048_2020-12-06
+7. 0.1342  Drilling_019_2020-11-07
+8. 0.1326  Drilling_037_2020-11-25
+9. 0.1319  Drilling_050_2020-12-08
+10. 0.1169 Drilling_036_2020-11-24</code></pre>
+<p>Report #39 went from <em>absent</em> (Chapter 3) to <em>rank 5 of 10</em> — a real improvement, worth having. But it’s not a clean win: the scores are bunched close together (0.12–0.24), and a busy engineer scanning only the top 2 or 3 results would still miss it.</p>
 </section>
 <section id="field-notes" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">4.6</span> Field notes</h2>
@@ -1300,21 +1300,21 @@ Reimers, Nils, and Iryna Gurevych. 2019. <span>“Sentence-<span>BERT</span>: Se
 <span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>real numbers behind the callout above:</span>
 <span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="in">1. 0.2239  Completion_003_2021-01-06</span></span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="in">2. 0.2076  Drilling_038_2020-11-26   &lt;- the actual stuck-pipe day</span></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a><span class="in">3. 0.1731  Drilling_049_2020-12-07</span></span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a><span class="in">4. 0.1635  Drilling_003_2020-10-22</span></span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="in">5. 0.1496  Drilling_039_2020-11-27   &lt;- tight hole / high torque, findable now</span></span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="in">6. 0.1495  Drilling_048_2020-12-06</span></span>
-<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="in">7. 0.1458  Drilling_050_2020-12-08</span></span>
-<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a><span class="in">8. 0.1437  Drilling_019_2020-11-07</span></span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="in">9. 0.1366  Drilling_037_2020-11-25</span></span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="in">10. 0.1319 Drilling_036_2020-11-24</span></span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="in">1. 0.2416  Completion_003_2021-01-06</span></span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="in">2. 0.1978  Drilling_038_2020-11-26   &lt;- the actual stuck-pipe day</span></span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a><span class="in">3. 0.1713  Drilling_049_2020-12-07</span></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a><span class="in">4. 0.1657  Drilling_003_2020-10-22</span></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="in">5. 0.1498  Drilling_039_2020-11-27   &lt;- tight hole / high torque, findable now</span></span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="in">6. 0.1406  Drilling_048_2020-12-06</span></span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="in">7. 0.1342  Drilling_019_2020-11-07</span></span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a><span class="in">8. 0.1326  Drilling_037_2020-11-25</span></span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="in">9. 0.1319  Drilling_050_2020-12-08</span></span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="in">10. 0.1169 Drilling_036_2020-11-24</span></span>
 <span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>Report #39 went from *absent* (Chapter 3) to *rank 5 of 10* — a real</span>
 <span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>improvement, worth having. But it's not a clean win: the scores are</span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>bunched close together (0.13–0.22), and a busy engineer scanning only the</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>bunched close together (0.12–0.24), and a busy engineer scanning only the</span>
 <span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>top 2 or 3 results would still miss it.</span>
 <span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>

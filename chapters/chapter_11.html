@@ -572,7 +572,7 @@ find the weakest category -&gt; that's where to improve next</code></pre>
 </section>
 <section id="implementation" class="level2" data-number="11.5">
 <h2 data-number="11.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">11.5</span> Implementation</h2>
-<div id="c756fc05" class="cell" data-execution_count="1">
+<div id="c07240fb" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_11/eval_metrics.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recall_at_k(results: <span class="bu">list</span>[<span class="bu">dict</span>], k: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> [r <span class="cf">for</span> r <span class="kw">in</span> results <span class="cf">if</span> r.get(<span class="st">"rank"</span>) <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> r[<span class="st">"rank"</span>] <span class="op">&lt;=</span> k]</span>
@@ -623,6 +623,7 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 <section id="challenge-exercise" class="level2" data-number="11.8">
 <h2 data-number="11.8" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">11.8</span> Challenge exercise</h2>
 <p><strong>Challenge:</strong> Extend your five-question set to at least 15 questions against the <em>full</em> 76-report archive (<code>datasets/forge_archive/</code>), and compute <code>recall@5</code>. This is genuinely useful, unpublished work: as far as this book’s companion pipeline is concerned, you’ll be building the first real evaluation set for Utah FORGE. Save your question set alongside your results — it’s the seed of exactly the kind of evaluation harness <code>scripts/run_eval.py</code> runs at scale once one exists. A reference solution approach is in <code>code/chapter_11/challenge/</code>.</p>
+<p>Don’t be alarmed if <code>recall@5</code> comes back much lower than you’d expect from Part I — the reference solution’s own 15-question set, run against all 76 reports with Chapter 4’s plain whole-document embeddings, scores <code>recall@5</code> of only <strong>0.47</strong>. That’s not a bug: at 10 candidates, chance alone gets you partway there, and whole-document dilution barely matters. At 76 candidates, both problems compound. A low score here is the honest, measured version of the same lesson Chapter 9 already taught — it’s exactly what motivates hybrid retrieval and reranking before this system sees a real, full-scale archive.</p>
 </section>
 <section id="key-takeaways" class="level2" data-number="11.9">
 <h2 data-number="11.9" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">11.9</span> Key takeaways</h2>
@@ -1325,33 +1326,43 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 <span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a><span class="in">`scripts/run_eval.py`</span> runs at scale once one exists. A reference solution</span>
 <span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a>approach is in <span class="in">`code/chapter_11/challenge/`</span>.</span>
 <span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
-<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An evaluation set with known correct answers is more valuable than any</span>
-<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a>  single retrieval technique — it's what tells you whether a technique</span>
-<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a>  helped.</span>
-<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`recall@k`</span>, MRR, and <span class="in">`NDCG@k`</span> answer different questions; report more</span>
-<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>  than one.</span>
-<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Don't trust a system's evaluation results from a different dataset as a</span>
-<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>  proxy for how it performs on yours — a harness that scored well on one</span>
-<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>  campaign says nothing certain about a new well until you build and run</span>
-<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>  a question set against that well's own archive, which is exactly what</span>
-<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a>  this chapter had you do.</span>
-<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
-<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_11/eval_metrics.py`</span> <span class="pp">|</span> <span class="in">`recall@k`</span>, MRR, <span class="in">`NDCG@k`</span> implementations <span class="pp">|</span></span>
-<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/scripts/run_eval.py`</span> <span class="pp">|</span> Evaluation harness (companion repo) — ready to point at a Utah FORGE question set once you build one <span class="pp">|</span></span>
-<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
-<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a>Every discipline from Chapters 6–11 — OCR gating, structured chunking,</span>
-<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a>hybrid retrieval, traceability, evaluation — exists in service of a</span>
-<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a>single payoff: finding things in an archive a human reading it linearly</span>
-<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a>would miss. Chapter 12 builds toward that payoff, using a real sequence</span>
-<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a>of events already in this archive.</span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a>Don't be alarmed if <span class="in">`recall@5`</span> comes back much lower than you'd expect</span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a>from Part I — the reference solution's own 15-question set, run against</span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a>all 76 reports with Chapter 4's plain whole-document embeddings, scores</span>
+<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a><span class="in">`recall@5`</span> of only **0.47**. That's not a bug: at 10 candidates, chance</span>
+<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a>alone gets you partway there, and whole-document dilution barely</span>
+<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a>matters. At 76 candidates, both problems compound. A low score here is</span>
+<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>the honest, measured version of the same lesson Chapter 9 already</span>
+<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a>taught — it's exactly what motivates hybrid retrieval and reranking</span>
+<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a>before this system sees a real, full-scale archive.</span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An evaluation set with known correct answers is more valuable than any</span>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>  single retrieval technique — it's what tells you whether a technique</span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>  helped.</span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`recall@k`</span>, MRR, and <span class="in">`NDCG@k`</span> answer different questions; report more</span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a>  than one.</span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Don't trust a system's evaluation results from a different dataset as a</span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>  proxy for how it performs on yours — a harness that scored well on one</span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a>  campaign says nothing certain about a new well until you build and run</span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a>  a question set against that well's own archive, which is exactly what</span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a>  this chapter had you do.</span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_11/eval_metrics.py`</span> <span class="pp">|</span> <span class="in">`recall@k`</span>, MRR, <span class="in">`NDCG@k`</span> implementations <span class="pp">|</span></span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/scripts/run_eval.py`</span> <span class="pp">|</span> Evaluation harness (companion repo) — ready to point at a Utah FORGE question set once you build one <span class="pp">|</span></span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>Every discipline from Chapters 6–11 — OCR gating, structured chunking,</span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a>hybrid retrieval, traceability, evaluation — exists in service of a</span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a>single payoff: finding things in an archive a human reading it linearly</span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>would miss. Chapter 12 builds toward that payoff, using a real sequence</span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>of events already in this archive.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

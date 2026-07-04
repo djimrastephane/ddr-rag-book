@@ -585,7 +585,7 @@ Answer + Citations</code></pre>
 </section>
 <section id="implementation" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">5.5</span> Implementation</h2>
-<div id="ea656d22" class="cell" data-execution_count="1">
+<div id="25ba84a0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_05/first_rag.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -641,11 +641,11 @@ Answer + Citations</code></pre>
 <div class="callout-body-container callout-body">
 <p><strong>Query:</strong> <code>"What led to the fishing operation on report #50?"</code>, <code>top_k=3</code>.</p>
 <p><strong>Result:</strong> retrieval returns report #49 (rank 1) plus two other reports — but <strong>not report #50</strong>, the report the question is literally about. The full ranking:</p>
-<pre><code>1. 0.4412  Drilling_049_2020-12-07   &lt;- packers fail (correctly retrieved)
-2. 0.3461  Drilling_038_2020-11-26
-3. 0.3358  Drilling_037_2020-11-25
+<pre><code>1. 0.4409  Drilling_049_2020-12-07   &lt;- packers fail (correctly retrieved)
+2. 0.3523  Drilling_038_2020-11-26
+3. 0.3270  Drilling_048_2020-12-06
 ...
-8. 0.3012  Drilling_050_2020-12-08   &lt;- the fishing report itself</code></pre>
+7. 0.3106  Drilling_050_2020-12-08   &lt;- the fishing report itself</code></pre>
 <p><strong>Why:</strong> report #50’s own text — bit-mill fishing narrative buried among casing tables, mud tables, and a full BHA component list — is, at whole-document granularity, more similar to <em>several other reports’</em> tables than it is to a question about fishing. This is the same granularity problem Chapter 4 already flagged; here it has a sharper consequence.</p>
 <p><strong>Lesson:</strong> this is exactly the failure mode this chapter’s own Key Takeaways warn about — and it’s a dangerous one specifically <em>because</em> the question names “report #50” directly. A careless <code>llm_call</code> implementation could echo that report number back in its answer without ever having actually retrieved report #50’s content, producing a citation-shaped sentence that <em>looks</em> grounded and isn’t. Always check what’s actually in the evidence list — not what the question happens to mention — before trusting an answer. Chapter 7’s chunking and Chapter 9’s hybrid retrieval are what actually close this gap; Part I’s simple system doesn’t, and pretending otherwise would defeat the entire point of this book.</p>
 </div>
@@ -1336,11 +1336,11 @@ Lewis, Patrick, Ethan Perez, Aleksandra Piktus, et al. 2020. <span>“Retrieval-
 <span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>The full ranking:</span>
 <span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a><span class="in">1. 0.4412  Drilling_049_2020-12-07   &lt;- packers fail (correctly retrieved)</span></span>
-<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a><span class="in">2. 0.3461  Drilling_038_2020-11-26</span></span>
-<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a><span class="in">3. 0.3358  Drilling_037_2020-11-25</span></span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a><span class="in">1. 0.4409  Drilling_049_2020-12-07   &lt;- packers fail (correctly retrieved)</span></span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a><span class="in">2. 0.3523  Drilling_038_2020-11-26</span></span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a><span class="in">3. 0.3270  Drilling_048_2020-12-06</span></span>
 <span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a><span class="in">...</span></span>
-<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a><span class="in">8. 0.3012  Drilling_050_2020-12-08   &lt;- the fishing report itself</span></span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a><span class="in">7. 0.3106  Drilling_050_2020-12-08   &lt;- the fishing report itself</span></span>
 <span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>**Why:** report #50's own text — bit-mill fishing narrative buried among</span>

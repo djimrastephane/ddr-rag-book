@@ -558,7 +558,7 @@ count how many are True
 <section id="implementation" class="level2" data-number="6.5">
 <h2 data-number="6.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">6.5</span> Implementation</h2>
 <p>Build a simplified version of the same idea:</p>
-<div id="c2a821ba" class="cell" data-execution_count="1">
+<div id="bc64de53" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_06/ocr_quality_gate.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -599,8 +599,8 @@ count how many are True
 </div>
 <div class="callout-body-container callout-body">
 <p><strong>Action:</strong> run <code>evaluate_ocr_quality()</code> against all ten real sample reports, including report #3 — the sparsest one in the archive, written before the well was even spudded, with most of its tables entirely empty.</p>
-<p><strong>Result:</strong> every single report passes cleanly. Report #3, the thinnest of the ten, still has 2,220 characters and 360 alphabetic words — comfortably clear of the 200-character / 30-word thresholds:</p>
-<pre><code>chars=2220 alpha_words=360 symbol_ratio=0.007  reject=False</code></pre>
+<p><strong>Result:</strong> every single report passes cleanly. Report #3, the thinnest of the ten, still has 2,235 characters and 361 alphabetic words — comfortably clear of the 200-character / 30-word thresholds:</p>
+<pre><code>chars=2235 alpha_words=361 symbol_ratio=0.006  reject=False</code></pre>
 <p><strong>Why:</strong> even a nearly-empty DDR carries a full page of section headers, column labels, and boilerplate (“WELL/JOB INFORMATION”, “PRESENT OPERATIONS”, table column names) regardless of how little actually happened that day. That structural text alone is enough to clear the density thresholds.</p>
 <p><strong>Lesson:</strong> a quality gate is only trustworthy if it doesn’t also reject legitimate sparse content — a gate that flagged every quiet day as “probably OCR garbage” would be useless in practice, burying real pages under false alarms. Checking the gate against your <em>most</em> sparse real documents, not just your noisiest fake ones, is how you find that out before it costs you.</p>
 </div>
@@ -1270,11 +1270,11 @@ count how many are True
 <span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>empty.</span>
 <span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a>**Result:** every single report passes cleanly. Report #3, the thinnest</span>
-<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>of the ten, still has 2,220 characters and 360 alphabetic words —</span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>of the ten, still has 2,235 characters and 361 alphabetic words —</span>
 <span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>comfortably clear of the 200-character / 30-word thresholds:</span>
 <span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a><span class="in">chars=2220 alpha_words=360 symbol_ratio=0.007  reject=False</span></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a><span class="in">chars=2235 alpha_words=361 symbol_ratio=0.006  reject=False</span></span>
 <span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>**Why:** even a nearly-empty DDR carries a full page of section headers,</span>

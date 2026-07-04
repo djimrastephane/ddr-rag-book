@@ -559,7 +559,7 @@ expanded text</code></pre>
 </section>
 <section id="implementation" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">2.5</span> Implementation</h2>
-<div id="1b6c5f00" class="cell" data-execution_count="1">
+<div id="fe7560fd" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_02/expand_abbreviations.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -610,7 +610,7 @@ expanded text</code></pre>
 </div>
 <div class="callout-body-container callout-body">
 <p><strong>Action:</strong> search every report for the literal string <code>PJSM</code>.</p>
-<p><strong>Result:</strong> it appears in all ten sample reports — and every single time, it’s immediately followed by its own expansion, written by the source software itself: <code>PJSM, pre job safety meeting</code>.</p>
+<p><strong>Result:</strong> it appears in six of the ten sample reports (not logged on rig-up or trip days when no fresh crew safety meeting was held) — but every single time it does appear, it’s immediately followed by its own expansion, written by the source software itself: <code>PJSM, pre job safety meeting</code>.</p>
 <p><strong>Why:</strong> this archive’s report-generation software (WellEz) evidently has a template that spells “pre job safety meeting” out in full every time, right after the abbreviation. But run the same check against <code>BHA</code>, <code>WOB</code>, <code>MWD</code>, or <code>SPP</code> — the terms that actually carry operational meaning in the time breakdown — and none of them ever get that treatment, anywhere in the archive.</p>
 <p><strong>Lesson:</strong> don’t assume a real archive is consistently either abbreviated or expanded. This one is both, unevenly, by accident of whatever template a report-writing tool happened to use for one specific phrase. An automated expander has to cover every term regardless — you can’t rely on the source to have already done the job for the ones that matter.</p>
 </div>
@@ -1270,60 +1270,62 @@ expanded text</code></pre>
 <span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="Field notes: the source already expands some abbreviations — but not the ones that matter"}</span>
 <span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>**Action:** search every report for the literal string <span class="in">`PJSM`</span>.</span>
 <span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>**Result:** it appears in all ten sample reports — and every single time,</span>
-<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>it's immediately followed by its own expansion, written by the source</span>
-<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>software itself: <span class="in">`PJSM, pre job safety meeting`</span>.</span>
-<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>**Why:** this archive's report-generation software (WellEz) evidently has</span>
-<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>a template that spells "pre job safety meeting" out in full every time,</span>
-<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>right after the abbreviation. But run the same check against <span class="in">`BHA`</span>,</span>
-<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a><span class="in">`WOB`</span>, <span class="in">`MWD`</span>, or <span class="in">`SPP`</span> — the terms that actually carry operational</span>
-<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>meaning in the time breakdown — and none of them ever get that</span>
-<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>treatment, anywhere in the archive.</span>
-<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>**Lesson:** don't assume a real archive is consistently either</span>
-<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>abbreviated or expanded. This one is both, unevenly, by accident of</span>
-<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a>whatever template a report-writing tool happened to use for one specific</span>
-<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>phrase. An automated expander has to cover every term regardless — you</span>
-<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a>can't rely on the source to have already done the job for the ones that</span>
-<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>matter.</span>
-<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>**Result:** it appears in six of the ten sample reports (not logged on</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>rig-up or trip days when no fresh crew safety meeting was held) — but</span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>every single time it does appear, it's immediately followed by its own</span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>expansion, written by the source software itself: `PJSM, pre job safety</span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>meeting`.</span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>**Why:** this archive's report-generation software (WellEz) evidently has</span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>a template that spells "pre job safety meeting" out in full every time,</span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>right after the abbreviation. But run the same check against <span class="in">`BHA`</span>,</span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a><span class="in">`WOB`</span>, <span class="in">`MWD`</span>, or <span class="in">`SPP`</span> — the terms that actually carry operational</span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>meaning in the time breakdown — and none of them ever get that</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>treatment, anywhere in the archive.</span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a>**Lesson:** don't assume a real archive is consistently either</span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>abbreviated or expanded. This one is both, unevenly, by accident of</span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a>whatever template a report-writing tool happened to use for one specific</span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>phrase. An automated expander has to cover every term regardless — you</span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a>can't rely on the source to have already done the job for the ones that</span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a>matter.</span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a>**Challenge:** Extend <span class="in">`ABBREVIATIONS`</span> using [Appendix</span>
-<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a>B](../appendix/appendix_b_oilfield_glossary.qmd), and handle the mud-table</span>
-<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>abbreviations (<span class="in">`FV`</span>, <span class="in">`WL`</span>, <span class="in">`PV`</span>, <span class="in">`YP`</span>, <span class="in">`CL`</span>) — notice how short these are,</span>
-<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a>and think carefully about whether blindly expanding a two-letter token</span>
-<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a>like <span class="in">`PV`</span> is actually safe against this archive's real text, or whether</span>
-<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a>it needs a narrower match context. A reference solution is in</span>
-<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a><span class="in">`code/chapter_02/challenge/`</span>.</span>
-<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>**Challenge:** Extend <span class="in">`ABBREVIATIONS`</span> using [Appendix</span>
+<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a>B](../appendix/appendix_b_oilfield_glossary.qmd), and handle the mud-table</span>
+<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a>abbreviations (<span class="in">`FV`</span>, <span class="in">`WL`</span>, <span class="in">`PV`</span>, <span class="in">`YP`</span>, <span class="in">`CL`</span>) — notice how short these are,</span>
+<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a>and think carefully about whether blindly expanding a two-letter token</span>
+<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a>like <span class="in">`PV`</span> is actually safe against this archive's real text, or whether</span>
+<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a>it needs a narrower match context. A reference solution is in</span>
+<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a><span class="in">`code/chapter_02/challenge/`</span>.</span>
 <span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Word-boundary regex, not substring replacement, is the difference</span>
-<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a>  between a correct expander and a silently broken one.</span>
-<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Real archives are inconsistent by nature — the same report can spell</span>
-<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a>  one abbreviation out in full while never expanding another. Don't</span>
-<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a>  assume the source data will document itself.</span>
-<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A transparent dictionary beats an opaque model here: every expansion is</span>
-<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a>  inspectable and testable.</span>
-<span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cleaning text is not optional groundwork — it's what makes every later</span>
-<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>  chapter's search and retrieval actually work.</span>
-<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-157"><a href="#cb4-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Word-boundary regex, not substring replacement, is the difference</span>
+<span id="cb4-158"><a href="#cb4-158" aria-hidden="true" tabindex="-1"></a>  between a correct expander and a silently broken one.</span>
+<span id="cb4-159"><a href="#cb4-159" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Real archives are inconsistent by nature — the same report can spell</span>
+<span id="cb4-160"><a href="#cb4-160" aria-hidden="true" tabindex="-1"></a>  one abbreviation out in full while never expanding another. Don't</span>
+<span id="cb4-161"><a href="#cb4-161" aria-hidden="true" tabindex="-1"></a>  assume the source data will document itself.</span>
+<span id="cb4-162"><a href="#cb4-162" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A transparent dictionary beats an opaque model here: every expansion is</span>
+<span id="cb4-163"><a href="#cb4-163" aria-hidden="true" tabindex="-1"></a>  inspectable and testable.</span>
+<span id="cb4-164"><a href="#cb4-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cleaning text is not optional groundwork — it's what makes every later</span>
+<span id="cb4-165"><a href="#cb4-165" aria-hidden="true" tabindex="-1"></a>  chapter's search and retrieval actually work.</span>
 <span id="cb4-166"><a href="#cb4-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_02/expand_abbreviations.py`</span> <span class="pp">|</span> Word-boundary abbreviation expander <span class="pp">|</span></span>
-<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`datasets/ddr_text_expanded/`</span> <span class="pp">|</span> Expanded output from Chapter 1's extracted text <span class="pp">|</span></span>
-<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_02_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
-<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb4-167"><a href="#cb4-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb4-168"><a href="#cb4-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-169"><a href="#cb4-169" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb4-170"><a href="#cb4-170" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb4-171"><a href="#cb4-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_02/expand_abbreviations.py`</span> <span class="pp">|</span> Word-boundary abbreviation expander <span class="pp">|</span></span>
+<span id="cb4-172"><a href="#cb4-172" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`datasets/ddr_text_expanded/`</span> <span class="pp">|</span> Expanded output from Chapter 1's extracted text <span class="pp">|</span></span>
+<span id="cb4-173"><a href="#cb4-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_02_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
 <span id="cb4-174"><a href="#cb4-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a>With clean, expanded text in hand, Chapter 3 builds the first tool an</span>
-<span id="cb4-176"><a href="#cb4-176" aria-hidden="true" tabindex="-1"></a>engineer would actually reach for: a keyword search engine that answers</span>
-<span id="cb4-177"><a href="#cb4-177" aria-hidden="true" tabindex="-1"></a>"which reports mention losses?" in milliseconds.</span>
+<span id="cb4-175"><a href="#cb4-175" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb4-176"><a href="#cb4-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-177"><a href="#cb4-177" aria-hidden="true" tabindex="-1"></a>With clean, expanded text in hand, Chapter 3 builds the first tool an</span>
+<span id="cb4-178"><a href="#cb4-178" aria-hidden="true" tabindex="-1"></a>engineer would actually reach for: a keyword search engine that answers</span>
+<span id="cb4-179"><a href="#cb4-179" aria-hidden="true" tabindex="-1"></a>"which reports mention losses?" in milliseconds.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
