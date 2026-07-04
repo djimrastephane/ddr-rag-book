@@ -13,7 +13,7 @@ def test_faiss_index_matches_brute_force_search(extracted_sample_text_dir, tmp_p
     from semantic_search import MODEL_NAME, embed_texts, load_chunks
     from sentence_transformers import SentenceTransformer
 
-    model = SentenceTransformer(MODEL_NAME)
+    model = SentenceTransformer(MODEL_NAME, device="cpu")
     filenames, texts = load_chunks(extracted_sample_text_dir)
     embeddings = embed_texts(model, texts)
 
