@@ -20,3 +20,6 @@ quarto render
 ```
 
 Companion pipeline: [DDR_UTAH_FORGE](https://github.com/djimrastephane/DDR_UTAH_FORGE).
+
+**License:** code is [MIT](LICENSE); the book's text is
+[CC BY 4.0](LICENSE-CONTENT.md).

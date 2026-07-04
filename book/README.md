@@ -129,4 +129,7 @@ a local or hosted model of your choice.
 
 ## License
 
-TBD — add a license before publishing or open-sourcing this repository.
+Code (`code/`, `notebooks/`) is licensed under the [MIT License](../LICENSE).
+The book's text (chapters, preface, appendices) is licensed under
+[CC BY 4.0](../LICENSE-CONTENT.md). The Utah FORGE DDR data in `datasets/`
+is public DOE-funded research data, not covered by either license.
