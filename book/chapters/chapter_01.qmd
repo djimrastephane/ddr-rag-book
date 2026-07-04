@@ -45,8 +45,10 @@ WELL NAME:FORGE 16A [78]-32 JOB:Drilling 65° Tangent
 PRESENT OPERATIONS:PIPE FREE, TRIP OUT OF HOLE FOR BHA INSPECTION
 
 TIME BREAKDOWN
-23:30 04:00 4.5 Drill From 6,360' to 6,507', (147') Total, 32.6' feet per hour.
-WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP 3200-3400 GPM 560, DIFF 200-300psi
+23:30 04:00 4.5 Drill From 6,360' to 6,507', (147') Total,
+32.6' feet per hour.
+WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP 3200-3400 GPM 560,
+DIFF 200-300psi
 During the slide lost tool face and became assembly became stuck
 04:00 06:00 2.0 Work pipe, circulate lube sweep, work tool back in position
 Pipe free
@@ -206,8 +208,10 @@ report 050's text without opening the original PDF.
 
 ```
 # COMPONENT OD ID LENGTH # COMPONENT OD ID LENGTH
-1 Drill Bit-Reed SKC613M-01C 8.75 1 7 Monel Collar-NMDC with MWD 6.75 3.25 30.35
-2 Motor-6.5'' 7/8, 5.7, 0.242 RPG 1.50,* Fixed 6.5 33.01 8 Monel Collar-NMDC (2 joints) 6.75 3.25 60.66
+1 Drill Bit-Reed SKC613M-01C 8.75 1 7 Monel Collar-NMDC
+with MWD 6.75 3.25 30.35
+2 Motor-6.5'' 7/8, 5.7, 0.242 RPG 1.50,* Fixed 6.5 33.01
+8 Monel Collar-NMDC (2 joints) 6.75 3.25 60.66
 ```
 
 **Why:** the real BHA table on this report is laid out as **two

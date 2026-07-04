@@ -84,6 +84,22 @@ format:
         \let\oldtexttt\texttt
         \renewcommand{\texttt}[1]{{\ttfamily\seqsplit{#1}}}
 
+        % Long lines inside fenced code blocks (long import paths, CLI
+        % commands) otherwise run off the page instead of wrapping. Pandoc's
+        % own Highlighting environment is plain fancyvrb, which can't break
+        % lines; fvextra extends it so we can redefine Highlighting here to
+        % wrap at the page edge, breaking mid-word if there's no other option.
+        \usepackage{fvextra}
+        \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+
+        % Real DDR excerpts (quoted in fenced code blocks with no language,
+        % e.g. the callouts showing raw report text) come through as plain
+        % LaTeX `verbatim`, not the Highlighting environment above -- the
+        % kernel's `verbatim` has no concept of line wrapping at all, so
+        % long report lines (time breakdowns, BHA tables) ran off the page.
+        % Redefine it to route through fvextra's Verbatim instead.
+        \renewenvironment{verbatim}{\VerbatimEnvironment\begin{Verbatim}[breaklines,breakanywhere]}{\end{Verbatim}}
+
 execute:
   freeze: auto
   echo: true

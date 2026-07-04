@@ -25,7 +25,7 @@ language that means the same thing to a human and to a machine.
 
 ::: {.callout-note title="Real excerpt — report #38, showing both patterns"}
 ```
-PJSM, pre job safety meeting.                     <- self-expanded by the source
+PJSM, pre job safety meeting.                     <- self-expanded by source
 ...
 Pick up Curve assembly 2, BHA 21, Reed Hycalog     <- BHA never expanded
 SKC613M-01C Trip in hole to 5,200'
