@@ -26,7 +26,10 @@ LINES = {
 
 
 if __name__ == "__main__":
-    model = SentenceTransformer(MODEL_NAME)
+    # device="cpu" pinned explicitly -- see code/chapter_04/semantic_search.py
+    # for why: Apple Silicon otherwise auto-selects the MPS backend, which
+    # produces meaningfully different embeddings than CPU.
+    model = SentenceTransformer(MODEL_NAME, device="cpu")
     keys = list(LINES.keys())
     texts = list(LINES.values())
 

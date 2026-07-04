@@ -63,7 +63,13 @@ if __name__ == "__main__":
         raise SystemExit(f"{text_dir} does not exist -- run Chapter 1's batch extraction first.")
 
     query = " ".join(sys.argv[1:]) or "stuck pipe"
-    model = SentenceTransformer(MODEL_NAME)
+    # device="cpu" is explicit, not the default: on Apple Silicon,
+    # sentence-transformers otherwise auto-selects the MPS (Metal GPU)
+    # backend, which produces meaningfully different embeddings from CPU
+    # -- not just noisier ones -- so results could differ from what this
+    # chapter documents. CPU is what every real number in this book was
+    # computed against.
+    model = SentenceTransformer(MODEL_NAME, device="cpu")
     filenames, texts = load_chunks(text_dir)
     embeddings = embed_texts(model, texts)
 

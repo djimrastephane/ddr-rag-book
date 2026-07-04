@@ -58,7 +58,10 @@ def guarded_answer(question: str, model, filenames, texts, embeddings,
 
 if __name__ == "__main__":
     text_dir = Path("datasets/ddr_text")
-    model = SentenceTransformer(MODEL_NAME)
+    # device="cpu" pinned explicitly -- see code/chapter_04/semantic_search.py
+    # for why: Apple Silicon otherwise auto-selects the MPS backend, which
+    # produces meaningfully different embeddings than CPU.
+    model = SentenceTransformer(MODEL_NAME, device="cpu")
     filenames, texts = load_chunks(text_dir)
     embeddings = embed_texts(model, texts)
 

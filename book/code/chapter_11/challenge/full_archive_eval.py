@@ -76,7 +76,10 @@ if __name__ == "__main__":
     texts = [extract_text(p) for p in pdf_files]
 
     print(f"Embedding {len(filenames)} reports (this takes a moment)...")
-    model = SentenceTransformer(MODEL_NAME)
+    # device="cpu" pinned explicitly -- see code/chapter_04/semantic_search.py
+    # for why: Apple Silicon otherwise auto-selects the MPS backend, which
+    # produces meaningfully different embeddings than CPU.
+    model = SentenceTransformer(MODEL_NAME, device="cpu")
     embeddings = model.encode(texts, normalize_embeddings=True)
 
     results = []

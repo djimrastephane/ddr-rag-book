@@ -51,7 +51,10 @@ if __name__ == "__main__":
     if not text_dir.exists():
         raise SystemExit(f"{text_dir} does not exist -- run Chapter 1's batch extraction first.")
 
-    model = SentenceTransformer(MODEL_NAME)
+    # device="cpu" pinned explicitly -- see code/chapter_04/semantic_search.py
+    # for why: Apple Silicon otherwise auto-selects the MPS backend, which
+    # produces meaningfully different embeddings than CPU.
+    model = SentenceTransformer(MODEL_NAME, device="cpu")
     filenames, texts = load_chunks(text_dir)
     embeddings = embed_texts(model, texts)
 
