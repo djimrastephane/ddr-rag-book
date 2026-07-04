@@ -4,6 +4,22 @@ Usage:
     python code/chapter_08/build_faiss_index.py
 """
 
+import os
+
+# This chapter is the only one that imports both faiss and
+# sentence-transformers (PyTorch) in the same process. On macOS, each
+# wheel bundles its own separate copy of the OpenMP runtime (faiss,
+# torch, and scikit-learn -- pulled in transitively -- each ship their
+# own libomp.dylib), and letting more than one thread run through them
+# concurrently crashes the process outright: a real, reproducible
+# segfault, confirmed against the actual crash report (a null-pointer
+# dereference inside libomp.dylib, with both faiss's and torch's copies
+# on the stack). Restricting OpenMP to a single thread avoids the
+# multi-threaded code path where the two runtimes' thread pools collide.
+# This must be set before faiss or torch is imported anywhere in the
+# process -- setting it later, even before first use, is too late.
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+
 import sys
 from pathlib import Path
 

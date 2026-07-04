@@ -9,6 +9,20 @@ expand_abbreviations`, and so on, exactly as if that file were the only
 thing on the path -- which mirrors how a reader actually runs them.
 """
 
+import os
+
+# Chapter 8's test is the only one that imports both faiss and
+# sentence-transformers (PyTorch) in the same process. On macOS, each
+# wheel bundles its own separate copy of the OpenMP runtime, and more
+# than one thread running through them concurrently crashes the process
+# -- see code/chapter_08/build_faiss_index.py for the full explanation
+# and the crash report that confirmed it. This has to be set here, in
+# conftest.py, rather than inside the test itself: pytest imports every
+# test module during collection, before any test function body runs, so
+# by the time a test's own code executes, faiss/torch may already be
+# loaded with the default thread count.
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+
 import sys
 from pathlib import Path
 
