@@ -24,7 +24,7 @@
     "href": "index.html#what-you-will-build",
     "title": "Building Industrial RAG Systems from Daily Drilling Reports",
     "section": "What you will build",
-    "text": "What you will build\n\n\n\n\n\n\n\nChapter\nYou will be able to…\n\n\n\n\n1\nExtract text from a DDR PDF\n\n\n2\nExpand oilfield abbreviations (BHA, WOB, MWD…) automatically\n\n\n3\nKeyword-search your entire DDR archive\n\n\n4\nSearch DDRs by meaning, not just exact words\n\n\n5\nAsk a question and get a cited, evidence-backed answer\n\n\n6–12\nScale the system to scanned reports, large archives, hybrid retrieval, reranking, and full traceability",
+    "text": "What you will build\n\n\n\n\n\n\n\nChapter\nYou will be able to…\n\n\n\n\n0\nSet up a working Python environment, in whichever editor or notebook tool you prefer\n\n\n1\nExtract text from a DDR PDF\n\n\n2\nExpand oilfield abbreviations (BHA, WOB, MWD…) automatically\n\n\n3\nKeyword-search your entire DDR archive\n\n\n4\nSearch DDRs by meaning, not just exact words\n\n\n5\nAsk a question and get a cited, evidence-backed answer\n\n\n6–12\nScale the system to scanned reports, large archives, hybrid retrieval, reranking, and full traceability",
     "crumbs": [
       "Welcome"
     ]
@@ -44,7 +44,7 @@
     "href": "index.html#companion-repository",
     "title": "Building Industrial RAG Systems from Daily Drilling Reports",
     "section": "Companion repository",
-    "text": "Companion repository\nAll code, sample datasets, and notebooks referenced in this book live in the companion repository. See Appendix A for setup instructions. Every chapter lists exactly which files you need under Repository files.\nLet’s read our first DDR.",
+    "text": "Companion repository\nAll code, sample datasets, and notebooks referenced in this book live in the companion repository. Every chapter lists exactly which files you need under Repository files.\nIf you’ve never installed Python or don’t know which editor to use, start with Part 0 — Preparing Your Python Workshop: it walks through everything from scratch, works with any of five common setups (Jupyter Notebook, VS Code, PyCharm Community, Positron, or a terminal alone), and ends with your first script actually running. If you already have Python and a working setup, jump straight to Chapter 1 — Appendix A has the rest of the reference material (the sample dataset, rendering the book, the companion pipeline) if you need it later.\nLet’s read our first DDR.",
     "crumbs": [
       "Welcome"
     ]
@@ -74,7 +74,7 @@
     "href": "preface.html#how-to-read-this-book",
     "title": "Preface",
     "section": "How to read this book",
-    "text": "How to read this book\nThis book borrows the practical-first, project-based spirit of Python Crash Course (Matthes 2023) — small wins early, theory only when the code in front of you needs it, a working artifact at the end of every chapter — but assumes considerably less going in. You do not need to have written Python before. You do not need to know what a function or a loop is before Chapter 1; each concept is explained in plain language, translated into terms an engineer already knows, exactly when you need it to solve the problem in front of you.\nRead it in order the first time. Each chapter assumes the code from the previous one exists and works — this is a build, not a reference manual. After your first pass, use it as a reference: jump to the chapter that matches the problem you currently have (Chapter 6 if your PDFs are scanned, Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers aren’t trustworthy yet).\nType the code yourself. Do not copy-paste from the companion repository until you have typed it once and watched it run. This is slower and it is worth it — and if you finish this book able to say “I can build this,” rather than “I understand the theory,” it did its job.",
+    "text": "How to read this book\nThis book borrows the practical-first, project-based spirit of Python Crash Course (Matthes 2023) — small wins early, theory only when the code in front of you needs it, a working artifact at the end of every chapter — but assumes considerably less going in. You do not need to have written Python before. You do not need to know what a function or a loop is before Chapter 1; each concept is explained in plain language, translated into terms an engineer already knows, exactly when you need it to solve the problem in front of you.\nIf you’ve never installed Python or set up a project folder before, start with Part 0 — it gets you to a working setup in whichever editor or notebook tool you’re most comfortable with, with no assumption that you’ve done this before.\nRead it in order the first time. Each chapter assumes the code from the previous one exists and works — this is a build, not a reference manual. After your first pass, use it as a reference: jump to the chapter that matches the problem you currently have (Chapter 6 if your PDFs are scanned, Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers aren’t trustworthy yet).\nType the code yourself. Do not copy-paste from the companion repository until you have typed it once and watched it run. This is slower and it is worth it — and if you finish this book able to say “I can build this,” rather than “I understand the theory,” it did its job.",
     "crumbs": [
       "Preface"
     ]
@@ -100,6 +100,149 @@
     ]
   },
   {
+    "objectID": "chapters/chapter_00.html",
+    "href": "chapters/chapter_00.html",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "",
+    "text": "0.1 What you need\nBefore you can read a single DDR with code, you need somewhere to do the work. Think of it this way:\nYou wouldn’t judge a rig by which brand of hard hat the crew wears, and you don’t need to fight over which code editor is “correct” before you start. Any of the environments in this section will run every example in this book. Pick the one that feels least intimidating and move on — you can always switch later once you know what you’re doing.\nThis section assumes you have never installed Python, never opened a terminal, and never used Git. If you’ve done some of this before, skim ahead to whichever step you actually need.\nFive things, all free, all one-time setup:\nNone of these cost money, and none of them lock you into a particular way of working. Let’s go through them one at a time.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#what-you-need",
+    "href": "chapters/chapter_00.html#what-you-need",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "",
+    "text": "Python — the language every example in this book is written in.\nA code editor or notebook environment — where you’ll read and edit the book’s code. Section 0.2 helps you choose one.\nA terminal — a text-based window where you type commands for the computer to run. Section 0.4 explains this in plain English if the word is new to you.\nGit — a tool for downloading (and later updating) this book’s companion code and sample DDR files in one step. If you’d rather not install it, Section 0.6 shows a no-Git alternative.\nThe companion repository — this book’s actual code and sample DDR archive, which you’ll download once in Section 0.6.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#choosing-your-environment",
+    "href": "chapters/chapter_00.html#choosing-your-environment",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.2 Choosing your environment",
+    "text": "0.2 Choosing your environment\nYou do not need to use any particular editor to follow this book. Every example runs the same way — as a plain Python file, or a plain code cell — no matter which of these you pick:\n\n\n\n\n\n\n\n\nEnvironment\nBest for\nNotes\n\n\n\n\nJupyter Notebook\nLearning and exploration\nGood for step-by-step code, runs in a web browser\n\n\nVS Code\nGeneral coding\nFree, very common in companies, lots of online help available\n\n\nPyCharm Community\nPython projects\nStrong project structure, a bit heavier to install\n\n\nPositron\nData science workflows\nGood for notebooks and scripts side by side\n\n\nTerminal only\nMinimal setup\nWorks everywhere, nothing extra to install\n\n\n\nIf you genuinely don’t know which to pick: install VS Code. It’s free, widely used outside this book too, and Appendix A2 walks through every click. If you’d rather not install anything beyond Python itself, the Terminal only route (Appendix A5) works identically — you’ll just type commands instead of clicking buttons.\nWhichever you choose, Appendices A1–A5 give you a short, dedicated guide for that specific environment once you’ve finished this section.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#installing-python",
+    "href": "chapters/chapter_00.html#installing-python",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.3 Installing Python",
+    "text": "0.3 Installing Python\n\n\n\n\n\n\nTipEngineering Translation: Python\n\n\n\nPython is the engine everything in this book runs on — the same code runs whether it’s read by a notebook, an editor, or the plain terminal. Installing Python once gives every tool in Section 0.2 something to run your code with.\n\n\nThis book was written and tested against Python 3.11 or later. Version matters because some of the libraries used later in the book (starting with Chapter 4) rely on features only present in newer Python releases — an older version can fail in confusing ways that have nothing to do with your code.\nCheck whether Python is already installed. Open a terminal (Section 0.4 shows you how) and type:\npython --version\nExpected output: something like Python 3.11.9 or higher. If you see that, skip ahead to Section 0.4.\nIf it fails — an error like command not found or a version starting with 2. — try:\npython3 --version\nMany Mac and Linux systems only recognise python3, not the shorter python. If python3 --version shows 3.11 or later, use python3 in place of python for every command in this book.\nIf neither command works, Python isn’t installed yet. Download it from python.org/downloads and run the installer for your operating system — on Windows, make sure to check the box labelled “Add python.exe to PATH” during installation, since that’s what lets the python command work from a terminal at all.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#opening-a-terminal",
+    "href": "chapters/chapter_00.html#opening-a-terminal",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.4 Opening a terminal",
+    "text": "0.4 Opening a terminal\n\n\n\n\n\n\nTipEngineering Translation: Terminal\n\n\n\nA terminal (sometimes called a command window, console, or shell) is a plain text window where you type instructions for the computer to run, one line at a time, instead of clicking buttons. It looks intimidating the first time and is genuinely just a way of talking to your computer directly.\n\n\nHow to open one:\n\nMac: open Spotlight (Cmd+Space), type Terminal, press Enter.\nWindows: open the Start menu, type Command Prompt or PowerShell, press Enter. Either works for this book.\nLinux: usually Ctrl+Alt+T, or search your applications menu for “Terminal”.\n\nOnce it’s open, you’ll see a prompt — some text followed by a blinking cursor, waiting for you to type. Try these four commands, one at a time, pressing Enter after each:\n\n\n\n\n\n\n\n\nCommand\nWhat it does\nWindows equivalent\n\n\n\n\npwd\nPrints your current folder (“print working directory”)\ncd (typed alone)\n\n\nls\nLists the files and folders here\ndir\n\n\ncd &lt;folder&gt;\nMoves into a folder, e.g. cd Documents\ncd &lt;folder&gt; (same)\n\n\nmkdir &lt;name&gt;\nCreates a new folder\nmkdir &lt;name&gt; (same)\n\n\n\nExpected output: pwd prints a path like /Users/yourname (Mac/Linux) or C:\\Users\\yourname (Windows). ls/dir prints a list of whatever files and folders are in your current location — it may be empty if the folder is new.\nIf a command isn’t recognised: double-check the spelling — these commands are typed exactly as shown, with no capital letters.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#creating-the-project-folder",
+    "href": "chapters/chapter_00.html#creating-the-project-folder",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.5 Creating the project folder",
+    "text": "0.5 Creating the project folder\nIf you plan to use Git in the next step, you can skip this — git clone creates its own folder for you. This step is here for readers who’d rather set up a folder by hand first, or who will use the ZIP download option instead of Git.\nIn your terminal:\nmkdir ddr-rag-book\ncd ddr-rag-book\nWhat this does: mkdir ddr-rag-book creates a new, empty folder named ddr-rag-book inside wherever your terminal currently is. cd ddr-rag-book moves your terminal into that folder, so every command you type next happens there.\nExpected output: no message printed — silence means it worked. Run pwd (or cd alone on Windows) to confirm you’re now inside ddr-rag-book.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#getting-the-companion-repository",
+    "href": "chapters/chapter_00.html#getting-the-companion-repository",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.6 Getting the companion repository",
+    "text": "0.6 Getting the companion repository\n\n\n\n\n\n\nTipEngineering Translation: Git and repository\n\n\n\nA repository (“repo” for short) is a folder of files — in this case, this book’s chapters, code, and sample DDR PDFs — tracked and shared online. Git is the tool that copies a repository from the internet onto your own computer, and later lets you pull down any updates. Think of git clone as downloading a shared project folder in one command, instead of clicking “download” on dozens of individual files.\n\n\nIf Git is installed, run this in your terminal:\ngit clone https://github.com/djimrastephane/ddr-rag-book.git\ncd ddr-rag-book\nWhat this does: downloads the entire book repository — every chapter’s code, the sample DDR PDFs, everything — into a new folder named ddr-rag-book, then moves your terminal into it.\nExpected output: a handful of progress lines (Cloning into 'ddr-rag-book'..., Receiving objects...) ending without an error.\nIf git isn’t recognised: you don’t need to install it just for this. Go to the repository’s page on GitHub, click the green Code button, choose Download ZIP, then extract the ZIP file anywhere on your computer. cd into the extracted folder (Section 0.4 shows how) and continue from there — everything else in this book works identically either way.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#creating-a-python-environment",
+    "href": "chapters/chapter_00.html#creating-a-python-environment",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.7 Creating a Python environment",
+    "text": "0.7 Creating a Python environment\n\n\n\n\n\n\nTipEngineering Translation: Virtual environment\n\n\n\nA virtual environment is a clean toolbox for this book. It keeps this project’s packages separate from any other Python project on your computer, so installing something here can never conflict with, break, or get mixed up with anything else you have installed.\n\n\nFrom inside the ddr-rag-book folder:\npython -m venv .venv\nWhat this does: creates a new, empty toolbox named .venv inside your project folder. Nothing is installed into it yet — that’s the next section.\nExpected output: no message, and a new .venv folder appears (check with ls or dir).\nIf it fails with something like No module named venv on Linux, your Python installation split the venv module into a separate package — install it with sudo apt install python3-venv (Ubuntu/Debian) and try again.\nNow activate it — this tells your terminal “use tools from this toolbox until I say otherwise”:\nMac/Linux:\nsource .venv/bin/activate\nWindows:\n.venv\\Scripts\\activate\nExpected output: your terminal prompt changes to show (.venv) at the start of the line. That’s your confirmation it worked — you’ll need to see that (.venv) every time you come back to work on this book.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#installing-packages",
+    "href": "chapters/chapter_00.html#installing-packages",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.8 Installing packages",
+    "text": "0.8 Installing packages\n\n\n\n\n\n\nTipEngineering Translation: pip and packages\n\n\n\nA package (also called a library or a dependency) is a piece of software someone else already wrote and tested, ready for you to use instead of writing it yourself — this book uses one to read PDFs, one to compare text meaning, and so on. pip is Python’s own tool for downloading packages into your active virtual environment.\n\n\nWith your virtual environment active (you should still see (.venv) in your prompt), run:\npip install -r requirements.txt\nWhat this does: reads requirements.txt — a plain list of every package this book needs, one per line — and installs all of them in one go, into your .venv toolbox only.\nExpected output: a scrolling list of Collecting ... and Successfully installed ... lines. This can take a minute or two the first time; some packages (starting with Chapter 4’s) are large.\nIf it fails: see Section 0.11 below — the most common causes are being in the wrong folder, or forgetting to activate .venv first.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#running-the-first-test",
+    "href": "chapters/chapter_00.html#running-the-first-test",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.9 Running the first test",
+    "text": "0.9 Running the first test\nBefore touching any real DDR, confirm the whole chain — Python, the virtual environment, the installed packages — actually works together. This book’s repository already includes a one-line check at code/setup_check.py:\nprint(\"DDR RAG workshop is ready.\")\nRun it:\npython code/setup_check.py\nExpected output:\nDDR RAG workshop is ready.\nIf you see that exact line, everything from Sections 0.3 through 0.8 worked. If you see an error instead, it names exactly what’s still missing — jump to Section 0.11.\n\n\n\n\n\n\nNoteNotebook users\n\n\n\nIf you’re working in Jupyter Notebook or another notebook environment instead of running files from the terminal, you don’t need setup_check.py as a file at all — just open a new notebook cell, type print(\"DDR RAG workshop is ready.\"), and run that cell directly. Every code example in this book can be run either way.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#running-the-first-book-script",
+    "href": "chapters/chapter_00.html#running-the-first-book-script",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.10 Running the first book script",
+    "text": "0.10 Running the first book script\nNow run the actual script Chapter 1 builds — this book’s very first real, working tool:\npython code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf\nWhat this does: opens one real Daily Drilling Report PDF (already included in the repository you downloaded in Section 0.6) and prints its full text straight to your terminal.\nExpected output: several dozen lines of real report text, starting with a header block (RPT DATE:11/26/2020, WELL NAME:FORGE 16A [78]-32…) and ending with a time breakdown that includes the line During the slide lost tool face and became assembly became stuck.\nIf it fails:\n\nModuleNotFoundError: No module named 'pdfplumber' — your virtual environment isn’t active, or Section 0.8 didn’t complete. Re-run Sections 0.7 and 0.8.\nNo such file or directory — you’re not inside the ddr-rag-book folder, or the path is mistyped. Run pwd (or cd alone on Windows) to check where you are.\n\nIf this printed real report text, Part 0 is complete — Chapter 1 explains exactly how this script works, line by line.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#troubleshooting",
+    "href": "chapters/chapter_00.html#troubleshooting",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "0.11 Troubleshooting",
+    "text": "0.11 Troubleshooting\n\n\n\n\n\n\n\n\nSymptom\nLikely cause\nWhat to do\n\n\n\n\npython: command not found\nPython isn’t installed, or isn’t on your system’s PATH\nTry python3 instead. If that also fails, reinstall Python from python.org, checking “Add to PATH” on Windows.\n\n\npip: command not found\nSame as above, or your virtual environment isn’t active\nConfirm (.venv) shows in your prompt (Section 0.7); if not installed at all, try python -m pip instead of pip directly.\n\n\nCommands run, but nothing looks like it worked\nYou’re in the wrong folder\nRun pwd (or cd alone on Windows) and compare it to where you expect to be; cd back into ddr-rag-book.\n\n\nNo such file or directory / FileNotFoundError\nWrong folder, or a typo in the file path\nRun ls (or dir) to see what’s actually there; file and folder names are case-sensitive on Mac/Linux.\n\n\nA package import fails (ModuleNotFoundError)\nVirtual environment isn’t active, or Section 0.8 wasn’t run\nRe-activate .venv (Section 0.7), then re-run pip install -r requirements.txt.\n\n\nPermission denied\nYour user account doesn’t have write access to that folder\nDon’t use sudo/administrator install for this project — instead, work inside a folder you own, like your home directory or Documents.\n\n\nWindows path errors (e.g. backslashes look wrong)\nWindows uses \\ in paths, this book’s examples are written with /\nBoth usually work in a modern Windows terminal, but if a command fails specifically because of slashes, replace / with \\ in that one command.",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
+    "objectID": "chapters/chapter_00.html#youre-ready-when",
+    "href": "chapters/chapter_00.html#youre-ready-when",
+    "title": "Part 0: Preparing Your Python Workshop",
+    "section": "You’re ready when…",
+    "text": "You’re ready when…\n\npython --version (or python3 --version) shows 3.11 or later.\nYour terminal prompt shows (.venv).\npip install -r requirements.txt finished without errors.\npython code/setup_check.py printed DDR RAG workshop is ready.\npython code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf printed real report text.\n\nIf all five are true, you have a working Python workshop, and Chapter 1 starts exactly where this section leaves off. If you’d like a step-by-step guide specific to the environment you chose in Section 0.2, see Appendices A1 (Jupyter Notebook), A2 (VS Code), A3 (PyCharm Community), A4 (Positron), or A5 (Terminal only).",
+    "crumbs": [
+      "Part 0 — Preparing Your Python Workshop",
+      "Part 0: Preparing Your Python Workshop"
+    ]
+  },
+  {
     "objectID": "chapters/chapter_01.html",
     "href": "chapters/chapter_01.html",
     "title": "1  Reading Your First DDR",
@@ -115,7 +258,7 @@
     "href": "chapters/chapter_01.html#learning-objectives",
     "title": "1  Reading Your First DDR",
     "section": "",
-    "text": "Explain why DDR PDFs are hard for software to read, and the difference between a digital-native PDF and a scanned one.\nExtract raw text from a digital-native PDF using Python.\nWrite a script that processes a single DDR, or an entire folder of them, from the command line.\nSave extracted text so it’s ready for the cleaning work in Chapter 2.",
+    "text": "Explain why DDR PDFs are hard for software to read, and the difference between a digital-native PDF and a scanned one.\nExtract raw text from a digital-native PDF using Python.\nWrite a script that processes a single DDR, or an entire folder of them, from the command line.\nSave extracted text so it’s ready for the cleaning work in Chapter 2.\n\n\n\n\n\n\n\nImportantBefore you start\n\n\n\nThis chapter assumes your Python workshop is already set up. If you haven’t done that yet, complete Part 0 first and confirm:\n\nPython runs (python --version or python3 --version shows 3.11 or later).\nYour virtual environment is active (your terminal prompt shows (.venv)).\nPackages are installed (pip install -r requirements.txt finished without errors).\nThe sample DDR files exist (datasets/sample_ddrs/ has ten PDFs).\npython code/setup_check.py prints DDR RAG workshop is ready.\n\nIf all five are true, you’re ready for this chapter. If any of them aren’t, Part 0, Section 0.11 has a troubleshooting table for exactly this situation.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
@@ -192,7 +335,7 @@
     "href": "chapters/chapter_01.html#expected-output",
     "title": "1  Reading Your First DDR",
     "section": "1.8 Expected Output",
-    "text": "1.8 Expected Output\nA list of ten file paths, sorted, something like:\nFORGE-16A-78-32_Drilling_003_2020-10-22.pdf\nFORGE-16A-78-32_Drilling_038_2020-11-26.pdf\n...\nFORGE-16A-78-32_Drilling_050_2020-12-08.pdf\n\nimport pathlib\nsorted(pathlib.Path(\"datasets/sample_ddrs\").glob(\"*.pdf\"))",
+    "text": "1.8 Expected Output\nA list of ten file paths, sorted, something like:\nFORGE-16A-78-32_Drilling_003_2020-10-22.pdf\nFORGE-16A-78-32_Drilling_038_2020-11-26.pdf\n...\nFORGE-16A-78-32_Drilling_050_2020-12-08.pdf\n\nimport pathlib\nsorted(pathlib.Path(\"datasets/sample_ddrs\").glob(\"*.pdf\"))\n\n\n\n\n\n\n\nNoteNotebook, script, and IDE users\n\n\n\nThis is the first code you’ll run in this book — however you set up Part 0, here’s how each option runs it:\n\nNotebook users: paste this into a new cell and run it directly (Shift+Enter in Jupyter or Positron).\nScript users: save it as a .py file and run it from the terminal with python your_file.py.\nIDE users: use your editor’s Run button, or the terminal command shown above — both produce identical output.\n\nEvery code block in this book works the same way; this note won’t repeat after this point.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Reading Your First DDR</span>"
@@ -3206,62 +3349,18 @@
     "href": "appendix/appendix_a_environment_setup.html",
     "title": "Appendix A: Environment Setup",
     "section": "",
-    "text": "1. Prerequisites\nBefore you can type a single line of Chapter 1’s code, your computer needs somewhere safe to install exactly the tools this book uses — without disturbing any other software already on your machine, and without any other software on your machine interfering with this book’s code. That’s the whole job of this appendix: get that safe, isolated setup in place once, so every chapter from here on is just “open a file and run it.”\nThis appendix covers everything you need before Chapter 1: installing dependencies, rendering the book, and understanding how Chapters 6–12 relate to the companion DDR Intelligence Platform pipeline.",
+    "text": "1. The sample dataset\nPart 0 covers everything you need to install Python, create a virtual environment, and run the book’s chapter scripts — start there if you haven’t already. This appendix covers a few things Part 0 doesn’t: the sample dataset’s layout, rendering this book itself (not just running its code), the companion DDR Intelligence Platform pipeline referenced in Chapters 6–12, a data-handling note for your own archives, and troubleshooting for a few less common errors.\nIf you’d like a guide specific to the editor or notebook environment you chose in Part 0, see Appendices A1–A5 instead.\nChapters 1–5 use ten real, curated Daily Drilling Reports from the public Utah FORGE archive (well FORGE 16A(78)-32) — already committed as PDFs in datasets/sample_ddrs/, since this is public data with no confidentiality concerns. Part II’s “at scale” chapters use the full 76-report archive, committed at datasets/forge_archive/. Nothing needs to be generated or downloaded to start: cloning the repository (Part 0, Section 0.6) gives you the full dataset.\nIf you want to reproduce either curated subset from your own copy of the full public archive, or extend it with more reports, see code/chapter_01/build_sample_archive.py and code/chapter_08/build_full_archive.py.",
     "crumbs": [
       "Appendices",
       "Appendix A: Environment Setup"
     ]
   },
   {
-    "objectID": "appendix/appendix_a_environment_setup.html#prerequisites",
-    "href": "appendix/appendix_a_environment_setup.html#prerequisites",
+    "objectID": "appendix/appendix_a_environment_setup.html#rendering-the-book-with-quarto",
+    "href": "appendix/appendix_a_environment_setup.html#rendering-the-book-with-quarto",
     "title": "Appendix A: Environment Setup",
-    "section": "",
-    "text": "Python 3.11 or later\nQuarto 1.7 or later (quarto --version to check)\nGit\nPositron (recommended) or any editor with a Python and Quarto extension\n\n\n\n\n\n\n\nTipEngineering Translation: git clone\n\n\n\nThis book’s entire repository — every chapter’s text and code, plus the sample DDR PDFs — lives on GitHub. git clone &lt;url&gt; copies that whole repository onto your own computer, once, as a real folder you can open, edit, and run — the same idea as copying a shared project folder onto your laptop instead of only viewing it in a browser.",
-    "crumbs": [
-      "Appendices",
-      "Appendix A: Environment Setup"
-    ]
-  },
-  {
-    "objectID": "appendix/appendix_a_environment_setup.html#set-up-the-books-python-environment",
-    "href": "appendix/appendix_a_environment_setup.html#set-up-the-books-python-environment",
-    "title": "Appendix A: Environment Setup",
-    "section": "2. Set up the book’s Python environment",
-    "text": "2. Set up the book’s Python environment\nFrom the book/ directory:\npython3 -m venv .venv\nsource .venv/bin/activate          # Windows: .venv\\Scripts\\activate\npip install -r requirements.txt\nOr, if you prefer conda/mamba:\nconda env create -f environment.yml\nconda activate ddr-rag-book\n\n\n\n\n\n\nTipEngineering Translation: Virtual environment\n\n\n\nA virtual environment (.venv) is a clean, separate toolbox that belongs only to this book’s project — the software equivalent of a dedicated tool crib kept apart from everyone else’s gear. Installing packages inside it can never conflict with, break, or get mixed up with any other Python software already on your computer. source .venv/bin/activate is the step that says “use tools from this crib for now” — you’ll see your terminal prompt change to show it’s active.\n\n\n\n\n\n\n\n\nTipEngineering Translation: pip install -r requirements.txt\n\n\n\nrequirements.txt is a parts list — one library per line, with the exact version this book was tested against. pip is the ordering system: pip install -r requirements.txt reads that list and installs every part on it in one go, instead of you tracking down and installing each library by hand.",
-    "crumbs": [
-      "Appendices",
-      "Appendix A: Environment Setup"
-    ]
-  },
-  {
-    "objectID": "appendix/appendix_a_environment_setup.html#the-sample-dataset",
-    "href": "appendix/appendix_a_environment_setup.html#the-sample-dataset",
-    "title": "Appendix A: Environment Setup",
-    "section": "3. The sample dataset",
-    "text": "3. The sample dataset\nChapters 1–5 use ten real, curated Daily Drilling Reports from the public Utah FORGE archive (well FORGE 16A(78)-32) — already committed as PDFs in datasets/sample_ddrs/, since this is public data with no confidentiality concerns. Part II’s “at scale” chapters use the full 76-report archive, committed at datasets/forge_archive/. Nothing needs to be generated or downloaded to start: git clone gives you the full dataset.\nIf you want to reproduce either curated subset from your own copy of the full public archive, or extend it with more reports, see code/chapter_01/build_sample_archive.py and code/chapter_08/build_full_archive.py.",
-    "crumbs": [
-      "Appendices",
-      "Appendix A: Environment Setup"
-    ]
-  },
-  {
-    "objectID": "appendix/appendix_a_environment_setup.html#render-the-book",
-    "href": "appendix/appendix_a_environment_setup.html#render-the-book",
-    "title": "Appendix A: Environment Setup",
-    "section": "4. Render the book",
-    "text": "4. Render the book\nquarto render\nOutput is written to _book/. For live-editing a single chapter while you write:\nquarto preview chapters/chapter_01.qmd",
-    "crumbs": [
-      "Appendices",
-      "Appendix A: Environment Setup"
-    ]
-  },
-  {
-    "objectID": "appendix/appendix_a_environment_setup.html#working-in-positron",
-    "href": "appendix/appendix_a_environment_setup.html#working-in-positron",
-    "title": "Appendix A: Environment Setup",
-    "section": "5. Working in Positron",
-    "text": "5. Working in Positron\nPositron runs Quarto documents natively — open any .qmd file and use the Render button in the editor toolbar, or run individual code cells interactively (each ```{python} block behaves like a Jupyter cell). Recommended setup:\n\nOpen the book/ folder as your Positron workspace root.\nSelect the .venv interpreter created in Step 2 via the interpreter picker (bottom status bar).\nUse the Quarto: Preview command for live reload while editing a chapter.\nUse the Console pane to run chapter scripts interactively (python code/chapter_01/read_ddr.py ...) — this is the fastest way to experiment with the code before committing it to a .qmd.",
+    "section": "2. Rendering the book with Quarto",
+    "text": "2. Rendering the book with Quarto\nRunning the chapter scripts (Part 0) doesn’t require anything beyond Python. Rebuilding this book itself — the HTML and PDF you’re reading — is a separate step that needs Quarto 1.7 or later:\nquarto --version\nIf that’s not recognised, install Quarto from quarto.org for your operating system.\nWith Quarto installed and your virtual environment active:\nquarto render\nOutput is written to _book/. For live-editing a single chapter while you write:\nquarto preview chapters/chapter_01.qmd\nOr, if you prefer conda/mamba instead of the .venv approach from Part 0:\nconda env create -f environment.yml\nconda activate ddr-rag-book",
     "crumbs": [
       "Appendices",
       "Appendix A: Environment Setup"
@@ -3271,8 +3370,8 @@
     "objectID": "appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii",
     "href": "appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii",
     "title": "Appendix A: Environment Setup",
-    "section": "6. The companion pipeline (for Part II)",
-    "text": "6. The companion pipeline (for Part II)\nChapters 6–12 reference DDR_UTAH_FORGE, a real, working DDR intelligence pipeline built specifically against this book’s public archive — same architecture as the reference platform this project grew from (per-document extraction, hybrid retrieval, structured facts, causality analysis), adapted for Utah FORGE’s real filenames and data. It’s a separate repository — clone it alongside this book’s repository, not inside it:\ncd ..                      # up from book/ to your projects root\ngit clone https://github.com/djimrastephane/DDR_UTAH_FORGE.git\ncd DDR_UTAH_FORGE\npython -m venv .venv && source .venv/bin/activate\npip install -r requirements.txt\nIts own data/ folder is gitignored — the repository is code only. Copy this book’s datasets/forge_archive/ into DDR_UTAH_FORGE/data/raw/ (or point it at your own copy of the public Utah FORGE archive) and follow its README.md Quickstart to run the full pipeline and Streamlit dashboard.\n\n\n\n\n\n\nTipYou don’t need it to follow along\n\n\n\nPart II chapters are written so every technique works fully standalone: the simplified code in code/chapter_06/ through code/chapter_12/ in this book’s repository requires no access to the companion pipeline. Where a chapter cites a specific file or a specific result from DDR_UTAH_FORGE (for example, the real 2,943-chunk global index in Chapter 8, or the real report-gap dates in Chapter 10), that result was independently verified against the pipeline’s actual output before being written into the book, so you can trust the numbers even without running the pipeline yourself.",
+    "section": "3. The companion pipeline (for Part II)",
+    "text": "3. The companion pipeline (for Part II)\nChapters 6–12 reference DDR_UTAH_FORGE, a real, working DDR intelligence pipeline built specifically against this book’s public archive — same architecture as the reference platform this project grew from (per-document extraction, hybrid retrieval, structured facts, causality analysis), adapted for Utah FORGE’s real filenames and data. It’s a separate repository — clone it alongside this book’s repository, not inside it:\ncd ..                      # up from book/ to your projects root\ngit clone https://github.com/djimrastephane/DDR_UTAH_FORGE.git\ncd DDR_UTAH_FORGE\npython -m venv .venv && source .venv/bin/activate\npip install -r requirements.txt\nIts own data/ folder is gitignored — the repository is code only. Copy this book’s datasets/forge_archive/ into DDR_UTAH_FORGE/data/raw/ (or point it at your own copy of the public Utah FORGE archive) and follow its README.md Quickstart to run the full pipeline and Streamlit dashboard.\n\n\n\n\n\n\nTipYou don’t need it to follow along\n\n\n\nPart II chapters are written so every technique works fully standalone: the simplified code in code/chapter_06/ through code/chapter_12/ in this book’s repository requires no access to the companion pipeline. Where a chapter cites a specific file or a specific result from DDR_UTAH_FORGE (for example, the real 2,943-chunk global index in Chapter 8, or the real report-gap dates in Chapter 10), that result was independently verified against the pipeline’s actual output before being written into the book, so you can trust the numbers even without running the pipeline yourself.",
     "crumbs": [
       "Appendices",
       "Appendix A: Environment Setup"
@@ -3282,8 +3381,8 @@
     "objectID": "appendix/appendix_a_environment_setup.html#a-note-on-data-handling",
     "href": "appendix/appendix_a_environment_setup.html#a-note-on-data-handling",
     "title": "Appendix A: Environment Setup",
-    "section": "7. A note on data handling",
-    "text": "7. A note on data handling\nThis book’s own data (datasets/sample_ddrs/, datasets/forge_archive/) is public and safe to commit, share, and publish — that’s true throughout this repository. The moment you point this book’s code at your own organisation’s DDRs instead, that changes:\n\nNever commit real, confidential DDR PDFs, extracted text, or derived artefacts (embeddings, indexes) to a public repository.\nIf you’re experimenting on a shared machine, confirm your organisation’s data classification policy covers running third-party Python packages (embedding models, OCR engines) against confidential well data.\nAdd your own archive’s path to .gitignore before dropping any confidential PDFs into a local datasets/ folder for testing.",
+    "section": "4. A note on data handling",
+    "text": "4. A note on data handling\nThis book’s own data (datasets/sample_ddrs/, datasets/forge_archive/) is public and safe to commit, share, and publish — that’s true throughout this repository. The moment you point this book’s code at your own organisation’s DDRs instead, that changes:\n\nNever commit real, confidential DDR PDFs, extracted text, or derived artefacts (embeddings, indexes) to a public repository.\nIf you’re experimenting on a shared machine, confirm your organisation’s data classification policy covers running third-party Python packages (embedding models, OCR engines) against confidential well data.\nAdd your own archive’s path to .gitignore before dropping any confidential PDFs into a local datasets/ folder for testing.",
     "crumbs": [
       "Appendices",
       "Appendix A: Environment Setup"
@@ -3293,11 +3392,341 @@
     "objectID": "appendix/appendix_a_environment_setup.html#troubleshooting",
     "href": "appendix/appendix_a_environment_setup.html#troubleshooting",
     "title": "Appendix A: Environment Setup",
-    "section": "8. Troubleshooting",
-    "text": "8. Troubleshooting\n\n\n\n\n\n\nTipEngineering Translation: PATH\n\n\n\nPATH is your computer’s list of “which program to run by default when I type a command” — a lookup table, checked top to bottom, the first time you type something like python. Activating .venv (Step 2) temporarily moves this book’s Python to the front of that list, so python means this project’s Python until you close the terminal or deactivate it.\n\n\n\n\n\n\n\n\n\nSymptom\nLikely cause\n\n\n\n\nquarto render fails on a code cell\nActivate .venv before rendering — Quarto uses whichever Python is on PATH. Confirm with which python and python -c \"import pdfplumber\".\n\n\nModuleNotFoundError: sentence_transformers (Chapter 4+)\nRe-run pip install -r requirements.txt; this is a heavier dependency and sometimes needs a separate pip install torch first on some platforms.\n\n\nFAISS import error on Apple Silicon (Chapter 8+)\nEnsure you installed faiss-cpu, not faiss-gpu — the latter has no macOS wheel.\n\n\nread_ddr.py reports no text extracted\nConfirm you’re pointing at a file in datasets/sample_ddrs/ or datasets/forge_archive/ — both are committed directly, so this shouldn’t happen unless the path is wrong.",
+    "section": "5. Troubleshooting",
+    "text": "5. Troubleshooting\nPart 0, Section 0.11 covers the common setup errors (Python not found, virtual environment not active, and so on). A few more specific to rendering the book or running Part II’s heavier packages:\n\n\n\n\n\n\n\nSymptom\nLikely cause\n\n\n\n\nquarto render fails on a code cell\nActivate .venv before rendering — Quarto uses whichever Python is on PATH. Confirm with which python and python -c \"import pdfplumber\".\n\n\nModuleNotFoundError: sentence_transformers (Chapter 4+)\nRe-run pip install -r requirements.txt; this is a heavier dependency and sometimes needs a separate pip install torch first on some platforms.\n\n\nFAISS import error on Apple Silicon (Chapter 8+)\nEnsure you installed faiss-cpu, not faiss-gpu — the latter has no macOS wheel.\n\n\nread_ddr.py reports no text extracted\nConfirm you’re pointing at a file in datasets/sample_ddrs/ or datasets/forge_archive/ — both are committed directly, so this shouldn’t happen unless the path is wrong.",
     "crumbs": [
       "Appendices",
       "Appendix A: Environment Setup"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a1_jupyter.html",
+    "href": "appendix/appendix_a1_jupyter.html",
+    "title": "Appendix A1: Using Jupyter Notebook",
+    "section": "",
+    "text": "Install the notebook\nThis appendix assumes you’ve completed Part 0 — Python installed, .venv created and active, packages installed via pip install -r requirements.txt. Everything below is specific to running this book’s code inside Jupyter Notebook instead of from a plain terminal.\nrequirements.txt already installed Jupyter for you in Part 0, so you can likely skip straight to “Start the notebook” below. If you skipped that step, or only want Jupyter on its own:\nExpected output: a Successfully installed ... line mentioning notebook.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A1: Using Jupyter Notebook"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a1_jupyter.html#install-the-notebook",
+    "href": "appendix/appendix_a1_jupyter.html#install-the-notebook",
+    "title": "Appendix A1: Using Jupyter Notebook",
+    "section": "",
+    "text": "pip install notebook",
+    "crumbs": [
+      "Appendices",
+      "Appendix A1: Using Jupyter Notebook"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a1_jupyter.html#start-the-notebook",
+    "href": "appendix/appendix_a1_jupyter.html#start-the-notebook",
+    "title": "Appendix A1: Using Jupyter Notebook",
+    "section": "Start the notebook",
+    "text": "Start the notebook\nWith your virtual environment active (you should see (.venv) in your terminal prompt) and from inside the ddr-rag-book project folder:\njupyter notebook\nWhat this does: starts a local notebook server and opens a new browser tab showing the contents of your project folder.\nIf nothing opens automatically, the terminal will print a URL starting with http://localhost:8888/... — copy and paste that into your browser.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A1: Using Jupyter Notebook"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a1_jupyter.html#open-a-chapter-notebook",
+    "href": "appendix/appendix_a1_jupyter.html#open-a-chapter-notebook",
+    "title": "Appendix A1: Using Jupyter Notebook",
+    "section": "Open a chapter notebook",
+    "text": "Open a chapter notebook\nEvery chapter of Part I has an interactive companion notebook. In the browser tab Jupyter opened, click into the notebooks/ folder, then open chapter_01_explore.ipynb (or whichever chapter you’re on).",
+    "crumbs": [
+      "Appendices",
+      "Appendix A1: Using Jupyter Notebook"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a1_jupyter.html#run-a-cell",
+    "href": "appendix/appendix_a1_jupyter.html#run-a-cell",
+    "title": "Appendix A1: Using Jupyter Notebook",
+    "section": "Run a cell",
+    "text": "Run a cell\nA notebook is made of cells — small blocks of code you run one at a time. Click into a cell, then press Shift+Enter to run it and move to the next one. The output (printed text, or an error) appears directly below the cell.\nExpected output: for Chapter 1’s notebook, running the extraction cell prints the real report text described in that chapter.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A1: Using Jupyter Notebook"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a1_jupyter.html#stop-the-notebook-server",
+    "href": "appendix/appendix_a1_jupyter.html#stop-the-notebook-server",
+    "title": "Appendix A1: Using Jupyter Notebook",
+    "section": "Stop the notebook server",
+    "text": "Stop the notebook server\nWhen you’re done, go back to the terminal window where you ran jupyter notebook and press Ctrl+C, then confirm if asked. Closing the browser tab alone does not stop the server — the terminal is where it’s actually running.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A1: Using Jupyter Notebook"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a2_vscode.html",
+    "href": "appendix/appendix_a2_vscode.html",
+    "title": "Appendix A2: Using VS Code",
+    "section": "",
+    "text": "Install VS Code\nThis appendix assumes you’ve completed Part 0 — Python installed, .venv created and active, packages installed. Everything below is specific to working in VS Code instead of a plain terminal.\nDownload it from code.visualstudio.com and run the installer for your operating system — no special options needed.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A2: Using VS Code"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a2_vscode.html#install-the-python-extension",
+    "href": "appendix/appendix_a2_vscode.html#install-the-python-extension",
+    "title": "Appendix A2: Using VS Code",
+    "section": "Install the Python extension",
+    "text": "Install the Python extension\nVS Code doesn’t understand Python out of the box; a small add-on teaches it to. Open VS Code, click the square-icon Extensions tab in the left sidebar, search for Python (published by Microsoft), and click Install.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A2: Using VS Code"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a2_vscode.html#open-the-project-folder",
+    "href": "appendix/appendix_a2_vscode.html#open-the-project-folder",
+    "title": "Appendix A2: Using VS Code",
+    "section": "Open the project folder",
+    "text": "Open the project folder\nUse File → Open Folder… and select the ddr-rag-book folder you created in Part 0. VS Code will use this as its workspace — every file in the sidebar is now part of this project.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A2: Using VS Code"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a2_vscode.html#select-the-interpreter",
+    "href": "appendix/appendix_a2_vscode.html#select-the-interpreter",
+    "title": "Appendix A2: Using VS Code",
+    "section": "Select the interpreter",
+    "text": "Select the interpreter\n\n\n\n\n\n\nTipEngineering Translation: Interpreter\n\n\n\nAn interpreter is simply which copy of Python VS Code should run your code with. You want it pointed at the .venv toolbox from Part 0, not some other Python installation on your machine.\n\n\nPress Cmd+Shift+P (Mac) or Ctrl+Shift+P (Windows/Linux) to open the command palette, type Python: Select Interpreter, and choose the one showing a path ending in .venv/bin/python (Mac/Linux) or .venv\\Scripts\\python.exe (Windows). If you don’t see it listed, click “Enter interpreter path” and browse to that file directly.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A2: Using VS Code"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a2_vscode.html#open-a-terminal",
+    "href": "appendix/appendix_a2_vscode.html#open-a-terminal",
+    "title": "Appendix A2: Using VS Code",
+    "section": "Open a terminal",
+    "text": "Open a terminal\nUse Terminal → New Terminal from the top menu. VS Code opens a terminal already positioned inside your project folder — and if you selected the right interpreter above, it should already show (.venv) at the start of the prompt.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A2: Using VS Code"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a2_vscode.html#run-a-script",
+    "href": "appendix/appendix_a2_vscode.html#run-a-script",
+    "title": "Appendix A2: Using VS Code",
+    "section": "Run a script",
+    "text": "Run a script\nEither:\n\nType the command directly into the terminal you just opened, e.g.:\npython code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf\nOr open the .py file in the editor and click the Run (▶) button in the top-right corner — VS Code runs it in an integrated terminal for you.\n\nBoth produce identical output — use whichever feels more natural.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A2: Using VS Code"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a3_pycharm.html",
+    "href": "appendix/appendix_a3_pycharm.html",
+    "title": "Appendix A3: Using PyCharm Community",
+    "section": "",
+    "text": "Install PyCharm Community\nThis appendix assumes you’ve completed Part 0 — Python installed, .venv created and active, packages installed. Everything below is specific to working in PyCharm Community (the free edition — this book needs nothing from the paid Professional edition).\nDownload it from jetbrains.com/pycharm/download — select the Community edition, which is free, and run the installer.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A3: Using PyCharm Community"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a3_pycharm.html#open-the-project",
+    "href": "appendix/appendix_a3_pycharm.html#open-the-project",
+    "title": "Appendix A3: Using PyCharm Community",
+    "section": "Open the project",
+    "text": "Open the project\nFrom PyCharm’s welcome screen, choose Open and select the ddr-rag-book folder you created in Part 0. PyCharm treats this folder as one project.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A3: Using PyCharm Community"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a3_pycharm.html#select-the-existing-.venv",
+    "href": "appendix/appendix_a3_pycharm.html#select-the-existing-.venv",
+    "title": "Appendix A3: Using PyCharm Community",
+    "section": "Select the existing .venv",
+    "text": "Select the existing .venv\nPyCharm may offer to create its own virtual environment — decline that and point it at the .venv you already created in Part 0 instead, so you don’t end up with two separate toolboxes:\n\nGo to PyCharm → Settings (Mac) or File → Settings (Windows/Linux).\nNavigate to Project: ddr-rag-book → Python Interpreter.\nClick the gear icon → Add → Existing environment.\nBrowse to .venv/bin/python (Mac/Linux) or .venv\\Scripts\\python.exe (Windows) inside your project folder, and select it.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A3: Using PyCharm Community"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a3_pycharm.html#open-a-terminal",
+    "href": "appendix/appendix_a3_pycharm.html#open-a-terminal",
+    "title": "Appendix A3: Using PyCharm Community",
+    "section": "Open a terminal",
+    "text": "Open a terminal\nPyCharm has a built-in terminal along the bottom of the window — click the Terminal tab. It opens already positioned inside your project folder, and should show (.venv) in the prompt once the interpreter above is set correctly.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A3: Using PyCharm Community"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a3_pycharm.html#run-a-script",
+    "href": "appendix/appendix_a3_pycharm.html#run-a-script",
+    "title": "Appendix A3: Using PyCharm Community",
+    "section": "Run a script",
+    "text": "Run a script\nTwo options, same result:\n\nType the command into PyCharm’s terminal tab:\npython code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf\nOr open the .py file in the editor and click the green Run (▶) arrow next to the file, or right-click inside the file and choose Run.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A3: Using PyCharm Community"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a3_pycharm.html#run-a-python-file-directly",
+    "href": "appendix/appendix_a3_pycharm.html#run-a-python-file-directly",
+    "title": "Appendix A3: Using PyCharm Community",
+    "section": "Run a Python file directly",
+    "text": "Run a Python file directly\nRight-clicking any .py file in PyCharm’s project sidebar and choosing Run ‘’ does the same thing as typing python &lt;path/to/file.py&gt; in the terminal — pick whichever is more comfortable as you go through the book.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A3: Using PyCharm Community"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a4_positron.html",
+    "href": "appendix/appendix_a4_positron.html",
+    "title": "Appendix A4: Using Positron",
+    "section": "",
+    "text": "Install Positron\nThis appendix assumes you’ve completed Part 0 — Python installed, .venv created and active, packages installed. Positron isn’t required to follow this book — it’s simply one of several environments that work well, particularly if you like moving between notebooks and plain scripts in the same window. Everything below is specific to working in Positron instead of a plain terminal.\nDownload it from positron.posit.co and run the installer for your operating system.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A4: Using Positron"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a4_positron.html#open-the-project-folder",
+    "href": "appendix/appendix_a4_positron.html#open-the-project-folder",
+    "title": "Appendix A4: Using Positron",
+    "section": "Open the project folder",
+    "text": "Open the project folder\nUse File → Open Folder… and select the ddr-rag-book folder from Part 0. Positron uses this as your workspace root.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A4: Using Positron"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a4_positron.html#select-the-python-environment",
+    "href": "appendix/appendix_a4_positron.html#select-the-python-environment",
+    "title": "Appendix A4: Using Positron",
+    "section": "Select the Python environment",
+    "text": "Select the Python environment\nPositron shows an interpreter picker in the bottom status bar. Click it and select the .venv you created in Part 0 — the same environment every other tool in this appendix set points at.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A4: Using Positron"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a4_positron.html#open-a-terminal",
+    "href": "appendix/appendix_a4_positron.html#open-a-terminal",
+    "title": "Appendix A4: Using Positron",
+    "section": "Open a terminal",
+    "text": "Open a terminal\nUse Terminal → New Terminal from the top menu, or the terminal icon in the bottom panel. If the right interpreter is selected above, this terminal should already show (.venv) in its prompt.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A4: Using Positron"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a4_positron.html#run-a-script",
+    "href": "appendix/appendix_a4_positron.html#run-a-script",
+    "title": "Appendix A4: Using Positron",
+    "section": "Run a script",
+    "text": "Run a script\npython code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf\nOr open the .py file and use Positron’s Run button in the editor toolbar.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A4: Using Positron"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a4_positron.html#run-notebooks",
+    "href": "appendix/appendix_a4_positron.html#run-notebooks",
+    "title": "Appendix A4: Using Positron",
+    "section": "Run notebooks",
+    "text": "Run notebooks\nPositron runs Jupyter notebooks (.ipynb) and Quarto documents (.qmd) natively — open notebooks/chapter_01_explore.ipynb directly, and run each cell with Shift+Enter, the same shortcut as Jupyter Notebook (Appendix A1). For a .qmd file — this book’s own chapters are written as .qmd — each ```{python} block behaves like a notebook cell, and the Render button in the editor toolbar builds the whole document, code and all.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A4: Using Positron"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a5_terminal.html",
+    "href": "appendix/appendix_a5_terminal.html",
+    "title": "Appendix A5: Terminal-Only Workflow",
+    "section": "",
+    "text": "Navigate to the project\nThis appendix assumes you’ve completed Part 0. If you’d rather not install any editor at all, everything in this book runs from the terminal alone — you’ll just open and edit files with whatever plain text editor came with your system (Notepad on Windows, TextEdit on Mac, nano or vim on Linux) instead of a dedicated code editor.\nConfirm you’re in the right place with pwd (Mac/Linux) or cd alone (Windows) — it should end in ddr-rag-book.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A5: Terminal-Only Workflow"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a5_terminal.html#navigate-to-the-project",
+    "href": "appendix/appendix_a5_terminal.html#navigate-to-the-project",
+    "title": "Appendix A5: Terminal-Only Workflow",
+    "section": "",
+    "text": "cd ddr-rag-book",
+    "crumbs": [
+      "Appendices",
+      "Appendix A5: Terminal-Only Workflow"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a5_terminal.html#activate-the-environment",
+    "href": "appendix/appendix_a5_terminal.html#activate-the-environment",
+    "title": "Appendix A5: Terminal-Only Workflow",
+    "section": "Activate the environment",
+    "text": "Activate the environment\nMac/Linux:\nsource .venv/bin/activate\nWindows:\n.venv\\Scripts\\activate\nExpected output: your prompt now starts with (.venv). Do this every time you open a new terminal window to work on this book — activation doesn’t persist between sessions.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A5: Terminal-Only Workflow"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a5_terminal.html#install-packages",
+    "href": "appendix/appendix_a5_terminal.html#install-packages",
+    "title": "Appendix A5: Terminal-Only Workflow",
+    "section": "Install packages",
+    "text": "Install packages\nOnly needed once, or again if requirements.txt changes:\npip install -r requirements.txt",
+    "crumbs": [
+      "Appendices",
+      "Appendix A5: Terminal-Only Workflow"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a5_terminal.html#run-scripts",
+    "href": "appendix/appendix_a5_terminal.html#run-scripts",
+    "title": "Appendix A5: Terminal-Only Workflow",
+    "section": "Run scripts",
+    "text": "Run scripts\nEvery chapter’s script runs the same way:\npython code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf\nSwap in whichever chapter and arguments that chapter’s text shows you.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A5: Terminal-Only Workflow"
+    ]
+  },
+  {
+    "objectID": "appendix/appendix_a5_terminal.html#render-the-book",
+    "href": "appendix/appendix_a5_terminal.html#render-the-book",
+    "title": "Appendix A5: Terminal-Only Workflow",
+    "section": "Render the book",
+    "text": "Render the book\nIf you want to build the book itself (this document, as HTML or PDF) rather than just running the chapter scripts, Quarto needs to be installed separately — see Appendix A, Section 2 for the render command and output location. This step is entirely optional: nothing about following the chapters and running their code requires rendering the book yourself.",
+    "crumbs": [
+      "Appendices",
+      "Appendix A5: Terminal-Only Workflow"
     ]
   },
   {
