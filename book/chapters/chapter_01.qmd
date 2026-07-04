@@ -1,5 +1,11 @@
 # Reading Your First DDR {#sec-chapter-01}
 
+```
+PDF
+ ↓
+Text
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -11,27 +17,29 @@ By the end of this chapter, you will be able to:
   from the command line.
 - Save extracted text so it's ready for the cleaning work in Chapter 2.
 
-## Operational problem
+## Operational Problem
 
-This book uses a real, publicly available archive: the Daily Drilling
-Reports from **Utah FORGE** — a Department of Energy-funded research
-project at the University of Utah, drilling and testing an enhanced
-geothermal system (EGS) well, **FORGE 16A(78)-32**, in Beaver County,
-Utah. Because it's a public research well rather than a commercial
-operator's confidential asset, its DDRs are openly available — which
-means every example in this book is real, traceable text, not an
+It's Monday morning. Someone on the call asks: *"Have we had a stuck pipe
+event on this well before? What happened, and how was it resolved?"*
+The answer is somewhere in the DDR archive — but that archive is 76 PDF
+files, named inconsistently by whatever software produced them, and the
+one report that matters is buried in there like a single page in a filing
+cabinet with no index. Nobody wants to open 76 PDFs one at a time to
+answer a question that took ten seconds to ask.
+
+This book uses a real, publicly available archive to solve exactly that
+problem: the Daily Drilling Reports from **Utah FORGE** — a Department of
+Energy-funded research project at the University of Utah, drilling and
+testing an enhanced geothermal system (EGS) well, **FORGE 16A(78)-32**, in
+Beaver County, Utah. Because it's a public research well rather than a
+commercial operator's confidential asset, its DDRs are openly available —
+which means every example in this book is real, traceable text, not an
 invented stand-in.
 
-Picture the same folder problem any operations team faces: 76 DDR PDFs,
-one per day of drilling and completion work, named inconsistently by
-whatever software produced them. Somewhere in that folder is the report
-that matters most this week — the day the drill string got stuck, or the
-day a fishing run recovered lost bit pieces. Opening 76 PDFs one at a
-time to find the right paragraph is exactly the kind of task a short
-Python script should do for you.
-
-That's the whole job of this chapter: given one PDF, get its text into a
-Python string you can work with. Nothing clever yet — no search, no
+Before we can search this archive, summarize it, or ask it questions, we
+need the words inside those PDFs available to a computer as plain text.
+That's the whole job of this chapter: given one PDF, get its text into
+something Python can work with. Nothing clever yet — no search, no
 abbreviation handling, no AI. Just a reliable way to turn a PDF into text.
 Everything in this book is built on top of getting this first step right.
 
@@ -59,7 +67,9 @@ This is one of ten real reports curated for Part I, spanning the well's
 actual timeline from rig-up in October 2020 through this stuck-pipe day
 in November and a fishing operation in December. Every excerpt in Part I
 is genuine, unedited report text — no anonymisation was needed, because
-this data is already public.
+this data is already public. Notice that report #38 answers the morning
+call question directly — *if* you happen to open this one file out of 76.
+That's the gap this chapter closes.
 
 ## Theory
 
@@ -90,6 +100,14 @@ about, but `pdfplumber` is a good default: actively maintained, and its
 text extraction is reliable on the kind of structured reports we're
 working with.
 
+::: {.callout-tip title="Engineering Translation: Library"}
+A **library** is borrowed tooling someone else already built and tested —
+the code equivalent of using a manufacturer's torque chart instead of
+deriving it yourself. `pdfplumber` is a library that already knows how to
+open a PDF and read the characters on its pages, so you don't have to
+write that from scratch.
+:::
+
 ```
 DDR PDF
    ↓
@@ -108,16 +126,46 @@ one Python string, ready for Chapter 2
 
 ### Step 1: get the sample archive
 
-The ten curated reports used throughout Part I are already in
-`datasets/sample_ddrs/` in this repository — real PDFs, committed
-directly, since Utah FORGE data is public. You don't need to generate or
-download anything to start.
+## What problem are we solving?
+
+Before extracting anything, confirm the report archive is actually there
+and see what you're working with — the same way you'd check a folder of
+scanned tickets exists before writing a script against it.
+
+## Inputs
+
+- The folder `datasets/sample_ddrs/`, containing ten curated Utah FORGE
+  DDR PDFs (already included in this repository — no download needed).
+
+## Expected Output
+
+A list of ten file paths, sorted, something like:
+
+```
+FORGE-16A-78-32_Drilling_003_2020-10-22.pdf
+FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
+...
+FORGE-16A-78-32_Drilling_050_2020-12-08.pdf
+```
 
 ```{python}
 #| eval: false
 import pathlib
 sorted(pathlib.Path("datasets/sample_ddrs").glob("*.pdf"))
 ```
+
+## What just happened?
+
+You pointed Python at a folder and asked it to list every file ending in
+`.pdf`. Nothing was opened or read yet — this is just confirming the
+folder and its contents exist before you build anything on top of them.
+
+::: {.callout-tip title="Engineering Translation: Path and glob"}
+A `Path` is Python's way of pointing at a file or folder location — think
+of it as a shortcut or bookmark to somewhere on disk. `glob("*.pdf")` is a
+filter: "show me everything in this folder whose name ends in `.pdf`,"
+the same way you might filter a file browser to show only PDFs.
+:::
 
 If you want to build this curated subset yourself from a full local copy
 of the public archive (or extend it with more reports), see
@@ -126,9 +174,22 @@ of the public archive (or extend it with more reports), see
 
 ### Step 2: extract text from one PDF
 
-Here is the core of `code/chapter_01/read_ddr.py`, built up piece by piece.
+## What problem are we solving?
 
-First, open a PDF and read one page:
+Prove that we can pull real text out of a single PDF before building
+anything more elaborate — the smallest possible version of the whole
+chapter's job.
+
+## Inputs
+
+- One PDF: `datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf`
+  (report #38, the stuck-pipe day).
+
+## Expected Output
+
+The full text of the report's first page, printed to your terminal —
+header block, casing and mud tables, BHA component list, survey data, and
+the time breakdown quoted above, all as plain text.
 
 ```{python}
 #| eval: false
@@ -139,17 +200,42 @@ with pdfplumber.open("datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-
     print(first_page.extract_text())
 ```
 
-Run that and you'll see the report's text printed straight to your
-terminal — the full header block (well name, spud date, days from spud),
-casing and mud tables, the BHA component list, survey data, and the time
-breakdown — all as a plain Python string. Real DDRs pack in far more than
-a simple narrative: this one report alone has seven distinct data
-sections.
+## What just happened?
+
+You opened the PDF, grabbed its first page, and asked `pdfplumber` to hand
+back everything readable on it as plain text. Real DDRs pack in far more
+than a simple narrative — this one report alone has seven distinct data
+sections (header, casing, mud, BHA, survey, time breakdown, and remarks) —
+and all of it came back as one ordinary block of text you can now search,
+print, or save.
+
+::: {.callout-tip title="Engineering Translation: Opening a file safely"}
+`with pdfplumber.open(...) as pdf:` is like signing a piece of equipment
+out and back in automatically. Everything inside the indented block
+happens while the file is "checked out"; once the block ends, Python
+closes it for you — so you never forget to release the file, even if
+something goes wrong partway through.
+:::
 
 Every DDR in this archive is a single page, but that won't be true of
 every report you'll ever encounter. Loop over every page and keep track
 of which page each chunk of text came from — you'll need that later for
 citations:
+
+## What problem are we solving?
+
+Handle reports with more than one page, and remember which page each
+piece of text came from — information you'll need in later chapters to
+point back to the exact source of an answer.
+
+## Inputs
+
+- Any DDR PDF path, single-page or multi-page.
+
+## Expected Output
+
+One combined string containing every page's text, with a marker like
+`--- Page 1 ---` showing where each page starts.
 
 ```{python}
 #| eval: false
@@ -165,16 +251,47 @@ def extract_text(pdf_path: Path) -> str:
     return "\n\n".join(pages_text)
 ```
 
+## What just happened?
+
+This packages the previous step into a reusable procedure: for every page
+in the PDF, pull its text, label it with a page number, and stitch all the
+labelled pages together into one string. Instead of writing this logic
+out every time, you now have one named tool — `extract_text` — you can
+hand any PDF path to.
+
+::: {.callout-tip title="Engineering Translation: Function and loop"}
+A **function** is a standard operating procedure: a named set of steps
+(`extract_text`) you can hand a new input to and trust it will follow the
+same procedure every time, instead of re-writing the steps by hand for
+each report. A **loop** (`for page_number, page in enumerate(...)`) means
+"repeat this operation for every page in the report" — the same way an
+SOP says "repeat for each joint" instead of listing every joint by hand.
+:::
+
 Note the `or ""`. If a page has no extractable text — a scanned page mixed
 into an otherwise digital report, for example — `extract_text()` returns
 `None`, and every downstream step in this book expects a string, not
-`None`. This one line is a small example of a pattern you'll see
-throughout the book: assume real data is messier than the happy path.
+`None`. This is a safety check, the code equivalent of confirming a valve
+position before proceeding instead of assuming it: assume real data is
+messier than the happy path, and this pattern shows up throughout the
+book.
 
 ### Step 3: make it a script you can run from the command line
 
-The full script, `code/chapter_01/read_ddr.py`, wraps this in a command-line
-interface so you can point it at one file or a whole folder:
+## What problem are we solving?
+
+Turn this into a tool you can point at any file or folder from the
+terminal, without opening or editing the code each time.
+
+## Inputs
+
+- A single PDF path, or a folder of PDFs plus a `--batch` flag and an
+  `--out` destination folder.
+
+## Expected Output
+
+Printed text to the terminal (single-file mode), or a folder of `.txt`
+files, one per PDF (batch mode).
 
 ```bash
 # One file, printed to the terminal
@@ -184,9 +301,33 @@ python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling
 python code/chapter_01/read_ddr.py datasets/sample_ddrs/ --batch --out datasets/ddr_text
 ```
 
+## What just happened?
+
+The full script, `code/chapter_01/read_ddr.py`, wraps the `extract_text`
+function in a command-line interface: flags like `--batch` and `--out`
+work like switches on a control panel, letting you choose "one file,
+printed" or "whole folder, saved" without touching the code itself.
+
 Try the first command now. You should see the full report text, including
 the line: `During the slide lost tool face and became assembly became
 stuck` — real language from a real rig report, not a paraphrase.
+
+## Production Reality
+
+This chapter assumes every DDR is a clean, digital-native PDF produced by
+the same software — true for this entire archive, and the easiest
+possible starting point. A real multi-well, multi-operator archive
+usually isn't that tidy. Expect:
+
+- scanned reports with no character data at all (Chapter 6)
+- rotated or skewed pages
+- duplicate reports filed under two different names
+- handwritten notes or annotations layered on top of a digital report
+- reports that are simply missing for a given day
+
+None of that shows up in Part I's ten curated reports, on purpose — you
+need a reliable extraction script before you can handle the messy cases.
+Chapter 6 comes back to this list once you have somewhere solid to stand.
 
 ## Practical exercise
 
@@ -269,6 +410,12 @@ reference solution is in `code/chapter_01/challenge/`.
 | `code/chapter_01/build_sample_archive.py` | Reproduces the curated Part I subset from the full public archive |
 | `datasets/sample_ddrs/` | Ten real, curated Utah FORGE DDR PDFs used throughout Part I |
 | `notebooks/chapter_01_explore.ipynb` | Interactive notebook version of this chapter |
+
+## What can you do now that you couldn't do before?
+
+You can turn any digital-native DDR PDF — or a whole folder of them —
+into plain text you can read, search, or hand to another script, without
+opening a single PDF viewer.
 
 ## Suggested next step
 

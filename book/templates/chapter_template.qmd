@@ -4,9 +4,20 @@ CHAPTER TEMPLATE
 Copy this file into chapters/chapter_NN.qmd and fill in every section.
 Do not delete a section — if it doesn't apply, write one sentence saying why.
 
-Style rules (Python Crash Course philosophy):
-- Practical first. Don't explain a concept before the reader needs it to
-  make the current code work.
+Audience: well/completions/intervention/drilling/production engineers and
+petroleum data scientists. Assume zero Python experience and zero software
+engineering experience. Assume strong operational experience, strong Excel
+skills, curiosity about AI, and willingness to type code manually. The
+reader should never ask "why am I learning this?" — every concept appears
+only after they've hit the problem it solves. Problem first, technology
+second. If forced to choose between technical completeness and reader
+confidence, choose reader confidence. The reader should finish saying
+"I can build this," not "I understand the theory."
+
+Style rules:
+- Problem first. Never introduce a concept (embeddings, vector databases,
+  rerankers, chunking, or anything else) before the reader has felt the
+  failure that makes it necessary.
 - Every chapter must produce a runnable artifact the reader can point to
   and say "I built that."
 - Minimal mathematics. If you need an equation, put the intuition in prose
@@ -15,9 +26,51 @@ Style rules (Python Crash Course philosophy):
   checkpoint.
 - Code blocks must run as-is against the companion repository's sample
   data. Do not show elided/pseudocode as if it were runnable.
+- Avoid jargon in plain-English explanations. Bad: "This creates an
+  inverted index." Good: "We built a lookup table that remembers which
+  reports contain each word."
+
+Required structural elements (do not skip any of these):
+1. A visual progress marker at the very top, e.g. `Text ↓ Searchable Archive`.
+2. "## Operational Problem" as the first section after Learning objectives,
+   written in the language of a drilling morning call (a question someone
+   would actually ask out loud), never "today we will learn X."
+3. Before EVERY code block: "## What problem are we solving?", "## Inputs",
+   "## Expected Output".
+4. After EVERY code block: "## What just happened?" in plain English.
+5. An "Engineering Translation" callout for every new programming or AI
+   concept introduced (dictionary -> equipment lookup table, function ->
+   standard operating procedure, loop -> repeat for every report, object ->
+   individual piece of equipment, class -> equipment spec sheet, index ->
+   table of contents for reports, etc.) — invent the right analogy for
+   whatever concept the chapter actually introduces.
+6. If the chapter introduces a new AI/ML concept, include a
+   "## Why keyword search fails" (or equivalent "why the simpler thing
+   fails") section before introducing the new technique — show the
+   question, why the simpler approach finds nothing, then the fix.
+7. A "## Production Reality" section: what this chapter's examples
+   deliberately simplify away, and what a messier real archive looks like
+   (scanned reports, rotated pages, duplicates, handwritten notes, missing
+   reports, inconsistent formats across operators, etc.).
+8. A closing "## What can you do now that you couldn't do before?" section
+   — one or two sentences of concrete new capability, not a theory recap.
 -->
 
 # Chapter Title Goes Here {#sec-chapter-NN}
+
+<!-- Progress marker: a short ASCII diagram showing this chapter's
+input -> output transformation, e.g.:
+
+Text
+ ↓
+Searchable Archive
+-->
+
+```
+Input State
+ ↓
+Output State
+```
 
 ## Learning objectives
 
@@ -28,12 +81,14 @@ By the end of this chapter, you will be able to:
 - Objective 2
 - Objective 3
 
-## Operational problem
+## Operational Problem
 
-<!-- One or two paragraphs. Describe the real field problem this chapter
-solves, in language a drilling/completions/production engineer would use.
-Ground it in a scenario: a specific well, a specific question someone
-needed answered, a specific way the current (manual) process fails. -->
+<!-- One or two paragraphs, opening with a question in the language of a
+drilling morning call ("Have we seen this failure mode before?", "Which
+wells experienced losses at this depth?"). Describe the real field
+problem this chapter solves. Ground it in a scenario: a specific well, a
+specific question someone needed answered, a specific way the current
+(manual) process fails. Never open with "Today we will learn X." -->
 
 ## Example DDR extract
 
@@ -57,20 +112,56 @@ DEPTH: 9,842 ft MD        24-HR OPS SUMMARY:
 <!-- The minimum theory required to understand *why* the implementation
 below works. If this section would exceed ~1.5 pages, you are including
 theory the reader doesn't need yet — cut it or defer it to a later
-chapter. Prefer diagrams and worked examples over formal definitions. -->
+chapter. Prefer diagrams and worked examples over formal definitions.
+
+Add an "Engineering Translation" callout for every new concept this
+chapter introduces — see rule 5 above. Example: -->
+
+::: {.callout-tip title="Engineering Translation: <concept>"}
+<!-- One or two plain-language sentences mapping the concept onto
+something the reader already knows from field operations. -->
+:::
+
+<!-- If this chapter introduces a new AI/ML concept, add a
+"## Why keyword search fails" (or equivalent) section here, before the
+new technique, following rule 6 above. -->
 
 ## Implementation
 
-<!-- Step-by-step, runnable code. Build it incrementally: show a minimal
-version working first, then extend it. Every code block should be
-something the reader can paste into a script or notebook and execute
-immediately, using files from datasets/ or code/ in the companion repo. -->
+<!-- Step-by-step, runnable code, broken into named steps if more than one
+logical block is involved. For EACH code block, follow this exact pattern: -->
+
+### Step 1: <what this step accomplishes>
+
+## What problem are we solving?
+
+<!-- One or two sentences: what does this specific block of code solve? -->
+
+## Inputs
+
+<!-- Bullet list: what does this code need to run? -->
+
+## Expected Output
+
+<!-- What should the reader see when they run this? Show a concrete example. -->
 
 ```{python}
 #| eval: false
 # Minimal working example — replace with chapter-specific code.
 print("Hello, DDR")
 ```
+
+## What just happened?
+
+<!-- Plain-English explanation, no unnecessary jargon. Bad: "This creates
+an inverted index." Good: "We built a lookup table that remembers which
+reports contain each word." -->
+
+## Production Reality
+
+<!-- What does this chapter's example deliberately simplify away? What
+does a messier, real, multi-well or multi-operator archive look like for
+this same problem? Follow rule 7 above. -->
 
 ## Practical exercise
 
@@ -136,6 +227,12 @@ lives in the companion repository under `code/chapter_NN/challenge/`. -->
 | `code/chapter_NN/script.py` | ... |
 | `datasets/...` | ... |
 | `notebooks/chapter_NN_explore.ipynb` | Interactive companion notebook |
+
+## What can you do now that you couldn't do before?
+
+<!-- One or two sentences of concrete new capability, following rule 8
+above. Not a theory recap — a plain statement of what the reader can now
+do that they couldn't before this chapter. -->
 
 ## Suggested next step
 

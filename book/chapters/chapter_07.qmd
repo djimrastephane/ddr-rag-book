@@ -1,5 +1,11 @@
 # Chunking That Respects Report Structure {#sec-chapter-07}
 
+```
+Whole Report
+ ↓
+Retrievable Chunks
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -9,18 +15,19 @@ By the end of this chapter, you will be able to:
 - Implement segment-aware chunking that breaks at natural report
   boundaries (section headers) instead of at an arbitrary character count.
 
-## Operational problem
+## Operational Problem
 
-Chapters 1–5 embedded each report as a single unit — fine for a ten-report
-sample corpus, unworkable at the full archive's scale. A single Utah
-FORGE report already has seven distinct sections (WELL/JOB INFORMATION,
-BOP, CASING, MUD, DRILL BITS, PUMPS, BHA, SURVEY DATA, CONSUMABLES, TIME
-BREAKDOWN) packed onto one page. Embed too much of that in one vector and
-the embedding blurs the casing programme together with the stuck-pipe
-narrative, hurting retrieval precision. Split naively at a fixed
-character count and you'll cut report #38's stuck-pipe sentence in half
-mid-word, right across a chunk boundary — the exact passage you most need
-to retrieve becomes the two chunks least likely to score well.
+Why does the exact sentence you need keep landing right on a chunk
+boundary? Chapters 1–5 embedded each report as a single unit — fine for a
+ten-report sample corpus, unworkable at the full archive's scale. A
+single Utah FORGE report already has seven distinct sections (WELL/JOB
+INFORMATION, BOP, CASING, MUD, DRILL BITS, PUMPS, BHA, SURVEY DATA,
+CONSUMABLES, TIME BREAKDOWN) packed onto one page. Embed too much of that
+in one vector and the embedding blurs the casing programme together with
+the stuck-pipe narrative, hurting retrieval precision. Split naively at a
+fixed character count and you'll cut report #38's stuck-pipe sentence in
+half mid-word, right across a chunk boundary — the exact passage you most
+need to retrieve becomes the two chunks least likely to score well.
 
 ## Example DDR extract
 
@@ -57,15 +64,32 @@ Two ideas, used together, fix this:
    self-contained, retrievable unit of meaning than one that ends
    mid-sentence because a counter hit its limit.
 
+::: {.callout-tip title="Engineering Translation: Token"}
+A **token** is the unit a language model actually counts in — roughly a
+word or a word-fragment, not a character and not quite a word either.
+It's the same idea as a rig measuring progress in footage drilled, not
+characters typed on the report: footage is the unit that actually
+determines what the operation costs and how far along it is.
+:::
+
+::: {.callout-tip title="Engineering Translation: Overlap"}
+**Overlap** between chunks is like re-surveying the last few feet of the
+previous run before starting the next one: a small deliberate repeat at
+the seam, so nothing that mattered right at the boundary gets lost
+between the two pieces.
+:::
+
 The companion pipeline, **DDR_UTAH_FORGE**, implements both in
 `src/rag_pdf/chunking.py`. `chunk_text_by_tokens()` does token-based
 splitting with configurable overlap (so context isn't lost entirely at a
 boundary), falling back to a word-based approximation if `tiktoken` isn't
 available. `split_text_for_segment_aware_chunking()` goes further: it
 walks the text line by line, detects boundary patterns, and returns a
-list of `SegmentBlock` objects — each with a title, its text, and a
-`boundary_type` (`MATCH`, `INSERT`, or `CONTINUATION`) recording *why*
-the segment starts where it does.
+list of `SegmentBlock` objects — each one bundling together a title, its
+text, and a `boundary_type` (`MATCH`, `INSERT`, or `CONTINUATION`)
+recording *why* the segment starts where it does, the same way an
+equipment spec sheet bundles a component's dimensions together instead of
+scattering them as loose numbers.
 
 Run against the real 76-report archive, this pipeline's chunking produces
 **2,943 chunks** — an average of about 39 chunks per report, reflecting
@@ -87,6 +111,24 @@ chunk 3:                         [t9  t10 t11 t12]
 
 ## Implementation
 
+## What problem are we solving?
+
+Split a report's text into pieces small enough to embed precisely,
+without severing the exact sentence a future query needs right at a
+chunk boundary.
+
+## Inputs
+
+- Full report text (a Python string).
+- `chunk_tokens`: how many tokens each chunk should hold.
+- `overlap_tokens`: how many tokens each chunk repeats from the end of
+  the previous one.
+
+## Expected Output
+
+A list of text chunks, each roughly `chunk_tokens` tokens long, each
+overlapping the next by `overlap_tokens` tokens.
+
 ```{python}
 #| eval: false
 # code/chapter_07/token_chunking.py
@@ -106,11 +148,40 @@ def chunk_text_by_tokens(text: str, chunk_tokens: int = 200,
     return chunks
 ```
 
+## What just happened?
+
+The text got converted into tokens, then sliced into fixed-size windows
+that each step forward by less than a full window's width — that gap is
+the overlap, and it's what keeps a sentence sitting near a boundary from
+being fully lost to one side or the other.
+
 This is a direct simplification of `chunk_text_by_tokens()` in the
 companion repository — same sliding-window-with-overlap logic, without
 the word-based fallback path. Read the full version, plus
 `split_text_for_segment_aware_chunking_with_patterns()`, in
 `src/rag_pdf/chunking.py`.
+
+## Production Reality
+
+This chapter's Field Notes (below) shows the heading heuristic getting a
+perfect score — because Utah FORGE's reports all come from one piece of
+software, using one consistent template. A larger, multi-operator
+archive rarely offers that luxury:
+
+- different reporting software formats section headers differently —
+  all-caps, title case, bolded, or not visually marked at all — so a
+  heading heuristic tuned to one archive's convention may need retuning,
+  or replacing entirely, for another
+- OCR'd pages (Chapter 6) can corrupt exactly the visual cues a heading
+  heuristic depends on — a garbled, partly-misread line may no longer
+  look like a clean heading at all
+- `tiktoken`'s `cl100k_base` encoding matches a specific family of
+  language models; a different embedding or generation model in your
+  pipeline may tokenize the same text differently, so `chunk_tokens=200`
+  isn't automatically the same size everywhere
+- overlap improves retrieval at chunk boundaries, but it also multiplies
+  how much text you store and embed — worth measuring deliberately once
+  an archive holds thousands of reports instead of ten
 
 ## Practical exercise
 
@@ -176,6 +247,12 @@ logic — is in `code/chapter_07/challenge/` and
 |---|---|
 | `code/chapter_07/token_chunking.py` | Simplified token-based chunker |
 | `DDR_UTAH_FORGE/src/rag_pdf/chunking.py` | Production token + segment-aware chunking (companion repo) |
+
+## What can you do now that you couldn't do before?
+
+You can split a report into chunks small enough to embed precisely,
+without cutting the exact sentence you need to retrieve in half at a
+chunk boundary.
 
 ## Suggested next step
 

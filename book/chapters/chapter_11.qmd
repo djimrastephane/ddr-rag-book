@@ -1,5 +1,11 @@
 # Evaluating Retrieval Quality {#sec-chapter-11}
 
+```
+"It Feels Like It's Working"
+            ↓
+Measured, Defensible Performance
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -11,7 +17,7 @@ By the end of this chapter, you will be able to:
 - Break results down by question category and difficulty to find *where*
   a system fails, not just *whether* it does.
 
-## Operational problem
+## Operational Problem
 
 "It feels like it's working" is not a standard you should ship an
 engineering decision-support tool against. Before this system goes in
@@ -71,6 +77,29 @@ Three metrics, each answering a slightly different question:
   the score is comparable across queries with different numbers of
   correct answers.
 
+::: {.callout-tip title="Engineering Translation: recall@k"}
+`recall@k` asks a plain yes/no question: did the right report make your
+shortlist of the top `k` results at all? It's like asking whether the
+correct casing point made your shortlist of candidate depths — it
+doesn't care whether it was the first one you'd pick or the last, only
+whether it was on the list.
+:::
+
+::: {.callout-tip title="Engineering Translation: Mean Reciprocal Rank"}
+**MRR** rewards a correct answer for landing near the top, not just
+somewhere on the list. It's the difference between "the right depth was
+in my top 5" and "the right depth was my very first pick" — the second
+is worth more, and MRR is the metric that actually reflects that.
+:::
+
+::: {.callout-tip title="Engineering Translation: NDCG@k"}
+**NDCG@k** is a more careful version of `recall@k`: instead of a flat
+yes/no, it gives partial credit based on exactly where the right answer
+landed — full credit at rank 1, a bit less at rank 2, less still further
+down — rather than treating "found it at #1" and "found it at #5" as
+equally good.
+:::
+
 None of these require deep statistics to use well — they require a good
 evaluation *set*: real questions, with a real, known correct source
 recorded in advance. Building that set by hand, from your own archive, is
@@ -95,17 +124,90 @@ find the weakest category -> that's where to improve next
 
 ## Implementation
 
+### Step 1: did the right answer make the shortlist at all?
+
+## What problem are we solving?
+
+Check, for every evaluation question, whether the correct report showed
+up anywhere in the top `k` retrieved results — a simple yes/no per
+question.
+
+## Inputs
+
+- A list of result dicts, one per evaluation question, each recording the
+  rank the correct report was found at (or `None` if it wasn't found).
+- `k`: how far down the results to look.
+
+## Expected Output
+
+A single number between 0 and 1 — the fraction of questions where the
+correct report was within the top `k`.
+
 ```{python}
 #| eval: false
 # code/chapter_11/eval_metrics.py
 def recall_at_k(results: list[dict], k: int) -> float:
     hits = [r for r in results if r.get("rank") is not None and r["rank"] <= k]
     return len(hits) / len(results) if results else 0.0
+```
 
+## What just happened?
+
+For each question, this checks whether the correct report's rank is
+within `k` — a plain hit or miss — then reports what fraction of all
+questions counted as a hit. It says nothing about *how close to the top*
+a hit was, which is exactly the gap the next two metrics fill.
+
+### Step 2: reward landing near the top, not just anywhere
+
+## What problem are we solving?
+
+Give more credit to a correct answer that ranked first than one that
+merely appeared somewhere in the results — closer to what a user actually
+experiences when scanning a results list top to bottom.
+
+## Inputs
+
+- The same list of result dicts as Step 1.
+
+## Expected Output
+
+A single average score: higher when correct answers tend to rank near
+the top, lower when they're buried further down or missing.
+
+```{python}
+#| eval: false
 def mrr(results: list[dict]) -> float:
     scores = [1.0 / r["rank"] if r.get("rank") else 0.0 for r in results]
     return sum(scores) / len(scores) if scores else 0.0
+```
 
+## What just happened?
+
+Each question's score is `1 / rank` — rank 1 scores a full 1.0, rank 5
+scores only 0.2, and a miss scores 0. Averaging those scores across every
+question produces one number that rewards *first-place* correct answers
+far more than answers merely present somewhere in the list.
+
+### Step 3: give partial credit based on exact position
+
+## What problem are we solving?
+
+Combine the best of both previous metrics: a graded score, like MRR, but
+one that treats "found in the top k" as the relevant window, like
+recall@k.
+
+## Inputs
+
+- The same list of result dicts, plus `k`.
+
+## Expected Output
+
+A single average score, weighted so a hit at rank 1 counts more than a
+hit at rank 5, and anything beyond `k` counts as zero.
+
+```{python}
+#| eval: false
 def ndcg_at_k(results: list[dict], k: int) -> float:
     import math
     scores = []
@@ -115,10 +217,40 @@ def ndcg_at_k(results: list[dict], k: int) -> float:
     return sum(scores) / len(scores) if scores else 0.0
 ```
 
+## What just happened?
+
+Instead of `1 / rank` (MRR), each hit's credit shrinks by `1 / log2(rank
++ 1)` — a gentler slope that still rewards a rank-1 hit the most, still
+penalizes a rank-5 hit, but doesn't fall off quite as sharply. Anything
+outside the top `k` scores zero, same as `recall@k`.
+
 Each `result` dict records, per evaluation question, the rank at which
 the known-correct report was retrieved (or `None` if it wasn't in the top
 k considered). This mirrors the shape of `_recall_at_k()`, `_mrr()`, and
 `_ndcg_at_k()` in the companion repository's `scripts/run_eval.py`.
+
+## Production Reality
+
+The evaluation set in this chapter has five questions, and the challenge
+exercise's has fifteen — genuinely useful, but still small next to a real
+deployment. A few realities worth planning for:
+
+- an evaluation set needs to keep growing as new report types, wells, and
+  question styles show up — five questions that were exhaustive for the
+  Part I sample won't stay representative of a live system fielding real
+  engineers' questions
+- tuning the retrieval pipeline specifically to score well against your
+  own evaluation set risks overfitting to it — the same way memorizing an
+  exam's specific questions isn't the same as knowing the material.
+  Holding some questions back, or continuously adding new ones, keeps the
+  score honest
+- an aggregate metric is a summary, not a substitute for periodically
+  reading real answers by eye — especially before a decision with real
+  consequences rides on the system's output
+- who writes the evaluation questions matters — a question set written
+  entirely by the person who built the retrieval pipeline tends to test
+  what that person already thought to check, not what a working engineer
+  will actually ask
 
 ## Practical exercise
 
@@ -204,6 +336,13 @@ before this system sees a real, full-scale archive.
 |---|---|
 | `code/chapter_11/eval_metrics.py` | `recall@k`, MRR, `NDCG@k` implementations |
 | `DDR_UTAH_FORGE/scripts/run_eval.py` | Evaluation harness (companion repo) — ready to point at a Utah FORGE question set once you build one |
+
+## What can you do now that you couldn't do before?
+
+You can put a defensible number on how well your retrieval system
+actually works, broken down by the kinds of questions it handles well and
+the ones it doesn't — instead of shipping a decision-support tool on the
+strength of "it feels like it's working."
 
 ## Suggested next step
 

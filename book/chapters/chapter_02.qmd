@@ -1,5 +1,11 @@
 # Cleaning Operational Text {#sec-chapter-02}
 
+```
+Raw Text
+ ↓
+Expanded Text
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -9,17 +15,31 @@ By the end of this chapter, you will be able to:
   boundaries so it doesn't corrupt unrelated text.
 - Apply the expander across every `.txt` file produced in Chapter 1.
 
-## Operational problem
+## Operational Problem
 
-Open one of the `.txt` files you extracted in Chapter 1 and read it as a
-computer would. Report #38's time breakdown says: *"During the slide lost
-tool face and became assembly became stuck"* — plain enough. But the same
-report is full of terms a keyword search or language model has no way to
-interpret: `BHA`, `WOB`, `MWD`, `SPP`, `NMDC`, `DLS`, `ECD`. A drilling
-engineer reads these instantly. A keyword search for "bottom hole
-assembly" finds nothing in a report that only ever writes `BHA`. Before we
-can search, summarise, or embed this text well, we need to expand it into
-language that means the same thing to a human and to a machine.
+Next chapter, you're going to build a search tool and ask it: *"Show me
+every report that mentions the bottom hole assembly."* Will it find
+report #38? Open the `.txt` file you extracted from it in Chapter 1 and
+check: the report never once writes "bottom hole assembly." It writes
+`BHA` — twenty-one times. A search tool that only knows the literal words
+you typed will come back empty, on a report that was exactly the one you
+needed.
+
+## Why keyword search fails
+
+Question: *"Show me every report that mentions the bottom hole
+assembly."*
+
+Keyword search for "bottom hole assembly" finds nothing in report #38,
+because the report never uses that phrase. Instead it says `BHA` — the
+same equipment, different word. A computer matching text literally has
+no way to know these mean the same thing. Report #38 also talks about
+`WOB`, `MWD`, `SPP`, and a dozen other abbreviations a keyword search
+would need to be told about, one by one, before it could ever find them.
+
+Before we can search, summarise, or hand this text to a language model,
+we need to expand it into language that means the same thing to a human
+and to a machine. That's the whole job of this chapter.
 
 ## Example DDR extract
 
@@ -49,6 +69,14 @@ break it:
    to be case-insensitive without forcing the rest of the sentence to
    change case.
 
+::: {.callout-tip title="Engineering Translation: Dictionary"}
+A Python **dictionary** is an equipment lookup table: you give it a tag
+(`"BHA"`) and it gives you back what that tag means
+(`"bottom hole assembly"`) — the same way a lookup table on the rig floor
+maps a short code stamped on a piece of equipment to its full
+specification.
+:::
+
 This is deliberately not a machine-learning problem. A few dozen
 well-chosen abbreviations, expanded correctly, solve most of the
 readability problem — and unlike a model, a dictionary is auditable: you
@@ -68,11 +96,26 @@ expanded text
 
 ## Implementation
 
+### Step 1: build the lookup table
+
+## What problem are we solving?
+
+Give the computer the same knowledge a drilling engineer already carries
+in their head: what each abbreviation stands for.
+
+## Inputs
+
+- A hand-built list of oilfield abbreviations and their full-text
+  expansions, drawn from what actually appears in this archive.
+
+## Expected Output
+
+A Python dictionary — no output printed yet, just a lookup table in
+memory, ready for the next step to use.
+
 ```{python}
 #| eval: false
 # code/chapter_02/expand_abbreviations.py
-import re
-
 ABBREVIATIONS = {
     "BHA": "bottom hole assembly",
     "WOB": "weight on bit",
@@ -93,6 +136,36 @@ ABBREVIATIONS = {
     "DOL": "days on location",
     "PDC": "polycrystalline diamond compact",
 }
+```
+
+## What just happened?
+
+You wrote down, once, what every abbreviation in this archive means. This
+list is the entire "knowledge" the expander needs — no training, no
+model, just a table you can read top to bottom and check by eye.
+
+### Step 2: expand every abbreviation safely
+
+## What problem are we solving?
+
+Turn `BHA` into `bottom hole assembly` everywhere it appears as its own
+word — without also mangling words that merely happen to contain those
+same letters.
+
+## Inputs
+
+- Raw report text (a Python string).
+- The `ABBREVIATIONS` lookup table from Step 1.
+
+## Expected Output
+
+The same text, with every whole-word abbreviation replaced by its
+expansion — for example, `Pick up Curve assembly 2, BHA 21` becomes
+`Pick up Curve assembly 2, bottom hole assembly 21`.
+
+```{python}
+#| eval: false
+import re
 
 def expand_text(text: str, abbreviations: dict[str, str] = ABBREVIATIONS) -> str:
     for abbr, expansion in abbreviations.items():
@@ -101,8 +174,64 @@ def expand_text(text: str, abbreviations: dict[str, str] = ABBREVIATIONS) -> str
     return text
 ```
 
-Run it against the text files from Chapter 1's `datasets/ddr_text/`
-folder and save the expanded versions to `datasets/ddr_text_expanded/`.
+## What just happened?
+
+For every entry in the lookup table, this checks the text for that exact
+word — not just those letters anywhere, but that whole word on its own —
+and swaps in the full expansion, regardless of whether it was typed in
+capitals or lowercase.
+
+::: {.callout-tip title="Engineering Translation: Word boundary matching"}
+`\b...\b` is a stricter kind of find-and-replace: instead of "contains
+these letters anywhere," it means "matches this exact word, with a space
+or punctuation on either side." That's the difference between correctly
+expanding the word `MD` and accidentally mangling it inside an unrelated
+word that merely contains those two letters.
+:::
+
+### Step 3: run it across the whole archive
+
+## What problem are we solving?
+
+Apply the expander to every report at once, not just one file at a time.
+
+## Inputs
+
+- The folder of `.txt` files Chapter 1 produced: `datasets/ddr_text/`.
+
+## Expected Output
+
+A new folder, `datasets/ddr_text_expanded/`, with one expanded `.txt`
+file per input file, same filenames.
+
+```bash
+python code/chapter_02/expand_abbreviations.py \
+    --in-dir datasets/ddr_text --out-dir datasets/ddr_text_expanded
+```
+
+## What just happened?
+
+The script read every `.txt` file Chapter 1 produced, ran each one through
+`expand_text`, and saved the result under the same filename in a new
+folder — so you can always find the expanded version of a report by
+matching its name against the original.
+
+## Production Reality
+
+This chapter's dictionary covers the abbreviations that actually appear
+in this archive — because it's all one well, produced by one operator's
+reporting software. A larger, multi-well or multi-operator archive is
+rarely that uniform. Expect:
+
+- different operators abbreviating the same equipment differently
+- typos and inconsistent spacing (`BHA`, `B.H.A.`, `B H A`)
+- unit mismatches hiding behind the same abbreviation (`MW` as mud weight
+  on one report, something else entirely on another)
+- abbreviations this dictionary has simply never seen before
+
+None of that appears in Utah FORGE's reports, which is exactly why this
+is the right place to learn the technique before facing a messier
+archive.
 
 ## Practical exercise
 
@@ -169,6 +298,13 @@ it needs a narrower match context. A reference solution is in
 | `code/chapter_02/expand_abbreviations.py` | Word-boundary abbreviation expander |
 | `datasets/ddr_text_expanded/` | Expanded output from Chapter 1's extracted text |
 | `notebooks/chapter_02_explore.ipynb` | Interactive companion notebook |
+
+## What can you do now that you couldn't do before?
+
+You can take the raw text Chapter 1 extracted and turn every shorthand
+term in it into plain language — so a report that only ever says `BHA`
+can now be found by anyone (or anything) searching for "bottom hole
+assembly."
 
 ## Suggested next step
 

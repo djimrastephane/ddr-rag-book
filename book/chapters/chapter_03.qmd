@@ -1,5 +1,11 @@
 # Searching DDRs {#sec-chapter-03}
 
+```
+Text
+ ↓
+Searchable Archive
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -10,7 +16,7 @@ By the end of this chapter, you will be able to:
 - Explain why exact keyword matching, while fast and simple, will
   eventually miss things a drilling engineer would consider an obvious hit.
 
-## Operational problem
+## Operational Problem
 
 You now have clean, expanded text for every DDR. The next question is the
 one an engineer actually asks out loud: *"Which reports mention losses?"*
@@ -41,6 +47,13 @@ core idea behind every search engine, from `grep` to Google — the
 difference is scale and ranking sophistication, not the fundamental
 mechanism.
 
+::: {.callout-tip title="Engineering Translation: Index"}
+An **index** here is exactly what it sounds like from the front of a
+manual: a table of contents for reports. Instead of "chapter 4, see page
+112," it says "the word 'losses', see report_019." Looking a word up in
+that table is instant; reading every report to find the same word is not.
+:::
+
 Tokenization matters here: "losses" and "LOSSES" should be the same
 token, and punctuation shouldn't create spurious tokens (`6,507'` should
 not prevent `6507` or nearby words from matching cleanly).
@@ -59,15 +72,68 @@ query "stuck" -> look up "stuck" -> {report_038}   (one dict lookup,
 
 ## Implementation
 
+### Step 1: split text into searchable words
+
+## What problem are we solving?
+
+Before we can look anything up, every report's text needs to be broken
+into a consistent set of words — so "Losses", "losses," and "LOSSES" all
+count as the same match.
+
+## Inputs
+
+- Any string of report text.
+
+## Expected Output
+
+A list of lowercase words with punctuation stripped out, for example:
+
+```
+["mud", "fluids", "seepage", "losses", "in", "six", "hours", "9", "bbls"]
+```
+
 ```{python}
 #| eval: false
 # code/chapter_03/keyword_search.py
 import re
-from collections import defaultdict
-from pathlib import Path
 
 def tokenize(text: str) -> list[str]:
     return re.findall(r"[a-z0-9]+", text.lower())
+```
+
+## What just happened?
+
+This lowercases the whole report, then pulls out every run of letters or
+digits as one word, throwing away punctuation, quotes, and apostrophes.
+`6,507'` becomes just `6507` — no comma, no foot mark — so it can be
+matched consistently whichever way it was typed in the original report.
+
+### Step 2: build the lookup table
+
+## What problem are we solving?
+
+Build a lookup table that remembers which reports contain each word, so a
+search never has to open and re-scan every file.
+
+## Inputs
+
+- A folder of cleaned, expanded report text: `datasets/ddr_text_expanded/`.
+
+## Expected Output
+
+A dictionary mapping each word to the set of report filenames that
+contain it, for example:
+
+```
+{"losses": {"FORGE-...-32_Drilling_019_2020-11-07.txt"},
+ "stuck":  {"FORGE-...-32_Drilling_038_2020-11-26.txt"},
+ ...}
+```
+
+```{python}
+#| eval: false
+from collections import defaultdict
+from pathlib import Path
 
 def build_index(text_dir: Path) -> dict[str, set[str]]:
     index: dict[str, set[str]] = defaultdict(set)
@@ -76,7 +142,35 @@ def build_index(text_dir: Path) -> dict[str, set[str]]:
         for token in tokens:
             index[token].add(path.name)
     return index
+```
 
+## What just happened?
+
+We built a lookup table that remembers which reports contain each word.
+For every report, we found its unique words and, for each one, noted
+"this word shows up in this report." The result is one table you can
+check instead of seventy-six files you'd otherwise have to open.
+
+### Step 3: answer a query
+
+## What problem are we solving?
+
+Given a query like "stuck pipe," find every report that contains all of
+those words — instantly, using the lookup table instead of opening a
+single file.
+
+## Inputs
+
+- The lookup table from Step 2.
+- A query string, e.g. `"stuck pipe"`.
+
+## Expected Output
+
+The set of filenames containing every word in the query, for example
+`{"FORGE-...-32_Drilling_038_2020-11-26.txt"}` for the query `"stuck"`.
+
+```{python}
+#| eval: false
 def search(index: dict[str, set[str]], query: str) -> set[str]:
     query_tokens = tokenize(query)
     if not query_tokens:
@@ -87,9 +181,34 @@ def search(index: dict[str, set[str]], query: str) -> set[str]:
     return results
 ```
 
-`search()` here implements an AND query: a document must contain every
-query token to match — appropriate for a first version, and the challenge
-exercise asks you to add OR and phrase queries.
+## What just happened?
+
+For each word in the query, we looked up its list of reports in the
+table, then kept only the reports that appeared on *every* one of those
+lists. That's why this is called an AND query: a report only matches if
+it contains every word you searched for, not just one of them. The
+challenge exercise below asks you to add an OR option too.
+
+## Production Reality
+
+This index lives entirely in memory and rebuilds itself every time you
+run the script — fine for 76 reports, and still fine for a few thousand.
+A real multi-well archive stretches this in ways worth knowing about
+early:
+
+- thousands of reports mean rebuilding the index on every run gets slow —
+  real systems save the index to disk or a database instead
+- OCR'd scanned reports (Chapter 6) introduce garbled tokens that were
+  never real words, bloating the index with noise
+- singular/plural and tense variants (`loss` vs `losses`, `drilled` vs
+  `drilling`) are treated as completely different words by this simple
+  tokenizer, so a search can still miss obvious matches
+- numbers and units (`6,507'` vs `6507 ft`) can drift apart across
+  reports from different software or operators
+
+None of this changes the core idea — a lookup table beats scanning every
+file — but it's why production search systems add stemming, on-disk
+indexes, and cleanup steps this chapter deliberately leaves out.
 
 ## Practical exercise
 
@@ -162,6 +281,31 @@ fishing"` and confirm it returns both report #49 (packers) and #50
 |---|---|
 | `code/chapter_03/keyword_search.py` | Inverted index and AND-query search |
 | `notebooks/chapter_03_explore.ipynb` | Interactive companion notebook |
+
+## Why keyword search fails
+
+Question: *"Show me previous stuck-pipe trouble on this well."*
+
+Keyword search for "stuck pipe" finds report #38 — the day it actually
+happened — and stops there. It misses report #39, filed the very next
+day, because that report never uses the word "stuck." Instead it says:
+
+- "Work tight hole"
+- "high torque decision to pull out of hole"
+- "Hole drag from 6,050' to 5,901'"
+
+That's the same operational story — continued stuck-pipe risk, one day
+later — written in entirely different words. Keyword search cannot
+connect them, because it only ever checks for exact spelling. It doesn't
+know what any word *means*, only whether it's present or absent.
+
+That gap — matching meaning, not just spelling — is exactly what Chapter
+4 solves, using a technique called embeddings.
+
+## What can you do now that you couldn't do before?
+
+You can search an archive of reports for exact words or phrases and get
+an answer in milliseconds, instead of opening files one at a time.
 
 ## Suggested next step
 

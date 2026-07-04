@@ -1,5 +1,11 @@
 # Semantic Search {#sec-chapter-04}
 
+```
+Searchable Archive
+ ↓
+Search by Meaning
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -14,15 +20,15 @@ By the end of this chapter, you will be able to:
   not a complete fix — and that granularity is what actually determines
   how well it works.
 
-## Operational problem
+## Operational Problem
 
 Chapter 3 ended on a real miss: the query `"stuck pipe"` found report #38
 (the actual incident) but was blind to report #39, which describes tight
 hole, high torque, and a decision to pull out of hole — real continued-risk
 language, written the very next day — without ever using the word "stuck."
-Semantic search is supposed to retrieve by *meaning* rather than exact
-words. Let's find out, honestly, how much of that problem it actually
-solves.
+An engineer reading both reports would say "yes, obviously, day two of the
+same problem." A keyword search can't see that at all. Let's find out,
+honestly, how much of that gap semantic search actually closes.
 
 ## Example DDR extract
 
@@ -47,10 +53,26 @@ You don't need to understand the neural network that produces this vector;
 you need to understand what it gives you: a numeric representation of
 meaning you can compare with simple arithmetic.
 
+::: {.callout-tip title="Engineering Translation: Vector / embedding"}
+Think of an embedding as GPS coordinates for meaning. Instead of latitude
+and longitude, it's a few hundred numbers — but the idea is the same: two
+sentences with similar meaning end up with "coordinates" close together,
+the same way two rigs in the same field end up with similar latitude and
+longitude, even if their names have nothing in common.
+:::
+
 **Cosine similarity** measures the angle between two vectors — 1.0 for
 identical direction, 0 for unrelated, negative for opposite. It's the
 standard way to compare embeddings because it ignores vector *length* and
 focuses purely on *direction*, which is what carries the meaning here.
+
+::: {.callout-tip title="Engineering Translation: Cosine similarity"}
+Cosine similarity is a compass bearing, not a ruler. It asks "which way is
+this thing pointing?", not "how big is it?" — so a short sentence and a
+long paragraph about the same topic can still score as pointing the same
+direction, the same way two surveys can report the same azimuth
+regardless of how long each run was.
+:::
 
 We use `sentence-transformers` [@reimers2019sbert] with a small, fast
 model (`all-MiniLM-L6-v2`) — good enough to prove the concept and small
@@ -72,15 +94,25 @@ nearby vectors = similar meaning, regardless of shared vocabulary
 
 ## Implementation
 
+### Step 1: load every report's text
+
+## What problem are we solving?
+
+Get every report's text into memory, alongside its filename, so we know
+which score belongs to which report later.
+
+## Inputs
+
+- A folder of cleaned report text, e.g. `datasets/ddr_text_expanded/`.
+
+## Expected Output
+
+Two matching lists: report filenames, and each report's full text.
+
 ```{python}
 #| eval: false
 # code/chapter_04/semantic_search.py
 from pathlib import Path
-
-import numpy as np
-from sentence_transformers import SentenceTransformer
-
-MODEL_NAME = "all-MiniLM-L6-v2"
 
 def load_chunks(text_dir: Path) -> tuple[list[str], list[str]]:
     filenames, texts = [], []
@@ -88,11 +120,68 @@ def load_chunks(text_dir: Path) -> tuple[list[str], list[str]]:
         filenames.append(path.name)
         texts.append(path.read_text(encoding="utf-8"))
     return filenames, texts
+```
+
+## What just happened?
+
+Nothing about meaning yet — this just reads every text file into memory
+and keeps a matching list of filenames, so that whatever score we
+calculate next can be traced back to the report it came from.
+
+### Step 2: convert text into vectors
+
+## What problem are we solving?
+
+Turn each report's text into a numeric representation of its meaning, so
+that "similar meaning" can be measured with arithmetic instead of exact
+word matching.
+
+## Inputs
+
+- `MODEL_NAME = "all-MiniLM-L6-v2"`, a pre-trained embedding model.
+- The list of report texts from Step 1.
+
+## Expected Output
+
+One 384-number vector per report, all packed into a single array.
+
+```{python}
+#| eval: false
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
+MODEL_NAME = "all-MiniLM-L6-v2"
 
 def embed_texts(model: SentenceTransformer, texts: list[str]) -> np.ndarray:
     embeddings = model.encode(texts, normalize_embeddings=True)
     return np.asarray(embeddings)
+```
 
+## What just happened?
+
+The model read each report and produced its "GPS coordinates for
+meaning" — one vector per report. `normalize_embeddings=True` scales
+every vector to the same length, so later we can compare direction only,
+which is exactly what cosine similarity needs.
+
+### Step 3: rank reports against a query
+
+## What problem are we solving?
+
+Given a query like "stuck pipe," find which reports are closest in
+meaning — not which reports contain those exact words.
+
+## Inputs
+
+- The query string.
+- The array of report vectors from Step 2.
+
+## Expected Output
+
+A ranked list of `(filename, score)` pairs, highest similarity first.
+
+```{python}
+#| eval: false
 def search(model: SentenceTransformer, query: str, filenames: list[str],
            embeddings: np.ndarray, top_k: int = 3) -> list[tuple[str, float]]:
     query_vec = model.encode([query], normalize_embeddings=True)[0]
@@ -101,9 +190,13 @@ def search(model: SentenceTransformer, query: str, filenames: list[str],
     return [(filenames[i], float(scores[i])) for i in top_indices]
 ```
 
-Because embeddings are normalized, the dot product `embeddings @
-query_vec` *is* cosine similarity — no separate normalization step needed
-at query time.
+## What just happened?
+
+The query got turned into its own vector, then compared against every
+report's vector at once. Because every vector was normalized to the same
+length in Step 2, one matrix multiplication (`embeddings @ query_vec`)
+gives back the cosine similarity for every report simultaneously —
+that's the "arithmetic" that replaces exact word matching.
 
 Run this against all ten sample reports with `query="stuck pipe"` and
 `top_k=10` (the whole ranking, not just the top few), and you get the
@@ -126,6 +219,27 @@ Report #39 went from *absent* (Chapter 3) to *rank 5 of 10* — a real
 improvement, worth having. But it's not a clean win: the scores are
 bunched close together (0.12–0.24), and a busy engineer scanning only the
 top 2 or 3 results would still miss it.
+
+## Production Reality
+
+This chapter runs the embedding model locally, on a laptop CPU, against
+ten short reports. Real deployments hit constraints this setup never
+sees:
+
+- some teams call a hosted embedding API instead of running a model
+  locally — which means sending report text, possibly confidential well
+  data, to a third party. That's a data-governance conversation, not just
+  a technical choice, and it's worth having before it's a surprise.
+- embeddings from two different model versions aren't comparable — if you
+  re-embed your archive with a newer model, old and new vectors can't be
+  compared against each other, and everything needs re-embedding together.
+- embedding a full multi-well archive (thousands of reports, not ten)
+  takes real time and, for hosted APIs, real money — a cost that scales
+  with archive size, not query volume.
+- a similarity score like 0.24 is only meaningful *relative to other
+  scores in the same search* — it is not "24% similar" in any absolute
+  sense, and comparing scores across different queries or models is not
+  valid.
 
 ## Field notes
 
@@ -215,6 +329,13 @@ should score close to each other. A reference solution is in
 |---|---|
 | `code/chapter_04/semantic_search.py` | Embedding generation and brute-force cosine search |
 | `notebooks/chapter_04_explore.ipynb` | Interactive companion notebook |
+
+## What can you do now that you couldn't do before?
+
+You can retrieve relevant report passages by meaning instead of exact
+wording — finding report #39's continued-risk language even though it
+never says "stuck" — and you know precisely why the result isn't perfect
+yet: granularity, not the model, is the real bottleneck.
 
 ## Suggested next step
 

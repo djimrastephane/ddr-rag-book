@@ -1,13 +1,14 @@
 # Appendix B: Oilfield Abbreviation Glossary {#sec-appendix-b .unnumbered}
 
-This glossary supports Chapter 2's abbreviation expansion engine and the
-Chapter 2 challenge exercise. It is broader than the `ABBREVIATIONS` dict
-built in Chapter 2 itself — that chapter's dictionary is deliberately
-scoped to terms verified present in this book's real Utah FORGE archive.
-This appendix adds enough additional common oilfield terms to give the
-expander real coverage on a first pass against a different archive. It is
-still not exhaustive — abbreviation usage varies by operator, rig
-contractor, and basin.
+This glossary is a bigger version of the same equipment lookup table
+introduced in Chapter 2 — it supports Chapter 2's abbreviation expansion
+engine and its challenge exercise. It is broader than the
+`ABBREVIATIONS` dict built in Chapter 2 itself — that chapter's
+dictionary is deliberately scoped to terms verified present in this
+book's real Utah FORGE archive. This appendix adds enough additional
+common oilfield terms to give the expander real coverage on a first pass
+against a different archive. It is still not exhaustive — abbreviation
+usage varies by operator, rig contractor, and basin.
 
 Terms marked **(FORGE)** are confirmed present in this book's real sample
 archive; the rest are common industry terms not found in this particular

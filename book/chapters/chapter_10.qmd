@@ -1,5 +1,11 @@
 # Traceable Answers and Hallucination Mitigation {#sec-chapter-10}
 
+```
+Plausible Answer
+      ↓
+Provable Answer
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -11,23 +17,34 @@ By the end of this chapter, you will be able to:
 - Detect and surface gaps in your own source archive, so the system's
   silence about a period isn't mistaken for "nothing happened."
 
-## Operational problem
+## Operational Problem
 
-Chapter 5 built a prompt that *asks* a language model to cite sources —
-necessary, but not sufficient. A model can still cite a plausible-sounding
-report number for a number it invented, especially for arithmetic
-questions ("how many hours of non-productive time in November?") that
-language models are statistically bad at answering exactly, no matter how
-good the prompt is. Separately, this archive — like any real archive —
-has a genuine gap, and a system that answers confidently from what it
-*has*, without flagging what it's *missing*, can quietly mislead an
-engineer who assumes silence means nothing happened.
+Can you actually prove that number, or did the model just make it sound
+right? Chapter 5 built a prompt that *asks* a language model to cite
+sources — necessary, but not sufficient. A model can still cite a
+plausible-sounding report number for a number it invented, especially for
+arithmetic questions ("how many hours of non-productive time in
+November?") that language models are statistically bad at answering
+exactly, no matter how good the prompt is. Separately, this archive —
+like any real archive — has a genuine gap, and a system that answers
+confidently from what it *has*, without flagging what it's *missing*, can
+quietly mislead an engineer who assumes silence means nothing happened.
 
 ## Structured facts, already extracted
 
 Language models can produce fluent, plausible claims that are simply
 false — a well-documented failure mode called hallucination
-[@ji2023hallucination]. The single most effective mitigation in this book
+[@ji2023hallucination].
+
+::: {.callout-tip title="Engineering Translation: Hallucination"}
+A **hallucination** is a confident wrong answer — the language-model
+equivalent of a new hire who guesses a number rather than admitting "I
+don't know," and says it fluently enough that nobody thinks to
+double-check. It isn't lying on purpose; it's producing text that sounds
+right without anything underneath actually verifying it.
+:::
+
+The single most effective mitigation in this book
 is a rule of thumb, not a model trick: **if a question can be answered by
 looking something up or computing it from structured data, don't generate
 the answer — compute it.**
@@ -89,6 +106,23 @@ the presence.
 
 ## Implementation
 
+### Step 1: give every claim a checkable tag
+
+## What problem are we solving?
+
+Attach a checkable source to every claim — which report, which page —
+instead of a citation-shaped sentence a reader has to take on faith.
+
+## Inputs
+
+- A report name/number, and an optional page number.
+- A list of such citations to attach to one answer.
+
+## Expected Output
+
+A plain-text "Evidence:" block listing each source, ready to show
+alongside a generated answer.
+
 ```{python}
 #| eval: false
 # code/chapter_10/traceable_answers.py
@@ -102,7 +136,43 @@ class Citation:
 def format_evidence(citations: list[Citation]) -> str:
     lines = [f"  {c.report}" + (f" page {c.page}" if c.page else "") for c in citations]
     return "Evidence:\n" + "\n".join(lines)
+```
 
+## What just happened?
+
+`Citation` bundles a report and a page number together as one unit — the
+equivalent of an evidence tag on an exhibit, so a claim's source can never
+get separated from the claim itself by accident. `format_evidence` turns
+a list of those tags into a plain block of text a reader can check
+against the real reports, one line per source.
+
+::: {.callout-tip title="Engineering Translation: Dataclass"}
+A **dataclass** like `Citation` is a small, labelled bundle of related
+facts — the code equivalent of an equipment tag that keeps a part number
+and its location together on one card, instead of as two separate loose
+numbers you could mix up.
+:::
+
+### Step 2: check the archive for real gaps
+
+## What problem are we solving?
+
+Detect whether the archive has days with no report at all, so the system
+can say "I have nothing for that date" instead of guessing or silently
+retrieving the nearest available report.
+
+## Inputs
+
+- A list of report dates, as ISO date strings, covering a period that
+  should have one report per day.
+
+## Expected Output
+
+A list of `(start, end)` date ranges with no report — empty if the
+archive is complete.
+
+```{python}
+#| eval: false
 def find_date_gaps(report_dates: list[str]) -> list[tuple[str, str]]:
     """Return (start, end) date ranges with no report, given a sorted
     list of ISO date strings covering a continuous daily-reporting period."""
@@ -116,6 +186,35 @@ def find_date_gaps(report_dates: list[str]) -> list[tuple[str, str]]:
             gaps.append(((prev + timedelta(days=1)).isoformat(), (curr - timedelta(days=1)).isoformat()))
     return gaps
 ```
+
+## What just happened?
+
+The dates get sorted, then checked one consecutive pair at a time: if
+more than one day passes between two reports, everything in between gets
+recorded as a missing range. No content is inspected here at all — this
+only checks whether a report *exists* for each day, which is exactly
+enough to catch the real two-day gap in this archive.
+
+## Production Reality
+
+This chapter's citation and gap-detection code both assume the
+underlying extraction is trustworthy — but structured extraction is still
+code, written by someone, and can encode a judgment call worth checking
+(see this chapter's own Field Notes on `is_npt` below). A deployed system
+has more to plan for:
+
+- gap detection has to run continuously as new reports arrive, not just
+  once at setup — a system that only checked for gaps on day one won't
+  notice a new one appearing three months later
+- not every gap is administrative silence — a missing day could mean a
+  missing safety report, which is worth escalating to a person, not just
+  logging quietly as "no data for this date"
+- a citation is only useful if someone actually reads it — a system that
+  buries the evidence list at the bottom of a long answer, in small
+  print, earns the same blind trust as a system with no citations at all
+- some engineering decisions (regulatory submissions, incident reports)
+  require a human sign-off no matter how good the system's citations
+  are — traceability supports a human reviewer, it doesn't replace one
 
 ## Practical exercise
 
@@ -191,6 +290,14 @@ A reference solution is in `code/chapter_10/challenge/`.
 |---|---|
 | `code/chapter_10/traceable_answers.py` | Citation formatting and date-gap detection |
 | `DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv` | Real, computed gap-detection output (companion repo) |
+
+## What can you do now that you couldn't do before?
+
+You can tell the difference between a question you should compute from
+data you already have and one you should generate an answer to — and you
+can prove, with a checkable citation, exactly where every part of a
+generated answer came from, including telling an engineer honestly when
+the archive simply has nothing to say.
 
 ## Suggested next step
 

@@ -1,5 +1,13 @@
 # Vector Databases at Scale {#sec-chapter-08}
 
+```
+10 Documents
+   ↓
+76-Report Archive
+   ↓
+Persistent Index
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -10,8 +18,9 @@ By the end of this chapter, you will be able to:
 - Understand the difference between a per-document index and a
   campaign-wide global index, and when each is the right tool.
 
-## Operational problem
+## Operational Problem
 
+What happens when your ten-document prototype meets the full archive?
 Chapter 4's `embeddings @ query_vec` brute-force search works fine over
 ten documents — it's a single matrix multiply. The full Utah FORGE
 archive is 76 reports. Run this book's companion pipeline's chunking and
@@ -26,18 +35,35 @@ search across every chunk are genuinely different operations.
 
 A **vector database** (or vector index library, like FAISS
 [@johnson2019faiss]) organises embeddings so that similarity search
-doesn't require comparing the query against every single vector. At this
-book's scale, even the simplest FAISS index — `IndexFlatIP` (flat,
-inner-product) — is the right choice: it's an *exact* nearest-neighbour
-search, mathematically equivalent to Chapter 4's brute-force approach,
-just implemented in optimised C++ with a persistent, loadable index file.
-(Larger-scale approximate indexes — IVF, HNSW — trade a small amount of
-accuracy for speed at millions of vectors; not a tradeoff this book's
-scale needs.)
+doesn't require comparing the query against every single vector.
+
+::: {.callout-tip title="Engineering Translation: FAISS index"}
+Think of Chapter 4's brute-force search as walking every aisle of a
+warehouse to find a part. A **FAISS index** is that same warehouse with
+an addressing scheme: it can go straight to the right shelf instead of
+checking every one. At this book's scale the "shelf" it finds is still
+mathematically the exact same answer — it just gets there faster and
+without needing everything loaded into memory by hand each time.
+:::
+
+At this book's scale, even the simplest FAISS index —
+`IndexFlatIP` (flat, inner-product) — is the right choice: it's an
+*exact* nearest-neighbour search, mathematically equivalent to Chapter 4's
+brute-force approach, just implemented in optimised C++ with a
+persistent, loadable index file. (Larger-scale approximate indexes — IVF,
+HNSW — trade a small amount of accuracy for speed at millions of vectors;
+not a tradeoff this book's scale needs.)
 
 Because embeddings are normalized (Chapter 4), inner product *is* cosine
 similarity — which is exactly why `IndexFlatIP` is the right index type
 rather than a distance-based one.
+
+::: {.callout-tip title="Engineering Translation: Persisting an index"}
+**Persisting** an index means saving it to a file, the same way you'd
+file a completed report in a binder instead of reconstructing it from
+memory every morning. Build it once, save it, and every future session
+just loads the finished file — no re-embedding, no rebuilding.
+:::
 
 ## Building the real index
 
@@ -89,6 +115,23 @@ Global FAISS index
 
 ## Implementation
 
+### Step 1: build the index and save it to disk
+
+## What problem are we solving?
+
+Turn a matrix of chunk embeddings into a fast, queryable structure, then
+save it so it never needs rebuilding from scratch in a future session.
+
+## Inputs
+
+- `embeddings`: a NumPy array of chunk vectors, shape `(n_chunks, 384)`.
+- A destination file path for the saved index.
+
+## Expected Output
+
+A `faiss.index` file on disk, plus the same in-memory index object ready
+to query immediately.
+
 ```{python}
 #| eval: false
 # code/chapter_08/build_faiss_index.py
@@ -105,7 +148,37 @@ def build_index(embeddings: np.ndarray) -> faiss.IndexFlatIP:
 
 def save_index(index: faiss.Index, path: Path) -> None:
     faiss.write_index(index, str(path))
+```
 
+## What just happened?
+
+`build_index` creates an empty FAISS structure sized for 384-number
+vectors, then loads every chunk's embedding into it in one call.
+`save_index` writes that structure out to a single file — the "binder"
+from the Engineering Translation above — so the next session can load it
+back instantly instead of re-embedding every chunk again.
+
+### Step 2: reload the index and answer a query
+
+## What problem are we solving?
+
+In a fresh session — no re-embedding, no rebuilding — load the saved
+index back and answer a query against it, the same way Chapter 4's
+`search` did, just backed by FAISS instead of a NumPy array in memory.
+
+## Inputs
+
+- The saved `faiss.index` file path.
+- A query vector (from Chapter 4's embedding model).
+- `top_k`: how many results to return.
+
+## Expected Output
+
+A ranked list of `(chunk_index, similarity_score)` pairs — the same
+shape of result Chapter 4's brute-force `search` returned.
+
+```{python}
+#| eval: false
 def load_index(path: Path) -> faiss.Index:
     return faiss.read_index(str(path))
 
@@ -114,10 +187,40 @@ def search(index: faiss.Index, query_vec: np.ndarray, top_k: int = 5):
     return list(zip(indices[0].tolist(), scores[0].tolist()))
 ```
 
+## What just happened?
+
+`load_index` reads the saved file back into a ready-to-query FAISS
+index — no re-embedding step, because the vectors were already saved
+inside it. `search` hands it one query vector and asks for the `top_k`
+closest matches; FAISS returns their positions and scores, which get
+paired up into the same kind of ranked list Chapter 4 produced by hand.
+
 This mirrors the indexing pattern in the companion pipeline's
 `src/rag_pdf/services/search_service.py`, which builds `IndexFlatIP` over
 chunk embeddings and persists it to `faiss.index` alongside each
 document's other artefacts.
+
+## Production Reality
+
+This chapter's `IndexFlatIP` scales cleanly to Utah FORGE's 2,943 chunks
+— both to build and to query. A single operator's *entire* well
+portfolio, or a service company handling multiple clients, changes the
+picture:
+
+- millions of chunks make exact search too slow; that's when approximate
+  indexes (IVF, HNSW) become the right tradeoff, not just an option
+  mentioned in passing
+- a flat index file rebuilt from scratch every time a new DDR arrives
+  doesn't scale — production systems need to add new vectors
+  incrementally, without reprocessing the whole archive
+- multiple engineers querying the same index at once, from different
+  applications, usually means a managed vector database (pgvector,
+  Pinecone, Weaviate) instead of a single `faiss.index` file on one
+  machine's disk
+- if some wells' data is more sensitive than others (a joint-venture well,
+  say, versus a wholly-owned one), a single global index needs an
+  access-control layer on top of it — FAISS itself has no concept of
+  "who's allowed to see this chunk"
 
 ## Practical exercise
 
@@ -192,6 +295,13 @@ order of magnitude. A reference solution is in `code/chapter_08/challenge/`.
 | `datasets/forge_archive/` | The full 76-report Utah FORGE archive |
 | `DDR_UTAH_FORGE/scripts/build_index.py` | Per-document index builder (companion repo) |
 | `DDR_UTAH_FORGE/scripts/build_global_index.py` | Campaign-wide global index builder (companion repo) |
+
+## What can you do now that you couldn't do before?
+
+You can build a persistent, queryable index over an entire report
+archive that survives a restart — and you've verified, not just assumed,
+that scaling up the infrastructure didn't change a single answer the
+retrieval gives back.
 
 ## Suggested next step
 

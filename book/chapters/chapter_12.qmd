@@ -1,5 +1,13 @@
 # Sequence Detection: Building Toward Cross-Well Intelligence {#sec-chapter-12}
 
+```
+1 Well, 76 Reports
+        ↓
+  Checkable Patterns
+        ↓
+Toward Cross-Well Intelligence
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -13,10 +21,10 @@ By the end of this chapter, you will be able to:
   demonstrate, and what it would take to scale this technique to genuine
   cross-well intelligence.
 
-## Operational problem
+## Operational Problem
 
-This is the payoff question every previous chapter has been building
-toward: *did something earlier predict trouble later?* A human reading 76
+Did something earlier predict trouble later? This is the payoff question
+every previous chapter has been building toward. A human reading 76
 reports in sequence can, with effort, spot a pattern — but a system that
 has structured, classified, and indexed the same text can hold every
 report in mind at once, and check numeric trends a human would have to
@@ -48,12 +56,24 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 :::
 
 Torque was flat — even slightly down — for two days, then jumped by
-roughly a third on the same day the assembly became stuck. This is a
-same-day correlation between a structured number and a narrative event,
-not a multi-day advance warning — and that distinction matters. Don't
-claim a leading indicator you haven't actually verified extends before
-the event; this pattern says "torque and the stuck-pipe event moved
-together," not "torque predicted the stuck pipe two days out."
+roughly a third on the same day the assembly became stuck.
+
+::: {.callout-tip title="Engineering Translation: Leading indicator vs. same-day correlation"}
+A **leading indicator** is a signal that shows up *before* the trouble —
+like a rising torque trend days ahead of an actual stuck-pipe event, which
+would genuinely give you warning. A **same-day correlation** just means
+two things moved together on the same day — useful evidence that they're
+related, but it confirms trouble, it doesn't predict it. This chapter's
+torque pattern is the second kind, and it matters to be precise about
+which one you're actually looking at.
+:::
+
+This is a same-day correlation between a structured number and a
+narrative event, not a multi-day advance warning — and that distinction
+matters. Don't claim a leading indicator you haven't actually verified
+extends before the event; this pattern says "torque and the stuck-pipe
+event moved together," not "torque predicted the stuck pipe two days
+out."
 
 Chapter 5's other real sequence — report #49's packers failing to set,
 followed same-day by picking up a fishing BHA, followed by report #50's
@@ -75,6 +95,14 @@ MIN_TERM_FREQ = 3             # minimum occurrences before a term counts at all
 NPT_SIGNAL_THRESHOLD = 0.40   # post-boundary NPT rate to call a term "causal"
 ESCALATION_FREQ_RATIO = 1.5   # frequency increase to call a term "escalating"
 ```
+
+::: {.callout-tip title="Engineering Translation: Threshold constants"}
+These four lines are named, readable numbers you could point to on a
+whiteboard and defend in a meeting — "we call it escalating once
+frequency rises by 50%" — rather than a judgment buried invisibly inside
+a trained model's weights. Anyone can read them, question them, and
+change them without touching the logic around them.
+:::
 
 Every one of these is a plain, readable number you can inspect, change,
 and justify — not a weight buried inside a trained model.
@@ -105,6 +133,24 @@ well's data, and some aren't yet.
 
 ## Implementation
 
+### Step 1: measure day-over-day change, not just the raw numbers
+
+## What problem are we solving?
+
+Turn a list of daily torque readings into a measured day-over-day
+percentage change, so "roughly a third" becomes an exact, checkable
+number.
+
+## Inputs
+
+- `readings`: a chronological list of `(date, torque_value)` pairs.
+
+## Expected Output
+
+A list of `(date, torque_value, percentage_change)` — one entry for every
+day after the first, since a percentage change needs a previous day to
+compare against.
+
 ```{python}
 #| eval: false
 # code/chapter_12/torque_trend_check.py
@@ -118,6 +164,31 @@ def torque_trend(readings: list[tuple[str, float]]) -> list[tuple[str, float, fl
     return trend
 ```
 
+## What just happened?
+
+This walks through the readings one consecutive pair at a time and
+computes how much each day's torque changed relative to the day before,
+as a percentage — the exact arithmetic behind the "flat, then a third
+higher" story told in prose above.
+
+### Step 2: run it against report #38's real numbers
+
+## What problem are we solving?
+
+See the actual percentage change for reports #36–38, printed as real
+numbers instead of an approximate description.
+
+## Inputs
+
+- The three real `TORQUE` header values from reports #36, #37, and #38.
+
+## Expected Output
+
+```
+2020-11-25: 4200 (-4.5%)
+2020-11-26: 5615 (+33.7%)
+```
+
 ```{python}
 #| eval: false
 readings = [
@@ -127,9 +198,37 @@ readings = [
 ]
 for date, val, pct in torque_trend(readings):
     print(f"{date}: {val} ({pct:+.1%})")
-# 2020-11-25: 4200 (-4.5%)
-# 2020-11-26: 5615 (+33.7%)
 ```
+
+## What just happened?
+
+Running the real header values through `torque_trend` confirms the
+pattern precisely: a 4.5% *dip* the day before, then a 33.7% jump on the
+stuck-pipe day itself — turning "roughly a third" into an exact,
+reproducible number sourced from the report headers themselves.
+
+## Production Reality
+
+This chapter's torque check works because Utah FORGE's header format is
+completely consistent, and because a single well gives you exactly one
+example of the pattern. Genuine cross-well intelligence has different
+demands entirely:
+
+- different rigs and BHA configurations have different normal torque
+  ranges — a 25% jump threshold tuned on this well could be meaningless,
+  or far too sensitive, on a well drilled with different equipment
+- not every operator's DDR software populates a header field as cleanly
+  as WellEz does here — a real multi-operator archive may need
+  per-source parsing before any threshold-based check is even possible
+- one well gives you one instance of a pattern, which is a hypothesis,
+  not a finding — genuine cross-well intelligence needs enough wells to
+  tell a real, recurring precursor apart from coincidence, which is
+  exactly why the companion pipeline's `causality_analyzer.py` was built
+  against a many-well campaign in the first place
+- as the callout above shows, code built and tuned for one dataset's
+  phase vocabulary doesn't just work on a new dataset because the file
+  paths match — every threshold and configuration assumption needs
+  re-checking against the new data before you trust its output
 
 ## Practical exercise
 
@@ -177,6 +276,14 @@ solution is in `code/chapter_12/challenge/`.
 | `DDR_UTAH_FORGE/src/ddr_rag/causality_analyzer.py` | Windowed leading-indicator detection (companion repo) |
 | `DDR_UTAH_FORGE/src/ddr_rag/npt_classifier.py` | Utah-FORGE-adapted NPT classification (companion repo) |
 | `DDR_UTAH_FORGE/data/fields/UtahForge/wells/` | Multi-well data structure, ready for expansion (companion repo) |
+
+## What can you do now that you couldn't do before?
+
+You can check, by hand and with real numbers, whether a structured trend
+and a narrative event actually moved together — and you know precisely
+what's still missing (more wells, re-tuned thresholds, a matching phase
+vocabulary) before that check becomes genuine cross-well operational
+intelligence.
 
 ## The complete system
 

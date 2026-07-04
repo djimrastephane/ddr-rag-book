@@ -1,5 +1,15 @@
 # First RAG System {#sec-chapter-05}
 
+```
+Question
+   ↓
+Retriever
+   ↓
+LLM
+   ↓
+Answer + Citations
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -11,7 +21,7 @@ By the end of this chapter, you will be able to:
 - Produce an answer with an explicit, per-claim evidence list — report
   number and page — rather than an unsupported paragraph.
 
-## Operational problem
+## Operational Problem
 
 Retrieval (Chapter 4) gets you the right passages. What an engineer
 actually wants is an answer: *"What led to the fishing operation on
@@ -54,6 +64,22 @@ answer *using only that evidence*. The model is not answering from what it
 memorised during training — it's answering from the specific passages you
 retrieved, which is what makes citation possible at all.
 
+::: {.callout-tip title="Engineering Translation: LLM"}
+An **LLM** (large language model) is like a very well-read new hire: it
+has absorbed an enormous amount of general drilling and engineering
+writing, so it writes fluently and knows the vocabulary — but it has
+never seen *your* wells or *your* reports. Left to its own memory, it will
+guess. RAG is how you make sure it answers from the actual report in
+front of it, not from a guess dressed up in confident language.
+:::
+
+::: {.callout-tip title="Engineering Translation: Prompt"}
+A **prompt** is the instructions-plus-evidence packet you hand that new
+hire before asking them to write anything — the equivalent of handing
+them the specific job's DDRs and a clear brief, instead of just asking
+"what usually happens in a fishing job?" and hoping they don't improvise.
+:::
+
 The critical design decision is the prompt: instruct the model explicitly
 to answer only from the provided context, and to cite which source each
 part of the answer came from. This doesn't make hallucination impossible —
@@ -87,13 +113,26 @@ archive.
 
 ## Implementation
 
+### Step 1: write the instructions the model must follow
+
+## What problem are we solving?
+
+Make sure the model answers from the evidence you hand it, not from
+whatever it remembers from training — and make sure it tells you which
+report each part of the answer came from.
+
+## Inputs
+
+- None yet — this is a fixed template, filled in for each question later.
+
+## Expected Output
+
+A reusable prompt template with two blanks: the evidence, and the
+question.
+
 ```{python}
 #| eval: false
 # code/chapter_05/first_rag.py
-from pathlib import Path
-
-from semantic_search import embed_texts, load_chunks, search  # from Chapter 4
-
 PROMPT_TEMPLATE = """Answer the question using ONLY the evidence below.
 If the evidence doesn't contain the answer, say so — do not guess.
 Cite which report each part of your answer comes from.
@@ -103,6 +142,38 @@ Evidence:
 
 Question: {question}
 Answer:"""
+```
+
+## What just happened?
+
+This is the "brief" you hand the model every single time: answer only
+from what's provided, admit it when the evidence doesn't cover the
+question, and always say which report backs each claim. Everything else
+in this chapter exists to fill in `{evidence}` and `{question}` correctly.
+
+### Step 2: assemble the evidence into that template
+
+## What problem are we solving?
+
+Take the reports Chapter 4's retriever found and package them, labelled
+by filename, into the prompt template's `{evidence}` blank.
+
+## Inputs
+
+- A question string.
+- The retrieved `(filename, score)` pairs from Chapter 4's `search`.
+- The full filename and text lists from Chapter 4's `load_chunks`.
+
+## Expected Output
+
+One complete prompt string, evidence labelled by source filename, ready
+to send to a model.
+
+```{python}
+#| eval: false
+from pathlib import Path
+
+from semantic_search import embed_texts, load_chunks, search  # from Chapter 4
 
 def build_prompt(question: str, retrieved: list[tuple[str, float]],
                   filenames: list[str], texts: list[str]) -> str:
@@ -114,7 +185,38 @@ def build_prompt(question: str, retrieved: list[tuple[str, float]],
         evidence="\n\n".join(evidence_blocks),
         question=question,
     )
+```
 
+## What just happened?
+
+For every report Chapter 4's retriever returned, this tags its full text
+with its own filename in square brackets, then stitches all of them
+together into the `{evidence}` section of the prompt. Every fact the
+model can possibly cite is now labelled with exactly which report it came
+from.
+
+### Step 3: retrieve, then generate, then report the sources
+
+## What problem are we solving?
+
+Chain retrieval and generation into one function: given a question, find
+the evidence, ask the model to answer from it, and hand back both the
+answer and the exact list of reports it was allowed to use.
+
+## Inputs
+
+- A question string.
+- The embedding model, filenames, texts, and embeddings from Chapter 4.
+- `llm_call`: any function that takes a prompt string and returns the
+  model's answer.
+
+## Expected Output
+
+A tuple: the generated answer text, and the list of report filenames
+that were actually retrieved and shown to the model.
+
+```{python}
+#| eval: false
 def answer_question(question: str, model, filenames, texts, embeddings,
                      llm_call) -> tuple[str, list[str]]:
     retrieved = search(model, question, filenames, embeddings, top_k=3)
@@ -124,11 +226,41 @@ def answer_question(question: str, model, filenames, texts, embeddings,
     return answer_text, evidence
 ```
 
+## What just happened?
+
+This is the whole system end to end: retrieve the top matching reports,
+build a prompt from them, generate an answer, and return that answer
+alongside the exact evidence list it was built from — so you (or an
+engineer reviewing the answer) can always check the citation against the
+real reports, rather than taking the model's word for it.
+
 `llm_call` is intentionally a plain function argument, not a hardcoded
 API client: plug in a local model, an API-based model, or — while you're
 first testing the retrieval and prompt logic — a stub that just echoes the
 evidence back, so you can verify the pipeline end to end before spending a
 single API call.
+
+## Production Reality
+
+This chapter's prompt says "answer only from the evidence" — but an
+instruction in a prompt is a strong nudge, not a guarantee. Real systems
+have to plan around what happens when that nudge isn't enough:
+
+- models don't follow instructions perfectly every time — occasionally
+  one will still answer from general knowledge instead of the evidence,
+  or blend the two without saying so
+- the same question, asked twice, can produce two differently worded
+  answers — LLM output isn't fully deterministic, which matters when
+  someone asks "why did it say something different yesterday?"
+- long evidence sections eventually hit the model's context window limit
+  — a real archive's retrieved chunks can't just grow without bound
+- every call to a hosted LLM API costs money and takes time; a system
+  answering hundreds of engineering questions a day needs a cost and
+  latency budget, not just a working prompt
+
+None of this means RAG doesn't work — it means "answer only from
+evidence" is a design goal you build toward, not a switch you flip.
+Chapter 10 covers the guardrails that close this gap further.
 
 ## Practical exercise
 
@@ -203,6 +335,13 @@ reference solution is in `code/chapter_05/challenge/`.
 |---|---|
 | `code/chapter_05/first_rag.py` | Prompt assembly and evidence-tracked question answering |
 | `notebooks/chapter_05_explore.ipynb` | Interactive companion notebook |
+
+## What can you do now that you couldn't do before?
+
+You can ask an engineering question in plain English and get back a
+generated answer with an explicit, checkable list of exactly which
+reports it came from — not just ranked passages you'd still have to read
+and synthesise yourself.
 
 ## Suggested next step
 

@@ -1,5 +1,11 @@
 # Scanned Reports and OCR Quality Gates {#sec-chapter-06}
 
+```
+Scanned PDF
+ ↓
+Trusted Text
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -10,18 +16,20 @@ By the end of this chapter, you will be able to:
 - Build a quality gate that rejects bad OCR output *before* it enters your
   search index, rather than trying to fix it after the fact.
 
-## Operational problem
+## Operational Problem
 
-Every one of the 76 Utah FORGE reports used in this book is
-digital-native — the archive's QA/QC pass confirms 0 unparsed PDFs across
-227 source files. You got lucky: WellEz, the software that generated
-these reports, embeds real character data on every page. Not every
-archive is this well-behaved. Faxed reports, reports scanned from paper
-files, and photos of a logbook page all produce PDFs with no character
-data at all — just a picture of text. Chapter 1's `extract_text()`
-handled this gracefully (an empty string, not a crash), but a real,
-larger archive needs more than graceful failure: it needs OCR to recover
-the text, and a way to know whether to trust what OCR gives back.
+Can you trust the text this archive extracted — even from a report that
+was scanned instead of born digital? Every one of the 76 Utah FORGE
+reports used in this book is digital-native — the archive's QA/QC pass
+confirms 0 unparsed PDFs across 227 source files. You got lucky: WellEz,
+the software that generated these reports, embeds real character data on
+every page. Not every archive is this well-behaved. Faxed reports, reports
+scanned from paper files, and photos of a logbook page all produce PDFs
+with no character data at all — just a picture of text. Chapter 1's
+`extract_text()` handled this gracefully (an empty string, not a crash),
+but a real, larger archive needs more than graceful failure: it needs OCR
+to recover the text, and a way to know whether to trust what OCR gives
+back.
 
 ## Example DDR extract
 
@@ -48,6 +56,22 @@ output at all**. A quality gate scores OCR text against a handful of cheap
 heuristics — is there enough text, is the alphabetic-to-symbol ratio
 sane, is there suspicious repeated garbage — and rejects anything that
 fails, routing it to manual review instead of silently indexing noise.
+
+::: {.callout-tip title="Engineering Translation: Quality gate"}
+A **quality gate** is a mud check before you commit to pumping downhole:
+a handful of cheap tests run before you trust what comes next. Passing
+doesn't prove the text is perfect, the same way a good mud check doesn't
+prove there's no problem downhole — it just screens out the obviously bad
+cases before they cost you.
+:::
+
+::: {.callout-tip title="Engineering Translation: Flag"}
+A **flag** here is one checkbox on an inspection form — "too little text"
+either applies or it doesn't. One flag firing on its own usually isn't
+grounds for rejection (a short, sparse-but-real report can trip one check
+honestly); it's when *several* flags fire together that the page is
+actually suspect.
+:::
 
 This chapter's companion pipeline, **DDR_UTAH_FORGE**, implements exactly
 this pattern in `src/rag_pdf/ocr_quality.py` — even though, as noted
@@ -77,7 +101,28 @@ count how many are True
 
 ## Implementation
 
-Build a simplified version of the same idea:
+Build a simplified version of the same idea.
+
+## What problem are we solving?
+
+Decide whether a page's extracted text is trustworthy enough to add to
+the search index, or whether it should be set aside for a human to check
+instead.
+
+## Inputs
+
+- Extracted text (from OCR, or from Chapter 1's digital extraction).
+- Thresholds: minimum characters, minimum alphabetic words, maximum
+  symbol ratio, and how many flags must fire before rejecting.
+
+## Expected Output
+
+A dictionary reporting the decision and which specific checks failed, for
+example:
+
+```
+{"reject_ocr": True, "flags": {"low_text_density": True, "high_symbol_ratio": True}}
+```
 
 ```{python}
 #| eval: false
@@ -101,6 +146,15 @@ def evaluate_ocr_quality(text: str, min_chars: int = 200,
     return {"reject_ocr": len(active) >= reject_min_flags, "flags": flags}
 ```
 
+## What just happened?
+
+This measures two things about the text: how much of it is real,
+readable words (`low_text_density`), and how much of it is odd symbols
+that shouldn't be there (`high_symbol_ratio`). Each check is a simple
+yes/no. Only when two or more of those checks say "yes, this looks
+wrong" does the function recommend rejecting the page — a single unusual
+character never sinks an otherwise legitimate report.
+
 Test it against a real Utah FORGE report's clean text (it should pass
 easily — that text has a healthy word count and almost no noise symbols)
 and against the corrupted example above (it should fail on both flags).
@@ -111,6 +165,31 @@ line-count check — is in the companion repository at
 for detecting and correcting upside-down or sideways scans, and
 `src/rag_pdf/table_ocr_handoff.py` for the case where a *table* (not
 narrative text) needs OCR fallback.
+
+## Production Reality
+
+This chapter's quality gate answers one narrow question: should this
+specific page be trusted? It doesn't answer what happens next. A real
+archive needs a plan for that too:
+
+- a flagged page needs an actual person to review it — a gate only earns
+  its keep if someone owns the review queue it creates, otherwise flagged
+  pages just pile up unread
+- rotated or upside-down scans (common when a paper report goes into a
+  scanner sideways) need correcting *before* OCR runs at all — that's a
+  separate step from quality scoring, handled by the companion
+  `rotation_handler.py`
+- handwritten margin notes on an otherwise-typed report often don't OCR
+  into anything usable — the gate will correctly flag them as
+  low-density, but "OCR failed" and "this needs a human to transcribe
+  handwriting" call for different follow-up
+- an archive spanning multiple regions or operators may include reports
+  in more than one language, which changes which OCR language pack — and
+  which quality thresholds — actually apply
+
+None of this shows up in the all-digital Utah FORGE archive, which is
+exactly why it's easy to forget about until a real archive containing
+any of the above lands on your desk.
 
 ## Practical exercise
 
@@ -178,6 +257,13 @@ encounter the real noisy data it's meant to catch.
 | `code/chapter_06/ocr_quality_gate.py` | Simplified OCR quality gate |
 | `DDR_UTAH_FORGE/src/rag_pdf/ocr_quality.py` | Production quality gate (companion repo) |
 | `DDR_UTAH_FORGE/src/rag_pdf/rotation_handler.py` | Scan rotation detection (companion repo) |
+
+## What can you do now that you couldn't do before?
+
+You can tell, automatically, whether a page of extracted or OCR'd text is
+trustworthy enough to search on — and route the pages that aren't to a
+human for review, instead of silently indexing garbage alongside good
+reports.
 
 ## Suggested next step
 

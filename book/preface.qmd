@@ -35,12 +35,17 @@ actually hit them in the field.
 
 ## How to read this book
 
-This book follows the practical-first, project-based teaching style of
-*Python Crash Course* [@matthes2023python]: small wins early, theory only
-when the code in front of you needs it, and a working artifact at the end
-of every chapter. Read it in order the first time. Each chapter assumes
-the code from the previous one exists and works — this is a build, not a
-reference manual.
+This book borrows the practical-first, project-based spirit of *Python
+Crash Course* [@matthes2023python] — small wins early, theory only when
+the code in front of you needs it, a working artifact at the end of
+every chapter — but assumes considerably less going in. You do not need
+to have written Python before. You do not need to know what a function
+or a loop is before Chapter 1; each concept is explained in plain
+language, translated into terms an engineer already knows, exactly when
+you need it to solve the problem in front of you.
+
+Read it in order the first time. Each chapter assumes the code from the
+previous one exists and works — this is a build, not a reference manual.
 After your first pass, use it as a reference: jump to the chapter that
 matches the problem you currently have (Chapter 6 if your PDFs are scanned,
 Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers
@@ -48,7 +53,8 @@ aren't trustworthy yet).
 
 Type the code yourself. Do not copy-paste from the companion repository
 until you have typed it once and watched it run. This is slower and it is
-worth it.
+worth it — and if you finish this book able to say "I can build this,"
+rather than "I understand the theory," it did its job.
 
 ## A note on data
 

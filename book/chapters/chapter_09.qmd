@@ -1,5 +1,13 @@
 # Hybrid Retrieval and Reranking {#sec-chapter-09}
 
+```
+Keyword Match + Meaning Match
+        ↓
+    Fused Ranking
+        ↓
+  Reranked Results
+```
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -13,15 +21,17 @@ By the end of this chapter, you will be able to:
 - Read production retrieval-scoring code closely enough to explain *why*
   a specific formula is written the way it is, not just what it computes.
 
-## Operational problem
+## Operational Problem
 
-A query like *"which report had packers fail to set?"* has both a
-semantic component (packers, setting, failure — a topic) and effectively
-an exact-match component (you want report #49 specifically, not every
-report that mentions packers in passing). Dense embeddings capture the
-topical meaning well but blur precise distinctions; keyword search
-(Chapter 3) nails the exact terms but misses paraphrase entirely. Neither
-alone is enough — production retrieval systems combine both.
+Which report had packers fail to set — and why doesn't either search
+method alone find it reliably? A query like *"which report had packers
+fail to set?"* has both a semantic component (packers, setting, failure —
+a topic) and effectively an exact-match component (you want report #49
+specifically, not every report that mentions packers in passing). Dense
+embeddings capture the topical meaning well but blur precise
+distinctions; keyword search (Chapter 3) nails the exact terms but misses
+paraphrase entirely. Neither alone is enough — production retrieval
+systems combine both.
 
 ## Theory
 
@@ -31,12 +41,29 @@ frequency, IDF) and normalised for document length. It's decades old,
 computationally cheap, and excellent at exact and near-exact matches —
 the opposite profile from dense embeddings.
 
+::: {.callout-tip title="Engineering Translation: BM25"}
+**BM25** is keyword search's more careful cousin. It still matches exact
+words, like Chapter 3's search, but gives more credit for rare, specific
+terms ("packers") than common ones ("the"), and adjusts for how long each
+report is so a longer report doesn't win just by containing more words
+overall.
+:::
+
 **Reciprocal Rank Fusion (RRF)** combines two ranked lists by *rank*, not
 raw score: for each document, sum `weight / (k + rank)` across both
 lists. This sidesteps a real problem — BM25 scores and cosine
 similarities live on completely different, incomparable scales, so
 averaging raw scores directly would let whichever signal happens to have
 larger numbers dominate regardless of which is actually more informative.
+
+::: {.callout-tip title="Engineering Translation: Reciprocal Rank Fusion"}
+Think of two judges ranking the same horse race. One scores out of 10,
+the other out of 100 — their raw scores can't be averaged meaningfully.
+But their *placings* (1st, 2nd, 3rd...) mean the same thing regardless of
+scale. **RRF** combines two search results the same way: by where each
+report placed in each ranking, not by the raw number each method
+happened to produce.
+:::
 
 ```
 Query
@@ -65,6 +92,16 @@ between them that no fixed vector representation can. This makes it
 substantially slower per comparison — which is exactly why it's applied
 after fusion has already narrowed the field, not instead of it.
 
+::: {.callout-tip title="Engineering Translation: Cross-encoder"}
+A dense embedding is like summarizing the query and each report
+separately, then comparing the two summaries from a distance. A
+**cross-encoder** instead reads the query and one candidate passage
+*side by side, together*, and judges the pair directly — closer to how a
+person actually double-checks a match, but too slow to do for every
+report, which is why it only runs on the small shortlist fusion already
+produced.
+:::
+
 ## Reading the real fusion code
 
 The companion pipeline's `src/rag_pdf/retrieval/hybrid_utils.py` and
@@ -74,9 +111,13 @@ they're the kind of thing that looks like a stylistic choice until you
 see what breaks without it.
 
 ::: {.callout-tip title="Detail 1: the IDF formula's shape isn't arbitrary"}
+In plain terms: this line makes sure a very common word can never make a
+report's score go *negative*. Here's the code:
+
 ```python
 self.idf[term] = math.log(1.0 + ((self.n_docs - df + 0.5) / (df + 0.5)))
 ```
+
 Compare this to the classic Robertson-Sparse-Selection IDF,
 `log((N - df + 0.5) / (df + 0.5))` *without* the `1.0 +`. For a term that
 appears in almost every document (`df` close to `n_docs`), the classic
@@ -90,10 +131,15 @@ constant.
 :::
 
 ::: {.callout-tip title="Detail 2: normalization has to define its own tie-break"}
+In plain terms: this guards against a division that would otherwise
+break the whole calculation whenever every candidate ties. Here's the
+code:
+
 ```python
 if hi <= lo:
     return {i: 0.0 for i in candidates}
 ```
+
 Min-max normalization rescales scores into `[0, 1]` by subtracting the
 minimum and dividing by the range. If every candidate in a batch scores
 identically, `hi - lo` is zero — a division that, left unguarded, would
@@ -118,6 +164,26 @@ pure similarity.
 
 ## Implementation
 
+## What problem are we solving?
+
+Combine two independently-ranked lists of reports — one from BM25, one
+from dense/semantic search — into a single fused ranking, without
+letting whichever method happens to produce larger raw numbers unfairly
+dominate the result.
+
+## Inputs
+
+- `ranked_lists`: two or more ranked lists of document IDs, best match
+  first (e.g. one from Chapter 3's keyword search, one from Chapter 4's
+  semantic search).
+- `k`: a constant controlling how much rank position matters.
+- `weights`: how much to trust each list relative to the others.
+
+## Expected Output
+
+A single fused ranking: a list of `(doc_id, score)` pairs, sorted
+highest-scoring first.
+
 ```{python}
 #| eval: false
 # code/chapter_09/hybrid_search.py
@@ -132,6 +198,37 @@ def reciprocal_rank_fusion(ranked_lists: list[list[str]], k: int = 20,
             scores[doc_id] += weight * (1.0 / (k + rank))
     return sorted(scores.items(), key=lambda item: item[1], reverse=True)
 ```
+
+## What just happened?
+
+For every report, this adds up a small credit from each ranked list based
+on *where it placed* — a high rank (near the top) contributes a bigger
+credit than a low rank, scaled by that list's weight — then sorts every
+report by its total credit. Because this uses each list's rank, not its
+own raw numbers, a method that happens to score everything on a bigger
+scale can't unfairly take over the fused result.
+
+## Production Reality
+
+This chapter tunes two signals with fixed weights (BM25 × 2.0, dense ×
+0.5) chosen for DDR text specifically. Real systems have to keep that
+tuning honest over time, not treat it as a one-time decision:
+
+- these weights were tuned for this domain's language — a different
+  report type (well completions versus drilling, say, or a different
+  operator's writing style) may need genuinely different weights, not the
+  same ones reused out of habit
+- cross-encoder reranking adds real per-query latency, the same way an
+  LLM call does (Chapter 5) — it has to be budgeted for, not just
+  switched on and forgotten
+- production systems often fuse more than two signals — metadata filters
+  like well name, date range, or report type frequently join BM25 and
+  dense scores in the same fusion step, and each added signal is one more
+  way the weighting can go wrong
+- as this chapter's own Field Notes show below, adding a signal isn't
+  automatically an improvement — a production system needs ongoing
+  evaluation (Chapter 11), not a one-time tuning pass assumed to hold
+  forever
 
 ## Practical exercise
 
@@ -213,6 +310,14 @@ solution is in `code/chapter_09/challenge/`.
 | `DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py` | BM25 index, IDF formula, score fusion (companion repo) |
 | `DDR_UTAH_FORGE/src/rag_pdf/retrieval/canonical_hybrid.py` | Full hybrid retrieval pipeline (companion repo) |
 | `DDR_UTAH_FORGE/src/rag_pdf/services/search_service.py` | Cross-encoder rerank + fusion weights (companion repo) |
+
+## What can you do now that you couldn't do before?
+
+You can combine exact keyword matching and semantic search into a single
+ranked list that plays to each method's strengths — and, from real
+evidence rather than assumption, you know that combining signals only
+helps when both of them actually have something useful to say about the
+query at hand.
 
 ## Suggested next step
 

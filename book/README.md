@@ -1,8 +1,8 @@
 # Building Industrial RAG Systems from Daily Drilling Reports
 
 Companion source for the book of the same name — a hands-on, build-as-you-go
-guide to retrieval-augmented generation (RAG) for drilling and completions
-engineers, written in the practical-first spirit of *Python Crash Course*.
+guide that teaches retrieval-augmented generation (RAG) to drilling and
+completions engineers, assuming no prior programming experience.
 
 Readers start with a folder of DDR PDFs and finish with an Industrial DDR
 Intelligence Platform, one working chapter at a time — using real,

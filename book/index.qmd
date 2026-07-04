@@ -33,13 +33,20 @@ You should read this book if you are a drilling engineer, completions
 engineer, intervention engineer, production engineer, petroleum data
 scientist, or part of a digital transformation team in energy, and you:
 
-- Have basic Python knowledge (variables, functions, loops, lists/dicts).
-- Have never built a RAG system.
-- Have never used a vector database or worked with embeddings.
+- Have never written a line of Python in your life — or tried once and
+  gave up.
+- Have strong operational experience and are comfortable in Excel.
+- Have never built a RAG system, used a vector database, or worked with
+  embeddings.
+- Are curious about AI and automation, and are willing to type code
+  examples yourself rather than just read about them.
 - Want working tools, not a machine learning course.
 
-No prior AI/ML background is assumed. Every concept is introduced exactly
-when you need it to solve the problem in front of you — not before.
+No prior programming or AI/ML background is assumed. Every concept —
+even one as basic as what a function is — is introduced only after
+you've hit the problem it solves, never before. The goal of this book
+isn't to turn you into a software engineer. It's to make you capable of
+building useful engineering tools.
 
 ## What you will build
 
