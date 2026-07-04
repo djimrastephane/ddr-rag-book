@@ -468,21 +468,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">1.1</span> Learning objectives</a></li>
-  <li><a href="#operational-problem" id="toc-operational-problem" class="nav-link" data-scroll-target="#operational-problem"><span class="header-section-number">1.2</span> Operational problem</a></li>
+  <li><a href="#operational-problem" id="toc-operational-problem" class="nav-link" data-scroll-target="#operational-problem"><span class="header-section-number">1.2</span> Operational Problem</a></li>
   <li><a href="#example-ddr-extract" id="toc-example-ddr-extract" class="nav-link" data-scroll-target="#example-ddr-extract"><span class="header-section-number">1.3</span> Example DDR extract</a></li>
   <li><a href="#theory" id="toc-theory" class="nav-link" data-scroll-target="#theory"><span class="header-section-number">1.4</span> Theory</a></li>
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">1.5</span> Implementation</a>
   <ul class="collapse">
   <li><a href="#step-1-get-the-sample-archive" id="toc-step-1-get-the-sample-archive" class="nav-link" data-scroll-target="#step-1-get-the-sample-archive"><span class="header-section-number">1.5.1</span> Step 1: get the sample archive</a></li>
-  <li><a href="#step-2-extract-text-from-one-pdf" id="toc-step-2-extract-text-from-one-pdf" class="nav-link" data-scroll-target="#step-2-extract-text-from-one-pdf"><span class="header-section-number">1.5.2</span> Step 2: extract text from one PDF</a></li>
-  <li><a href="#step-3-make-it-a-script-you-can-run-from-the-command-line" id="toc-step-3-make-it-a-script-you-can-run-from-the-command-line" class="nav-link" data-scroll-target="#step-3-make-it-a-script-you-can-run-from-the-command-line"><span class="header-section-number">1.5.3</span> Step 3: make it a script you can run from the command line</a></li>
   </ul></li>
-  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">1.6</span> Practical exercise</a></li>
-  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">1.7</span> Field notes</a></li>
-  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">1.8</span> Challenge exercise</a></li>
-  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">1.9</span> Key takeaways</a></li>
-  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">1.10</span> Repository files</a></li>
-  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">1.11</span> Suggested next step</a></li>
+  <li><a href="#what-problem-are-we-solving" id="toc-what-problem-are-we-solving" class="nav-link" data-scroll-target="#what-problem-are-we-solving"><span class="header-section-number">1.6</span> What problem are we solving?</a></li>
+  <li><a href="#inputs" id="toc-inputs" class="nav-link" data-scroll-target="#inputs"><span class="header-section-number">1.7</span> Inputs</a></li>
+  <li><a href="#expected-output" id="toc-expected-output" class="nav-link" data-scroll-target="#expected-output"><span class="header-section-number">1.8</span> Expected Output</a></li>
+  <li><a href="#what-just-happened" id="toc-what-just-happened" class="nav-link" data-scroll-target="#what-just-happened"><span class="header-section-number">1.9</span> What just happened?</a>
+  <ul class="collapse">
+  <li><a href="#step-2-extract-text-from-one-pdf" id="toc-step-2-extract-text-from-one-pdf" class="nav-link" data-scroll-target="#step-2-extract-text-from-one-pdf"><span class="header-section-number">1.9.1</span> Step 2: extract text from one PDF</a></li>
+  </ul></li>
+  <li><a href="#what-problem-are-we-solving-1" id="toc-what-problem-are-we-solving-1" class="nav-link" data-scroll-target="#what-problem-are-we-solving-1"><span class="header-section-number">1.10</span> What problem are we solving?</a></li>
+  <li><a href="#inputs-1" id="toc-inputs-1" class="nav-link" data-scroll-target="#inputs-1"><span class="header-section-number">1.11</span> Inputs</a></li>
+  <li><a href="#expected-output-1" id="toc-expected-output-1" class="nav-link" data-scroll-target="#expected-output-1"><span class="header-section-number">1.12</span> Expected Output</a></li>
+  <li><a href="#what-just-happened-1" id="toc-what-just-happened-1" class="nav-link" data-scroll-target="#what-just-happened-1"><span class="header-section-number">1.13</span> What just happened?</a></li>
+  <li><a href="#what-problem-are-we-solving-2" id="toc-what-problem-are-we-solving-2" class="nav-link" data-scroll-target="#what-problem-are-we-solving-2"><span class="header-section-number">1.14</span> What problem are we solving?</a></li>
+  <li><a href="#inputs-2" id="toc-inputs-2" class="nav-link" data-scroll-target="#inputs-2"><span class="header-section-number">1.15</span> Inputs</a></li>
+  <li><a href="#expected-output-2" id="toc-expected-output-2" class="nav-link" data-scroll-target="#expected-output-2"><span class="header-section-number">1.16</span> Expected Output</a></li>
+  <li><a href="#what-just-happened-2" id="toc-what-just-happened-2" class="nav-link" data-scroll-target="#what-just-happened-2"><span class="header-section-number">1.17</span> What just happened?</a>
+  <ul class="collapse">
+  <li><a href="#step-3-make-it-a-script-you-can-run-from-the-command-line" id="toc-step-3-make-it-a-script-you-can-run-from-the-command-line" class="nav-link" data-scroll-target="#step-3-make-it-a-script-you-can-run-from-the-command-line"><span class="header-section-number">1.17.1</span> Step 3: make it a script you can run from the command line</a></li>
+  </ul></li>
+  <li><a href="#what-problem-are-we-solving-3" id="toc-what-problem-are-we-solving-3" class="nav-link" data-scroll-target="#what-problem-are-we-solving-3"><span class="header-section-number">1.18</span> What problem are we solving?</a></li>
+  <li><a href="#inputs-3" id="toc-inputs-3" class="nav-link" data-scroll-target="#inputs-3"><span class="header-section-number">1.19</span> Inputs</a></li>
+  <li><a href="#expected-output-3" id="toc-expected-output-3" class="nav-link" data-scroll-target="#expected-output-3"><span class="header-section-number">1.20</span> Expected Output</a></li>
+  <li><a href="#what-just-happened-3" id="toc-what-just-happened-3" class="nav-link" data-scroll-target="#what-just-happened-3"><span class="header-section-number">1.21</span> What just happened?</a></li>
+  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">1.22</span> Production Reality</a></li>
+  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">1.23</span> Practical exercise</a></li>
+  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">1.24</span> Field notes</a></li>
+  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">1.25</span> Challenge exercise</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">1.26</span> Key takeaways</a></li>
+  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">1.27</span> Repository files</a></li>
+  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">1.28</span> What can you do now that you couldn’t do before?</a></li>
+  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">1.29</span> Suggested next step</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/djimrastephane/ddr-rag-book/edit/main/chapters/chapter_01.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/djimrastephane/ddr-rag-book/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -509,6 +531,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<pre><code>PDF
+ ↓
+Text</code></pre>
 <section id="learning-objectives" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1.1</span> Learning objectives</h2>
 <p>By the end of this chapter, you will be able to:</p>
@@ -520,10 +545,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </section>
 <section id="operational-problem" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">1.2</span> Operational problem</h2>
-<p>This book uses a real, publicly available archive: the Daily Drilling Reports from <strong>Utah FORGE</strong> — a Department of Energy-funded research project at the University of Utah, drilling and testing an enhanced geothermal system (EGS) well, <strong>FORGE 16A(78)-32</strong>, in Beaver County, Utah. Because it’s a public research well rather than a commercial operator’s confidential asset, its DDRs are openly available — which means every example in this book is real, traceable text, not an invented stand-in.</p>
-<p>Picture the same folder problem any operations team faces: 76 DDR PDFs, one per day of drilling and completion work, named inconsistently by whatever software produced them. Somewhere in that folder is the report that matters most this week — the day the drill string got stuck, or the day a fishing run recovered lost bit pieces. Opening 76 PDFs one at a time to find the right paragraph is exactly the kind of task a short Python script should do for you.</p>
-<p>That’s the whole job of this chapter: given one PDF, get its text into a Python string you can work with. Nothing clever yet — no search, no abbreviation handling, no AI. Just a reliable way to turn a PDF into text. Everything in this book is built on top of getting this first step right.</p>
+<h2 data-number="1.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">1.2</span> Operational Problem</h2>
+<p>It’s Monday morning. Someone on the call asks: <em>“Have we had a stuck pipe event on this well before? What happened, and how was it resolved?”</em> The answer is somewhere in the DDR archive — but that archive is 76 PDF files, named inconsistently by whatever software produced them, and the one report that matters is buried in there like a single page in a filing cabinet with no index. Nobody wants to open 76 PDFs one at a time to answer a question that took ten seconds to ask.</p>
+<p>This book uses a real, publicly available archive to solve exactly that problem: the Daily Drilling Reports from <strong>Utah FORGE</strong> — a Department of Energy-funded research project at the University of Utah, drilling and testing an enhanced geothermal system (EGS) well, <strong>FORGE 16A(78)-32</strong>, in Beaver County, Utah. Because it’s a public research well rather than a commercial operator’s confidential asset, its DDRs are openly available — which means every example in this book is real, traceable text, not an invented stand-in.</p>
+<p>Before we can search this archive, summarize it, or ask it questions, we need the words inside those PDFs available to a computer as plain text. That’s the whole job of this chapter: given one PDF, get its text into something Python can work with. Nothing clever yet — no search, no abbreviation handling, no AI. Just a reliable way to turn a PDF into text. Everything in this book is built on top of getting this first step right.</p>
 </section>
 <section id="example-ddr-extract" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="example-ddr-extract"><span class="header-section-number">1.3</span> Example DDR extract</h2>
@@ -552,7 +577,7 @@ During the slide lost tool face and became assembly became stuck
 Pipe free</code></pre>
 </div>
 </div>
-<p>This is one of ten real reports curated for Part I, spanning the well’s actual timeline from rig-up in October 2020 through this stuck-pipe day in November and a fishing operation in December. Every excerpt in Part I is genuine, unedited report text — no anonymisation was needed, because this data is already public.</p>
+<p>This is one of ten real reports curated for Part I, spanning the well’s actual timeline from rig-up in October 2020 through this stuck-pipe day in November and a fishing operation in December. Every excerpt in Part I is genuine, unedited report text — no anonymisation was needed, because this data is already public. Notice that report #38 answers the morning call question directly — <em>if</em> you happen to open this one file out of 76. That’s the gap this chapter closes.</p>
 </section>
 <section id="theory" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="theory"><span class="header-section-number">1.4</span> Theory</h2>
@@ -563,6 +588,19 @@ Pipe free</code></pre>
 </ul>
 <p>The Utah FORGE archive is entirely digital-native — every report was produced by the same software, so extraction is reliable throughout Part I. This won’t always be true of a real archive (Chapter 6 deals with the scanned-report case), but it’s the right place to start.</p>
 <p>We’ll use <a href="https://github.com/jsvine/pdfplumber"><code>pdfplumber</code></a>, a Python library that reads a PDF’s internal structure and hands back the text (and, later in the book, tables and layout) on each page. There are other libraries that do this — <code>PyPDF2</code>, <code>pymupdf</code> — and they’re worth knowing about, but <code>pdfplumber</code> is a good default: actively maintained, and its text extraction is reliable on the kind of structured reports we’re working with.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Library">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Engineering Translation: Library
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>library</strong> is borrowed tooling someone else already built and tested — the code equivalent of using a manufacturer’s torque chart instead of deriving it yourself. <code>pdfplumber</code> is a library that already knows how to open a PDF and read the characters on its pages, so you don’t have to write that from scratch.</p>
+</div>
+</div>
 <pre><code>DDR PDF
    ↓
 open with pdfplumber
@@ -579,58 +617,180 @@ one Python string, ready for Chapter 2</code></pre>
 <h2 data-number="1.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">1.5</span> Implementation</h2>
 <section id="step-1-get-the-sample-archive" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="step-1-get-the-sample-archive"><span class="header-section-number">1.5.1</span> Step 1: get the sample archive</h3>
-<p>The ten curated reports used throughout Part I are already in <code>datasets/sample_ddrs/</code> in this repository — real PDFs, committed directly, since Utah FORGE data is public. You don’t need to generate or download anything to start.</p>
-<div id="d201976b" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="what-problem-are-we-solving" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="what-problem-are-we-solving"><span class="header-section-number">1.6</span> What problem are we solving?</h2>
+<p>Before extracting anything, confirm the report archive is actually there and see what you’re working with — the same way you’d check a folder of scanned tickets exists before writing a script against it.</p>
+</section>
+<section id="inputs" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="inputs"><span class="header-section-number">1.7</span> Inputs</h2>
+<ul>
+<li>The folder <code>datasets/sample_ddrs/</code>, containing ten curated Utah FORGE DDR PDFs (already included in this repository — no download needed).</li>
+</ul>
+</section>
+<section id="expected-output" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">1.8</span> Expected Output</h2>
+<p>A list of ten file paths, sorted, something like:</p>
+<pre><code>FORGE-16A-78-32_Drilling_003_2020-10-22.pdf
+FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
+...
+FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
+<div id="5f4305dd" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="what-just-happened" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="what-just-happened"><span class="header-section-number">1.9</span> What just happened?</h2>
+<p>You pointed Python at a folder and asked it to list every file ending in <code>.pdf</code>. Nothing was opened or read yet — this is just confirming the folder and its contents exist before you build anything on top of them.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Path and glob">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Engineering Translation: Path and glob
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <code>Path</code> is Python’s way of pointing at a file or folder location — think of it as a shortcut or bookmark to somewhere on disk. <code>glob("*.pdf")</code> is a filter: “show me everything in this folder whose name ends in <code>.pdf</code>,” the same way you might filter a file browser to show only PDFs.</p>
+</div>
 </div>
 <p>If you want to build this curated subset yourself from a full local copy of the public archive (or extend it with more reports), see <code>code/chapter_01/build_sample_archive.py</code> — it’s documented in <a href="../appendix/appendix_a_environment_setup.html">Appendix A</a>.</p>
+<section id="step-2-extract-text-from-one-pdf" class="level3" data-number="1.9.1">
+<h3 data-number="1.9.1" class="anchored" data-anchor-id="step-2-extract-text-from-one-pdf"><span class="header-section-number">1.9.1</span> Step 2: extract text from one PDF</h3>
 </section>
-<section id="step-2-extract-text-from-one-pdf" class="level3" data-number="1.5.2">
-<h3 data-number="1.5.2" class="anchored" data-anchor-id="step-2-extract-text-from-one-pdf"><span class="header-section-number">1.5.2</span> Step 2: extract text from one PDF</h3>
-<p>Here is the core of <code>code/chapter_01/read_ddr.py</code>, built up piece by piece.</p>
-<p>First, open a PDF and read one page:</p>
-<div id="c0a09a7f" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    first_page <span class="op">=</span> pdf.pages[<span class="dv">0</span>]</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(first_page.extract_text())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="what-problem-are-we-solving-1" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="what-problem-are-we-solving-1"><span class="header-section-number">1.10</span> What problem are we solving?</h2>
+<p>Prove that we can pull real text out of a single PDF before building anything more elaborate — the smallest possible version of the whole chapter’s job.</p>
+</section>
+<section id="inputs-1" class="level2" data-number="1.11">
+<h2 data-number="1.11" class="anchored" data-anchor-id="inputs-1"><span class="header-section-number">1.11</span> Inputs</h2>
+<ul>
+<li>One PDF: <code>datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</code> (report #38, the stuck-pipe day).</li>
+</ul>
+</section>
+<section id="expected-output-1" class="level2" data-number="1.12">
+<h2 data-number="1.12" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">1.12</span> Expected Output</h2>
+<p>The full text of the report’s first page, printed to your terminal — header block, casing and mud tables, BHA component list, survey data, and the time breakdown quoted above, all as plain text.</p>
+<div id="65349e37" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    first_page <span class="op">=</span> pdf.pages[<span class="dv">0</span>]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(first_page.extract_text())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Run that and you’ll see the report’s text printed straight to your terminal — the full header block (well name, spud date, days from spud), casing and mud tables, the BHA component list, survey data, and the time breakdown — all as a plain Python string. Real DDRs pack in far more than a simple narrative: this one report alone has seven distinct data sections.</p>
+</section>
+<section id="what-just-happened-1" class="level2" data-number="1.13">
+<h2 data-number="1.13" class="anchored" data-anchor-id="what-just-happened-1"><span class="header-section-number">1.13</span> What just happened?</h2>
+<p>You opened the PDF, grabbed its first page, and asked <code>pdfplumber</code> to hand back everything readable on it as plain text. Real DDRs pack in far more than a simple narrative — this one report alone has seven distinct data sections (header, casing, mud, BHA, survey, time breakdown, and remarks) — and all of it came back as one ordinary block of text you can now search, print, or save.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Opening a file safely">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Engineering Translation: Opening a file safely
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>with pdfplumber.open(...) as pdf:</code> is like signing a piece of equipment out and back in automatically. Everything inside the indented block happens while the file is “checked out”; once the block ends, Python closes it for you — so you never forget to release the file, even if something goes wrong partway through.</p>
+</div>
+</div>
 <p>Every DDR in this archive is a single page, but that won’t be true of every report you’ll ever encounter. Loop over every page and keep track of which page each chunk of text came from — you’ll need that later for citations:</p>
-<div id="88d28182" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_text(pdf_path: Path) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    pages_text <span class="op">=</span> []</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pdfplumber.<span class="bu">open</span>(pdf_path) <span class="im">as</span> pdf:</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> page_number, page <span class="kw">in</span> <span class="bu">enumerate</span>(pdf.pages, start<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            text <span class="op">=</span> page.extract_text() <span class="kw">or</span> <span class="st">""</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            pages_text.append(<span class="ss">f"--- Page </span><span class="sc">{</span>page_number<span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>text<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(pages_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Note the <code>or ""</code>. If a page has no extractable text — a scanned page mixed into an otherwise digital report, for example — <code>extract_text()</code> returns <code>None</code>, and every downstream step in this book expects a string, not <code>None</code>. This one line is a small example of a pattern you’ll see throughout the book: assume real data is messier than the happy path.</p>
 </section>
-<section id="step-3-make-it-a-script-you-can-run-from-the-command-line" class="level3" data-number="1.5.3">
-<h3 data-number="1.5.3" class="anchored" data-anchor-id="step-3-make-it-a-script-you-can-run-from-the-command-line"><span class="header-section-number">1.5.3</span> Step 3: make it a script you can run from the command line</h3>
-<p>The full script, <code>code/chapter_01/read_ddr.py</code>, wraps this in a command-line interface so you can point it at one file or a whole folder:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One file, printed to the terminal</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A whole folder, saved as .txt files</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/ <span class="at">--batch</span> <span class="at">--out</span> datasets/ddr_text</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="what-problem-are-we-solving-2" class="level2" data-number="1.14">
+<h2 data-number="1.14" class="anchored" data-anchor-id="what-problem-are-we-solving-2"><span class="header-section-number">1.14</span> What problem are we solving?</h2>
+<p>Handle reports with more than one page, and remember which page each piece of text came from — information you’ll need in later chapters to point back to the exact source of an answer.</p>
+</section>
+<section id="inputs-2" class="level2" data-number="1.15">
+<h2 data-number="1.15" class="anchored" data-anchor-id="inputs-2"><span class="header-section-number">1.15</span> Inputs</h2>
+<ul>
+<li>Any DDR PDF path, single-page or multi-page.</li>
+</ul>
+</section>
+<section id="expected-output-2" class="level2" data-number="1.16">
+<h2 data-number="1.16" class="anchored" data-anchor-id="expected-output-2"><span class="header-section-number">1.16</span> Expected Output</h2>
+<p>One combined string containing every page’s text, with a marker like <code>--- Page 1 ---</code> showing where each page starts.</p>
+<div id="f4fbcad6" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_text(pdf_path: Path) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    pages_text <span class="op">=</span> []</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pdfplumber.<span class="bu">open</span>(pdf_path) <span class="im">as</span> pdf:</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> page_number, page <span class="kw">in</span> <span class="bu">enumerate</span>(pdf.pages, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            text <span class="op">=</span> page.extract_text() <span class="kw">or</span> <span class="st">""</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            pages_text.append(<span class="ss">f"--- Page </span><span class="sc">{</span>page_number<span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>text<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(pages_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="what-just-happened-2" class="level2" data-number="1.17">
+<h2 data-number="1.17" class="anchored" data-anchor-id="what-just-happened-2"><span class="header-section-number">1.17</span> What just happened?</h2>
+<p>This packages the previous step into a reusable procedure: for every page in the PDF, pull its text, label it with a page number, and stitch all the labelled pages together into one string. Instead of writing this logic out every time, you now have one named tool — <code>extract_text</code> — you can hand any PDF path to.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Function and loop">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Engineering Translation: Function and loop
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>function</strong> is a standard operating procedure: a named set of steps (<code>extract_text</code>) you can hand a new input to and trust it will follow the same procedure every time, instead of re-writing the steps by hand for each report. A <strong>loop</strong> (<code>for page_number, page in enumerate(...)</code>) means “repeat this operation for every page in the report” — the same way an SOP says “repeat for each joint” instead of listing every joint by hand.</p>
+</div>
+</div>
+<p>Note the <code>or ""</code>. If a page has no extractable text — a scanned page mixed into an otherwise digital report, for example — <code>extract_text()</code> returns <code>None</code>, and every downstream step in this book expects a string, not <code>None</code>. This is a safety check, the code equivalent of confirming a valve position before proceeding instead of assuming it: assume real data is messier than the happy path, and this pattern shows up throughout the book.</p>
+<section id="step-3-make-it-a-script-you-can-run-from-the-command-line" class="level3" data-number="1.17.1">
+<h3 data-number="1.17.1" class="anchored" data-anchor-id="step-3-make-it-a-script-you-can-run-from-the-command-line"><span class="header-section-number">1.17.1</span> Step 3: make it a script you can run from the command line</h3>
+</section>
+</section>
+<section id="what-problem-are-we-solving-3" class="level2" data-number="1.18">
+<h2 data-number="1.18" class="anchored" data-anchor-id="what-problem-are-we-solving-3"><span class="header-section-number">1.18</span> What problem are we solving?</h2>
+<p>Turn this into a tool you can point at any file or folder from the terminal, without opening or editing the code each time.</p>
+</section>
+<section id="inputs-3" class="level2" data-number="1.19">
+<h2 data-number="1.19" class="anchored" data-anchor-id="inputs-3"><span class="header-section-number">1.19</span> Inputs</h2>
+<ul>
+<li>A single PDF path, or a folder of PDFs plus a <code>--batch</code> flag and an <code>--out</code> destination folder.</li>
+</ul>
+</section>
+<section id="expected-output-3" class="level2" data-number="1.20">
+<h2 data-number="1.20" class="anchored" data-anchor-id="expected-output-3"><span class="header-section-number">1.20</span> Expected Output</h2>
+<p>Printed text to the terminal (single-file mode), or a folder of <code>.txt</code> files, one per PDF (batch mode).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One file, printed to the terminal</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A whole folder, saved as .txt files</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/ <span class="at">--batch</span> <span class="at">--out</span> datasets/ddr_text</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="what-just-happened-3" class="level2" data-number="1.21">
+<h2 data-number="1.21" class="anchored" data-anchor-id="what-just-happened-3"><span class="header-section-number">1.21</span> What just happened?</h2>
+<p>The full script, <code>code/chapter_01/read_ddr.py</code>, wraps the <code>extract_text</code> function in a command-line interface: flags like <code>--batch</code> and <code>--out</code> work like switches on a control panel, letting you choose “one file, printed” or “whole folder, saved” without touching the code itself.</p>
 <p>Try the first command now. You should see the full report text, including the line: <code>During the slide lost tool face and became assembly became stuck</code> — real language from a real rig report, not a paraphrase.</p>
 </section>
+<section id="production-reality" class="level2" data-number="1.22">
+<h2 data-number="1.22" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">1.22</span> Production Reality</h2>
+<p>This chapter assumes every DDR is a clean, digital-native PDF produced by the same software — true for this entire archive, and the easiest possible starting point. A real multi-well, multi-operator archive usually isn’t that tidy. Expect:</p>
+<ul>
+<li>scanned reports with no character data at all (Chapter 6)</li>
+<li>rotated or skewed pages</li>
+<li>duplicate reports filed under two different names</li>
+<li>handwritten notes or annotations layered on top of a digital report</li>
+<li>reports that are simply missing for a given day</li>
+</ul>
+<p>None of that shows up in Part I’s ten curated reports, on purpose — you need a reliable extraction script before you can handle the messy cases. Chapter 6 comes back to this list once you have somewhere solid to stand.</p>
 </section>
-<section id="practical-exercise" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">1.6</span> Practical exercise</h2>
+<section id="practical-exercise" class="level2" data-number="1.23">
+<h2 data-number="1.23" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">1.23</span> Practical exercise</h2>
 <p><strong>Try it yourself:</strong> Run <code>read_ddr.py</code> in batch mode against <code>datasets/sample_ddrs/</code>, saving the output to <code>datasets/ddr_text/</code>. Then open <code>FORGE-16A-78-32_Drilling_050_2020-12-08.txt</code> and find the line describing what the crew milled up that day.</p>
 <p><strong>You’ll know it worked when:</strong> you have ten <code>.txt</code> files in <code>datasets/ddr_text/</code>, one per PDF, and you can find the word “Fishing” in report 050’s text without opening the original PDF.</p>
 </section>
-<section id="field-notes" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">1.7</span> Field notes</h2>
+<section id="field-notes" class="level2" data-number="1.24">
+<h2 data-number="1.24" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">1.24</span> Field notes</h2>
 <div class="callout callout-style-default callout-warning callout-titled" title="Field notes: a table that reads like nonsense until you know why">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -653,12 +813,12 @@ with MWD 6.75 3.25 30.35
 </div>
 </div>
 </section>
-<section id="challenge-exercise" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">1.8</span> Challenge exercise</h2>
+<section id="challenge-exercise" class="level2" data-number="1.25">
+<h2 data-number="1.25" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">1.25</span> Challenge exercise</h2>
 <p><strong>Challenge:</strong> Extend the script to also print, for each PDF, the total number of pages and the total character count extracted. Then compare report #3 (October 22, before the well was spudded — <code>PRESENT OPERATIONS: RIGGING UP...</code>) against report #38 (the stuck-pipe day): how much richer is the later report’s text, and why might that be? (Hint: check the <code>SPUD DATE</code> and <code>DFS</code>/<code>DOL</code> fields in each report’s header.) A reference solution is in <code>code/chapter_01/challenge/</code>.</p>
 </section>
-<section id="key-takeaways" class="level2" data-number="1.9">
-<h2 data-number="1.9" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">1.9</span> Key takeaways</h2>
+<section id="key-takeaways" class="level2" data-number="1.26">
+<h2 data-number="1.26" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">1.26</span> Key takeaways</h2>
 <ul>
 <li>A PDF’s internal structure, not its on-screen appearance, determines whether text can be extracted directly. Digital-native PDFs can; scanned PDFs need OCR (Chapter 6).</li>
 <li><code>pdfplumber</code> turns a PDF into plain Python strings, one page at a time.</li>
@@ -666,8 +826,8 @@ with MWD 6.75 3.25 30.35
 <li>A five-line function (<code>extract_text</code>) plus a thin command-line wrapper is already a genuinely useful tool. You don’t need machine learning to save an engineer an hour of searching PDFs by hand — and it works identically whether the PDF is a synthetic example or, as here, a real report from a real well.</li>
 </ul>
 </section>
-<section id="repository-files" class="level2" data-number="1.10">
-<h2 data-number="1.10" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">1.10</span> Repository files</h2>
+<section id="repository-files" class="level2" data-number="1.27">
+<h2 data-number="1.27" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">1.27</span> Repository files</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -699,8 +859,12 @@ with MWD 6.75 3.25 30.35
 </tbody>
 </table>
 </section>
-<section id="suggested-next-step" class="level2" data-number="1.11">
-<h2 data-number="1.11" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">1.11</span> Suggested next step</h2>
+<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="1.28">
+<h2 data-number="1.28" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">1.28</span> What can you do now that you couldn’t do before?</h2>
+<p>You can turn any digital-native DDR PDF — or a whole folder of them — into plain text you can read, search, or hand to another script, without opening a single PDF viewer.</p>
+</section>
+<section id="suggested-next-step" class="level2" data-number="1.29">
+<h2 data-number="1.29" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">1.29</span> Suggested next step</h2>
 <p>The text you just extracted uses real oilfield shorthand and drilling terminology — <code>BHA</code>, <code>WOB</code>, <code>SPP</code>, <code>PJSM</code> — some spelled out, some abbreviated, exactly as the field actually writes it. Chapter 2 builds an abbreviation expansion engine grounded in what’s actually in this archive, turning this raw text into something both humans and machines can search reliably.</p>
 
 
@@ -1190,286 +1354,433 @@ with MWD 6.75 3.25 30.35
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Reading Your First DDR {#sec-chapter-01}</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain why DDR PDFs are hard for software to read, and the difference</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  between a *digital-native* PDF and a *scanned* one.</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Extract raw text from a digital-native PDF using Python.</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Write a script that processes a single DDR, or an entire folder of them,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  from the command line.</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Save extracted text so it's ready for the cleaning work in Chapter 2.</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational problem</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>This book uses a real, publicly available archive: the Daily Drilling</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>Reports from **Utah FORGE** — a Department of Energy-funded research</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>project at the University of Utah, drilling and testing an enhanced</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>geothermal system (EGS) well, **FORGE 16A(78)-32**, in Beaver County,</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>Utah. Because it's a public research well rather than a commercial</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>operator's confidential asset, its DDRs are openly available — which</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>means every example in this book is real, traceable text, not an</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>invented stand-in.</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>Picture the same folder problem any operations team faces: 76 DDR PDFs,</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>one per day of drilling and completion work, named inconsistently by</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>whatever software produced them. Somewhere in that folder is the report</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>that matters most this week — the day the drill string got stuck, or the</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>day a fishing run recovered lost bit pieces. Opening 76 PDFs one at a</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>time to find the right paragraph is exactly the kind of task a short</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>Python script should do for you.</span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>That's the whole job of this chapter: given one PDF, get its text into a</span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>Python string you can work with. Nothing clever yet — no search, no</span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>abbreviation handling, no AI. Just a reliable way to turn a PDF into text.</span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>Everything in this book is built on top of getting this first step right.</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Example DDR extract</span></span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Real DDR excerpt — report #38, FORGE 16A(78)-32, 2020-11-26"}</span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="in">RPT DATE:11/26/2020</span></span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="in">DAILY DRILLING REPORT RPT NUM.:38</span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="in">WELL NAME:FORGE 16A [78]-32 JOB:Drilling 65° Tangent</span></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="in">PRESENT OPERATIONS:PIPE FREE, TRIP OUT OF HOLE FOR BHA INSPECTION</span></span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="in">TIME BREAKDOWN</span></span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="in">23:30 04:00 4.5 Drill From 6,360' to 6,507', (147') Total,</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="in">32.6' feet per hour.</span></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="in">WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP 3200-3400 GPM 560,</span></span>
-<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="in">DIFF 200-300psi</span></span>
-<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="in">During the slide lost tool face and became assembly became stuck</span></span>
-<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="in">04:00 06:00 2.0 Work pipe, circulate lube sweep, work tool back in position</span></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="in">Pipe free</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>This is one of ten real reports curated for Part I, spanning the well's</span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>actual timeline from rig-up in October 2020 through this stuck-pipe day</span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>in November and a fishing operation in December. Every excerpt in Part I</span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>is genuine, unedited report text — no anonymisation was needed, because</span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>this data is already public.</span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>A PDF is not a text file wearing a costume. It's a page-description format:</span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>instructions for *drawing* characters at specific coordinates, not a</span>
-<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>stream of text with a beginning and an end. Two DDRs that look identical on</span>
-<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>screen can be built completely differently under the hood:</span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Digital-native PDFs** were generated directly from software (in this</span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>  case, WellEz, the drilling data system that produced every report in</span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>  this archive). The text was placed on the page as actual character</span>
-<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>  data, so a library can recover it.</span>
-<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Scanned PDFs** are photographs of paper reports. There is no character</span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>  data at all — just a picture of a page. Extracting text from these</span>
-<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>  requires optical character recognition (OCR), which we cover in</span>
-<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>  Chapter 6.</span>
-<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>The Utah FORGE archive is entirely digital-native — every report was</span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>produced by the same software, so extraction is reliable throughout Part</span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>I. This won't always be true of a real archive (Chapter 6 deals with the</span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>scanned-report case), but it's the right place to start.</span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>We'll use <span class="co">[</span><span class="ot">`pdfplumber`</span><span class="co">](https://github.com/jsvine/pdfplumber)</span>, a Python</span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>library that reads a PDF's internal structure and hands back the text</span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>(and, later in the book, tables and layout) on each page. There are other</span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>libraries that do this — <span class="in">`PyPDF2`</span>, <span class="in">`pymupdf`</span> — and they're worth knowing</span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>about, but <span class="in">`pdfplumber`</span> is a good default: actively maintained, and its</span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>text extraction is reliable on the kind of structured reports we're</span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>working with.</span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="in">DDR PDF</span></span>
-<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="in">open with pdfplumber</span></span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a><span class="in">for each page:</span></span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a><span class="in">  page.extract_text()  --&gt;  string, or None if unextractable</span></span>
-<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a><span class="in">join every page's text together</span></span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a><span class="in">one Python string, ready for Chapter 2</span></span>
-<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation</span></span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: get the sample archive</span></span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>The ten curated reports used throughout Part I are already in</span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a><span class="in">`datasets/sample_ddrs/`</span> in this repository — real PDFs, committed</span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>directly, since Utah FORGE data is public. You don't need to generate or</span>
-<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>download anything to start.</span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
-<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span>
-<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>If you want to build this curated subset yourself from a full local copy</span>
-<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a>of the public archive (or extend it with more reports), see</span>
-<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a><span class="in">`code/chapter_01/build_sample_archive.py`</span> — it's documented in</span>
-<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Appendix A</span><span class="co">](../appendix/appendix_a_environment_setup.qmd)</span>.</span>
-<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: extract text from one PDF</span></span>
-<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a>Here is the core of <span class="in">`code/chapter_01/read_ddr.py`</span>, built up piece by piece.</span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>First, open a PDF and read one page:</span>
-<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
-<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
-<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>    first_page <span class="op">=</span> pdf.pages[<span class="dv">0</span>]</span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(first_page.extract_text())</span>
-<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>Run that and you'll see the report's text printed straight to your</span>
-<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>terminal — the full header block (well name, spud date, days from spud),</span>
-<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>casing and mud tables, the BHA component list, survey data, and the time</span>
-<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>breakdown — all as a plain Python string. Real DDRs pack in far more than</span>
-<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>a simple narrative: this one report alone has seven distinct data</span>
-<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>sections.</span>
-<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>Every DDR in this archive is a single page, but that won't be true of</span>
-<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>every report you'll ever encounter. Loop over every page and keep track</span>
-<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>of which page each chunk of text came from — you'll need that later for</span>
-<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>citations:</span>
-<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
-<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_text(pdf_path: Path) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a>    pages_text <span class="op">=</span> []</span>
-<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pdfplumber.<span class="bu">open</span>(pdf_path) <span class="im">as</span> pdf:</span>
-<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> page_number, page <span class="kw">in</span> <span class="bu">enumerate</span>(pdf.pages, start<span class="op">=</span><span class="dv">1</span>):</span>
-<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>            text <span class="op">=</span> page.extract_text() <span class="kw">or</span> <span class="st">""</span></span>
-<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a>            pages_text.append(<span class="ss">f"--- Page </span><span class="sc">{</span>page_number<span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>text<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(pages_text)</span>
-<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a>Note the <span class="in">`or ""`</span>. If a page has no extractable text — a scanned page mixed</span>
-<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a>into an otherwise digital report, for example — <span class="in">`extract_text()`</span> returns</span>
-<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a><span class="in">`None`</span>, and every downstream step in this book expects a string, not</span>
-<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="in">`None`</span>. This one line is a small example of a pattern you'll see</span>
-<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>throughout the book: assume real data is messier than the happy path.</span>
-<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: make it a script you can run from the command line</span></span>
-<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>The full script, <span class="in">`code/chapter_01/read_ddr.py`</span>, wraps this in a command-line</span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>interface so you can point it at one file or a whole folder:</span>
-<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a><span class="co"># One file, printed to the terminal</span></span>
-<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</span>
-<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a><span class="co"># A whole folder, saved as .txt files</span></span>
-<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/ <span class="at">--batch</span> <span class="at">--out</span> datasets/ddr_text</span>
-<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a>Try the first command now. You should see the full report text, including</span>
-<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>the line: `During the slide lost tool face and became assembly became</span>
-<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a>stuck` — real language from a real rig report, not a paraphrase.</span>
-<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
-<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Run <span class="in">`read_ddr.py`</span> in batch mode against</span>
-<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a><span class="in">`datasets/sample_ddrs/`</span>, saving the output to <span class="in">`datasets/ddr_text/`</span>. Then</span>
-<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>open <span class="in">`FORGE-16A-78-32_Drilling_050_2020-12-08.txt`</span> and find the line</span>
-<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>describing what the crew milled up that day.</span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** you have ten <span class="in">`.txt`</span> files in</span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a><span class="in">`datasets/ddr_text/`</span>, one per PDF, and you can find the word "Fishing" in</span>
-<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>report 050's text without opening the original PDF.</span>
-<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
-<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="Field notes: a table that reads like nonsense until you know why"}</span>
-<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a>**Action:** extract report #38's <span class="in">`BHA`</span> section and read it as plain text.</span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>**Result:**</span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a><span class="in"># COMPONENT OD ID LENGTH # COMPONENT OD ID LENGTH</span></span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a><span class="in">1 Drill Bit-Reed SKC613M-01C 8.75 1 7 Monel Collar-NMDC</span></span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a><span class="in">with MWD 6.75 3.25 30.35</span></span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a><span class="in">2 Motor-6.5'' 7/8, 5.7, 0.242 RPG 1.50,* Fixed 6.5 33.01</span></span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a><span class="in">8 Monel Collar-NMDC (2 joints) 6.75 3.25 60.66</span></span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>**Why:** the real BHA table on this report is laid out as **two</span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>side-by-side sub-tables** — components 1–6 on the left half of the page,</span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>components 7–10 on the right half. Visually, that's obvious: two neat</span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>columns. But <span class="in">`extract_text()`</span> reads left to right, top to bottom, so</span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>component 1's row and component 7's row — which just happen to sit on</span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>the same horizontal line of the page — get concatenated into one line of</span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>output text, with no marker showing where the left sub-table ends and</span>
-<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a>the right one begins.</span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a>**Lesson:** <span class="in">`extract_text()`</span> gives you the words on the page, not the</span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>*layout* those words depend on to make sense. A two-column table isn't a</span>
-<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>special case — it's normal DDR formatting — and reading its flattened</span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>output at face value would have you believe component 1 and component 7</span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a>are the same row. This book's chapters work around it by favouring the</span>
-<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a>narrative <span class="in">`TIME BREAKDOWN`</span> text over the structured tables for search and</span>
-<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>retrieval — real table-aware parsing (detecting table boundaries and</span>
-<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>reconstructing rows correctly) is its own discipline, and the companion</span>
-<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a>pipeline's <span class="in">`src/rag_pdf/table_detect.py`</span> and <span class="in">`table_extract.py`</span> handle it</span>
-<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>properly. For now, just know that "extracted text" and "correct reading</span>
-<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a>order" are not the same guarantee.</span>
-<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
-<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a>**Challenge:** Extend the script to also print, for each PDF, the total</span>
-<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a>number of pages and the total character count extracted. Then compare</span>
-<span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a>report #3 (October 22, before the well was spudded — `PRESENT</span>
-<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a>OPERATIONS: RIGGING UP...`) against report #38 (the stuck-pipe day): how</span>
-<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a>much richer is the later report's text, and why might that be? (Hint:</span>
-<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a>check the <span class="in">`SPUD DATE`</span> and <span class="in">`DFS`</span>/<span class="in">`DOL`</span> fields in each report's header.) A</span>
-<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a>reference solution is in <span class="in">`code/chapter_01/challenge/`</span>.</span>
-<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
-<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A PDF's internal structure, not its on-screen appearance, determines</span>
-<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a>  whether text can be extracted directly. Digital-native PDFs can;</span>
-<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a>  scanned PDFs need OCR (Chapter 6).</span>
-<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`pdfplumber`</span> turns a PDF into plain Python strings, one page at a time.</span>
-<span id="cb8-261"><a href="#cb8-261" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Handle <span class="in">`None`</span> from <span class="in">`extract_text()`</span> explicitly — real-world DDR archives</span>
-<span id="cb8-262"><a href="#cb8-262" aria-hidden="true" tabindex="-1"></a>  will contain pages that don't extract cleanly, and your code should</span>
-<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a>  never crash on them.</span>
-<span id="cb8-264"><a href="#cb8-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A five-line function (<span class="in">`extract_text`</span>) plus a thin command-line wrapper</span>
-<span id="cb8-265"><a href="#cb8-265" aria-hidden="true" tabindex="-1"></a>  is already a genuinely useful tool. You don't need machine learning to</span>
-<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a>  save an engineer an hour of searching PDFs by hand — and it works</span>
-<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a>  identically whether the PDF is a synthetic example or, as here, a real</span>
-<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a>  report from a real well.</span>
-<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
-<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_01/read_ddr.py`</span> <span class="pp">|</span> Extracts text from one PDF or a folder of PDFs <span class="pp">|</span></span>
-<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_01/build_sample_archive.py`</span> <span class="pp">|</span> Reproduces the curated Part I subset from the full public archive <span class="pp">|</span></span>
-<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`datasets/sample_ddrs/`</span> <span class="pp">|</span> Ten real, curated Utah FORGE DDR PDFs used throughout Part I <span class="pp">|</span></span>
-<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_01_explore.ipynb`</span> <span class="pp">|</span> Interactive notebook version of this chapter <span class="pp">|</span></span>
-<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
-<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a>The text you just extracted uses real oilfield shorthand and drilling</span>
-<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>terminology — <span class="in">`BHA`</span>, <span class="in">`WOB`</span>, <span class="in">`SPP`</span>, <span class="in">`PJSM`</span> — some spelled out, some</span>
-<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a>abbreviated, exactly as the field actually writes it. Chapter 2 builds an</span>
-<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a>abbreviation expansion engine grounded in what's actually in this</span>
-<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a>archive, turning this raw text into something both humans and machines</span>
-<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a>can search reliably.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Reading Your First DDR {#sec-chapter-01}</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="in">PDF</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="in"> ↓</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="in">Text</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain why DDR PDFs are hard for software to read, and the difference</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  between a *digital-native* PDF and a *scanned* one.</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Extract raw text from a digital-native PDF using Python.</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Write a script that processes a single DDR, or an entire folder of them,</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  from the command line.</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Save extracted text so it's ready for the cleaning work in Chapter 2.</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>It's Monday morning. Someone on the call asks: *"Have we had a stuck pipe</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>event on this well before? What happened, and how was it resolved?"*</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>The answer is somewhere in the DDR archive — but that archive is 76 PDF</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>files, named inconsistently by whatever software produced them, and the</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>one report that matters is buried in there like a single page in a filing</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>cabinet with no index. Nobody wants to open 76 PDFs one at a time to</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>answer a question that took ten seconds to ask.</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>This book uses a real, publicly available archive to solve exactly that</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>problem: the Daily Drilling Reports from **Utah FORGE** — a Department of</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>Energy-funded research project at the University of Utah, drilling and</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>testing an enhanced geothermal system (EGS) well, **FORGE 16A(78)-32**, in</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>Beaver County, Utah. Because it's a public research well rather than a</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>commercial operator's confidential asset, its DDRs are openly available —</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>which means every example in this book is real, traceable text, not an</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>invented stand-in.</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>Before we can search this archive, summarize it, or ask it questions, we</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>need the words inside those PDFs available to a computer as plain text.</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>That's the whole job of this chapter: given one PDF, get its text into</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>something Python can work with. Nothing clever yet — no search, no</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>abbreviation handling, no AI. Just a reliable way to turn a PDF into text.</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>Everything in this book is built on top of getting this first step right.</span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Example DDR extract</span></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Real DDR excerpt — report #38, FORGE 16A(78)-32, 2020-11-26"}</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="in">RPT DATE:11/26/2020</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="in">DAILY DRILLING REPORT RPT NUM.:38</span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="in">WELL NAME:FORGE 16A [78]-32 JOB:Drilling 65° Tangent</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="in">PRESENT OPERATIONS:PIPE FREE, TRIP OUT OF HOLE FOR BHA INSPECTION</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="in">TIME BREAKDOWN</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a><span class="in">23:30 04:00 4.5 Drill From 6,360' to 6,507', (147') Total,</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="in">32.6' feet per hour.</span></span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a><span class="in">WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP 3200-3400 GPM 560,</span></span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a><span class="in">DIFF 200-300psi</span></span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a><span class="in">During the slide lost tool face and became assembly became stuck</span></span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a><span class="in">04:00 06:00 2.0 Work pipe, circulate lube sweep, work tool back in position</span></span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a><span class="in">Pipe free</span></span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>This is one of ten real reports curated for Part I, spanning the well's</span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>actual timeline from rig-up in October 2020 through this stuck-pipe day</span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>in November and a fishing operation in December. Every excerpt in Part I</span>
+<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>is genuine, unedited report text — no anonymisation was needed, because</span>
+<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>this data is already public. Notice that report #38 answers the morning</span>
+<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>call question directly — *if* you happen to open this one file out of 76.</span>
+<span id="cb10-72"><a href="#cb10-72" aria-hidden="true" tabindex="-1"></a>That's the gap this chapter closes.</span>
+<span id="cb10-73"><a href="#cb10-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-74"><a href="#cb10-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory</span></span>
+<span id="cb10-75"><a href="#cb10-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-76"><a href="#cb10-76" aria-hidden="true" tabindex="-1"></a>A PDF is not a text file wearing a costume. It's a page-description format:</span>
+<span id="cb10-77"><a href="#cb10-77" aria-hidden="true" tabindex="-1"></a>instructions for *drawing* characters at specific coordinates, not a</span>
+<span id="cb10-78"><a href="#cb10-78" aria-hidden="true" tabindex="-1"></a>stream of text with a beginning and an end. Two DDRs that look identical on</span>
+<span id="cb10-79"><a href="#cb10-79" aria-hidden="true" tabindex="-1"></a>screen can be built completely differently under the hood:</span>
+<span id="cb10-80"><a href="#cb10-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-81"><a href="#cb10-81" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Digital-native PDFs** were generated directly from software (in this</span>
+<span id="cb10-82"><a href="#cb10-82" aria-hidden="true" tabindex="-1"></a>  case, WellEz, the drilling data system that produced every report in</span>
+<span id="cb10-83"><a href="#cb10-83" aria-hidden="true" tabindex="-1"></a>  this archive). The text was placed on the page as actual character</span>
+<span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>  data, so a library can recover it.</span>
+<span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Scanned PDFs** are photographs of paper reports. There is no character</span>
+<span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>  data at all — just a picture of a page. Extracting text from these</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a>  requires optical character recognition (OCR), which we cover in</span>
+<span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a>  Chapter 6.</span>
+<span id="cb10-89"><a href="#cb10-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-90"><a href="#cb10-90" aria-hidden="true" tabindex="-1"></a>The Utah FORGE archive is entirely digital-native — every report was</span>
+<span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a>produced by the same software, so extraction is reliable throughout Part</span>
+<span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>I. This won't always be true of a real archive (Chapter 6 deals with the</span>
+<span id="cb10-93"><a href="#cb10-93" aria-hidden="true" tabindex="-1"></a>scanned-report case), but it's the right place to start.</span>
+<span id="cb10-94"><a href="#cb10-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-95"><a href="#cb10-95" aria-hidden="true" tabindex="-1"></a>We'll use <span class="co">[</span><span class="ot">`pdfplumber`</span><span class="co">](https://github.com/jsvine/pdfplumber)</span>, a Python</span>
+<span id="cb10-96"><a href="#cb10-96" aria-hidden="true" tabindex="-1"></a>library that reads a PDF's internal structure and hands back the text</span>
+<span id="cb10-97"><a href="#cb10-97" aria-hidden="true" tabindex="-1"></a>(and, later in the book, tables and layout) on each page. There are other</span>
+<span id="cb10-98"><a href="#cb10-98" aria-hidden="true" tabindex="-1"></a>libraries that do this — <span class="in">`PyPDF2`</span>, <span class="in">`pymupdf`</span> — and they're worth knowing</span>
+<span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a>about, but <span class="in">`pdfplumber`</span> is a good default: actively maintained, and its</span>
+<span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>text extraction is reliable on the kind of structured reports we're</span>
+<span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>working with.</span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Library"}</span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>A **library** is borrowed tooling someone else already built and tested —</span>
+<span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a>the code equivalent of using a manufacturer's torque chart instead of</span>
+<span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>deriving it yourself. <span class="in">`pdfplumber`</span> is a library that already knows how to</span>
+<span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>open a PDF and read the characters on its pages, so you don't have to</span>
+<span id="cb10-108"><a href="#cb10-108" aria-hidden="true" tabindex="-1"></a>write that from scratch.</span>
+<span id="cb10-109"><a href="#cb10-109" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-110"><a href="#cb10-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-111"><a href="#cb10-111" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-112"><a href="#cb10-112" aria-hidden="true" tabindex="-1"></a><span class="in">DDR PDF</span></span>
+<span id="cb10-113"><a href="#cb10-113" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
+<span id="cb10-114"><a href="#cb10-114" aria-hidden="true" tabindex="-1"></a><span class="in">open with pdfplumber</span></span>
+<span id="cb10-115"><a href="#cb10-115" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
+<span id="cb10-116"><a href="#cb10-116" aria-hidden="true" tabindex="-1"></a><span class="in">for each page:</span></span>
+<span id="cb10-117"><a href="#cb10-117" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
+<span id="cb10-118"><a href="#cb10-118" aria-hidden="true" tabindex="-1"></a><span class="in">  page.extract_text()  --&gt;  string, or None if unextractable</span></span>
+<span id="cb10-119"><a href="#cb10-119" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
+<span id="cb10-120"><a href="#cb10-120" aria-hidden="true" tabindex="-1"></a><span class="in">join every page's text together</span></span>
+<span id="cb10-121"><a href="#cb10-121" aria-hidden="true" tabindex="-1"></a><span class="in">   ↓</span></span>
+<span id="cb10-122"><a href="#cb10-122" aria-hidden="true" tabindex="-1"></a><span class="in">one Python string, ready for Chapter 2</span></span>
+<span id="cb10-123"><a href="#cb10-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-124"><a href="#cb10-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-125"><a href="#cb10-125" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation</span></span>
+<span id="cb10-126"><a href="#cb10-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-127"><a href="#cb10-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: get the sample archive</span></span>
+<span id="cb10-128"><a href="#cb10-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-129"><a href="#cb10-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb10-130"><a href="#cb10-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-131"><a href="#cb10-131" aria-hidden="true" tabindex="-1"></a>Before extracting anything, confirm the report archive is actually there</span>
+<span id="cb10-132"><a href="#cb10-132" aria-hidden="true" tabindex="-1"></a>and see what you're working with — the same way you'd check a folder of</span>
+<span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a>scanned tickets exists before writing a script against it.</span>
+<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The folder <span class="in">`datasets/sample_ddrs/`</span>, containing ten curated Utah FORGE</span>
+<span id="cb10-138"><a href="#cb10-138" aria-hidden="true" tabindex="-1"></a>  DDR PDFs (already included in this repository — no download needed).</span>
+<span id="cb10-139"><a href="#cb10-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-140"><a href="#cb10-140" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb10-141"><a href="#cb10-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-142"><a href="#cb10-142" aria-hidden="true" tabindex="-1"></a>A list of ten file paths, sorted, something like:</span>
+<span id="cb10-143"><a href="#cb10-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-144"><a href="#cb10-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-145"><a href="#cb10-145" aria-hidden="true" tabindex="-1"></a><span class="in">FORGE-16A-78-32_Drilling_003_2020-10-22.pdf</span></span>
+<span id="cb10-146"><a href="#cb10-146" aria-hidden="true" tabindex="-1"></a><span class="in">FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</span></span>
+<span id="cb10-147"><a href="#cb10-147" aria-hidden="true" tabindex="-1"></a><span class="in">...</span></span>
+<span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a><span class="in">FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</span></span>
+<span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb10-155"><a href="#cb10-155" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
+<span id="cb10-156"><a href="#cb10-156" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span>
+<span id="cb10-157"><a href="#cb10-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-158"><a href="#cb10-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-159"><a href="#cb10-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb10-160"><a href="#cb10-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-161"><a href="#cb10-161" aria-hidden="true" tabindex="-1"></a>You pointed Python at a folder and asked it to list every file ending in</span>
+<span id="cb10-162"><a href="#cb10-162" aria-hidden="true" tabindex="-1"></a><span class="in">`.pdf`</span>. Nothing was opened or read yet — this is just confirming the</span>
+<span id="cb10-163"><a href="#cb10-163" aria-hidden="true" tabindex="-1"></a>folder and its contents exist before you build anything on top of them.</span>
+<span id="cb10-164"><a href="#cb10-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-165"><a href="#cb10-165" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Path and glob"}</span>
+<span id="cb10-166"><a href="#cb10-166" aria-hidden="true" tabindex="-1"></a>A <span class="in">`Path`</span> is Python's way of pointing at a file or folder location — think</span>
+<span id="cb10-167"><a href="#cb10-167" aria-hidden="true" tabindex="-1"></a>of it as a shortcut or bookmark to somewhere on disk. <span class="in">`glob("*.pdf")`</span> is a</span>
+<span id="cb10-168"><a href="#cb10-168" aria-hidden="true" tabindex="-1"></a>filter: "show me everything in this folder whose name ends in <span class="in">`.pdf`</span>,"</span>
+<span id="cb10-169"><a href="#cb10-169" aria-hidden="true" tabindex="-1"></a>the same way you might filter a file browser to show only PDFs.</span>
+<span id="cb10-170"><a href="#cb10-170" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-171"><a href="#cb10-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-172"><a href="#cb10-172" aria-hidden="true" tabindex="-1"></a>If you want to build this curated subset yourself from a full local copy</span>
+<span id="cb10-173"><a href="#cb10-173" aria-hidden="true" tabindex="-1"></a>of the public archive (or extend it with more reports), see</span>
+<span id="cb10-174"><a href="#cb10-174" aria-hidden="true" tabindex="-1"></a><span class="in">`code/chapter_01/build_sample_archive.py`</span> — it's documented in</span>
+<span id="cb10-175"><a href="#cb10-175" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Appendix A</span><span class="co">](../appendix/appendix_a_environment_setup.qmd)</span>.</span>
+<span id="cb10-176"><a href="#cb10-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-177"><a href="#cb10-177" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: extract text from one PDF</span></span>
+<span id="cb10-178"><a href="#cb10-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-179"><a href="#cb10-179" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb10-180"><a href="#cb10-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-181"><a href="#cb10-181" aria-hidden="true" tabindex="-1"></a>Prove that we can pull real text out of a single PDF before building</span>
+<span id="cb10-182"><a href="#cb10-182" aria-hidden="true" tabindex="-1"></a>anything more elaborate — the smallest possible version of the whole</span>
+<span id="cb10-183"><a href="#cb10-183" aria-hidden="true" tabindex="-1"></a>chapter's job.</span>
+<span id="cb10-184"><a href="#cb10-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-185"><a href="#cb10-185" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb10-186"><a href="#cb10-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-187"><a href="#cb10-187" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>One PDF: <span class="in">`datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf`</span></span>
+<span id="cb10-188"><a href="#cb10-188" aria-hidden="true" tabindex="-1"></a>  (report #38, the stuck-pipe day).</span>
+<span id="cb10-189"><a href="#cb10-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-190"><a href="#cb10-190" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb10-191"><a href="#cb10-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-192"><a href="#cb10-192" aria-hidden="true" tabindex="-1"></a>The full text of the report's first page, printed to your terminal —</span>
+<span id="cb10-193"><a href="#cb10-193" aria-hidden="true" tabindex="-1"></a>header block, casing and mud tables, BHA component list, survey data, and</span>
+<span id="cb10-194"><a href="#cb10-194" aria-hidden="true" tabindex="-1"></a>the time breakdown quoted above, all as plain text.</span>
+<span id="cb10-195"><a href="#cb10-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-198"><a href="#cb10-198" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb10-199"><a href="#cb10-199" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb10-200"><a href="#cb10-200" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
+<span id="cb10-201"><a href="#cb10-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-202"><a href="#cb10-202" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
+<span id="cb10-203"><a href="#cb10-203" aria-hidden="true" tabindex="-1"></a>    first_page <span class="op">=</span> pdf.pages[<span class="dv">0</span>]</span>
+<span id="cb10-204"><a href="#cb10-204" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(first_page.extract_text())</span>
+<span id="cb10-205"><a href="#cb10-205" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-206"><a href="#cb10-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-207"><a href="#cb10-207" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb10-208"><a href="#cb10-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-209"><a href="#cb10-209" aria-hidden="true" tabindex="-1"></a>You opened the PDF, grabbed its first page, and asked <span class="in">`pdfplumber`</span> to hand</span>
+<span id="cb10-210"><a href="#cb10-210" aria-hidden="true" tabindex="-1"></a>back everything readable on it as plain text. Real DDRs pack in far more</span>
+<span id="cb10-211"><a href="#cb10-211" aria-hidden="true" tabindex="-1"></a>than a simple narrative — this one report alone has seven distinct data</span>
+<span id="cb10-212"><a href="#cb10-212" aria-hidden="true" tabindex="-1"></a>sections (header, casing, mud, BHA, survey, time breakdown, and remarks) —</span>
+<span id="cb10-213"><a href="#cb10-213" aria-hidden="true" tabindex="-1"></a>and all of it came back as one ordinary block of text you can now search,</span>
+<span id="cb10-214"><a href="#cb10-214" aria-hidden="true" tabindex="-1"></a>print, or save.</span>
+<span id="cb10-215"><a href="#cb10-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-216"><a href="#cb10-216" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Opening a file safely"}</span>
+<span id="cb10-217"><a href="#cb10-217" aria-hidden="true" tabindex="-1"></a><span class="in">`with pdfplumber.open(...) as pdf:`</span> is like signing a piece of equipment</span>
+<span id="cb10-218"><a href="#cb10-218" aria-hidden="true" tabindex="-1"></a>out and back in automatically. Everything inside the indented block</span>
+<span id="cb10-219"><a href="#cb10-219" aria-hidden="true" tabindex="-1"></a>happens while the file is "checked out"; once the block ends, Python</span>
+<span id="cb10-220"><a href="#cb10-220" aria-hidden="true" tabindex="-1"></a>closes it for you — so you never forget to release the file, even if</span>
+<span id="cb10-221"><a href="#cb10-221" aria-hidden="true" tabindex="-1"></a>something goes wrong partway through.</span>
+<span id="cb10-222"><a href="#cb10-222" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-223"><a href="#cb10-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-224"><a href="#cb10-224" aria-hidden="true" tabindex="-1"></a>Every DDR in this archive is a single page, but that won't be true of</span>
+<span id="cb10-225"><a href="#cb10-225" aria-hidden="true" tabindex="-1"></a>every report you'll ever encounter. Loop over every page and keep track</span>
+<span id="cb10-226"><a href="#cb10-226" aria-hidden="true" tabindex="-1"></a>of which page each chunk of text came from — you'll need that later for</span>
+<span id="cb10-227"><a href="#cb10-227" aria-hidden="true" tabindex="-1"></a>citations:</span>
+<span id="cb10-228"><a href="#cb10-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-229"><a href="#cb10-229" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb10-230"><a href="#cb10-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-231"><a href="#cb10-231" aria-hidden="true" tabindex="-1"></a>Handle reports with more than one page, and remember which page each</span>
+<span id="cb10-232"><a href="#cb10-232" aria-hidden="true" tabindex="-1"></a>piece of text came from — information you'll need in later chapters to</span>
+<span id="cb10-233"><a href="#cb10-233" aria-hidden="true" tabindex="-1"></a>point back to the exact source of an answer.</span>
+<span id="cb10-234"><a href="#cb10-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-235"><a href="#cb10-235" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb10-236"><a href="#cb10-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-237"><a href="#cb10-237" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Any DDR PDF path, single-page or multi-page.</span>
+<span id="cb10-238"><a href="#cb10-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-239"><a href="#cb10-239" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb10-240"><a href="#cb10-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-241"><a href="#cb10-241" aria-hidden="true" tabindex="-1"></a>One combined string containing every page's text, with a marker like</span>
+<span id="cb10-242"><a href="#cb10-242" aria-hidden="true" tabindex="-1"></a><span class="in">`--- Page 1 ---`</span> showing where each page starts.</span>
+<span id="cb10-243"><a href="#cb10-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-246"><a href="#cb10-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb10-247"><a href="#cb10-247" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb10-248"><a href="#cb10-248" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb10-249"><a href="#cb10-249" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
+<span id="cb10-250"><a href="#cb10-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-251"><a href="#cb10-251" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> extract_text(pdf_path: Path) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb10-252"><a href="#cb10-252" aria-hidden="true" tabindex="-1"></a>    pages_text <span class="op">=</span> []</span>
+<span id="cb10-253"><a href="#cb10-253" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> pdfplumber.<span class="bu">open</span>(pdf_path) <span class="im">as</span> pdf:</span>
+<span id="cb10-254"><a href="#cb10-254" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> page_number, page <span class="kw">in</span> <span class="bu">enumerate</span>(pdf.pages, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb10-255"><a href="#cb10-255" aria-hidden="true" tabindex="-1"></a>            text <span class="op">=</span> page.extract_text() <span class="kw">or</span> <span class="st">""</span></span>
+<span id="cb10-256"><a href="#cb10-256" aria-hidden="true" tabindex="-1"></a>            pages_text.append(<span class="ss">f"--- Page </span><span class="sc">{</span>page_number<span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>text<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-257"><a href="#cb10-257" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(pages_text)</span>
+<span id="cb10-258"><a href="#cb10-258" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-259"><a href="#cb10-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-260"><a href="#cb10-260" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb10-261"><a href="#cb10-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-262"><a href="#cb10-262" aria-hidden="true" tabindex="-1"></a>This packages the previous step into a reusable procedure: for every page</span>
+<span id="cb10-263"><a href="#cb10-263" aria-hidden="true" tabindex="-1"></a>in the PDF, pull its text, label it with a page number, and stitch all the</span>
+<span id="cb10-264"><a href="#cb10-264" aria-hidden="true" tabindex="-1"></a>labelled pages together into one string. Instead of writing this logic</span>
+<span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a>out every time, you now have one named tool — <span class="in">`extract_text`</span> — you can</span>
+<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a>hand any PDF path to.</span>
+<span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Function and loop"}</span>
+<span id="cb10-269"><a href="#cb10-269" aria-hidden="true" tabindex="-1"></a>A **function** is a standard operating procedure: a named set of steps</span>
+<span id="cb10-270"><a href="#cb10-270" aria-hidden="true" tabindex="-1"></a>(<span class="in">`extract_text`</span>) you can hand a new input to and trust it will follow the</span>
+<span id="cb10-271"><a href="#cb10-271" aria-hidden="true" tabindex="-1"></a>same procedure every time, instead of re-writing the steps by hand for</span>
+<span id="cb10-272"><a href="#cb10-272" aria-hidden="true" tabindex="-1"></a>each report. A **loop** (<span class="in">`for page_number, page in enumerate(...)`</span>) means</span>
+<span id="cb10-273"><a href="#cb10-273" aria-hidden="true" tabindex="-1"></a>"repeat this operation for every page in the report" — the same way an</span>
+<span id="cb10-274"><a href="#cb10-274" aria-hidden="true" tabindex="-1"></a>SOP says "repeat for each joint" instead of listing every joint by hand.</span>
+<span id="cb10-275"><a href="#cb10-275" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-276"><a href="#cb10-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-277"><a href="#cb10-277" aria-hidden="true" tabindex="-1"></a>Note the <span class="in">`or ""`</span>. If a page has no extractable text — a scanned page mixed</span>
+<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a>into an otherwise digital report, for example — <span class="in">`extract_text()`</span> returns</span>
+<span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a><span class="in">`None`</span>, and every downstream step in this book expects a string, not</span>
+<span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a><span class="in">`None`</span>. This is a safety check, the code equivalent of confirming a valve</span>
+<span id="cb10-281"><a href="#cb10-281" aria-hidden="true" tabindex="-1"></a>position before proceeding instead of assuming it: assume real data is</span>
+<span id="cb10-282"><a href="#cb10-282" aria-hidden="true" tabindex="-1"></a>messier than the happy path, and this pattern shows up throughout the</span>
+<span id="cb10-283"><a href="#cb10-283" aria-hidden="true" tabindex="-1"></a>book.</span>
+<span id="cb10-284"><a href="#cb10-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-285"><a href="#cb10-285" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: make it a script you can run from the command line</span></span>
+<span id="cb10-286"><a href="#cb10-286" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-287"><a href="#cb10-287" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb10-288"><a href="#cb10-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-289"><a href="#cb10-289" aria-hidden="true" tabindex="-1"></a>Turn this into a tool you can point at any file or folder from the</span>
+<span id="cb10-290"><a href="#cb10-290" aria-hidden="true" tabindex="-1"></a>terminal, without opening or editing the code each time.</span>
+<span id="cb10-291"><a href="#cb10-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-292"><a href="#cb10-292" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb10-293"><a href="#cb10-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-294"><a href="#cb10-294" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A single PDF path, or a folder of PDFs plus a <span class="in">`--batch`</span> flag and an</span>
+<span id="cb10-295"><a href="#cb10-295" aria-hidden="true" tabindex="-1"></a>  <span class="in">`--out`</span> destination folder.</span>
+<span id="cb10-296"><a href="#cb10-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-297"><a href="#cb10-297" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb10-298"><a href="#cb10-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-299"><a href="#cb10-299" aria-hidden="true" tabindex="-1"></a>Printed text to the terminal (single-file mode), or a folder of <span class="in">`.txt`</span></span>
+<span id="cb10-300"><a href="#cb10-300" aria-hidden="true" tabindex="-1"></a>files, one per PDF (batch mode).</span>
+<span id="cb10-301"><a href="#cb10-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-302"><a href="#cb10-302" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb10-303"><a href="#cb10-303" aria-hidden="true" tabindex="-1"></a><span class="co"># One file, printed to the terminal</span></span>
+<span id="cb10-304"><a href="#cb10-304" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</span>
+<span id="cb10-305"><a href="#cb10-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-306"><a href="#cb10-306" aria-hidden="true" tabindex="-1"></a><span class="co"># A whole folder, saved as .txt files</span></span>
+<span id="cb10-307"><a href="#cb10-307" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/ <span class="at">--batch</span> <span class="at">--out</span> datasets/ddr_text</span>
+<span id="cb10-308"><a href="#cb10-308" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-309"><a href="#cb10-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-310"><a href="#cb10-310" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb10-311"><a href="#cb10-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-312"><a href="#cb10-312" aria-hidden="true" tabindex="-1"></a>The full script, <span class="in">`code/chapter_01/read_ddr.py`</span>, wraps the <span class="in">`extract_text`</span></span>
+<span id="cb10-313"><a href="#cb10-313" aria-hidden="true" tabindex="-1"></a>function in a command-line interface: flags like <span class="in">`--batch`</span> and <span class="in">`--out`</span></span>
+<span id="cb10-314"><a href="#cb10-314" aria-hidden="true" tabindex="-1"></a>work like switches on a control panel, letting you choose "one file,</span>
+<span id="cb10-315"><a href="#cb10-315" aria-hidden="true" tabindex="-1"></a>printed" or "whole folder, saved" without touching the code itself.</span>
+<span id="cb10-316"><a href="#cb10-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-317"><a href="#cb10-317" aria-hidden="true" tabindex="-1"></a>Try the first command now. You should see the full report text, including</span>
+<span id="cb10-318"><a href="#cb10-318" aria-hidden="true" tabindex="-1"></a>the line: `During the slide lost tool face and became assembly became</span>
+<span id="cb10-319"><a href="#cb10-319" aria-hidden="true" tabindex="-1"></a>stuck` — real language from a real rig report, not a paraphrase.</span>
+<span id="cb10-320"><a href="#cb10-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-321"><a href="#cb10-321" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
+<span id="cb10-322"><a href="#cb10-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-323"><a href="#cb10-323" aria-hidden="true" tabindex="-1"></a>This chapter assumes every DDR is a clean, digital-native PDF produced by</span>
+<span id="cb10-324"><a href="#cb10-324" aria-hidden="true" tabindex="-1"></a>the same software — true for this entire archive, and the easiest</span>
+<span id="cb10-325"><a href="#cb10-325" aria-hidden="true" tabindex="-1"></a>possible starting point. A real multi-well, multi-operator archive</span>
+<span id="cb10-326"><a href="#cb10-326" aria-hidden="true" tabindex="-1"></a>usually isn't that tidy. Expect:</span>
+<span id="cb10-327"><a href="#cb10-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-328"><a href="#cb10-328" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>scanned reports with no character data at all (Chapter 6)</span>
+<span id="cb10-329"><a href="#cb10-329" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>rotated or skewed pages</span>
+<span id="cb10-330"><a href="#cb10-330" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>duplicate reports filed under two different names</span>
+<span id="cb10-331"><a href="#cb10-331" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>handwritten notes or annotations layered on top of a digital report</span>
+<span id="cb10-332"><a href="#cb10-332" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>reports that are simply missing for a given day</span>
+<span id="cb10-333"><a href="#cb10-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-334"><a href="#cb10-334" aria-hidden="true" tabindex="-1"></a>None of that shows up in Part I's ten curated reports, on purpose — you</span>
+<span id="cb10-335"><a href="#cb10-335" aria-hidden="true" tabindex="-1"></a>need a reliable extraction script before you can handle the messy cases.</span>
+<span id="cb10-336"><a href="#cb10-336" aria-hidden="true" tabindex="-1"></a>Chapter 6 comes back to this list once you have somewhere solid to stand.</span>
+<span id="cb10-337"><a href="#cb10-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-338"><a href="#cb10-338" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
+<span id="cb10-339"><a href="#cb10-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-340"><a href="#cb10-340" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Run <span class="in">`read_ddr.py`</span> in batch mode against</span>
+<span id="cb10-341"><a href="#cb10-341" aria-hidden="true" tabindex="-1"></a><span class="in">`datasets/sample_ddrs/`</span>, saving the output to <span class="in">`datasets/ddr_text/`</span>. Then</span>
+<span id="cb10-342"><a href="#cb10-342" aria-hidden="true" tabindex="-1"></a>open <span class="in">`FORGE-16A-78-32_Drilling_050_2020-12-08.txt`</span> and find the line</span>
+<span id="cb10-343"><a href="#cb10-343" aria-hidden="true" tabindex="-1"></a>describing what the crew milled up that day.</span>
+<span id="cb10-344"><a href="#cb10-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-345"><a href="#cb10-345" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** you have ten <span class="in">`.txt`</span> files in</span>
+<span id="cb10-346"><a href="#cb10-346" aria-hidden="true" tabindex="-1"></a><span class="in">`datasets/ddr_text/`</span>, one per PDF, and you can find the word "Fishing" in</span>
+<span id="cb10-347"><a href="#cb10-347" aria-hidden="true" tabindex="-1"></a>report 050's text without opening the original PDF.</span>
+<span id="cb10-348"><a href="#cb10-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-349"><a href="#cb10-349" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
+<span id="cb10-350"><a href="#cb10-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-351"><a href="#cb10-351" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="Field notes: a table that reads like nonsense until you know why"}</span>
+<span id="cb10-352"><a href="#cb10-352" aria-hidden="true" tabindex="-1"></a>**Action:** extract report #38's <span class="in">`BHA`</span> section and read it as plain text.</span>
+<span id="cb10-353"><a href="#cb10-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-354"><a href="#cb10-354" aria-hidden="true" tabindex="-1"></a>**Result:**</span>
+<span id="cb10-355"><a href="#cb10-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-356"><a href="#cb10-356" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-357"><a href="#cb10-357" aria-hidden="true" tabindex="-1"></a><span class="in"># COMPONENT OD ID LENGTH # COMPONENT OD ID LENGTH</span></span>
+<span id="cb10-358"><a href="#cb10-358" aria-hidden="true" tabindex="-1"></a><span class="in">1 Drill Bit-Reed SKC613M-01C 8.75 1 7 Monel Collar-NMDC</span></span>
+<span id="cb10-359"><a href="#cb10-359" aria-hidden="true" tabindex="-1"></a><span class="in">with MWD 6.75 3.25 30.35</span></span>
+<span id="cb10-360"><a href="#cb10-360" aria-hidden="true" tabindex="-1"></a><span class="in">2 Motor-6.5'' 7/8, 5.7, 0.242 RPG 1.50,* Fixed 6.5 33.01</span></span>
+<span id="cb10-361"><a href="#cb10-361" aria-hidden="true" tabindex="-1"></a><span class="in">8 Monel Collar-NMDC (2 joints) 6.75 3.25 60.66</span></span>
+<span id="cb10-362"><a href="#cb10-362" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-363"><a href="#cb10-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-364"><a href="#cb10-364" aria-hidden="true" tabindex="-1"></a>**Why:** the real BHA table on this report is laid out as **two</span>
+<span id="cb10-365"><a href="#cb10-365" aria-hidden="true" tabindex="-1"></a>side-by-side sub-tables** — components 1–6 on the left half of the page,</span>
+<span id="cb10-366"><a href="#cb10-366" aria-hidden="true" tabindex="-1"></a>components 7–10 on the right half. Visually, that's obvious: two neat</span>
+<span id="cb10-367"><a href="#cb10-367" aria-hidden="true" tabindex="-1"></a>columns. But <span class="in">`extract_text()`</span> reads left to right, top to bottom, so</span>
+<span id="cb10-368"><a href="#cb10-368" aria-hidden="true" tabindex="-1"></a>component 1's row and component 7's row — which just happen to sit on</span>
+<span id="cb10-369"><a href="#cb10-369" aria-hidden="true" tabindex="-1"></a>the same horizontal line of the page — get concatenated into one line of</span>
+<span id="cb10-370"><a href="#cb10-370" aria-hidden="true" tabindex="-1"></a>output text, with no marker showing where the left sub-table ends and</span>
+<span id="cb10-371"><a href="#cb10-371" aria-hidden="true" tabindex="-1"></a>the right one begins.</span>
+<span id="cb10-372"><a href="#cb10-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-373"><a href="#cb10-373" aria-hidden="true" tabindex="-1"></a>**Lesson:** <span class="in">`extract_text()`</span> gives you the words on the page, not the</span>
+<span id="cb10-374"><a href="#cb10-374" aria-hidden="true" tabindex="-1"></a>*layout* those words depend on to make sense. A two-column table isn't a</span>
+<span id="cb10-375"><a href="#cb10-375" aria-hidden="true" tabindex="-1"></a>special case — it's normal DDR formatting — and reading its flattened</span>
+<span id="cb10-376"><a href="#cb10-376" aria-hidden="true" tabindex="-1"></a>output at face value would have you believe component 1 and component 7</span>
+<span id="cb10-377"><a href="#cb10-377" aria-hidden="true" tabindex="-1"></a>are the same row. This book's chapters work around it by favouring the</span>
+<span id="cb10-378"><a href="#cb10-378" aria-hidden="true" tabindex="-1"></a>narrative <span class="in">`TIME BREAKDOWN`</span> text over the structured tables for search and</span>
+<span id="cb10-379"><a href="#cb10-379" aria-hidden="true" tabindex="-1"></a>retrieval — real table-aware parsing (detecting table boundaries and</span>
+<span id="cb10-380"><a href="#cb10-380" aria-hidden="true" tabindex="-1"></a>reconstructing rows correctly) is its own discipline, and the companion</span>
+<span id="cb10-381"><a href="#cb10-381" aria-hidden="true" tabindex="-1"></a>pipeline's <span class="in">`src/rag_pdf/table_detect.py`</span> and <span class="in">`table_extract.py`</span> handle it</span>
+<span id="cb10-382"><a href="#cb10-382" aria-hidden="true" tabindex="-1"></a>properly. For now, just know that "extracted text" and "correct reading</span>
+<span id="cb10-383"><a href="#cb10-383" aria-hidden="true" tabindex="-1"></a>order" are not the same guarantee.</span>
+<span id="cb10-384"><a href="#cb10-384" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-385"><a href="#cb10-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-386"><a href="#cb10-386" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
+<span id="cb10-387"><a href="#cb10-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-388"><a href="#cb10-388" aria-hidden="true" tabindex="-1"></a>**Challenge:** Extend the script to also print, for each PDF, the total</span>
+<span id="cb10-389"><a href="#cb10-389" aria-hidden="true" tabindex="-1"></a>number of pages and the total character count extracted. Then compare</span>
+<span id="cb10-390"><a href="#cb10-390" aria-hidden="true" tabindex="-1"></a>report #3 (October 22, before the well was spudded — `PRESENT</span>
+<span id="cb10-391"><a href="#cb10-391" aria-hidden="true" tabindex="-1"></a>OPERATIONS: RIGGING UP...`) against report #38 (the stuck-pipe day): how</span>
+<span id="cb10-392"><a href="#cb10-392" aria-hidden="true" tabindex="-1"></a>much richer is the later report's text, and why might that be? (Hint:</span>
+<span id="cb10-393"><a href="#cb10-393" aria-hidden="true" tabindex="-1"></a>check the <span class="in">`SPUD DATE`</span> and <span class="in">`DFS`</span>/<span class="in">`DOL`</span> fields in each report's header.) A</span>
+<span id="cb10-394"><a href="#cb10-394" aria-hidden="true" tabindex="-1"></a>reference solution is in <span class="in">`code/chapter_01/challenge/`</span>.</span>
+<span id="cb10-395"><a href="#cb10-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-396"><a href="#cb10-396" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb10-397"><a href="#cb10-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-398"><a href="#cb10-398" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A PDF's internal structure, not its on-screen appearance, determines</span>
+<span id="cb10-399"><a href="#cb10-399" aria-hidden="true" tabindex="-1"></a>  whether text can be extracted directly. Digital-native PDFs can;</span>
+<span id="cb10-400"><a href="#cb10-400" aria-hidden="true" tabindex="-1"></a>  scanned PDFs need OCR (Chapter 6).</span>
+<span id="cb10-401"><a href="#cb10-401" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`pdfplumber`</span> turns a PDF into plain Python strings, one page at a time.</span>
+<span id="cb10-402"><a href="#cb10-402" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Handle <span class="in">`None`</span> from <span class="in">`extract_text()`</span> explicitly — real-world DDR archives</span>
+<span id="cb10-403"><a href="#cb10-403" aria-hidden="true" tabindex="-1"></a>  will contain pages that don't extract cleanly, and your code should</span>
+<span id="cb10-404"><a href="#cb10-404" aria-hidden="true" tabindex="-1"></a>  never crash on them.</span>
+<span id="cb10-405"><a href="#cb10-405" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A five-line function (<span class="in">`extract_text`</span>) plus a thin command-line wrapper</span>
+<span id="cb10-406"><a href="#cb10-406" aria-hidden="true" tabindex="-1"></a>  is already a genuinely useful tool. You don't need machine learning to</span>
+<span id="cb10-407"><a href="#cb10-407" aria-hidden="true" tabindex="-1"></a>  save an engineer an hour of searching PDFs by hand — and it works</span>
+<span id="cb10-408"><a href="#cb10-408" aria-hidden="true" tabindex="-1"></a>  identically whether the PDF is a synthetic example or, as here, a real</span>
+<span id="cb10-409"><a href="#cb10-409" aria-hidden="true" tabindex="-1"></a>  report from a real well.</span>
+<span id="cb10-410"><a href="#cb10-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-411"><a href="#cb10-411" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb10-412"><a href="#cb10-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-413"><a href="#cb10-413" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb10-414"><a href="#cb10-414" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb10-415"><a href="#cb10-415" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_01/read_ddr.py`</span> <span class="pp">|</span> Extracts text from one PDF or a folder of PDFs <span class="pp">|</span></span>
+<span id="cb10-416"><a href="#cb10-416" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_01/build_sample_archive.py`</span> <span class="pp">|</span> Reproduces the curated Part I subset from the full public archive <span class="pp">|</span></span>
+<span id="cb10-417"><a href="#cb10-417" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`datasets/sample_ddrs/`</span> <span class="pp">|</span> Ten real, curated Utah FORGE DDR PDFs used throughout Part I <span class="pp">|</span></span>
+<span id="cb10-418"><a href="#cb10-418" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_01_explore.ipynb`</span> <span class="pp">|</span> Interactive notebook version of this chapter <span class="pp">|</span></span>
+<span id="cb10-419"><a href="#cb10-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-420"><a href="#cb10-420" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb10-421"><a href="#cb10-421" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-422"><a href="#cb10-422" aria-hidden="true" tabindex="-1"></a>You can turn any digital-native DDR PDF — or a whole folder of them —</span>
+<span id="cb10-423"><a href="#cb10-423" aria-hidden="true" tabindex="-1"></a>into plain text you can read, search, or hand to another script, without</span>
+<span id="cb10-424"><a href="#cb10-424" aria-hidden="true" tabindex="-1"></a>opening a single PDF viewer.</span>
+<span id="cb10-425"><a href="#cb10-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-426"><a href="#cb10-426" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb10-427"><a href="#cb10-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-428"><a href="#cb10-428" aria-hidden="true" tabindex="-1"></a>The text you just extracted uses real oilfield shorthand and drilling</span>
+<span id="cb10-429"><a href="#cb10-429" aria-hidden="true" tabindex="-1"></a>terminology — <span class="in">`BHA`</span>, <span class="in">`WOB`</span>, <span class="in">`SPP`</span>, <span class="in">`PJSM`</span> — some spelled out, some</span>
+<span id="cb10-430"><a href="#cb10-430" aria-hidden="true" tabindex="-1"></a>abbreviated, exactly as the field actually writes it. Chapter 2 builds an</span>
+<span id="cb10-431"><a href="#cb10-431" aria-hidden="true" tabindex="-1"></a>abbreviation expansion engine grounded in what's actually in this</span>
+<span id="cb10-432"><a href="#cb10-432" aria-hidden="true" tabindex="-1"></a>archive, turning this raw text into something both humans and machines</span>
+<span id="cb10-433"><a href="#cb10-433" aria-hidden="true" tabindex="-1"></a>can search reliably.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

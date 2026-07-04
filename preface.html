@@ -534,8 +534,9 @@ div.csl-indent {
 </section>
 <section id="how-to-read-this-book" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-read-this-book">How to read this book</h2>
-<p>This book follows the practical-first, project-based teaching style of <em>Python Crash Course</em> <span class="citation" data-cites="matthes2023python">(<a href="references.html#ref-matthes2023python" role="doc-biblioref">Matthes 2023</a>)</span>: small wins early, theory only when the code in front of you needs it, and a working artifact at the end of every chapter. Read it in order the first time. Each chapter assumes the code from the previous one exists and works — this is a build, not a reference manual. After your first pass, use it as a reference: jump to the chapter that matches the problem you currently have (Chapter 6 if your PDFs are scanned, Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers aren’t trustworthy yet).</p>
-<p>Type the code yourself. Do not copy-paste from the companion repository until you have typed it once and watched it run. This is slower and it is worth it.</p>
+<p>This book borrows the practical-first, project-based spirit of <em>Python Crash Course</em> <span class="citation" data-cites="matthes2023python">(<a href="references.html#ref-matthes2023python" role="doc-biblioref">Matthes 2023</a>)</span> — small wins early, theory only when the code in front of you needs it, a working artifact at the end of every chapter — but assumes considerably less going in. You do not need to have written Python before. You do not need to know what a function or a loop is before Chapter 1; each concept is explained in plain language, translated into terms an engineer already knows, exactly when you need it to solve the problem in front of you.</p>
+<p>Read it in order the first time. Each chapter assumes the code from the previous one exists and works — this is a build, not a reference manual. After your first pass, use it as a reference: jump to the chapter that matches the problem you currently have (Chapter 6 if your PDFs are scanned, Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers aren’t trustworthy yet).</p>
+<p>Type the code yourself. Do not copy-paste from the companion repository until you have typed it once and watched it run. This is slower and it is worth it — and if you finish this book able to say “I can build this,” rather than “I understand the theory,” it did its job.</p>
 </section>
 <section id="a-note-on-data" class="level2">
 <h2 class="anchored" data-anchor-id="a-note-on-data">A note on data</h2>
@@ -1074,40 +1075,46 @@ Society of Petroleum Engineers. 2022. <span>“Digitalisation of Daily Drilling 
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to read this book</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>This book follows the practical-first, project-based teaching style of</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>*Python Crash Course* <span class="co">[</span><span class="ot">@matthes2023python</span><span class="co">]</span>: small wins early, theory only</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>when the code in front of you needs it, and a working artifact at the end</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>of every chapter. Read it in order the first time. Each chapter assumes</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>the code from the previous one exists and works — this is a build, not a</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>reference manual.</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>After your first pass, use it as a reference: jump to the chapter that</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>matches the problem you currently have (Chapter 6 if your PDFs are scanned,</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>aren't trustworthy yet).</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>Type the code yourself. Do not copy-paste from the companion repository</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>until you have typed it once and watched it run. This is slower and it is</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>worth it.</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">## A note on data</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>Most Daily Drilling Reports are operationally sensitive and confidential</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>— which is exactly why this book doesn't use one from a commercial</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>operator. Every example here comes from **Utah FORGE**, a Department of</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>Energy-funded enhanced geothermal system research well (FORGE</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>16A(78)-32) whose reports are public: real well name, real dates, real</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>personnel, real events, exactly as filed. No anonymisation was applied,</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>because none was needed — this is what "publicly available" means in</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>practice, and it lets this book show you genuine field language instead</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>of an approximation of it.</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>That said, the *technique* generalises directly to a confidential</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>archive: everything from Chapter 6 onward — OCR gating, traceability,</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>corpus-completeness checks — exists precisely because production</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>archives are messier and more sensitive than this one. If you point this</span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>book's code at your own organisation's DDRs, do not commit them to a</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>public repository, and see <span class="co">[</span><span class="ot">Appendix A</span><span class="co">](appendix/appendix_a_environment_setup.qmd)</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>for a data-handling checklist.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>This book borrows the practical-first, project-based spirit of *Python</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>Crash Course* <span class="co">[</span><span class="ot">@matthes2023python</span><span class="co">]</span> — small wins early, theory only when</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>the code in front of you needs it, a working artifact at the end of</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>every chapter — but assumes considerably less going in. You do not need</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>to have written Python before. You do not need to know what a function</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>or a loop is before Chapter 1; each concept is explained in plain</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>language, translated into terms an engineer already knows, exactly when</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>you need it to solve the problem in front of you.</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>Read it in order the first time. Each chapter assumes the code from the</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>previous one exists and works — this is a build, not a reference manual.</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>After your first pass, use it as a reference: jump to the chapter that</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>matches the problem you currently have (Chapter 6 if your PDFs are scanned,</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>Chapter 9 if your retrieval quality is poor, Chapter 10 if your answers</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>aren't trustworthy yet).</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>Type the code yourself. Do not copy-paste from the companion repository</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>until you have typed it once and watched it run. This is slower and it is</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>worth it — and if you finish this book able to say "I can build this,"</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>rather than "I understand the theory," it did its job.</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="fu">## A note on data</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>Most Daily Drilling Reports are operationally sensitive and confidential</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>— which is exactly why this book doesn't use one from a commercial</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>operator. Every example here comes from **Utah FORGE**, a Department of</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>Energy-funded enhanced geothermal system research well (FORGE</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>16A(78)-32) whose reports are public: real well name, real dates, real</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>personnel, real events, exactly as filed. No anonymisation was applied,</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>because none was needed — this is what "publicly available" means in</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>practice, and it lets this book show you genuine field language instead</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>of an approximation of it.</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>That said, the *technique* generalises directly to a confidential</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>archive: everything from Chapter 6 onward — OCR gating, traceability,</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>corpus-completeness checks — exists precisely because production</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>archives are messier and more sensitive than this one. If you point this</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>book's code at your own organisation's DDRs, do not commit them to a</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>public repository, and see <span class="co">[</span><span class="ot">Appendix A</span><span class="co">](appendix/appendix_a_environment_setup.qmd)</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>for a data-handling checklist.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
