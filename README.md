@@ -15,6 +15,28 @@ In *Building Industrial RAG Systems from Daily Drilling Reports*, you build a wo
 
 Every example uses real, publicly available Daily Drilling Reports from **Utah FORGE** — a Department of Energy-funded geothermal research well — not synthetic stand-ins. A real stuck-pipe event, a real packers-fail-to-fishing sequence, and a real reporting gap all appear exactly as filed.
 
+### What You're Building
+
+This is a real interaction with the system you'll have built by Chapter 5 — the question, the generated answer, and the exact reports backing every claim in it. Nothing here is invented; both claims in the answer are directly quoted from the real report text.
+
+```
+Question: What led to the fishing operation on report #50?
+
+Answer: On report #49 (2020-12-07), the crew attempted multiple times
+to set packers on BHA #32, but pressure readings showed the ball did
+not seat and the packers failed to set. They tripped out with the
+packer assembly and picked up a fishing BHA (#33) that same day. On
+report #50 (2020-12-08), that fishing run milled up lost pieces of bit.
+
+Evidence:
+  FORGE-16A-78-32_Drilling_049_2020-12-07.pdf
+  FORGE-16A-78-32_Drilling_050_2020-12-08.pdf
+```
+
+That's it — a question, an answer, and the exact source reports you'd need to check it against. No black box.
+
+<br>
+
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
 - [Read the book online](https://djimrastephane.github.io/ddr-rag-book/)
 - License: code is [MIT](LICENSE); the book's text is [CC BY 4.0](LICENSE-CONTENT.md)
@@ -79,6 +101,23 @@ Operational Intelligence
 ```
 
 By the last arrow, you're not reading about RAG systems — you built one, and you understand every piece of it.
+
+<br>
+&nbsp;
+
+## What You'll Build by the End
+
+By the end of the book you will have built:
+
+- ✓ PDF extraction pipeline
+- ✓ Abbreviation expansion engine
+- ✓ Keyword search engine
+- ✓ Semantic search engine
+- ✓ Industrial RAG system
+- ✓ Traceable answer engine
+- ✓ Cross-well sequence detector
+
+Seven real, working artifacts — not seven topics you read about.
 
 <br>
 &nbsp;
