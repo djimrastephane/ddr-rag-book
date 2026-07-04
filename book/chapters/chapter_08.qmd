@@ -221,6 +221,18 @@ picture:
   say, versus a wholly-owned one), a single global index needs an
   access-control layer on top of it — FAISS itself has no concept of
   "who's allowed to see this chunk"
+- this chapter's own code deliberately restricts FAISS and the embedding
+  model to a single CPU thread (`OMP_NUM_THREADS=1`). Not a hypothetical
+  caution — a fix for a real, reproducible crash confirmed during this
+  book's own testing: on macOS, FAISS and PyTorch (which the embedding
+  model runs on) each bring their own separate copy of the same
+  multi-threading library, and letting both use more than one thread at
+  once corrupts memory and crashes the whole program. Invisible at ten
+  documents. A genuinely large archive would want real multi-threaded
+  performance back, which means revisiting that limit deliberately —
+  checking whether your specific combination of library versions still
+  hits the same conflict — rather than leaving every embedding job
+  capped at one thread by default forever
 
 ## Practical exercise
 
