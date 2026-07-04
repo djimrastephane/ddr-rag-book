@@ -566,7 +566,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 </section>
 <section id="implementation" class="level2" data-number="12.5">
 <h2 data-number="12.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">12.5</span> Implementation</h2>
-<div id="22292dbc" class="cell" data-execution_count="1">
+<div id="bafcfcc1" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_12/torque_trend_check.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> torque_trend(readings: <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>, <span class="bu">float</span>]]:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Given [(date, torque_value), ...] in chronological order, return</span></span>
@@ -577,7 +577,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        trend.append((date, val, pct_change))</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> trend</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="d120b587" class="cell" data-execution_count="2">
+<div id="48ab3e06" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>readings <span class="op">=</span> [</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-24"</span>, <span class="dv">4400</span>),</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-25"</span>, <span class="dv">4200</span>),</span>
