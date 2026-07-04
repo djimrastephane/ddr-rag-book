@@ -132,7 +132,7 @@ BibTeX entry:
 
 ```bibtex
 @book{ddr-rag-book,
-  author  = {Stephane Djimra},
+  author  = {Djimra Stephane Soulanoudjingar},
   title   = {Building Industrial RAG Systems from Daily Drilling Reports},
   year    = {2026},
   url     = {https://djimrastephane.github.io/ddr-rag-book/},
