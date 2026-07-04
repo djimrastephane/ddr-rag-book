@@ -2062,7 +2062,7 @@
     "href": "chapters/chapter_07.html#practical-exercise",
     "title": "7  Chunking That Respects Report Structure",
     "section": "7.11 Practical exercise",
-    "text": "7.11 Practical exercise\nTry it yourself: Chunk report #38’s full text with chunk_tokens=60, overlap_tokens=15, and confirm the stuck-pipe sentence (“During the slide lost tool face and became assembly became stuck”) appears complete within at least one chunk rather than split across two.\nYou’ll know it worked when: you can point to a single chunk that contains the full sentence, from “During the slide” through “became stuck.”",
+    "text": "7.11 Practical exercise\nNotice this uses smaller numbers than the chunk_tokens=200, overlap_tokens=40 shown above — deliberately. Every DDR in this sample is a single page, so at 200/40 one report only splits into 11 chunks; at 60/15 it splits into 37. More chunks from one short report makes the idea of chunking itself easier to see and check by eye, which is the point of this exercise. Real archives with real budgets tend to land closer to 200/40 or larger — see the Production Reality note above.\nTry it yourself: Chunk report #38’s full text with chunk_tokens=60, overlap_tokens=15, and confirm the stuck-pipe sentence (“During the slide lost tool face and became assembly became stuck”) appears complete within at least one chunk rather than split across two.\nYou’ll know it worked when: you can point to a single chunk that contains the full sentence, from “During the slide” through “became stuck.”",
     "crumbs": [
       "Part II — Industrialising the System",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>Chunking That Respects Report Structure</span>"
