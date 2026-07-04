@@ -116,7 +116,7 @@ from this archive.
 [**DDR_UTAH_FORGE**](https://github.com/djimrastephane/DDR_UTAH_FORGE) is
 a separate, public repository from this book. This book's own code never
 depends on it — every chapter's `code/chapter_NN/` scripts run standalone
-against the committed `datasets/` archive. See [Appendix A, section 3](appendix/appendix_a_environment_setup.qmd#3-the-companion-pipeline-for-part-ii)
+against the committed `datasets/` archive. See [Appendix A, section 3](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii)
 for how to clone it and how the two projects relate.
 
 ## Recommended workflow in Positron (for authors drafting new chapters)
