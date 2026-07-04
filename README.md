@@ -1,6 +1,8 @@
 # Building Industrial RAG Systems from Daily Drilling Reports
 
-This repository contains the chapters, code, and sample data for **Building Industrial RAG Systems from Daily Drilling Reports** — a hands-on, build-as-you-go book that teaches retrieval-augmented generation (RAG) to drilling and completions engineers, assuming zero prior programming experience.
+**First time here? Jump straight to [Start Here](#start-here).**
+
+This repository contains the chapters, code, and sample data for **Building Industrial RAG Systems from Daily Drilling Reports** — a hands-on, build-as-you-go book that teaches retrieval-augmented generation (RAG) to well, drilling, and completions engineers, assuming zero prior programming experience.
 
 <br>
 <br>
@@ -9,27 +11,243 @@ This repository contains the chapters, code, and sample data for **Building Indu
 
 <br>
 
-In *Building Industrial RAG Systems from Daily Drilling Reports*, you'll build a working RAG system from scratch, one chapter at a time: extracting text from a real Daily Drilling Report (DDR) PDF, expanding oilfield shorthand, searching an archive by keyword and then by meaning, and finally generating cited, evidence-backed answers to real engineering questions — no machine learning background assumed, no black-box product involved.
+In *Building Industrial RAG Systems from Daily Drilling Reports*, you build a working RAG system from scratch, one chapter at a time: extracting text from a real Daily Drilling Report (DDR) PDF, expanding oilfield shorthand, searching an archive by keyword and then by meaning, and finally generating cited, evidence-backed answers to real engineering questions — no machine learning background assumed, no black-box product involved.
 
-Every example in the book uses real, publicly available Daily Drilling Reports from **Utah FORGE** — a Department of Energy-funded enhanced geothermal system research well (FORGE 16A(78)-32) — not synthetic stand-ins. A real stuck-pipe event, a real packers-fail-to-fishing sequence, and a real reporting gap all appear exactly as filed.
+Every example uses real, publicly available Daily Drilling Reports from **Utah FORGE** — a Department of Energy-funded geothermal research well — not synthetic stand-ins. A real stuck-pipe event, a real packers-fail-to-fishing sequence, and a real reporting gap all appear exactly as filed.
 
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
 - [Read the book online](https://djimrastephane.github.io/ddr-rag-book/)
 - License: code is [MIT](LICENSE); the book's text is [CC BY 4.0](LICENSE-CONTENT.md)
 
 <br>
-<br>
 
-To download a copy of this repository, click the [Download ZIP](https://github.com/djimrastephane/ddr-rag-book/archive/refs/heads/main.zip) button, or run the following in your terminal:
+To get a copy of this repository, click the [Download ZIP](https://github.com/djimrastephane/ddr-rag-book/archive/refs/heads/main.zip) button, or run the following in a terminal:
 
 ```bash
 git clone https://github.com/djimrastephane/ddr-rag-book.git
 ```
 
+Never used a terminal or Git before? That's exactly what **Start Here** and **Part 0** below are for — nothing past this point assumes you already know how.
+
+<br>
+<br>
+
+# Start Here
+
+This README has one job: get you to successfully run Chapter 1. Everything else in this file is reference material for later.
+
+If this is your first Python project, do these five things in order:
+
+1. Read **[Part 0: Preparing Your Python Workshop](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_00.html)** — installs Python and gets your project folder ready. No prior experience assumed.
+2. Run `setup_check.py` — one command that confirms everything is working before you touch a real report.
+3. Run **[Chapter 1](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_01.html)** — extract text from a real Daily Drilling Report PDF.
+4. Watch it happen on your own screen — real rig-floor language, printed by code you ran yourself.
+5. Continue sequentially, one chapter at a time. Each chapter builds on the last.
+
+| Step | Typical time |
+|---|---|
+| Setup (Part 0) | ~30–45 minutes |
+| Chapter 1 | ~20 minutes |
+| Chapter 2 | ~20 minutes |
+| Chapter 3 | ~30 minutes |
+
+That's under two hours from "nothing installed" to searching a real drilling report archive by keyword. You don't need to understand everything before you start — you need to run the first command. Everything else follows from there.
+
+<br>
+<br>
+
+# Your Learning Journey
+
+Each arrow below is one or two chapters of real, working code — not a diagram of what's theoretically possible.
+
+```
+DDR PDF
+   ↓
+Text Extraction
+   ↓
+Text Cleaning
+   ↓
+Keyword Search
+   ↓
+Semantic Search
+   ↓
+RAG
+   ↓
+Traceable Answers
+   ↓
+Operational Intelligence
+```
+
+By the last arrow, you're not reading about RAG systems — you built one, and you understand every piece of it.
+
+<br>
+&nbsp;
+
+## What You Will Be Able to Do
+
+After working through this book, you will be able to:
+
+- Extract text from drilling reports
+- Expand oilfield abbreviations automatically
+- Search historical operations by keyword
+- Build semantic search that finds reports by meaning, not just exact wording
+- Build a complete RAG pipeline, end to end
+- Generate traceable, evidence-backed answers
+- Evaluate retrieval quality with real numbers, not guesswork
+- Detect operational patterns across wells
+
+<br>
+&nbsp;
+
+## Who This Book Is For
+
+This book is written for:
+
+- Well Engineers
+- Completion Engineers
+- Intervention Engineers
+- Drilling Engineers
+- Production Engineers
+- Digital Oilfield Professionals
+- Energy Data Scientists
+
+If you've ever read a DDR and wished you could search years of them in seconds, this book is for you.
+
+<br>
+&nbsp;
+
+## Who This Book Is Not For
+
+This book is probably not for you if:
+
+- you want a theoretical machine learning textbook
+- you want a mathematical treatment of transformers
+- you want to train foundation models
+- you already build production-scale RAG systems professionally
+
+None of that is a criticism — it just means your time is better spent elsewhere.
+
+<br>
+&nbsp;
+
+## Expected Background
+
+**Helpful:**
+
+- operational experience
+- experience reading DDRs
+- comfort in Excel
+- curiosity
+
+**Not required:**
+
+- Python
+- AI or machine learning
+- software engineering
+- Git
+- Linux
+
+<br>
+&nbsp;
+
+## How Long Does Each Chapter Take
+
+| Chapter | Typical time |
+|---|---|
+| Part 0 | 30–45 min |
+| Chapter 1 | 20 min |
+| Chapter 2 | 20 min |
+| Chapter 3 | 30 min |
+| Chapter 4 | 30 min |
+| Chapter 5 | 45 min |
+| Chapter 6 | 30 min |
+| Chapter 7 | 30 min |
+| Chapter 8 | 40 min |
+| Chapter 9 | 40 min |
+| Chapter 10 | 30 min |
+| Chapter 11 | 30 min |
+| Chapter 12 | 45 min |
+
+There's no need to do this in one sitting — most readers spread it across several days, a chapter or two at a time.
+
+<br>
+&nbsp;
+
+## Minimum Computer Requirements
+
+**Minimum:**
+
+- 8 GB RAM
+- 5 GB free disk space
+- a modern CPU (nothing from the last ~6 years should struggle)
+
+**Recommended:**
+
+- 16 GB RAM, which makes Part II's heavier chapters more comfortable
+
+**No GPU required. No cloud account required. No paid API required.** Everything in this book runs locally on an ordinary laptop. The embedding model used from Chapter 4 onward (`all-MiniLM-L6-v2`) and the vector index in Chapter 8 (`faiss-cpu`) are both deliberately chosen to be small and fast on CPU. Chapter 5's `llm_call` argument is provider-agnostic — you *can* plug in a hosted API if you want one, but nothing about following this book requires it.
+
+<br>
+&nbsp;
+
+## Choose Your Workshop
+
+| Environment | Recommended for |
+|---|---|
+| [Jupyter Notebook](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a1_jupyter.html) | Learning and experimentation |
+| [VS Code](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a2_vscode.html) | General coding |
+| [PyCharm Community](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a3_pycharm.html) | Larger projects |
+| [Positron](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a4_positron.html) | Data science workflows |
+| [Terminal only](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a5_terminal.html) | Minimal setup |
+
+**There is no wrong choice. All examples run identically in every one of these.** Part 0 covers general setup; each link above has a short, dedicated walkthrough for that specific tool.
+
+<br>
+&nbsp;
+
+## First Success Checkpoint
+
+You are ready for Chapter 1 when:
+
+- ✅ Python runs
+- ✅ `setup_check.py` runs successfully
+- ✅ the sample DDR files exist in `datasets/sample_ddrs/`
+- ✅ your virtual environment is active
+
+All four checks are covered in Part 0 — if any of them aren't true yet, that's exactly what it's for.
+
+<br>
+&nbsp;
+
+## Common Reader Journeys
+
+**"I am a drilling engineer with no coding experience."**
+→ Start with Part 0 and proceed sequentially, one chapter at a time.
+
+**"I already know Python."**
+→ Skip Part 0 and start directly at Chapter 1.
+
+**"I already build RAG systems professionally."**
+→ Skim Part I for context, then start at Part II (Chapter 6), where OCR gating, hybrid retrieval, and traceability are covered.
+
+<br>
+&nbsp;
+
+## What Makes This Book Different
+
+- Uses real DDRs rather than synthetic examples
+- Uses public operational data — no confidentiality concerns, nothing invented
+- Assumes zero programming experience
+- Focuses on well engineering problems, not generic AI demos
+- Emphasizes traceability over generation quality
+- Teaches industrial constraints (scanned reports, retrieval failures, evaluation) rather than a toy happy-path
+
 <br>
 <br>
 
 # Table of Contents
+
+Everything below this point is reference material — you don't need to read it to get started (see **Start Here** above). It's here for when you want to jump to a specific chapter, check a file, or come back to something later.
 
 Please note that this `README.md` file is a Markdown (`.md`) file — GitHub renders it automatically, and if you downloaded this repository as a ZIP, any Markdown previewer will too. The book's chapters, however, are written as `.qmd` (Quarto Markdown) files, which GitHub's file viewer shows as plain unformatted source. Read them properly formatted at [djimrastephane.github.io/ddr-rag-book](https://djimrastephane.github.io/ddr-rag-book/), which renders automatically from this repository.
 
@@ -38,13 +256,10 @@ For the full repository layout (folder tree, part/chapter file map) see [`book/R
 <br>
 <br>
 
-> **Tip:**
-> If you've never installed Python, never opened a terminal, or aren't sure which editor to use, start with **Part 0 — Preparing Your Python Workshop** ([`book/chapters/chapter_00.qmd`](book/chapters/chapter_00.qmd), or [read it online](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_00.html)). It's IDE-agnostic — Jupyter Notebook, VS Code, PyCharm Community, Positron, or a terminal alone all work identically, each with its own short guide in Appendices A1–A5.
-
-<br>
-<br>
-
 [![Publish book to GitHub Pages](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/publish.yml/badge.svg)](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/publish.yml)
+[![Code tests Linux](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-linux.yml/badge.svg)](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-linux.yml)
+[![Code tests Windows](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-windows.yml/badge.svg)](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-windows.yml)
+[![Code tests macOS](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-macos.yml/badge.svg)](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-macos.yml)
 
 - [Troubleshooting](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_00.html#troubleshooting) (Part 0, Section 0.11), plus [Appendix A, Section 5](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a_environment_setup.html#troubleshooting) for rendering/dependency issues
 
@@ -72,22 +287,6 @@ Chapter titles in the table below link to the rendered, readable page for that r
 <br>
 &nbsp;
 
-## Prerequisites
-
-The only real prerequisite is curiosity. This book assumes zero prior programming or AI/ML experience — Part 0 takes you from nothing installed to a working Python environment, and every concept, down to what a function or a dictionary is, is explained in plain English and translated into terms a drilling, completions, or production engineer already knows, exactly when the code in front of you needs it, never before.
-
-Strong operational experience and comfort in Excel are more useful starting points here than prior coding experience.
-
-<br>
-&nbsp;
-
-## Hardware Requirements
-
-Every chapter in Part I and most of Part II runs on an ordinary laptop CPU — no GPU required. The embedding model used from Chapter 4 onward (`all-MiniLM-L6-v2`) and the vector index in Chapter 8 (`faiss-cpu`) are both deliberately chosen to be small and fast on CPU. Chapter 5's `llm_call` argument is provider-agnostic: plug in a local model or a hosted API, and your hardware needs follow whichever you choose.
-
-<br>
-&nbsp;
-
 ## Companion Pipeline
 
 [**DDR_UTAH_FORGE**](https://github.com/djimrastephane/DDR_UTAH_FORGE) is a separate, public repository: a real, working DDR intelligence pipeline built specifically against this book's public archive, which Part II's chapters reference for verified real-world numbers (a real 2,943-chunk global index, a real detected reporting gap, and so on). This book's own code never depends on it — every chapter's script in `book/code/chapter_NN/` runs standalone against the committed sample archive. See [Appendix A, Section 3](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii) for how to clone it and how the two projects relate.
@@ -98,6 +297,18 @@ Every chapter in Part I and most of Part II runs on an ordinary laptop CPU — n
 ## Exercises
 
 Every chapter includes a **Practical exercise** (a guided, checkable task using the real sample archive) and a **Challenge exercise** (a harder, more open-ended extension). Reference solutions for challenge exercises live alongside each chapter's code, e.g. [`book/code/chapter_01/challenge/`](book/code/chapter_01/challenge).
+
+<br>
+&nbsp;
+
+## Automated Tests
+
+Every chapter's real code — not a simplified stand-in — is tested against the actual sample DDR archive in [`book/tests/`](book/tests), on Linux, Windows, and macOS. Run them yourself from the `book/` directory:
+
+```bash
+pip install -r requirements.txt
+pytest -v
+```
 
 <br>
 &nbsp;
