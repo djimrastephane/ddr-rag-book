@@ -96,10 +96,15 @@ exercise asks you to add OR and phrase queries.
 **Try it yourself:** Build the index over `datasets/ddr_text_expanded/`
 and run `search(index, "fishing")`.
 
-**You'll know it worked when:** the result set contains exactly
-`{"FORGE-16A-78-32_Drilling_050_2020-12-08.txt"}` — the day the crew
-milled up lost pieces of bit, right after packers failed to set the day
-before.
+**You'll know it worked when:** the result set contains **two** reports,
+not one: `FORGE-16A-78-32_Drilling_049_2020-12-07.txt` (the day the crew
+picked up a fishing BHA and logged `ACTIVITY PLANNED: FISHING
+OPERATIONS`) and `FORGE-16A-78-32_Drilling_050_2020-12-08.txt` (the day
+they actually milled up lost pieces of bit). If you expected only one
+result, that's a useful surprise: the word "fishing" genuinely appears in
+both the planning day and the execution day, and an AND/OR keyword index
+has no concept of "the day it actually happened" versus "the day it was
+planned" — it just finds every document containing the word.
 
 ## Field notes
 

@@ -150,11 +150,11 @@ that list actually contains what the target answer above needs.
 The full ranking:
 
 ```
-1. 0.4412  Drilling_049_2020-12-07   <- packers fail (correctly retrieved)
-2. 0.3461  Drilling_038_2020-11-26
-3. 0.3358  Drilling_037_2020-11-25
+1. 0.4409  Drilling_049_2020-12-07   <- packers fail (correctly retrieved)
+2. 0.3523  Drilling_038_2020-11-26
+3. 0.3270  Drilling_048_2020-12-06
 ...
-8. 0.3012  Drilling_050_2020-12-08   <- the fishing report itself
+7. 0.3106  Drilling_050_2020-12-08   <- the fishing report itself
 ```
 
 **Why:** report #50's own text — bit-mill fishing narrative buried among

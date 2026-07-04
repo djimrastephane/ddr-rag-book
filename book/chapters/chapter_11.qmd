@@ -175,6 +175,16 @@ results — it's the seed of exactly the kind of evaluation harness
 `scripts/run_eval.py` runs at scale once one exists. A reference solution
 approach is in `code/chapter_11/challenge/`.
 
+Don't be alarmed if `recall@5` comes back much lower than you'd expect
+from Part I — the reference solution's own 15-question set, run against
+all 76 reports with Chapter 4's plain whole-document embeddings, scores
+`recall@5` of only **0.47**. That's not a bug: at 10 candidates, chance
+alone gets you partway there, and whole-document dilution barely
+matters. At 76 candidates, both problems compound. A low score here is
+the honest, measured version of the same lesson Chapter 9 already
+taught — it's exactly what motivates hybrid retrieval and reranking
+before this system sees a real, full-scale archive.
+
 ## Key takeaways
 
 - An evaluation set with known correct answers is more valuable than any

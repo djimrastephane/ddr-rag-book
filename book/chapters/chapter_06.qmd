@@ -130,11 +130,11 @@ before the well was even spudded, with most of its tables entirely
 empty.
 
 **Result:** every single report passes cleanly. Report #3, the thinnest
-of the ten, still has 2,220 characters and 360 alphabetic words —
+of the ten, still has 2,235 characters and 361 alphabetic words —
 comfortably clear of the 200-character / 30-word thresholds:
 
 ```
-chars=2220 alpha_words=360 symbol_ratio=0.007  reject=False
+chars=2235 alpha_words=361 symbol_ratio=0.006  reject=False
 ```
 
 **Why:** even a nearly-empty DDR carries a full page of section headers,

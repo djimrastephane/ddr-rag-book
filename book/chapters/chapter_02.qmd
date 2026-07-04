@@ -119,9 +119,11 @@ are the ones most likely to collide with real words) gets corrupted.
 ::: {.callout-warning title="Field notes: the source already expands some abbreviations — but not the ones that matter"}
 **Action:** search every report for the literal string `PJSM`.
 
-**Result:** it appears in all ten sample reports — and every single time,
-it's immediately followed by its own expansion, written by the source
-software itself: `PJSM, pre job safety meeting`.
+**Result:** it appears in six of the ten sample reports (not logged on
+rig-up or trip days when no fresh crew safety meeting was held) — but
+every single time it does appear, it's immediately followed by its own
+expansion, written by the source software itself: `PJSM, pre job safety
+meeting`.
 
 **Why:** this archive's report-generation software (WellEz) evidently has
 a template that spells "pre job safety meeting" out in full every time,

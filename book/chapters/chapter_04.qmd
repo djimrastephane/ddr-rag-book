@@ -110,21 +110,21 @@ Run this against all ten sample reports with `query="stuck pipe"` and
 real numbers behind the callout above:
 
 ```
-1. 0.2239  Completion_003_2021-01-06
-2. 0.2076  Drilling_038_2020-11-26   <- the actual stuck-pipe day
-3. 0.1731  Drilling_049_2020-12-07
-4. 0.1635  Drilling_003_2020-10-22
-5. 0.1496  Drilling_039_2020-11-27   <- tight hole / high torque, findable now
-6. 0.1495  Drilling_048_2020-12-06
-7. 0.1458  Drilling_050_2020-12-08
-8. 0.1437  Drilling_019_2020-11-07
-9. 0.1366  Drilling_037_2020-11-25
-10. 0.1319 Drilling_036_2020-11-24
+1. 0.2416  Completion_003_2021-01-06
+2. 0.1978  Drilling_038_2020-11-26   <- the actual stuck-pipe day
+3. 0.1713  Drilling_049_2020-12-07
+4. 0.1657  Drilling_003_2020-10-22
+5. 0.1498  Drilling_039_2020-11-27   <- tight hole / high torque, findable now
+6. 0.1406  Drilling_048_2020-12-06
+7. 0.1342  Drilling_019_2020-11-07
+8. 0.1326  Drilling_037_2020-11-25
+9. 0.1319  Drilling_050_2020-12-08
+10. 0.1169 Drilling_036_2020-11-24
 ```
 
 Report #39 went from *absent* (Chapter 3) to *rank 5 of 10* — a real
 improvement, worth having. But it's not a clean win: the scores are
-bunched close together (0.13–0.22), and a busy engineer scanning only the
+bunched close together (0.12–0.24), and a busy engineer scanning only the
 top 2 or 3 results would still miss it.
 
 ## Field notes

@@ -163,7 +163,7 @@ RRF (1.0/1.0): report #39 ranks 7th of 10
 
 Compare that to `"packers fishing"` (the practical exercise above),
 where fusion helps exactly as expected — report #49 stays 1st and
-report #50 jumps from 10th (dense alone) to 2nd (fused).
+report #50 jumps from 8th (dense alone) to 2nd (fused).
 
 **Why:** BM25 has essentially nothing useful to say about report #39 for
 `"stuck pipe"` — it shares almost no vocabulary with the query, so BM25
