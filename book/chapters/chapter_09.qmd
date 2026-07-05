@@ -20,8 +20,8 @@ By the end of this chapter, you will be able to:
   number-heavy queries.
 - Combine BM25 (sparse/exact) and dense (semantic) retrieval using
   Reciprocal Rank Fusion (RRF).
-- Apply a cross-encoder to rerank a small candidate set for higher
-  precision than either retrieval method alone.
+- Explain when and why production systems add cross-encoder reranking on
+  top of fused retrieval, and the latency cost it trades for precision.
 - Read production retrieval-scoring code closely enough to explain *why*
   a specific formula is written the way it is, not just what it computes.
 

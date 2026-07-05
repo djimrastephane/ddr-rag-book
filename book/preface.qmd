@@ -31,6 +31,27 @@ This book teaches you to build that system yourself, understand every
 part of it, and trust its output, rather than adopting a black-box
 product you cannot inspect.
 
+## What this protects
+
+The gap this book closes isn't really about PDFs. It's about what
+happens when the person who remembers a similar incident retires,
+changes companies, or is simply on a different rig this week. A DDR
+archive is, in a sense, tribal knowledge that hasn't been asked to prove
+itself yet — findable only if you already know which report to open, or
+who to call.
+
+A system like the one you'll build here doesn't replace that engineer's
+judgment. It replaces the search. Deciding what a stuck-pipe signature
+means, or whether a packer failure changes tomorrow's plan, is still
+yours to make — the system's job is only to put the right evidence in
+front of you fast enough that the decision doesn't wait on someone's
+memory, or on however long it takes to open dozens of PDFs one at a
+time. That matters most exactly where it's easiest to overlook: getting
+an engineer new to a well up to speed on events they weren't there for,
+and investigations where the fastest path to an answer today is still
+"ask the person who's been here longest" — which stops working the day
+that person isn't.
+
 ## Why "industrial"
 
 A demo that answers one question about one PDF is easy to build and easy to

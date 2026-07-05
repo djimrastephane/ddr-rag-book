@@ -27,6 +27,39 @@ are publicly available. No anonymisation, no synthetic stand-ins: you'll
 read genuine rig-floor language, including a real stuck-pipe event and a
 real fishing operation, from page one.
 
+## Before and after
+
+Today, when someone needs to know if something has happened before, the
+options are limited: open PDFs one at a time and hope you pick the right
+one, ask whoever's been around the project longest and hope they
+remember, or rely on memory and risk repeating a mistake nobody wrote
+down clearly enough to find again.
+
+By Chapter 5, you'll have built a system that answers the same kind of
+question differently — not a guess, not a folder of files to read
+yourself, but a direct answer with the evidence attached:
+
+::: {.callout-note title="A real interaction with the system you'll build by Chapter 5"}
+```
+Question: What led to the fishing operation on report #50?
+
+Answer: On report #49 (2020-12-07), the crew attempted multiple times
+to set packers on BHA #32, but pressure readings showed the ball did
+not seat and the packers failed to set. They tripped out with the
+packer assembly and picked up a fishing BHA (#33) that same day. On
+report #50 (2020-12-08), that fishing run milled up lost pieces of bit.
+
+Evidence:
+  FORGE-16A-78-32_Drilling_049_2020-12-07.pdf
+  FORGE-16A-78-32_Drilling_050_2020-12-08.pdf
+```
+:::
+
+Both claims in that answer are directly quoted from the real report
+text — nothing here is invented. That's the destination. The rest of
+this book is how you build the road to it, one working script at a
+time, starting with a single PDF.
+
 ## Who this book is for
 
 You should read this book if you are a drilling engineer, completions
