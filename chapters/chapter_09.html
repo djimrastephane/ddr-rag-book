@@ -590,7 +590,7 @@ div.csl-indent {
 <ul>
 <li>Explain why semantic search alone underperforms on precise, entity- or number-heavy queries.</li>
 <li>Combine BM25 (sparse/exact) and dense (semantic) retrieval using Reciprocal Rank Fusion (RRF).</li>
-<li>Apply a cross-encoder to rerank a small candidate set for higher precision than either retrieval method alone.</li>
+<li>Explain when and why production systems add cross-encoder reranking on top of fused retrieval, and the latency cost it trades for precision.</li>
 <li>Read production retrieval-scoring code closely enough to explain <em>why</em> a specific formula is written the way it is, not just what it computes.</li>
 </ul>
 </section>
@@ -712,7 +712,7 @@ Results</code></pre>
 <section id="expected-output" class="level2" data-number="9.8">
 <h2 data-number="9.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">9.8</span> Expected Output</h2>
 <p>A single fused ranking: a list of <code>(doc_id, score)</code> pairs, sorted highest-scoring first.</p>
-<div id="c3ca304e" class="cell" data-execution_count="1">
+<div id="8ef44702" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/hybrid_search.py</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1370,8 +1370,8 @@ Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevanc
 <span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  number-heavy queries.</span>
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Combine BM25 (sparse/exact) and dense (semantic) retrieval using</span>
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  Reciprocal Rank Fusion (RRF).</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Apply a cross-encoder to rerank a small candidate set for higher</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  precision than either retrieval method alone.</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain when and why production systems add cross-encoder reranking on</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  top of fused retrieval, and the latency cost it trades for precision.</span>
 <span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Read production retrieval-scoring code closely enough to explain *why*</span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  a specific formula is written the way it is, not just what it computes.</span>
 <span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>

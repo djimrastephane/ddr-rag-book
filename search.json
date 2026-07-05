@@ -10,6 +10,16 @@
     ]
   },
   {
+    "objectID": "index.html#before-and-after",
+    "href": "index.html#before-and-after",
+    "title": "Building Industrial RAG Systems from Daily Drilling Reports",
+    "section": "Before and after",
+    "text": "Before and after\nToday, when someone needs to know if something has happened before, the options are limited: open PDFs one at a time and hope you pick the right one, ask whoever’s been around the project longest and hope they remember, or rely on memory and risk repeating a mistake nobody wrote down clearly enough to find again.\nBy Chapter 5, you’ll have built a system that answers the same kind of question differently — not a guess, not a folder of files to read yourself, but a direct answer with the evidence attached:\n\n\n\n\n\n\nNoteA real interaction with the system you’ll build by Chapter 5\n\n\n\nQuestion: What led to the fishing operation on report #50?\n\nAnswer: On report #49 (2020-12-07), the crew attempted multiple times\nto set packers on BHA #32, but pressure readings showed the ball did\nnot seat and the packers failed to set. They tripped out with the\npacker assembly and picked up a fishing BHA (#33) that same day. On\nreport #50 (2020-12-08), that fishing run milled up lost pieces of bit.\n\nEvidence:\n  FORGE-16A-78-32_Drilling_049_2020-12-07.pdf\n  FORGE-16A-78-32_Drilling_050_2020-12-08.pdf\n\n\nBoth claims in that answer are directly quoted from the real report text — nothing here is invented. That’s the destination. The rest of this book is how you build the road to it, one working script at a time, starting with a single PDF.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
     "objectID": "index.html#who-this-book-is-for",
     "href": "index.html#who-this-book-is-for",
     "title": "Building Industrial RAG Systems from Daily Drilling Reports",
@@ -55,6 +65,16 @@
     "title": "Preface",
     "section": "",
     "text": "Why this book exists\nI wrote this book because I kept seeing the same gap on drilling and completions teams: the field generates enormous amounts of written operational knowledge — Daily Drilling Reports, end-of-well reports, morning reports, NPT logs — and almost none of it is usable by the next engineer who needs it (Society of Petroleum Engineers 2022). It sits in inconsistently named PDFs — scanned or digital — scattered across SharePoint folders and email threads. When the assembly loses tool face mid-slide and gets stuck downhole, the fastest way to find out if this has happened before is often to ask the engineer who’s been on the project the longest, hoping they remember a similar incident.\nThis book’s own archive has exactly that event — a real stuck-pipe day, verified against the original report. But dropping the archive’s PDFs into a folder and searching them doesn’t solve it either: searching \"stuck pipe\" finds the report where the pipe actually got stuck — but misses the very next day’s report entirely, because that one talks about \"tight hole,\" \"high torque,\" and a \"decision to pull out of hole\" instead. Same event, continuing, one day later — invisible to anything that only matches on exact words. That gap, between what a report says and what it means, is exactly what retrieval-augmented generation (RAG) closes.\nLarge language models are genuinely useful here — not because they are new or exciting, but because they solve a real, boring, expensive problem: turning an unstructured archive into something you can query. This book teaches you to build that system yourself, understand every part of it, and trust its output, rather than adopting a black-box product you cannot inspect.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "preface.html#what-this-protects",
+    "href": "preface.html#what-this-protects",
+    "title": "Preface",
+    "section": "What this protects",
+    "text": "What this protects\nThe gap this book closes isn’t really about PDFs. It’s about what happens when the person who remembers a similar incident retires, changes companies, or is simply on a different rig this week. A DDR archive is, in a sense, tribal knowledge that hasn’t been asked to prove itself yet — findable only if you already know which report to open, or who to call.\nA system like the one you’ll build here doesn’t replace that engineer’s judgment. It replaces the search. Deciding what a stuck-pipe signature means, or whether a packer failure changes tomorrow’s plan, is still yours to make — the system’s job is only to put the right evidence in front of you fast enough that the decision doesn’t wait on someone’s memory, or on however long it takes to open dozens of PDFs one at a time. That matters most exactly where it’s easiest to overlook: getting an engineer new to a well up to speed on events they weren’t there for, and investigations where the fastest path to an answer today is still “ask the person who’s been here longest” — which stops working the day that person isn’t.",
     "crumbs": [
       "Preface"
     ]
@@ -2381,7 +2401,7 @@
     "href": "chapters/chapter_09.html#learning-objectives",
     "title": "9  Hybrid Retrieval and Reranking",
     "section": "",
-    "text": "Explain why semantic search alone underperforms on precise, entity- or number-heavy queries.\nCombine BM25 (sparse/exact) and dense (semantic) retrieval using Reciprocal Rank Fusion (RRF).\nApply a cross-encoder to rerank a small candidate set for higher precision than either retrieval method alone.\nRead production retrieval-scoring code closely enough to explain why a specific formula is written the way it is, not just what it computes.",
+    "text": "Explain why semantic search alone underperforms on precise, entity- or number-heavy queries.\nCombine BM25 (sparse/exact) and dense (semantic) retrieval using Reciprocal Rank Fusion (RRF).\nExplain when and why production systems add cross-encoder reranking on top of fused retrieval, and the latency cost it trades for precision.\nRead production retrieval-scoring code closely enough to explain why a specific formula is written the way it is, not just what it computes.",
     "crumbs": [
       "Part II — Industrialising the System",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Hybrid Retrieval and Reranking</span>"
