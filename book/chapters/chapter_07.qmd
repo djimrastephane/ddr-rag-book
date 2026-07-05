@@ -172,6 +172,72 @@ the word-based fallback path. Read the full version, plus
 `split_text_for_segment_aware_chunking_with_patterns()`, in
 `src/rag_pdf/chunking.py`.
 
+### Step 2: give every chunk back its page number
+
+## What problem are we solving?
+
+`chunk_text_by_tokens()` above returns plain strings — once a chunk is
+made, nothing about it remembers which page it came from. That's fine
+until Chapter 10 needs to cite a page number for a claim, and discovers
+there isn't one to cite. Chapter 1's `extract_text()` already writes a
+`--- Page N ---` marker before each page's text; this step reads those
+markers back out and chunks each page separately, so no chunk can ever
+straddle a page boundary or lose track of which one it belongs to.
+
+## Inputs
+
+- The full `--- Page N ---`-marked text Chapter 1's `extract_text()`
+  produces, not a single page's text in isolation.
+
+## Expected Output
+
+A list of `(page_number, chunk_text)` pairs — the same chunks as before,
+each now labelled with the real page it came from.
+
+```{python}
+#| eval: false
+import re
+
+PAGE_MARKER = re.compile(r"--- Page (\d+) ---\n?")
+
+def split_pages(pages_text: str) -> list[tuple[int, str]]:
+    matches = list(PAGE_MARKER.finditer(pages_text))
+    pages = []
+    for i, match in enumerate(matches):
+        page_number = int(match.group(1))
+        start = match.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(pages_text)
+        pages.append((page_number, pages_text[start:end].strip()))
+    return pages
+
+def chunk_pages_by_tokens(pages_text: str, chunk_tokens: int = 60,
+                          overlap_tokens: int = 15) -> list[tuple[int, str]]:
+    chunks_with_pages = []
+    for page_number, page_text in split_pages(pages_text):
+        for chunk in chunk_text_by_tokens(page_text, chunk_tokens, overlap_tokens):
+            chunks_with_pages.append((page_number, chunk))
+    return chunks_with_pages
+```
+
+## What just happened?
+
+`split_pages` undoes Chapter 1's markers, turning the joined text back
+into `(page_number, page_text)` pairs. `chunk_pages_by_tokens` then chunks
+*each page's text separately* — reusing the exact function from Step
+1 — and tags every resulting chunk with the page it came from. Chunking
+per page instead of chunking the whole joined document is what actually
+guarantees no chunk can straddle two pages: the token window in Step 1
+never sees more than one page's text at a time.
+
+Run this against report #38's real text and it produces **37 chunks**,
+every one correctly labelled `page 1` — because every DDR in this sample
+archive is a single page (Chapter 1). That's not a very demanding test of
+the page-tracking logic, and it's worth being honest about that: this
+step earns its keep the day someone points this code at a multi-page
+report, not on this archive. The `became stuck` sentence still lands
+whole inside one chunk, exactly as in Step 1 — page tracking didn't cost
+anything the chunking itself hadn't already paid for.
+
 ## Production Reality
 
 This chapter's Field Notes (below) shows the heading heuristic getting a
@@ -263,32 +329,38 @@ logic — is in `code/chapter_07/challenge/` and
   self-contained, retrievable units — worth the extra complexity once
   reports have real internal structure, which every DDR in this archive
   does.
+- A chunk that doesn't know its own page number can't be cited by page
+  later — chunk per page, not per document, if Chapter 10's citations
+  need to mean anything.
 
 ## Repository files
 
 | File | Purpose |
 |---|---|
-| `code/chapter_07/token_chunking.py` | Simplified token-based chunker |
+| `code/chapter_07/token_chunking.py` | Token-based chunker with overlap, plus page-aware chunking |
 | `DDR_UTAH_FORGE/src/rag_pdf/chunking.py` | Production token + segment-aware chunking (companion repo) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 7"}
 - [x] Explained why chunk size is measured in tokens, not characters
 - [x] Implemented token-based chunking with overlap
 - [x] Verified a key sentence survives intact inside one chunk instead of splitting across two
+- [x] Gave every chunk back the real page number it came from
 - [x] Sketched a segment-aware splitter that respects section headers
 :::
 
 ::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
 **`token_chunking.py`** — a token-based chunker with overlap, turning any
 whole report into retrievable pieces sized for precise embedding instead
-of one blurry whole-document vector.
+of one blurry whole-document vector, each one labelled with the exact
+page it came from.
 :::
 
 ## What can you do now that you couldn't do before?
 
 You can split a report into chunks small enough to embed precisely,
 without cutting the exact sentence you need to retrieve in half at a
-chunk boundary.
+chunk boundary — and every chunk still knows which page it came from, so
+nothing downstream has to guess.
 
 ## Suggested next step
 

@@ -4,8 +4,10 @@ Usage:
     python code/chapter_10/traceable_answers.py
 """
 
+import sys
 from dataclasses import dataclass
 from datetime import date, timedelta
+from pathlib import Path
 
 
 @dataclass
@@ -20,6 +22,21 @@ def format_evidence(citations: list[Citation]) -> str:
     never presented without a way to check it against the source."""
     lines = [f"  {c.report}" + (f" page {c.page}" if c.page else "") for c in citations]
     return "Evidence:\n" + "\n".join(lines)
+
+
+def citations_from_search(chunk_results: list[tuple[int, float]],
+                           metadata: list[dict]) -> list[Citation]:
+    """Turn raw FAISS results into real Citation objects.
+
+    This is the piece the earlier chapters never wired up: `metadata[idx]`
+    -- a real report filename and page number -- came from Chapter 8's
+    build_chunk_metadata_index(), which in turn came from Chapter 7's
+    page-aware chunk_pages_by_tokens(), which came from Chapter 1's
+    "--- Page N ---" markers. A Citation here is never invented -- it's
+    read straight off the chunk that actually matched.
+    """
+    return [Citation(report=metadata[idx]["report"], page=metadata[idx]["page"])
+            for idx, _score in chunk_results]
 
 
 def find_date_gaps(report_dates: list[str]) -> list[tuple[str, str]]:
@@ -52,3 +69,21 @@ if __name__ == "__main__":
     print(f"Gaps found in the Part I sample's ten dates: {len(gaps)}")
     for start, end in gaps:
         print(f"  {start} to {end}")
+
+    print("\n--- Citations built from a real chunk-level search, not hardcoded ---")
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "chapter_04"))
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "chapter_08"))
+    from build_faiss_index import build_chunk_metadata_index, search  # noqa: E402
+    from semantic_search import MODEL_NAME  # noqa: E402
+    from sentence_transformers import SentenceTransformer  # noqa: E402
+
+    text_dir = Path("datasets/ddr_text")
+    if text_dir.exists():
+        model = SentenceTransformer(MODEL_NAME, device="cpu")
+        index, metadata = build_chunk_metadata_index(text_dir, model)
+        query_vec = model.encode(["stuck pipe"], normalize_embeddings=True)[0]
+        results = search(index, query_vec, top_k=3)
+        real_citations = citations_from_search(results, metadata)
+        print(format_evidence(real_citations))
+    else:
+        print(f"{text_dir} does not exist -- run Chapter 1's batch extraction first.")

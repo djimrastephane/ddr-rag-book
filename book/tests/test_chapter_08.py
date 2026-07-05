@@ -32,3 +32,24 @@ def test_faiss_index_matches_brute_force_search(extracted_sample_text_dir, tmp_p
     # IndexFlatIP is exact, not approximate, so it must agree with
     # brute-force NumPy search on every rank, not just the top result.
     assert faiss_order == brute_order
+
+
+@pytest.mark.slow
+def test_chunk_metadata_index_cites_the_real_stuck_pipe_page(extracted_sample_text_dir):
+    from build_faiss_index import build_chunk_metadata_index, search
+    from semantic_search import MODEL_NAME
+    from sentence_transformers import SentenceTransformer
+
+    model = SentenceTransformer(MODEL_NAME, device="cpu")
+    index, metadata = build_chunk_metadata_index(extracted_sample_text_dir, model)
+
+    # One metadata record per indexed chunk, not per report.
+    assert len(metadata) == index.ntotal
+    assert len(metadata) > 10  # more chunks than reports in the sample archive
+
+    query_vec = model.encode(["stuck pipe"], normalize_embeddings=True)[0]
+    results = search(index, query_vec, top_k=3)
+    top_report, top_page = metadata[results[0][0]]["report"], metadata[results[0][0]]["page"]
+
+    assert top_report == "FORGE-16A-78-32_Drilling_038_2020-11-26.txt"
+    assert top_page == 1

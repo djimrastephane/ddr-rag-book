@@ -27,8 +27,10 @@ import faiss
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "chapter_04"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "chapter_07"))
 from semantic_search import MODEL_NAME, embed_texts, load_chunks  # noqa: E402
 from sentence_transformers import SentenceTransformer  # noqa: E402
+from token_chunking import chunk_pages_by_tokens  # noqa: E402
 
 
 def build_index(embeddings: np.ndarray) -> faiss.IndexFlatIP:
@@ -62,6 +64,33 @@ def search(index: faiss.Index, query_vec: np.ndarray, top_k: int = 5):
     return list(zip(indices[0].tolist(), scores[0].tolist()))
 
 
+def build_chunk_metadata_index(text_dir: Path, model: SentenceTransformer,
+                                chunk_tokens: int = 60, overlap_tokens: int = 15
+                                ) -> tuple[faiss.Index, list[dict]]:
+    """Build an index over real chunks, not whole documents -- and, unlike
+    the whole-document demo below, keep a metadata record for every row.
+
+    load_chunks() above (from Chapter 4) treats each whole report as one
+    embedding, which is what this chapter's own demo still does. That's a
+    real gap: a whole-document row can only ever cite "this report," never
+    a page within it. This function closes it by chunking each report with
+    Chapter 7's page-aware chunker first, so metadata[i] -- the report
+    filename and page number -- describes exactly what embeddings[i] is,
+    row for row.
+    """
+    metadata: list[dict] = []
+    chunk_texts: list[str] = []
+    for path in sorted(text_dir.glob("*.txt")):
+        pages_text = path.read_text(encoding="utf-8")
+        for page_number, chunk in chunk_pages_by_tokens(pages_text, chunk_tokens, overlap_tokens):
+            metadata.append({"report": path.name, "page": page_number})
+            chunk_texts.append(chunk)
+
+    embeddings = embed_texts(model, chunk_texts)
+    index = build_index(embeddings)
+    return index, metadata
+
+
 if __name__ == "__main__":
     text_dir = Path("datasets/ddr_text")
     if not text_dir.exists():
@@ -85,3 +114,12 @@ if __name__ == "__main__":
     print("\nTop 5 for 'stuck pipe' (reloaded index):")
     for idx, score in results:
         print(f"  {score:.4f}  {filenames[idx]}")
+
+    print("\n--- Chunk-level index, with real (report, page) metadata ---")
+    chunk_index, metadata = build_chunk_metadata_index(text_dir, model)
+    print(f"Built chunk index: {len(metadata)} chunks across {len(filenames)} reports")
+    chunk_results = search(chunk_index, query_vec, top_k=5)
+    print("Top 5 chunks for 'stuck pipe':")
+    for idx, score in chunk_results:
+        m = metadata[idx]
+        print(f"  {score:.4f}  {m['report']} page {m['page']}")

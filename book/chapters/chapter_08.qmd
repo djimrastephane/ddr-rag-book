@@ -209,6 +209,68 @@ This mirrors the indexing pattern in the companion pipeline's
 chunk embeddings and persists it to `faiss.index` alongside each
 document's other artefacts.
 
+### Step 3: index real chunks, with real metadata attached
+
+## What problem are we solving?
+
+Everything above indexes whole documents — Chapter 4's `load_chunks()`
+loads one vector per *report*, not per chunk, so a FAISS row can only
+ever answer "which report," never "which page of it." Chapter 7 already
+built a chunker that knows each chunk's page number; this step is what
+actually puts that chunker to work, building one FAISS row per chunk with
+a matching metadata record — report filename and page — so a search
+result can finally point at more than just a whole file.
+
+## Inputs
+
+- A folder of extracted `.txt` files: `datasets/ddr_text/`.
+- Chapter 7's `chunk_pages_by_tokens()`.
+
+## Expected Output
+
+A FAISS index with one row per chunk, and a parallel `metadata` list —
+`metadata[i]` is a `{"report": ..., "page": ...}` dict describing exactly
+what `embeddings[i]` is.
+
+```{python}
+#| eval: false
+def build_chunk_metadata_index(text_dir: Path, model: SentenceTransformer,
+                                chunk_tokens: int = 60, overlap_tokens: int = 15):
+    metadata, chunk_texts = [], []
+    for path in sorted(text_dir.glob("*.txt")):
+        pages_text = path.read_text(encoding="utf-8")
+        for page_number, chunk in chunk_pages_by_tokens(pages_text, chunk_tokens, overlap_tokens):
+            metadata.append({"report": path.name, "page": page_number})
+            chunk_texts.append(chunk)
+
+    embeddings = embed_texts(model, chunk_texts)
+    index = build_index(embeddings)
+    return index, metadata
+```
+
+## What just happened?
+
+For every report, this runs Chapter 7's page-aware chunker, embeds each
+resulting chunk, and appends a matching `{"report", "page"}` record to
+`metadata` in the same order the chunk's vector gets added to the index.
+Row `i` of the FAISS index and entry `i` of `metadata` describe the same
+chunk — that parallel-list discipline is the entire mechanism; there's no
+cleverness beyond keeping the two lists in lockstep.
+
+Run this against the real ten-report sample and it builds **333 chunks
+across 10 reports** — roughly ten times the rows the whole-document index
+above has, all from the exact same source text. Query it for `"stuck
+pipe"` and the difference isn't just more rows: report #38 — the actual
+stuck-pipe day — jumps to **rank 1** at a score of **0.4362**, clearly
+separated from its nearest competitor. The whole-document index earlier
+in this chapter ranked the same report **2nd**, at **0.1978**, behind a
+report that only mentions the topic in passing. Chunking doesn't just
+enable page-level citations — it measurably sharpens the ranking itself,
+for the same reason Chapter 4's Field Notes already showed: a whole
+report blends a few relevant sentences with pages of unrelated tables,
+and a smaller chunk can't hide relevant text inside irrelevant text the
+way a whole document can.
+
 ## Production Reality
 
 This chapter's `IndexFlatIP` scales cleanly to Utah FORGE's 2,943 chunks
@@ -308,14 +370,18 @@ order of magnitude. A reference solution is in `code/chapter_08/challenge/`.
   efficiently and persistently.
 - Per-document and global indexes serve genuinely different questions;
   build both rather than forcing one index to do both jobs.
-- Scaling the *index* doesn't fix retrieval *quality* — that's the next
-  chapter's problem.
+- Indexing real chunks instead of whole documents isn't just what makes
+  page-level citations possible — it measurably improved this chapter's
+  own "stuck pipe" ranking, from 2nd place to 1st.
+- Scaling the *index* doesn't fix retrieval *quality* on its own — that's
+  the next chapter's problem, though chunk-level indexing already closes
+  part of the gap.
 
 ## Repository files
 
 | File | Purpose |
 |---|---|
-| `code/chapter_08/build_faiss_index.py` | FAISS `IndexFlatIP` build/save/load/search |
+| `code/chapter_08/build_faiss_index.py` | FAISS `IndexFlatIP` build/save/load/search, plus chunk+metadata indexing |
 | `code/chapter_08/build_full_archive.py` | Reproduces the full 76-report archive from the public source |
 | `datasets/forge_archive/` | The full 76-report Utah FORGE archive |
 | `DDR_UTAH_FORGE/scripts/build_index.py` | Per-document index builder (companion repo) |
@@ -326,12 +392,15 @@ order of magnitude. A reference solution is in `code/chapter_08/challenge/`.
 - [x] Built and queried a FAISS index over DDR chunk embeddings
 - [x] Persisted an index to disk and reloaded it in a fresh session
 - [x] Verified FAISS results match brute-force results exactly, not approximately
+- [x] Built a real chunk-level index with (report, page) metadata attached to every row
 :::
 
 ::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
 **`build_faiss_index.py`** — a persistent, queryable FAISS vector index:
 build it once, save it to disk, and every future session loads it back
-instantly instead of re-embedding the archive.
+instantly instead of re-embedding the archive. Its chunk-level variant
+attaches real (report, page) metadata to every row, ready for Chapter
+10's citations.
 :::
 
 ## What can you do now that you couldn't do before?
@@ -339,7 +408,8 @@ instantly instead of re-embedding the archive.
 You can build a persistent, queryable index over an entire report
 archive that survives a restart — and you've verified, not just assumed,
 that scaling up the infrastructure didn't change a single answer the
-retrieval gives back.
+retrieval gives back. Every row in the chunk-level index also carries a
+real page number, ready for Chapter 10 to actually cite.
 
 ## Suggested next step
 

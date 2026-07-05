@@ -206,6 +206,62 @@ recorded as a missing range. No content is inspected here at all — this
 only checks whether a report *exists* for each day, which is exactly
 enough to catch the real two-day gap in this archive.
 
+### Step 3: build a citation from a real search, not by hand
+
+## What problem are we solving?
+
+Every `Citation` shown so far in this chapter was typed in by hand —
+`Citation(report="...", page=1)` — which proves the data structure works
+but not that the *system* can produce one. A citation is only actually
+trustworthy if it comes from the same retrieval the answer itself used.
+This step closes that loop: run a real query against Chapter 8's
+chunk-level index, and read the report and page straight off whichever
+chunk matched — never re-typed, never assumed.
+
+## Inputs
+
+- Chapter 8's `build_chunk_metadata_index()` and `search()`.
+- A query string.
+
+## Expected Output
+
+A list of `Citation` objects built entirely from the search results —
+real reports, real pages, in ranked order.
+
+```{python}
+#| eval: false
+def citations_from_search(chunk_results: list[tuple[int, float]],
+                           metadata: list[dict]) -> list[Citation]:
+    return [Citation(report=metadata[idx]["report"], page=metadata[idx]["page"])
+            for idx, _score in chunk_results]
+```
+
+## What just happened?
+
+For every `(row_index, score)` pair a search returns, this looks up
+`metadata[row_index]` — the real report and page Chapter 8 recorded for
+that exact chunk — and wraps it in a `Citation`. There's no separate
+"figure out the source" step: the metadata was attached back when the
+chunk was indexed, so reading it is all citing requires.
+
+Run this against the real archive for `"stuck pipe"` and the top result
+is:
+
+```
+Evidence:
+  FORGE-16A-78-32_Drilling_038_2020-11-26.txt page 1
+```
+
+That's the same report #38 this whole book has used for the stuck-pipe
+story, cited automatically from a live search — not because the example
+was written to come out that way, but because Chapter 8 already
+verified report #38 ranks 1st for this exact query against the real
+chunk-level index. Every DDR in this sample archive is a single page, so
+`page` reads `1` every time here; the code doesn't know that in advance,
+and would report page 4 just as readily on a report that actually had
+one, which is the entire point of building it this way instead of typing
+`page=1` by hand.
+
 ## Production Reality
 
 This chapter's citation and gap-detection code both assume the
@@ -294,6 +350,11 @@ A reference solution is in `code/chapter_10/challenge/`.
   plausible.
 - Every generated claim needs a citation an engineer can independently
   check, not just a citation-shaped sentence.
+- A citation is only as trustworthy as where its fields come from — a
+  hand-typed `page=1` proves the data structure works, not that the
+  system can produce one. Chapters 7-10 wire the real value through:
+  Chapter 1's page markers, Chapter 7's per-page chunking, Chapter 8's
+  chunk metadata, read back here.
 - A system that can tell you what it *doesn't have* is more trustworthy
   than one that answers fluently regardless of coverage — this archive's
   real two-day gap at the Drilling-to-Completion handover is exactly the
@@ -303,29 +364,32 @@ A reference solution is in `code/chapter_10/challenge/`.
 
 | File | Purpose |
 |---|---|
-| `code/chapter_10/traceable_answers.py` | Citation formatting and date-gap detection |
+| `code/chapter_10/traceable_answers.py` | Citation formatting, real search-to-citation wiring, and date-gap detection |
 | `DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv` | Real, computed gap-detection output (companion repo) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 10"}
 - [x] Distinguished questions to compute from data versus questions to generate an answer to
 - [x] Attached a checkable citation to every generated claim
+- [x] Built a real Citation from a live search result, not typed in by hand
 - [x] Detected a real gap in the archive instead of silently assuming completeness
 - [x] Caught a structured field's judgment call, not just trusted it blindly
 :::
 
 ::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
 **`traceable_answers.py`** — a citation and gap-detection layer: every
-claim carries a checkable source, and every silence in the archive gets
-surfaced instead of hidden.
+claim carries a real, live-search-sourced citation — report and page,
+never hand-typed — and every silence in the archive gets surfaced
+instead of hidden.
 :::
 
 ## What can you do now that you couldn't do before?
 
 You can tell the difference between a question you should compute from
 data you already have and one you should generate an answer to — and you
-can prove, with a checkable citation, exactly where every part of a
-generated answer came from, including telling an engineer honestly when
-the archive simply has nothing to say.
+can prove, with a citation built from a real search result (not typed in
+by hand), exactly where every part of a generated answer came from,
+including telling an engineer honestly when the archive simply has
+nothing to say.
 
 ## Suggested next step
 
