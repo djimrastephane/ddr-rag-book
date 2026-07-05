@@ -680,7 +680,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <section id="expected-output" class="level2" data-number="12.8">
 <h2 data-number="12.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">12.8</span> Expected Output</h2>
 <p>A list of <code>(date, torque_value, percentage_change)</code> — one entry for every day after the first, since a percentage change needs a previous day to compare against.</p>
-<div id="7197c5da" class="cell" data-execution_count="1">
+<div id="91d71c34" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_12/torque_trend_check.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> torque_trend(readings: <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>, <span class="bu">float</span>]]:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Given [(date, torque_value), ...] in chronological order, return</span></span>
@@ -713,7 +713,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <h2 data-number="12.12" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">12.12</span> Expected Output</h2>
 <pre><code>2020-11-25: 4200 (-4.5%)
 2020-11-26: 5615 (+33.7%)</code></pre>
-<div id="5ea2b3da" class="cell" data-execution_count="2">
+<div id="91c07db2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>readings <span class="op">=</span> [</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-24"</span>, <span class="dv">4400</span>),</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-25"</span>, <span class="dv">4200</span>),</span>
@@ -1366,7 +1366,7 @@ Sequence detection (Chapter 12) -- mines what the pipeline has already
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="pdf"}</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/pipeline_ch12.pdf)</span>{width="220"}</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/pipeline_ch12.pdf)</span>{width="220" fig-align="center"}</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>::: {.chapter-status}</span>
@@ -1715,7 +1715,7 @@ Sequence detection (Chapter 12) -- mines what the pipeline has already
 <span id="cb7-361"><a href="#cb7-361" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb7-362"><a href="#cb7-362" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-363"><a href="#cb7-363" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="pdf"}</span>
-<span id="cb7-364"><a href="#cb7-364" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch12_complete.pdf)</span>{width="280"}</span>
+<span id="cb7-364"><a href="#cb7-364" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch12_complete.pdf)</span>{width="280" fig-align="center"}</span>
 <span id="cb7-365"><a href="#cb7-365" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb7-366"><a href="#cb7-366" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-367"><a href="#cb7-367" aria-hidden="true" tabindex="-1"></a>Two more pieces sit alongside this pipeline rather than inside it —</span>
