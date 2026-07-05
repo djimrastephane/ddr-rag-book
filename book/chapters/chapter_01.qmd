@@ -6,6 +6,10 @@ PDF
 Text
 ```
 
+::: {.chapter-status}
+Progress `█░░░░░░░░░░░` **1 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -38,8 +42,9 @@ situation.
 
 ## Operational Problem
 
-It's Monday morning. Someone on the call asks: *"Have we had a stuck pipe
-event on this well before? What happened, and how was it resolved?"*
+It's Monday morning. Oumy, the drilling engineer, asks on the call:
+*"Have we had a stuck pipe event on this well before? What happened, and
+how was it resolved?"*
 The answer is somewhere in the DDR archive — but that archive is 76 PDF
 files, named inconsistently by whatever software produced them, and the
 one report that matters is buried in there like a single page in a filing
@@ -365,9 +370,12 @@ Chapter 6 comes back to this list once you have somewhere solid to stand.
 
 ## Practical exercise
 
-**Try it yourself:** Run `read_ddr.py` in batch mode against
-`datasets/sample_ddrs/`, saving the output to `datasets/ddr_text/`. Then
-open `FORGE-16A-78-32_Drilling_050_2020-12-08.txt` and find the line
+🟢 **Beginner**
+
+**Try it yourself:** Help Oumy check the rest of the archive the way she
+asked: run `read_ddr.py` in batch mode against `datasets/sample_ddrs/`,
+saving the output to `datasets/ddr_text/`. Then open
+`FORGE-16A-78-32_Drilling_050_2020-12-08.txt` and find the line
 describing what the crew milled up that day.
 
 **You'll know it worked when:** you have ten `.txt` files in
@@ -376,7 +384,7 @@ report 050's text without opening the original PDF.
 
 ## Field notes
 
-::: {.callout-warning title="Field notes: a table that reads like nonsense until you know why"}
+::: {.callout-warning title="🔧 Field notes: a table that reads like nonsense until you know why"}
 **Action:** extract report #38's `BHA` section and read it as plain text.
 
 **Result:**
@@ -413,6 +421,8 @@ order" are not the same guarantee.
 
 ## Challenge exercise
 
+🟠 **Intermediate**
+
 **Challenge:** Extend the script to also print, for each PDF, the total
 number of pages and the total character count extracted. Then compare
 report #3 (October 22, before the well was spudded — `PRESENT
@@ -445,6 +455,19 @@ reference solution is in `code/chapter_01/challenge/`.
 | `datasets/sample_ddrs/` | Ten real, curated Utah FORGE DDR PDFs used throughout Part I |
 | `notebooks/chapter_01_explore.ipynb` | Interactive notebook version of this chapter |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 1"}
+- [x] Told a digital-native DDR PDF apart from a scanned one
+- [x] Extracted the full text of a real report, including its BHA table
+- [x] Wrote a reusable `extract_text` function that handles multi-page reports
+- [x] Turned it into a command-line script that runs on one file or a whole folder
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`read_ddr.py`** — a PDF text extraction pipeline: point it at one DDR or
+an entire folder, and it hands back clean, page-numbered text, ready for
+Chapter 2's abbreviation work.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can turn any digital-native DDR PDF — or a whole folder of them —
@@ -453,9 +476,9 @@ opening a single PDF viewer.
 
 ## Suggested next step
 
-The text you just extracted uses real oilfield shorthand and drilling
-terminology — `BHA`, `WOB`, `SPP`, `PJSM` — some spelled out, some
-abbreviated, exactly as the field actually writes it. Chapter 2 builds an
-abbreviation expansion engine grounded in what's actually in this
-archive, turning this raw text into something both humans and machines
-can search reliably.
+**Coming up in Chapter 2:** The text you just extracted uses real
+oilfield shorthand and drilling terminology — `BHA`, `WOB`, `SPP`, `PJSM`
+— some spelled out, some abbreviated, exactly as the field actually
+writes it. Chapter 2 builds an abbreviation expansion engine grounded in
+what's actually in this archive, turning this raw text into something
+both humans and machines can search reliably.

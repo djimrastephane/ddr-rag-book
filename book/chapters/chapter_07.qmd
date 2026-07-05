@@ -6,6 +6,10 @@ Whole Report
 Retrievable Chunks
 ```
 
+::: {.chapter-status}
+Progress `███████░░░░░` **7 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -17,8 +21,10 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Why does the exact sentence you need keep landing right on a chunk
-boundary? Chapters 1–5 embedded each report as a single unit — fine for a
+Oumy, the drilling engineer, notices something odd while reviewing
+retrieval results: why does the exact sentence she needs keep landing
+right on a chunk boundary? Chapters 1–5 embedded each report as a single
+unit — fine for a
 ten-report sample corpus, unworkable at the full archive's scale. A
 single Utah FORGE report already has seven distinct sections (WELL/JOB
 INFORMATION, BOP, CASING, MUD, DRILL BITS, PUMPS, BHA, SURVEY DATA,
@@ -185,6 +191,8 @@ archive rarely offers that luxury:
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 Notice this uses smaller numbers than the `chunk_tokens=200,
 overlap_tokens=40` shown above — deliberately. Every DDR in this sample
 is a single page, so at 200/40 one report only splits into 11 chunks;
@@ -203,7 +211,7 @@ contains the full sentence, from "During the slide" through "became stuck."
 
 ## Field notes
 
-::: {.callout-tip title="Field notes: does the heading heuristic ever guess wrong?"}
+::: {.callout-warning title="🔧 Field notes: does the heading heuristic ever guess wrong?"}
 **Action:** run the "all-caps line under 6 words = heading" rule against
 every line of all ten real reports, and list every match.
 
@@ -228,6 +236,8 @@ assumption to inherit.
 :::
 
 ## Challenge exercise
+
+🟠 **Intermediate**
 
 **Challenge:** Implement a minimal segment-aware splitter that treats any
 all-caps line under 6 words (like `MUD`, `DRILL BITS`, `SURVEY DATA`,
@@ -256,6 +266,19 @@ logic — is in `code/chapter_07/challenge/` and
 | `code/chapter_07/token_chunking.py` | Simplified token-based chunker |
 | `DDR_UTAH_FORGE/src/rag_pdf/chunking.py` | Production token + segment-aware chunking (companion repo) |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 7"}
+- [x] Explained why chunk size is measured in tokens, not characters
+- [x] Implemented token-based chunking with overlap
+- [x] Verified a key sentence survives intact inside one chunk instead of splitting across two
+- [x] Sketched a segment-aware splitter that respects section headers
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`token_chunking.py`** — a token-based chunker with overlap, turning any
+whole report into retrievable pieces sized for precise embedding instead
+of one blurry whole-document vector.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can split a report into chunks small enough to embed precisely,
@@ -264,6 +287,7 @@ chunk boundary.
 
 ## Suggested next step
 
-Well-formed chunks still need somewhere fast to live. Chapter 8 replaces
-Chapter 4's brute-force cosine search with a real vector database, and
-scales retrieval from ten documents to the full 76-report archive.
+**Coming up in Chapter 8:** Well-formed chunks still need somewhere fast
+to live. Chapter 8 replaces Chapter 4's brute-force cosine search with a
+real vector database, and scales retrieval from ten documents to the
+full 76-report archive.

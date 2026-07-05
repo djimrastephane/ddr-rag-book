@@ -6,6 +6,10 @@ Scanned PDF
 Trusted Text
 ```
 
+::: {.chapter-status}
+Progress `██████░░░░░░` **6 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -18,8 +22,10 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Can you trust the text this archive extracted — even from a report that
-was scanned instead of born digital? Every one of the 76 Utah FORGE
+Sean, the production engineer, asks a question that matters long before
+any answer gets generated: *"Can you trust the text this archive
+extracted — even from a report that was scanned instead of born
+digital?"* Every one of the 76 Utah FORGE
 reports used in this book is digital-native — the archive's QA/QC pass
 confirms 0 unparsed PDFs across 227 source files. You got lucky: WellEz,
 the software that generated these reports, embeds real character data on
@@ -193,6 +199,8 @@ any of the above lands on your desk.
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Run `evaluate_ocr_quality()` against the extracted
 text of report #38 (clean) and the degraded example string above.
 
@@ -202,7 +210,7 @@ fails.
 
 ## Field notes
 
-::: {.callout-tip title="Field notes: checking the gate doesn't cry wolf"}
+::: {.callout-warning title="🔧 Field notes: checking the gate doesn't cry wolf"}
 **Action:** run `evaluate_ocr_quality()` against all ten real sample
 reports, including report #3 — the sparsest one in the archive, written
 before the well was even spudded, with most of its tables entirely
@@ -232,6 +240,8 @@ before it costs you.
 
 ## Challenge exercise
 
+🟠 **Intermediate**
+
 **Challenge:** This archive is 100% digital, so you can't test the gate
 against a real scanned Utah FORGE page. Instead, write a small function
 that synthetically corrupts clean text (swap random characters for
@@ -258,6 +268,19 @@ encounter the real noisy data it's meant to catch.
 | `DDR_UTAH_FORGE/src/rag_pdf/ocr_quality.py` | Production quality gate (companion repo) |
 | `DDR_UTAH_FORGE/src/rag_pdf/rotation_handler.py` | Scan rotation detection (companion repo) |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 6"}
+- [x] Recognised when a DDR PDF needs OCR instead of direct extraction
+- [x] Explained why raw OCR output can't be trusted without scoring it first
+- [x] Built a quality gate that rejects bad text before it reaches the index
+- [x] Verified the gate doesn't false-positive on legitimately sparse reports
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`ocr_quality_gate.py`** — an OCR quality gate: score any extracted text
+against four cheap heuristics and decide, automatically, whether it's
+trustworthy enough to index or needs a human to review it first.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can tell, automatically, whether a page of extracted or OCR'd text is
@@ -267,7 +290,7 @@ reports.
 
 ## Suggested next step
 
-Once you trust the text coming out of OCR and digital extraction alike,
-the next question is how to break it into pieces small enough to embed
-and retrieve — without cutting a stuck-pipe narrative in half across two
-chunks. That's Chapter 7.
+**Coming up in Chapter 7:** Once you trust the text coming out of OCR and
+digital extraction alike, the next question is how to break it into
+pieces small enough to embed and retrieve — without cutting a stuck-pipe
+narrative in half across two chunks. That's Chapter 7.

@@ -8,6 +8,10 @@ Keyword Match + Meaning Match
   Reranked Results
 ```
 
+::: {.chapter-status}
+Progress `█████████░░░` **9 / 12** &nbsp;·&nbsp; **Estimated time:** 60–75 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -23,9 +27,10 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Which report had packers fail to set — and why doesn't either search
-method alone find it reliably? A query like *"which report had packers
-fail to set?"* has both a semantic component (packers, setting, failure —
+Mike, the completions engineer, is back with the packers question from
+Chapter 8: which report had packers fail to set — and why doesn't either
+search method alone find it reliably? A query like *"which report had
+packers fail to set?"* has both a semantic component (packers, setting, failure —
 a topic) and effectively an exact-match component (you want report #49
 specifically, not every report that mentions packers in passing). Dense
 embeddings capture the topical meaning well but blur precise
@@ -232,6 +237,8 @@ tuning honest over time, not treat it as a one-time decision:
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Rank the ten sample DDRs for "packers fishing" using
 Chapter 3's keyword search and Chapter 4's semantic search separately,
 then fuse the two ranked lists with `reciprocal_rank_fusion(lists, k=20,
@@ -243,7 +250,7 @@ weighting favours the keyword signal here.
 
 ## Field notes
 
-::: {.callout-warning title="Field notes: hybrid fusion isn't automatically better — check both directions"}
+::: {.callout-warning title="🔧 Field notes: hybrid fusion isn't automatically better — check both directions"}
 **Query:** the same `"stuck pipe"` query from Chapters 3 and 4.
 
 **Result:** with the pipeline's real fusion weights (BM25 × 2.0, dense ×
@@ -282,6 +289,8 @@ operationally important query like this one.
 
 ## Challenge exercise
 
+🔴 **Advanced**
+
 **Challenge:** Implement the two guards from the code study above against
 deliberately constructed edge cases: a term that appears in every sample
 document (test that your IDF stays non-negative), and a batch where every
@@ -311,6 +320,19 @@ solution is in `code/chapter_09/challenge/`.
 | `DDR_UTAH_FORGE/src/rag_pdf/retrieval/canonical_hybrid.py` | Full hybrid retrieval pipeline (companion repo) |
 | `DDR_UTAH_FORGE/src/rag_pdf/services/search_service.py` | Cross-encoder rerank + fusion weights (companion repo) |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 9"}
+- [x] Explained why semantic search alone underperforms on precise, entity-heavy queries
+- [x] Combined BM25 and dense retrieval using Reciprocal Rank Fusion
+- [x] Read production scoring code closely enough to explain why its guards exist
+- [x] Confirmed fusion helps on one query and actively hurts on another, using real evidence
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`hybrid_search.py`** — a Reciprocal Rank Fusion engine combining
+keyword and semantic retrieval into one ranked list that plays to both
+methods' strengths.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can combine exact keyword matching and semantic search into a single
@@ -321,7 +343,7 @@ query at hand.
 
 ## Suggested next step
 
-Better retrieval still isn't the same as a trustworthy answer. Chapter 10
-tackles the harder problem: making sure every generated claim traces back
-to real evidence, and that the system tells you honestly when it doesn't
-know.
+**Coming up in Chapter 10:** Better retrieval still isn't the same as a
+trustworthy answer. Chapter 10 tackles the harder problem: making sure
+every generated claim traces back to real evidence, and that the system
+tells you honestly when it doesn't know.

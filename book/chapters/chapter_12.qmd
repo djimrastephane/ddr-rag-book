@@ -8,6 +8,10 @@
 Toward Cross-Well Intelligence
 ```
 
+::: {.chapter-status}
+Progress `████████████` **12 / 12** &nbsp;·&nbsp; **Estimated time:** 60–90 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -23,8 +27,9 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Did something earlier predict trouble later? This is the payoff question
-every previous chapter has been building toward. A human reading 76
+Sarah, the intervention engineer, asks the payoff question every
+previous chapter has been building toward: *"Did something earlier
+predict trouble later?"* A human reading 76
 reports in sequence can, with effort, spot a pattern — but a system that
 has structured, classified, and indexed the same text can hold every
 report in mind at once, and check numeric trends a human would have to
@@ -232,6 +237,8 @@ demands entirely:
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Extend `readings` with report #39's header torque
 value (check the PDF yourself — Chapter 1's `read_ddr.py` will get it for
 you) and confirm whether the elevated torque persisted after the pipe was
@@ -241,7 +248,41 @@ freed, or dropped back toward the pre-event baseline.
 for each day, sourced from header fields you extracted yourself, not from
 this chapter's text.
 
+## Field notes
+
+::: {.callout-warning title="🔧 Field notes: the pattern doesn't stop at the stuck-pipe day"}
+**Action:** read report #39's narrative text — the day *after* the
+stuck-pipe day this chapter's torque numbers track — the same lines
+Chapter 3's Field Notes already flagged as invisible to keyword search.
+
+**Result:** report #39 says:
+
+- "Work tight hole at 6,526'."
+- "Due to high torque decision to pull out of hole"
+- "Hole drag from 6,050' to 5,901' no issues"
+
+Continued elevated-torque language, one calendar day after report #38's
+header `TORQUE` value jumped 33.7% on the stuck-pipe day itself.
+
+**Why:** this chapter's structured trend check only looks at the
+`TORQUE` header field across three days, and stops at report #38. But
+report #39's narrative — high torque, a tight hole, a deliberate decision
+to pull out of hole — reads like the same operational story continuing
+in prose, one day after the structured number spiked.
+
+**Lesson:** a single structured signal, however precise, is one thread
+of a larger story. Report #39 is exactly the kind of continuation a
+torque-only check would miss entirely, but that hybrid retrieval and
+narrative search (Chapters 3-9 combined) can still surface. That's the
+whole book's argument, compressed into one field note: no single
+technique in this book is sufficient alone — structured checks,
+narrative retrieval, and traceable generation each catch what the others
+miss.
+:::
+
 ## Challenge exercise
+
+🔴 **Advanced**
 
 **Challenge:** Pull the `TORQUE` header value for all 76 reports in
 `datasets/forge_archive/` (Chapter 1's extraction plus a small regex),
@@ -276,6 +317,20 @@ solution is in `code/chapter_12/challenge/`.
 | `DDR_UTAH_FORGE/src/ddr_rag/causality_analyzer.py` | Windowed leading-indicator detection (companion repo) |
 | `DDR_UTAH_FORGE/src/ddr_rag/npt_classifier.py` | Utah-FORGE-adapted NPT classification (companion repo) |
 | `DDR_UTAH_FORGE/data/fields/UtahForge/wells/` | Multi-well data structure, ready for expansion (companion repo) |
+
+::: {.callout-caution title="CHECKPOINT — Chapter 12"}
+- [x] Combined a structured numeric trend with narrative text into one checkable story
+- [x] Read real thresholds from production causality-detection code before trusting its labels
+- [x] Distinguished a same-day correlation from an unverified leading indicator
+- [x] Identified exactly what this single-well archive can't yet demonstrate
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`torque_trend_check.py`** — a structured sequence-detection check, and
+the first building block toward genuine cross-well intelligence: the
+same technique the companion pipeline's `causality_analyzer.py` runs at
+scale once more than one well's data exists.
+:::
 
 ## What can you do now that you couldn't do before?
 
@@ -335,7 +390,7 @@ belonged. None of the complexity here is complexity for its own sake.
 
 ## Suggested next step
 
-You've now built, chapter by chapter, a working RAG system grounded
+**Where to go from here:** You've now built, chapter by chapter, a working RAG system grounded
 entirely in real, public DDRs — from extracting a single PDF's text
 through checking a real numeric trend against a real narrative event.
 [Appendix A](../appendix/appendix_a_environment_setup.qmd) shows how to

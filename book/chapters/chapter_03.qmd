@@ -6,6 +6,10 @@ Text
 Searchable Archive
 ```
 
+::: {.chapter-status}
+Progress `███░░░░░░░░░` **3 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -18,11 +22,11 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-You now have clean, expanded text for every DDR. The next question is the
-one an engineer actually asks out loud: *"Which reports mention losses?"*
-or *"Show me the report where they had to fish for something."* Opening
-files one by one doesn't scale past a handful of reports — you need an
-index.
+You now have clean, expanded text for every DDR. Sarah, the intervention
+engineer, asks the question out loud on the next call: *"Which reports
+mention losses?"* or *"Show me the report where they had to fish for
+something."* Opening files one by one doesn't scale past a handful of
+reports — you need an index.
 
 ## Example DDR extract
 
@@ -212,6 +216,8 @@ indexes, and cleanup steps this chapter deliberately leaves out.
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Build the index over `datasets/ddr_text_expanded/`
 and run `search(index, "fishing")`.
 
@@ -227,7 +233,7 @@ planned" — it just finds every document containing the word.
 
 ## Field notes
 
-::: {.callout-warning title="Field notes: the search that misses the day after"}
+::: {.callout-warning title="🔧 Field notes: the search that misses the day after"}
 **Query:** `"stuck pipe"`
 
 **Result:** one hit — report #38 (2020-11-26), the day the assembly
@@ -255,6 +261,8 @@ same query.
 :::
 
 ## Challenge exercise
+
+🟠 **Intermediate**
 
 **Challenge:** Add phrase search (query tokens must appear *adjacent* and
 in order, not just co-occur anywhere in the document) and an OR operator.
@@ -302,6 +310,18 @@ know what any word *means*, only whether it's present or absent.
 That gap — matching meaning, not just spelling — is exactly what Chapter
 4 solves, using a technique called embeddings.
 
+::: {.callout-caution title="CHECKPOINT — Chapter 3"}
+- [x] Built an inverted index over a folder of cleaned DDR text
+- [x] Answered keyword queries in milliseconds instead of minutes
+- [x] Identified exactly where and why exact-word matching misses related reports
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`keyword_search.py`** — an inverted-index keyword search engine over the
+whole cleaned archive, fast enough to answer a query while someone's
+still on the call.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can search an archive of reports for exact words or phrases and get
@@ -309,8 +329,9 @@ an answer in milliseconds, instead of opening files one at a time.
 
 ## Suggested next step
 
-Keyword search is exact and unforgiving — it doesn't know that "high
-torque decision to pull out of hole" and "stuck pipe" describe related
-trouble. Chapter 4 replaces exact matching with semantic search, so
-retrieval works by meaning, not just spelling — and comes back to this
-exact "stuck pipe" query to see how much that actually fixes.
+**Coming up in Chapter 4:** Keyword search is exact and unforgiving — it
+doesn't know that "high torque decision to pull out of hole" and "stuck
+pipe" describe related trouble. Chapter 4 replaces exact matching with
+semantic search, so retrieval works by meaning, not just spelling — and
+comes back to this exact "stuck pipe" query to see how much that
+actually fixes.

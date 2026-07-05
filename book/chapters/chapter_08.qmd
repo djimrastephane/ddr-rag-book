@@ -8,6 +8,10 @@
 Persistent Index
 ```
 
+::: {.chapter-status}
+Progress `████████░░░░` **8 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -20,8 +24,10 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-What happens when your ten-document prototype meets the full archive?
-Chapter 4's `embeddings @ query_vec` brute-force search works fine over
+Mike, the completions engineer, has been happily querying all ten sample
+reports through Chapter 5's system — but what happens when his
+ten-document prototype meets the full archive? Chapter 4's `embeddings @
+query_vec` brute-force search works fine over
 ten documents — it's a single matrix multiply. The full Utah FORGE
 archive is 76 reports. Run this book's companion pipeline's chunking and
 embedding steps against all of them and you get **2,943 chunks** — still
@@ -236,6 +242,8 @@ picture:
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Build a FAISS index over the ten sample DDR
 embeddings from Chapter 4, save it to disk, reload it in a fresh Python
 session, and confirm a query for "stuck pipe" returns the same ranked
@@ -248,7 +256,7 @@ agree — because, mathematically, `IndexFlatIP` over normalized vectors
 
 ## Field notes
 
-::: {.callout-tip title="Field notes: proving 'exact, not approximate' rather than asserting it"}
+::: {.callout-warning title="🔧 Field notes: proving 'exact, not approximate' rather than asserting it"}
 **Action:** run five different real queries — `"stuck pipe"`, `"fishing
 operation"`, `"packers failed to set"`, `"torque problems"`, `"losses"`
 — through both the brute-force NumPy search and a FAISS `IndexFlatIP`
@@ -280,6 +288,8 @@ lines of code to confirm this one.
 
 ## Challenge exercise
 
+🔴 **Advanced**
+
 **Challenge:** If you have the full 76-report Utah FORGE archive
 (`datasets/forge_archive/`) and can run the heavier dependencies
 (`sentence-transformers`, `faiss-cpu`), chunk and embed all 76 reports
@@ -308,6 +318,19 @@ order of magnitude. A reference solution is in `code/chapter_08/challenge/`.
 | `DDR_UTAH_FORGE/scripts/build_index.py` | Per-document index builder (companion repo) |
 | `DDR_UTAH_FORGE/scripts/build_global_index.py` | Campaign-wide global index builder (companion repo) |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 8"}
+- [x] Explained why brute-force search stops scaling, in concrete memory/latency terms
+- [x] Built and queried a FAISS index over DDR chunk embeddings
+- [x] Persisted an index to disk and reloaded it in a fresh session
+- [x] Verified FAISS results match brute-force results exactly, not approximately
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`build_faiss_index.py`** — a persistent, queryable FAISS vector index:
+build it once, save it to disk, and every future session loads it back
+instantly instead of re-embedding the archive.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can build a persistent, queryable index over an entire report
@@ -317,6 +340,7 @@ retrieval gives back.
 
 ## Suggested next step
 
-A fast index doesn't guarantee good retrieval. Chapter 9 looks at the
-retrieval scoring code itself — how sparse and dense signals get combined,
-and what it takes to make that combination numerically sound.
+**Coming up in Chapter 9:** A fast index doesn't guarantee good
+retrieval. Chapter 9 looks at the retrieval scoring code itself — how
+sparse and dense signals get combined, and what it takes to make that
+combination numerically sound.

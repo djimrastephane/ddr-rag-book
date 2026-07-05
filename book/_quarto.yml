@@ -101,6 +101,24 @@ format:
         \usepackage{fvextra}
         \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
 
+        % Every chapter's status strip, difficulty badges, and Field notes
+        % titles use block-drawing characters and emoji (progress bars,
+        % coloured difficulty circles, a wrench icon, a checkmark) that
+        % render fine in HTML but have no glyph in the PDF engine's fonts --
+        % without a mapping they'd print as blank boxes. Each one is always
+        % paired with an adjacent text label carrying the same meaning
+        % ("Beginner", "1 / 12", "Field notes"), so the PDF-safe substitution
+        % below just needs to preserve the bar shape (as plain ASCII) or drop
+        % the purely decorative icon -- nothing said in HTML is lost.
+        \usepackage{newunicodechar}
+        \newunicodechar{█}{\#}
+        \newunicodechar{░}{.}
+        \newunicodechar{✓}{}
+        \newunicodechar{🟢}{}
+        \newunicodechar{🟠}{}
+        \newunicodechar{🔴}{}
+        \newunicodechar{🔧}{}
+
         % Real DDR excerpts (quoted in fenced code blocks with no language,
         % e.g. the callouts showing raw report text) come through as plain
         % LaTeX `verbatim`, not the Highlighting environment above -- the

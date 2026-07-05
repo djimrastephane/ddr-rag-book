@@ -6,6 +6,10 @@ Nothing Installed
 A Working Python Workshop
 ```
 
+::: {.chapter-status}
+Progress: **Part 0 — Environment Setup** (before Chapter 1) &nbsp;·&nbsp; **Estimated time:** 20–30 min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner
+:::
+
 Before you can read a single DDR with code, you need somewhere to do the
 work. Think of it this way:
 
@@ -349,17 +353,23 @@ exactly how this script works, line by line.
 | `Permission denied` | Your user account doesn't have write access to that folder | Don't use `sudo`/administrator install for this project — instead, work inside a folder you own, like your home directory or Documents. |
 | Windows path errors (e.g. backslashes look wrong) | Windows uses `\` in paths, this book's examples are written with `/` | Both usually work in a modern Windows terminal, but if a command fails specifically because of slashes, replace `/` with `\` in that one command. |
 
-## You're ready when...
+::: {.callout-caution title="CHECKPOINT — Part 0"}
+- [x] `python --version` (or `python3 --version`) shows 3.11 or later
+- [x] Your terminal prompt shows `(.venv)`
+- [x] `pip install -r requirements.txt` finished without errors
+- [x] `python code/setup_check.py` printed `DDR RAG workshop is ready.`
+- [x] `python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf` printed real report text
+:::
 
-- `python --version` (or `python3 --version`) shows 3.11 or later.
-- Your terminal prompt shows `(.venv)`.
-- `pip install -r requirements.txt` finished without errors.
-- `python code/setup_check.py` printed `DDR RAG workshop is ready.`
-- `python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf`
-  printed real report text.
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**A working Python environment** — Python, an active virtual environment,
+every package this book needs, and a folder with the real Utah FORGE DDR
+archive already in it, ready to run the companion repository's tests and
+every chapter that follows.
+:::
 
-If all five are true, you have a working Python workshop, and Chapter 1
-starts exactly where this section leaves off. If you'd like a
-step-by-step guide specific to the environment you chose in Section 0.2,
-see Appendices A1 (Jupyter Notebook), A2 (VS Code), A3 (PyCharm
-Community), A4 (Positron), or A5 (Terminal only).
+If all five checkpoint items are true, you have a working Python
+workshop, and Chapter 1 starts exactly where this section leaves off. If
+you'd like a step-by-step guide specific to the environment you chose in
+Section 0.2, see Appendices A1 (Jupyter Notebook), A2 (VS Code), A3
+(PyCharm Community), A4 (Positron), or A5 (Terminal only).

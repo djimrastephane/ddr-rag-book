@@ -6,6 +6,10 @@
 Measured, Defensible Performance
 ```
 
+::: {.chapter-status}
+Progress `███████████░` **11 / 12** &nbsp;·&nbsp; **Estimated time:** 60–90 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -19,10 +23,11 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-"It feels like it's working" is not a standard you should ship an
-engineering decision-support tool against. Before this system goes in
-front of drilling engineers, you need a defensible answer to "how good is
-it" — and, more usefully, "which kinds of questions does it get wrong."
+Oumy, the drilling engineer, has one blunt question before this system
+goes anywhere near her rig: "it feels like it's working" is not a
+standard you should ship an engineering decision-support tool against.
+You need a defensible answer to "how good is it" — and, more usefully,
+"which kinds of questions does it get wrong."
 The companion pipeline ships an evaluation harness for exactly this,
 `scripts/run_eval.py`, built against a real question set for a different
 (private, North Sea) campaign it was originally developed on. It has
@@ -254,6 +259,8 @@ deployment. A few realities worth planning for:
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Run the five questions above through Chapter 9's
 hybrid search over the ten-report sample archive, record each correct
 report's rank, and compute `recall@3` by hand.
@@ -265,7 +272,7 @@ yourself.
 
 ## Field notes
 
-::: {.callout-important title="Field notes: 'better' isn't monotonic — track one hard question across every chapter"}
+::: {.callout-important title="🔧 Field notes: 'better' isn't monotonic — track one hard question across every chapter"}
 **Action:** track report #39's rank for the query `"stuck pipe"` through
 every retrieval method this book has built so far, instead of just
 looking at one final aggregate score.
@@ -297,6 +304,8 @@ improving is to track them individually, the way this table just did.
 :::
 
 ## Challenge exercise
+
+🔴 **Advanced**
 
 **Challenge:** Extend your five-question set to at least 15 questions
 against the *full* 76-report archive (`datasets/forge_archive/`), and
@@ -337,6 +346,19 @@ before this system sees a real, full-scale archive.
 | `code/chapter_11/eval_metrics.py` | `recall@k`, MRR, `NDCG@k` implementations |
 | `DDR_UTAH_FORGE/scripts/run_eval.py` | Evaluation harness (companion repo) — ready to point at a Utah FORGE question set once you build one |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 11"}
+- [x] Built a hand-labeled evaluation set with known correct answers
+- [x] Computed `recall@k`, MRR, and `NDCG@k`, and can explain what each one tells you
+- [x] Tracked one hard question across every retrieval method in this book
+- [x] Reported results broken down by category instead of one aggregate score
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`eval_metrics.py`** plus a real, hand-verified evaluation set — the
+first ever built against this archive, with a defensible number attached
+to "how good is it."
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can put a defensible number on how well your retrieval system
@@ -346,8 +368,8 @@ strength of "it feels like it's working."
 
 ## Suggested next step
 
-Every discipline from Chapters 6–11 — OCR gating, structured chunking,
-hybrid retrieval, traceability, evaluation — exists in service of a
-single payoff: finding things in an archive a human reading it linearly
-would miss. Chapter 12 builds toward that payoff, using a real sequence
-of events already in this archive.
+**Coming up in Chapter 12:** Every discipline from Chapters 6–11 — OCR
+gating, structured chunking, hybrid retrieval, traceability, evaluation —
+exists in service of a single payoff: finding things in an archive a
+human reading it linearly would miss. Chapter 12 builds toward that
+payoff, using a real sequence of events already in this archive.

@@ -54,6 +54,32 @@ Required structural elements (do not skip any of these):
    reports, inconsistent formats across operators, etc.).
 8. A closing "## What can you do now that you couldn't do before?" section
    — one or two sentences of concrete new capability, not a theory recap.
+9. A ".chapter-status" div directly under the pipeline diagram: a 12-block
+   progress bar (N filled for chapter N, rest empty), an estimated time,
+   and a difficulty badge (🟢/🟠/🔴). See markup below.
+10. Exactly one named persona (Mike/completions, Sarah/intervention,
+    Sean/production, Oumy/drilling — see index.qmd's roster) appears in
+    the opening sentence(s) of "## Operational Problem", asking the
+    motivating question. Pick whichever persona the chapter's question
+    naturally belongs to. Personas may be echoed once more in "##
+    Practical exercise" for bookend effect, but never appear in Theory,
+    Production Reality, or Field notes — those sections stay factual and
+    unattributed, since their content is independently verified against
+    the real archive, not invented dialogue.
+11. A difficulty badge line under both exercise headings: "## Practical
+    exercise" gets 🟢 **Beginner** always; "## Challenge exercise" gets
+    🟠 **Intermediate** by default, escalated to 🔴 **Advanced** only when
+    the challenge is genuinely harder than a typical chapter's (a
+    judgment call, not a mechanical rule).
+12. A "CHECKPOINT" box (`callout-caution`, GFM task-list checkboxes) and a
+    "WHAT YOU BUILT" box (`callout-tip .built-box`), placed together right
+    after "## Repository files" and before the closing "## What can you do
+    now..." / "## Suggested next step" pair. CHECKPOINT is a terse,
+    checkable skills list; WHAT YOU BUILT names the concrete artifact.
+    Neither replaces "## Key takeaways" (conceptual) or "## What can you
+    do now" (prose) — each reinforces achievement from a different angle.
+13. "## Suggested next step" opens with a bolded **Coming up in Chapter
+    N+1:** line before its bridging paragraph.
 -->
 
 # Chapter Title Goes Here {#sec-chapter-NN}
@@ -72,6 +98,15 @@ Input State
 Output State
 ```
 
+<!-- Chapter status strip (rule 9). Progress bar is 12 characters total,
+N filled for chapter N. Estimated time is a plausible range for a reader
+typing every example. Difficulty is the chapter's overall level, usually
+🟢 for Part I and early Part II, 🟠/🔴 as the system gets more involved. -->
+
+::: {.chapter-status}
+Progress `███░░░░░░░░░` **N / 12** &nbsp;·&nbsp; **Estimated time:** NN–NN min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -83,12 +118,14 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-<!-- One or two paragraphs, opening with a question in the language of a
-drilling morning call ("Have we seen this failure mode before?", "Which
-wells experienced losses at this depth?"). Describe the real field
-problem this chapter solves. Ground it in a scenario: a specific well, a
-specific question someone needed answered, a specific way the current
-(manual) process fails. Never open with "Today we will learn X." -->
+<!-- One or two paragraphs, opening with ONE named persona (rule 10)
+asking a question in the language of a drilling morning call ("Have we
+seen this failure mode before?", "Which wells experienced losses at this
+depth?"). Describe the real field problem this chapter solves. Ground it
+in a scenario: a specific well, a specific question someone needed
+answered, a specific way the current (manual) process fails. Never open
+with "Today we will learn X." Example opening: "Sarah, the intervention
+engineer, asks: '...'" -->
 
 ## Example DDR extract
 
@@ -165,6 +202,8 @@ this same problem? Follow rule 7 above. -->
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 <!-- A guided exercise using the sample dataset, with a clear, checkable
 "you'll know you got it right when..." condition. This is not optional —
 every chapter has one. -->
@@ -206,6 +245,8 @@ but never says "...".
 
 ## Challenge exercise
 
+🟠 **Intermediate** <!-- escalate to 🔴 Advanced per rule 11 if warranted -->
+
 <!-- A harder, more open-ended extension for readers who want to go
 further. No solution is provided in the main text; a reference solution
 lives in the companion repository under `code/chapter_NN/challenge/`. -->
@@ -228,6 +269,19 @@ lives in the companion repository under `code/chapter_NN/challenge/`. -->
 | `datasets/...` | ... |
 | `notebooks/chapter_NN_explore.ipynb` | Interactive companion notebook |
 
+<!-- Rule 12: CHECKPOINT + WHAT YOU BUILT, together, here. -->
+
+::: {.callout-caution title="CHECKPOINT — Chapter NN"}
+- [x] Skill 1 gained this chapter, phrased as something done, not learned
+- [x] Skill 2
+- [x] Skill 3
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`artifact_name.py`** — one or two sentences naming the concrete artifact
+and what it hands off to the next chapter.
+:::
+
 ## What can you do now that you couldn't do before?
 
 <!-- One or two sentences of concrete new capability, following rule 8
@@ -236,5 +290,8 @@ do that they couldn't before this chapter. -->
 
 ## Suggested next step
 
-<!-- One paragraph bridging to the next chapter: what limitation of
-today's artifact motivates tomorrow's work? -->
+<!-- Rule 13: open with a bolded "Coming up in Chapter N+1:" line, then
+one paragraph bridging to the next chapter: what limitation of today's
+artifact motivates tomorrow's work? -->
+
+**Coming up in Chapter N+1:** ...

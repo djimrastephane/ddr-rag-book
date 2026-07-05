@@ -6,6 +6,10 @@ Plausible Answer
 Provable Answer
 ```
 
+::: {.chapter-status}
+Progress `██████████░░` **10 / 12** &nbsp;·&nbsp; **Estimated time:** 60–75 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -19,8 +23,10 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Can you actually prove that number, or did the model just make it sound
-right? Chapter 5 built a prompt that *asks* a language model to cite
+Sean, the production engineer, asks a pointed question after seeing a
+generated number in a draft report: *"Can you actually prove that number,
+or did the model just make it sound right?"* Chapter 5 built a prompt
+that *asks* a language model to cite
 sources — necessary, but not sufficient. A model can still cite a
 plausible-sounding report number for a number it invented, especially for
 arithmetic questions ("how many hours of non-productive time in
@@ -218,6 +224,8 @@ has more to plan for:
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Run `find_date_gaps()` against the report dates in
 this book's ten-report sample — `["2020-10-22", "2020-11-07",
 "2020-11-24", "2020-11-25", "2020-11-26", "2020-11-27", "2020-12-06",
@@ -231,7 +239,7 @@ one real gap: January 4th–5th, 2021, right before the Completion report.
 
 ## Field notes
 
-::: {.callout-warning title="Field notes: verify the automatic label, not just the automatic lookup"}
+::: {.callout-warning title="🔧 Field notes: verify the automatic label, not just the automatic lookup"}
 **Action:** check the real, computed `is_npt` flag — set once during
 extraction, not re-derived on every query — for every operations row on
 report #38, the stuck-pipe day.
@@ -266,6 +274,8 @@ of it.
 
 ## Challenge exercise
 
+🟠 **Intermediate**
+
 **Challenge:** Extend `find_date_gaps()` to classify each gap's severity
 (e.g. a gap under 3 days is Low; a gap that crosses a report-type boundary
 — Drilling to Completion, as this one does — is High regardless of
@@ -291,6 +301,19 @@ A reference solution is in `code/chapter_10/challenge/`.
 | `code/chapter_10/traceable_answers.py` | Citation formatting and date-gap detection |
 | `DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv` | Real, computed gap-detection output (companion repo) |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 10"}
+- [x] Distinguished questions to compute from data versus questions to generate an answer to
+- [x] Attached a checkable citation to every generated claim
+- [x] Detected a real gap in the archive instead of silently assuming completeness
+- [x] Caught a structured field's judgment call, not just trusted it blindly
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`traceable_answers.py`** — a citation and gap-detection layer: every
+claim carries a checkable source, and every silence in the archive gets
+surfaced instead of hidden.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can tell the difference between a question you should compute from
@@ -301,7 +324,7 @@ the archive simply has nothing to say.
 
 ## Suggested next step
 
-You now have a system that retrieves well and answers honestly. Chapter
-11 asks the question every system like this eventually needs answered
-with numbers, not impressions: *how good is it, really* — and where
-specifically does it still fail?
+**Coming up in Chapter 11:** You now have a system that retrieves well
+and answers honestly. Chapter 11 asks the question every system like this
+eventually needs answered with numbers, not impressions: *how good is it,
+really* — and where specifically does it still fail?

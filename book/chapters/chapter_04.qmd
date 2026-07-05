@@ -6,6 +6,10 @@ Searchable Archive
 Search by Meaning
 ```
 
+::: {.chapter-status}
+Progress `████░░░░░░░░` **4 / 12** &nbsp;·&nbsp; **Estimated time:** 60–75 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -22,13 +26,14 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Chapter 3 ended on a real miss: the query `"stuck pipe"` found report #38
-(the actual incident) but was blind to report #39, which describes tight
-hole, high torque, and a decision to pull out of hole — real continued-risk
-language, written the very next day — without ever using the word "stuck."
-An engineer reading both reports would say "yes, obviously, day two of the
-same problem." A keyword search can't see that at all. Let's find out,
-honestly, how much of that gap semantic search actually closes.
+Chapter 3 ended on a real miss: Sarah's query `"stuck pipe"` found report
+#38 (the actual incident) but was blind to report #39, which describes
+tight hole, high torque, and a decision to pull out of hole — real
+continued-risk language, written the very next day — without ever using
+the word "stuck." Sarah, reading both reports herself, says "yes,
+obviously, day two of the same problem." A keyword search can't see that
+at all. Let's find out, honestly, how much of that gap semantic search
+actually closes.
 
 ## Example DDR extract
 
@@ -243,7 +248,7 @@ sees:
 
 ## Field notes
 
-::: {.callout-warning title="Field notes: why whole-document embeddings are noisy"}
+::: {.callout-warning title="🔧 Field notes: why whole-document embeddings are noisy"}
 **Query:** `"stuck pipe"`, same as above.
 
 **Result:** report #39 ranks 5th of 10 when you embed each *entire
@@ -287,6 +292,8 @@ what's actually inside each embedded vector before blaming the model.
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Embed all ten sample DDRs and run
 `search(model, "stuck pipe", filenames, embeddings, top_k=10)`.
 
@@ -295,6 +302,8 @@ appears somewhere in your ranked results — unlike Chapter 3, where it
 didn't appear at all — even if it isn't near the top.
 
 ## Challenge exercise
+
+🟠 **Intermediate**
 
 **Challenge:** Reproduce the Field Notes line-level result yourself.
 Manually pull three lines of text — report #39's `"Due to high torque
@@ -330,6 +339,19 @@ should score close to each other. A reference solution is in
 | `code/chapter_04/semantic_search.py` | Embedding generation and brute-force cosine search |
 | `notebooks/chapter_04_explore.ipynb` | Interactive companion notebook |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 4"}
+- [x] Explained what a text embedding is without needing the underlying math
+- [x] Generated embeddings for a folder of DDR text
+- [x] Ranked reports by semantic similarity to a query using cosine similarity
+- [x] Diagnosed granularity, not the model, as the real bottleneck
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`semantic_search.py`** — a brute-force semantic search engine: embed a
+folder of reports once, then rank any query against them by meaning, not
+spelling.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can retrieve relevant report passages by meaning instead of exact
@@ -339,8 +361,9 @@ yet: granularity, not the model, is the real bottleneck.
 
 ## Suggested next step
 
-You can now retrieve relevant passages by meaning, and you've learned the
-honest limits of doing it at whole-document granularity. Chapter 5 turns
-retrieval into an answer: given a question, retrieve the right evidence,
-and generate a response that cites exactly where each claim came from.
-Chapter 7 comes back to fix the granularity problem directly.
+**Coming up in Chapter 5:** You can now retrieve relevant passages by
+meaning, and you've learned the honest limits of doing it at
+whole-document granularity. Chapter 5 turns retrieval into an answer:
+given a question, retrieve the right evidence, and generate a response
+that cites exactly where each claim came from. Chapter 7 comes back to
+fix the granularity problem directly.

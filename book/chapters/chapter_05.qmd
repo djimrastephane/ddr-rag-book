@@ -10,6 +10,10 @@ LLM
 Answer + Citations
 ```
 
+::: {.chapter-status}
+Progress `█████░░░░░░░` **5 / 12** &nbsp;·&nbsp; **Estimated time:** 60–90 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -23,10 +27,11 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Retrieval (Chapter 4) gets you the right passages. What an engineer
-actually wants is an answer: *"What led to the fishing operation on
-report #50?"* — not two ranked text chunks they have to read and
-synthesise themselves. But a generated answer that isn't traceable back
+Retrieval (Chapter 4) gets you the right passages. What Mike, the
+completions engineer, actually wants is an answer: *"What led to the
+fishing operation on report #50?"* — not two ranked text chunks he has
+to read and synthesise himself. But a generated answer that isn't
+traceable back
 to specific reports is worse than no answer at all in an engineering
 context, because it invites misplaced trust. This chapter builds the
 smallest system that does both: synthesise an answer, and show exactly
@@ -264,6 +269,8 @@ Chapter 10 covers the guardrails that close this gap further.
 
 ## Practical exercise
 
+🟢 **Beginner**
+
 **Try it yourself:** Wire up `answer_question` with a stub `llm_call` that
 simply returns the evidence text, run it for "What led to the fishing
 operation on report #50?" with `top_k=3`, and print the evidence list.
@@ -274,7 +281,7 @@ that list actually contains what the target answer above needs.
 
 ## Field notes
 
-::: {.callout-warning title="Field notes: the report the question is about isn't in the evidence"}
+::: {.callout-warning title="🔧 Field notes: the report the question is about isn't in the evidence"}
 **Query:** `"What led to the fishing operation on report #50?"`, `top_k=3`.
 
 **Result:** retrieval returns report #49 (rank 1) plus two other reports
@@ -311,6 +318,8 @@ of this book.
 
 ## Challenge exercise
 
+🔴 **Advanced**
+
 **Challenge:** Connect a real LLM (local via `transformers`/`ollama`, or a
 hosted API) as `llm_call`, and add a check that rejects the answer if it
 mentions a report filename that wasn't in the retrieved evidence list — a
@@ -336,6 +345,20 @@ reference solution is in `code/chapter_05/challenge/`.
 | `code/chapter_05/first_rag.py` | Prompt assembly and evidence-tracked question answering |
 | `notebooks/chapter_05_explore.ipynb` | Interactive companion notebook |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 5"}
+- [x] Explained RAG as two separate, inspectable steps: retrieve, then generate
+- [x] Assembled retrieved evidence into a prompt that forces answers from that evidence only
+- [x] Produced an answer with an explicit, per-report evidence list
+- [x] Caught a real case where the cited report wasn't actually in the evidence
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`first_rag.py`** — an Industrial RAG system: ask it a question in plain
+English, and it retrieves evidence, generates an answer, and hands back
+the exact list of reports that answer is traceable to. This is Part I's
+capstone artifact.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can ask an engineering question in plain English and get back a
@@ -345,11 +368,11 @@ and synthesise yourself.
 
 ## Suggested next step
 
-What you've built in Part I works — on ten clean, digital, hand-picked
-reports out of the full 76-report Utah FORGE archive. Part II
-industrialises this system against the reality of a full archive:
-retrieval that has to be both fast and precise across every report, and
-answers that have to survive scrutiny from someone who wasn't in the room
-when they were generated. Chapter 6 starts with the first thing that
-breaks in a typical real-world archive: scanned reports with no
-extractable text at all.
+**Coming up in Chapter 6:** What you've built in Part I works — on ten
+clean, digital, hand-picked reports out of the full 76-report Utah FORGE
+archive. Part II industrialises this system against the reality of a
+full archive: retrieval that has to be both fast and precise across
+every report, and answers that have to survive scrutiny from someone who
+wasn't in the room when they were generated. Chapter 6 starts with the
+first thing that breaks in a typical real-world archive: scanned reports
+with no extractable text at all.

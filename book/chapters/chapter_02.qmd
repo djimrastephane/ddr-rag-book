@@ -6,6 +6,10 @@ Raw Text
 Expanded Text
 ```
 
+::: {.chapter-status}
+Progress `██░░░░░░░░░░` **2 / 12** &nbsp;·&nbsp; **Estimated time:** 30–45 min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner
+:::
+
 ## Learning objectives
 
 By the end of this chapter, you will be able to:
@@ -17,8 +21,9 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Next chapter, you're going to build a search tool and ask it: *"Show me
-every report that mentions the bottom hole assembly."* Will it find
+Mike, the completions engineer, wants next chapter's search tool to
+answer: *"Show me every report that mentions the bottom hole assembly."*
+Will it find
 report #38? Open the `.txt` file you extracted from it in Chapter 1 and
 check: the report never once writes "bottom hole assembly." It writes
 `BHA` — twenty-one times. A search tool that only knows the literal words
@@ -235,7 +240,9 @@ archive.
 
 ## Practical exercise
 
-**Try it yourself:** Run the expander against
+🟢 **Beginner**
+
+**Try it yourself:** Help Mike get his answer — run the expander against
 `FORGE-16A-78-32_Drilling_038_2020-11-26.txt`.
 
 **You'll know it worked when:** `Pick up Curve assembly 2, BHA 21` becomes
@@ -245,7 +252,7 @@ are the ones most likely to collide with real words) gets corrupted.
 
 ## Field notes
 
-::: {.callout-warning title="Field notes: the source already expands some abbreviations — but not the ones that matter"}
+::: {.callout-warning title="🔧 Field notes: the source already expands some abbreviations — but not the ones that matter"}
 **Action:** search every report for the literal string `PJSM`.
 
 **Result:** it appears in six of the ten sample reports (not logged on
@@ -270,6 +277,8 @@ matter.
 :::
 
 ## Challenge exercise
+
+🟠 **Intermediate**
 
 **Challenge:** Extend `ABBREVIATIONS` using [Appendix
 B](../appendix/appendix_b_oilfield_glossary.qmd), and handle the mud-table
@@ -299,6 +308,18 @@ it needs a narrower match context. A reference solution is in
 | `datasets/ddr_text_expanded/` | Expanded output from Chapter 1's extracted text |
 | `notebooks/chapter_02_explore.ipynb` | Interactive companion notebook |
 
+::: {.callout-caution title="CHECKPOINT — Chapter 2"}
+- [x] Explained why oilfield shorthand breaks naive text search
+- [x] Built a word-boundary-safe abbreviation dictionary
+- [x] Expanded every `.txt` file from Chapter 1 without corrupting unrelated text
+:::
+
+::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
+**`expand_abbreviations.py`** — an abbreviation expansion engine: point it
+at Chapter 1's extracted text and it hands back plain-language text, ready
+for Chapter 3's search index.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can take the raw text Chapter 1 extracted and turn every shorthand
@@ -308,6 +329,7 @@ assembly."
 
 ## Suggested next step
 
-With clean, expanded text in hand, Chapter 3 builds the first tool an
-engineer would actually reach for: a keyword search engine that answers
-"which reports mention losses?" in milliseconds.
+**Coming up in Chapter 3:** With clean, expanded text in hand, Chapter 3
+builds the first tool an engineer would actually reach for: a keyword
+search engine that answers "which reports mention losses?" in
+milliseconds.

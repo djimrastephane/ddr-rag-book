@@ -73,6 +73,40 @@ Retrieval matters more than generation. Traceability matters more than
 eloquent prose. Engineers trust evidence, not predictions — so this system is
 built to show its work, every time.
 
+### The visual language of this book
+
+A few recurring elements appear in every chapter, explained once here so
+they never need repeating:
+
+- **Progress bar** — `███░░░░░░░░░ 3 / 12` at the top of every chapter,
+  showing exactly how far you are through the book.
+- **Estimated time** and **difficulty badge** (🟢 Beginner, 🟠
+  Intermediate, 🔴 Advanced) — next to the progress bar, so you know the
+  commitment before you start.
+- **CHECKPOINT** — a checklist near the end of each chapter, confirming
+  the specific skills you just gained.
+- **WHAT YOU BUILT** — a green box naming the concrete artifact (a
+  script, an index, a pipeline) you now have, distinct from the
+  conceptual "Key takeaways" earlier in the chapter.
+- **Field notes** 🔧 — a real, independently verified operational
+  vignette: something an experienced engineer would notice in the data
+  that a tool alone would miss.
+
+You'll also meet four recurring engineers, each asking the question that
+opens a chapter's **Operational Problem**:
+
+| Name | Role |
+|---|---|
+| Oumy | Drilling Engineer |
+| Mike | Completions Engineer |
+| Sarah | Intervention Engineer |
+| Sean | Production Engineer |
+
+They're a framing device, not a source of data: whichever question Oumy,
+Mike, Sarah, or Sean asks, every report, number, and quote used to answer
+it is the real, unaltered Utah FORGE archive described above — never
+invented on their behalf.
+
 ## Companion repository
 
 All code, sample datasets, and notebooks referenced in this book live in the
