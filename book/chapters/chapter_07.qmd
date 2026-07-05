@@ -1,10 +1,15 @@
 # Chunking That Respects Report Structure {#sec-chapter-07}
 
-```
-Whole Report
- ↓
-Retrievable Chunks
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch07_light.svg){.diagram-light width="180"}
+![](../figures/diagrams/pipeline_ch07_dark.svg){.diagram-dark width="180"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch07_light.svg){width="180"}
+:::
 
 ::: {.chapter-status}
 Progress `███████░░░░░` **7 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate

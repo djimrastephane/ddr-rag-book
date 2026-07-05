@@ -1,10 +1,15 @@
 # Part 0: Preparing Your Python Workshop {#sec-chapter-00 .unnumbered}
 
-```
-Nothing Installed
-       ↓
-A Working Python Workshop
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch00_light.svg){.diagram-light width="220"}
+![](../figures/diagrams/pipeline_ch00_dark.svg){.diagram-dark width="220"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch00_light.svg){width="220"}
+:::
 
 ::: {.chapter-status}
 Progress: **Part 0 — Environment Setup** (before Chapter 1) &nbsp;·&nbsp; **Estimated time:** 20–30 min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner

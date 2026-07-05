@@ -1,10 +1,15 @@
 # Searching DDRs {#sec-chapter-03}
 
-```
-Text
- ↓
-Searchable Archive
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch03_light.svg){.diagram-light width="180"}
+![](../figures/diagrams/pipeline_ch03_dark.svg){.diagram-dark width="180"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch03_light.svg){width="180"}
+:::
 
 ::: {.chapter-status}
 Progress `███░░░░░░░░░` **3 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner

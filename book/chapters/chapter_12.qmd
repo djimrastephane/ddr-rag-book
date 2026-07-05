@@ -1,12 +1,15 @@
 # Sequence Detection: Building Toward Cross-Well Intelligence {#sec-chapter-12}
 
-```
-1 Well, 76 Reports
-        ↓
-  Checkable Patterns
-        ↓
-Toward Cross-Well Intelligence
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch12_light.svg){.diagram-light width="220"}
+![](../figures/diagrams/pipeline_ch12_dark.svg){.diagram-dark width="220"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch12_light.svg){width="220"}
+:::
 
 ::: {.chapter-status}
 Progress `████████████` **12 / 12** &nbsp;·&nbsp; **Estimated time:** 60–90 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced

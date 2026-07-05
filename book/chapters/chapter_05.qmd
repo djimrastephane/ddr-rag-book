@@ -1,14 +1,15 @@
 # First RAG System {#sec-chapter-05}
 
-```
-Question
-   ↓
-Retriever
-   ↓
-LLM
-   ↓
-Answer + Citations
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch05_light.svg){.diagram-light width="180"}
+![](../figures/diagrams/pipeline_ch05_dark.svg){.diagram-dark width="180"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch05_light.svg){width="180"}
+:::
 
 ::: {.chapter-status}
 Progress `█████░░░░░░░` **5 / 12** &nbsp;·&nbsp; **Estimated time:** 60–90 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate

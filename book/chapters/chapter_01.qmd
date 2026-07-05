@@ -1,10 +1,15 @@
 # Reading Your First DDR {#sec-chapter-01}
 
-```
-PDF
- ↓
-Text
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch01_light.svg){.diagram-light width="160"}
+![](../figures/diagrams/pipeline_ch01_dark.svg){.diagram-dark width="160"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch01_light.svg){width="160"}
+:::
 
 ::: {.chapter-status}
 Progress `█░░░░░░░░░░░` **1 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner

@@ -1,12 +1,15 @@
 # Vector Databases at Scale {#sec-chapter-08}
 
-```
-10 Documents
-   ↓
-76-Report Archive
-   ↓
-Persistent Index
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch08_light.svg){.diagram-light width="180"}
+![](../figures/diagrams/pipeline_ch08_dark.svg){.diagram-dark width="180"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch08_light.svg){width="180"}
+:::
 
 ::: {.chapter-status}
 Progress `████████░░░░` **8 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate

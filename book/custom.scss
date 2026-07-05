@@ -33,3 +33,22 @@ pre.sourceCode {
 .callout.built-box .callout-title-container {
   color: #2e7d32;
 }
+
+// Pipeline diagrams (TikZ, compiled to SVG) ship as two colour variants --
+// <img> tags can't inherit currentColor from the page like inline SVG can,
+// so instead of one adaptive image we show/hide the light- or dark-suited
+// variant based on the same body.quarto-light / body.quarto-dark class
+// Quarto's own theme toggle already sets.
+.pipeline-diagram {
+  text-align: center;
+  margin: 1em 0;
+}
+.pipeline-diagram .diagram-dark {
+  display: none;
+}
+body.quarto-dark .pipeline-diagram .diagram-light {
+  display: none;
+}
+body.quarto-dark .pipeline-diagram .diagram-dark {
+  display: inline;
+}

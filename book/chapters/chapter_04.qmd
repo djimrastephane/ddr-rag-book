@@ -1,10 +1,15 @@
 # Semantic Search {#sec-chapter-04}
 
-```
-Searchable Archive
- ↓
-Search by Meaning
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch04_light.svg){.diagram-light width="180"}
+![](../figures/diagrams/pipeline_ch04_dark.svg){.diagram-dark width="180"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch04_light.svg){width="180"}
+:::
 
 ::: {.chapter-status}
 Progress `████░░░░░░░░` **4 / 12** &nbsp;·&nbsp; **Estimated time:** 60–75 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate

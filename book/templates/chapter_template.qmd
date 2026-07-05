@@ -84,19 +84,26 @@ Required structural elements (do not skip any of these):
 
 # Chapter Title Goes Here {#sec-chapter-NN}
 
-<!-- Progress marker: a short ASCII diagram showing this chapter's
-input -> output transformation, e.g.:
+<!-- Progress marker: a small pipeline diagram showing this chapter's
+input -> output transformation (2-4 boxes, vertical flow with arrows).
+Author it in TikZ, compile with `pdflatex` + `pdftocairo -svg`, generate
+a light (black on transparent) and dark (light-gray on transparent)
+color variant, and save both to figures/diagrams/pipeline_chNN_{light,dark}.svg
+-- see chapter_01.qmd through chapter_12.qmd for 13 worked examples and
+figures/diagrams/ for the generator pattern. Do NOT use plain ASCII art
+here; it doesn't get the crisp, theme-aware rendering the rest of the
+book's diagrams have. -->
 
-Text
- ↓
-Searchable Archive
--->
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_chNN_light.svg){.diagram-light width="180"}
+![](../figures/diagrams/pipeline_chNN_dark.svg){.diagram-dark width="180"}
+:::
+:::
 
-```
-Input State
- ↓
-Output State
-```
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_chNN_light.svg){width="180"}
+:::
 
 <!-- Chapter status strip (rule 9). Progress bar is 12 characters total,
 N filled for chapter N. Estimated time is a plausible range for a reader

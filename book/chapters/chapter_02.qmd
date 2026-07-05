@@ -1,10 +1,15 @@
 # Cleaning Operational Text {#sec-chapter-02}
 
-```
-Raw Text
- ↓
-Expanded Text
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch02_light.svg){.diagram-light width="150"}
+![](../figures/diagrams/pipeline_ch02_dark.svg){.diagram-dark width="150"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch02_light.svg){width="150"}
+:::
 
 ::: {.chapter-status}
 Progress `██░░░░░░░░░░` **2 / 12** &nbsp;·&nbsp; **Estimated time:** 30–45 min &nbsp;·&nbsp; **Difficulty:** 🟢 Beginner

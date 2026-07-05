@@ -1,10 +1,15 @@
 # Scanned Reports and OCR Quality Gates {#sec-chapter-06}
 
-```
-Scanned PDF
- ↓
-Trusted Text
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch06_light.svg){.diagram-light width="160"}
+![](../figures/diagrams/pipeline_ch06_dark.svg){.diagram-dark width="160"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch06_light.svg){width="160"}
+:::
 
 ::: {.chapter-status}
 Progress `██████░░░░░░` **6 / 12** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🟠 Intermediate

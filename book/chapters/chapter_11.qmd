@@ -1,10 +1,15 @@
 # Evaluating Retrieval Quality {#sec-chapter-11}
 
-```
-"It Feels Like It's Working"
-            ↓
-Measured, Defensible Performance
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch11_light.svg){.diagram-light width="230"}
+![](../figures/diagrams/pipeline_ch11_dark.svg){.diagram-dark width="230"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch11_light.svg){width="230"}
+:::
 
 ::: {.chapter-status}
 Progress `███████████░` **11 / 12** &nbsp;·&nbsp; **Estimated time:** 60–90 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced
