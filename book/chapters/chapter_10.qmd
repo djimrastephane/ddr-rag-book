@@ -8,7 +8,7 @@
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_ch10_light.svg){width="170"}
+![](../figures/diagrams/pipeline_ch10.pdf){width="170"}
 :::
 
 ::: {.chapter-status}

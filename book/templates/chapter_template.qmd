@@ -86,13 +86,14 @@ Required structural elements (do not skip any of these):
 
 <!-- Progress marker: a small pipeline diagram showing this chapter's
 input -> output transformation (2-4 boxes, vertical flow with arrows).
-Author it in TikZ, compile with `pdflatex` + `pdftocairo -svg`, generate
-a light (black on transparent) and dark (light-gray on transparent)
-color variant, and save both to figures/diagrams/pipeline_chNN_{light,dark}.svg
--- see chapter_01.qmd through chapter_12.qmd for 13 worked examples and
-figures/diagrams/ for the generator pattern. Do NOT use plain ASCII art
-here; it doesn't get the crisp, theme-aware rendering the rest of the
-book's diagrams have. -->
+Add it to the DIAGRAMS dict in figures/diagrams/generate_diagrams.py and
+run that script -- it compiles TikZ -> PDF via pdflatex, then produces
+three files per diagram: pipeline_chNN_light.svg and _dark.svg (for
+HTML), and pipeline_chNN.pdf (for PDF output -- see the note below on
+why this can't just reuse the SVG). See chapter_01.qmd through
+chapter_12.qmd for 13 worked examples. Do NOT use plain ASCII art here;
+it doesn't get the crisp, theme-aware rendering the rest of the book's
+diagrams have. -->
 
 ::: {.content-visible when-format="html"}
 ::: {.pipeline-diagram}
@@ -102,8 +103,15 @@ book's diagrams have. -->
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_chNN_light.svg){width="180"}
+![](../figures/diagrams/pipeline_chNN.pdf){width="180"}
 :::
+<!-- PDF format embeds the compiled .pdf directly, not the SVG -- Quarto's
+LaTeX pipeline needs rsvg-convert to rasterize an SVG for PDF output,
+which isn't installed on the GitHub Actions runner (confirmed by a real
+CI failure: "Could not convert a SVG to a PDF for output. Please ensure
+that rsvg-convert is available on the path."). generate_diagrams.py
+already saves the compiled PDF alongside both SVG variants for exactly
+this reason -- always reference the .pdf here, never the .svg. -->
 
 <!-- Chapter status strip (rule 9). Progress bar is 12 characters total,
 N filled for chapter N. Estimated time is a plausible range for a reader

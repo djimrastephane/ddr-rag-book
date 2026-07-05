@@ -97,6 +97,11 @@ def generate(name: str, labels: list[str], width_mm: int, workdir: Path):
 
     (FIGURES_DIR / f"{name}_light.svg").write_text(svg_text)
     (FIGURES_DIR / f"{name}_dark.svg").write_text(dark_text)
+    # PDF output embeds the .pdf directly (not the SVG) -- Quarto's LaTeX
+    # pipeline needs rsvg-convert to rasterize an SVG for PDF, which isn't
+    # installed on the GitHub Actions runner. A native PDF image needs no
+    # conversion at all, so this sidesteps that dependency entirely.
+    (FIGURES_DIR / f"{name}.pdf").write_bytes(pdf_path.read_bytes())
     print(f"OK: {name} ({len(labels)} boxes, width={width_mm}mm)")
 
 
