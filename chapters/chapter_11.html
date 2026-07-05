@@ -696,7 +696,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 <section id="expected-output" class="level2" data-number="11.8">
 <h2 data-number="11.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">11.8</span> Expected Output</h2>
 <p>A single number between 0 and 1 — the fraction of questions where the correct report was within the top <code>k</code>.</p>
-<div id="89ffdf14" class="cell" data-execution_count="1">
+<div id="42452382" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_11/eval_metrics.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> recall_at_k(results: <span class="bu">list</span>[<span class="bu">dict</span>], k: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    hits <span class="op">=</span> [r <span class="cf">for</span> r <span class="kw">in</span> results <span class="cf">if</span> r.get(<span class="st">"rank"</span>) <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> r[<span class="st">"rank"</span>] <span class="op">&lt;=</span> k]</span>
@@ -723,7 +723,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 <section id="expected-output-1" class="level2" data-number="11.12">
 <h2 data-number="11.12" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">11.12</span> Expected Output</h2>
 <p>A single average score: higher when correct answers tend to rank near the top, lower when they’re buried further down or missing.</p>
-<div id="a6f5c67d" class="cell" data-execution_count="2">
+<div id="cc271373" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mrr(results: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> [<span class="fl">1.0</span> <span class="op">/</span> r[<span class="st">"rank"</span>] <span class="cf">if</span> r.get(<span class="st">"rank"</span>) <span class="cf">else</span> <span class="fl">0.0</span> <span class="cf">for</span> r <span class="kw">in</span> results]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(scores) <span class="op">/</span> <span class="bu">len</span>(scores) <span class="cf">if</span> scores <span class="cf">else</span> <span class="fl">0.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -749,7 +749,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 <section id="expected-output-2" class="level2" data-number="11.16">
 <h2 data-number="11.16" class="anchored" data-anchor-id="expected-output-2"><span class="header-section-number">11.16</span> Expected Output</h2>
 <p>A single average score, weighted so a hit at rank 1 counts more than a hit at rank 5, and anything beyond <code>k</code> counts as zero.</p>
-<div id="88358efb" class="cell" data-execution_count="3">
+<div id="a8037e21" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ndcg_at_k(results: <span class="bu">list</span>[<span class="bu">dict</span>], k: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> math</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> []</span>
