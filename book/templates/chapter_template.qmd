@@ -166,6 +166,17 @@ below works. If this section would exceed ~1.5 pages, you are including
 theory the reader doesn't need yet — cut it or defer it to a later
 chapter. Prefer diagrams and worked examples over formal definitions.
 
+If this section needs its own flow diagram (an algorithm's internal
+steps, not the chapter-opening progress marker), it follows the same
+TikZ -> PDF/SVG pattern, added to THEORY_DIAGRAMS (not DIAGRAMS) in
+figures/diagrams/generate_diagrams.py — see chapter_01, 02, 04, 05, 09,
+11, and 12 for worked examples, including multi-line labels (a step
+name plus a smaller annotation, e.g. "Extraction" / "Chapter 1 --
+pdfplumber"). The generator only draws a straight vertical chain; a
+diagram that branches (a yes/no decision) needs that support added
+first, or should stay as prose/ASCII for now (chapters 6, 8, and 10 have
+one each, still ASCII, for exactly this reason).
+
 Add an "Engineering Translation" callout for every new concept this
 chapter introduces — see rule 5 above. Example: -->
 

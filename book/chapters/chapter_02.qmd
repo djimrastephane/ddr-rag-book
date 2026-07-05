@@ -92,17 +92,16 @@ well-chosen abbreviations, expanded correctly, solve most of the
 readability problem — and unlike a model, a dictionary is auditable: you
 can list every expansion it will ever make.
 
-```
-raw text
-   ↓
-for each (abbreviation, expansion) in dictionary:
-   ↓
-  build pattern: \b + abbreviation + \b   (case-insensitive)
-   ↓
-  substitute every match with the expansion
-   ↓
-expanded text
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch02_expand_light.svg){.diagram-light width="280"}
+![](../figures/diagrams/theory_ch02_expand_dark.svg){.diagram-dark width="280"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch02_expand.pdf){width="280"}
+:::
 
 ## Implementation
 

@@ -95,21 +95,16 @@ everything else builds on.
 Here's the complete pipeline you've actually built, chapter by chapter —
 every arrow below is real, working code you've already written:
 
-```
-DDR PDF
-   ↓
-Extraction              (Chapter 1 — pdfplumber)
-   ↓
-Cleaning                (Chapter 2 — abbreviation expansion)
-   ↓
-Embeddings              (Chapter 4 — sentence-transformers)
-   ↓
-Retriever               (Chapter 4 — cosine similarity search)
-   ↓
-LLM                     (this chapter — prompt + generation)
-   ↓
-Answer + Citations
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch05_pipeline_light.svg){.diagram-light width="280"}
+![](../figures/diagrams/theory_ch05_pipeline_dark.svg){.diagram-dark width="280"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch05_pipeline.pdf){width="280"}
+:::
 
 This is deliberately the simplest version of this pipeline that could
 possibly work — brute-force search, whole-document embeddings, no

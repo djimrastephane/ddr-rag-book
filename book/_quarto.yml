@@ -86,6 +86,15 @@ format:
       - margin=1in
     include-in-header:
       text: |
+        % scrbook defaults to \flushbottom (it's a two-sided book class),
+        % which stretches inter-paragraph and list spacing to make every
+        % page end at exactly the same baseline. That's invisible on
+        % dense pages, but pages with a short paragraph next to an
+        % itemize list (several chapters' Theory sections) can end up
+        % with large, awkward-looking gaps as LaTeX inserts that stretch.
+        % \raggedbottom lets pages end at their natural height instead.
+        \raggedbottom
+
         % Long inline `code` spans (e.g. file paths) otherwise overflow
         % past the page margin instead of wrapping -- seqsplit allows a
         % break at any character while \ttfamily keeps the monospace font.

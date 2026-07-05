@@ -137,19 +137,16 @@ open a PDF and read the characters on its pages, so you don't have to
 write that from scratch.
 :::
 
-```
-DDR PDF
-   ↓
-open with pdfplumber
-   ↓
-for each page:
-   ↓
-  page.extract_text()  -->  string, or None if unextractable
-   ↓
-join every page's text together
-   ↓
-one Python string, ready for Chapter 2
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch01_extract_light.svg){.diagram-light width="260"}
+![](../figures/diagrams/theory_ch01_extract_dark.svg){.diagram-dark width="260"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch01_extract.pdf){width="260"}
+:::
 
 ## Implementation
 

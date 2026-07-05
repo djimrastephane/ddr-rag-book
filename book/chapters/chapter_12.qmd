@@ -349,27 +349,16 @@ Twelve chapters ago, this was a single PDF and a five-line function.
 Here's everything you built, end to end — every arrow below is a chapter
 you completed, not an aspiration:
 
-```
-DDR PDF (scanned or digital)
-   ↓
-OCR quality gate                (Chapter 6)
-   ↓
-Extraction                      (Chapter 1)
-   ↓
-Cleaning                        (Chapter 2)
-   ↓
-Segment-aware chunking          (Chapter 7)
-   ↓
-Embeddings                      (Chapter 4)
-   ↓
-Hybrid index — BM25 + FAISS     (Chapters 8-9)
-   ↓
-Retriever + Reranker            (Chapter 9)
-   ↓
-LLM + structured facts          (Chapter 5, 10)
-   ↓
-Answer + Citations + Gaps flagged   (Chapter 10)
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch12_complete_light.svg){.diagram-light width="280"}
+![](../figures/diagrams/theory_ch12_complete_dark.svg){.diagram-dark width="280"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch12_complete.pdf){width="280"}
+:::
 
 Two more pieces sit alongside this pipeline rather than inside it —
 they don't run on every query, but they're what make the rest of it

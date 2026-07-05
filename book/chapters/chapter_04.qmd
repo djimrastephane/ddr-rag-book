@@ -90,17 +90,16 @@ enough to run on a laptop CPU. Chapter 8 replaces the brute-force search here
 with a proper vector database once the corpus grows past what fits
 comfortably in memory.
 
-```
-text ("stuck pipe")
-   ↓
-embedding model (all-MiniLM-L6-v2)
-   ↓
-vector: [0.02, -0.15, 0.33, ...]   (384 numbers)
-   ↓
-compare against every document's vector via cosine similarity
-   ↓
-nearby vectors = similar meaning, regardless of shared vocabulary
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch04_embed_light.svg){.diagram-light width="260"}
+![](../figures/diagrams/theory_ch04_embed_dark.svg){.diagram-dark width="260"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch04_embed.pdf){width="260"}
+:::
 
 ## Implementation
 

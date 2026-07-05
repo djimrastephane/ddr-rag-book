@@ -35,6 +35,7 @@ from pathlib import Path
 FIGURES_DIR = Path(__file__).parent
 
 TEX_TEMPLATE = r"""\documentclass[tikz,border=2pt]{{standalone}}
+\usepackage[T1]{{fontenc}}
 \usepackage{{tikz}}
 \usetikzlibrary{{arrows.meta, positioning}}
 \begin{{document}}
@@ -62,14 +63,24 @@ def escape_latex(s: str) -> str:
              .replace("_", "\\_"))
 
 
-def build_tex(labels: list[str], width_mm: int) -> str:
+def render_label(label) -> str:
+    """A label is either a plain string, or a (main, annotation) tuple --
+    the annotation renders as a smaller, italic second line, e.g. a
+    "(Chapter 4)" note under a step name."""
+    if isinstance(label, tuple):
+        main, sub = label
+        return f"{escape_latex(main)}\\\\{{\\scriptsize\\itshape {escape_latex(sub)}}}"
+    return escape_latex(label)
+
+
+def build_tex(labels: list, width_mm: int) -> str:
     nodes = []
     for i, label in enumerate(labels):
-        esc = escape_latex(label)
+        text = render_label(label)
         if i == 0:
-            nodes.append(f"\\node[box] (n{i}) {{{esc}}};")
+            nodes.append(f"\\node[box] (n{i}) {{{text}}};")
         else:
-            nodes.append(f"\\node[box, below=of n{i-1}] (n{i}) {{{esc}}};")
+            nodes.append(f"\\node[box, below=of n{i-1}] (n{i}) {{{text}}};")
     arrows = [f"\\draw[arr] (n{i}) -- (n{i+1});" for i in range(len(labels) - 1)]
     return TEX_TEMPLATE.format(width=width_mm, nodes="\n".join(nodes), arrows="\n".join(arrows))
 
@@ -121,8 +132,78 @@ DIAGRAMS = {
     "pipeline_ch12": (["1 Well, 76 Reports", "Checkable Patterns", "Toward Cross-Well Intelligence"], 50),
 }
 
+# Second category: linear-chain diagrams inside Theory/Implementation
+# sections (not the top-of-chapter progress markers above). A few of this
+# book's diagrams branch (yes/no splits in chapters 6, 8, 10) -- those
+# aren't here yet, since this generator only draws a straight vertical
+# chain; they need branch/conditional support added first.
+THEORY_DIAGRAMS = {
+    "theory_ch01_extract": ([
+        "DDR PDF",
+        "open with pdfplumber",
+        "for each page:",
+        ("page.extract_text()", "-> string, or None if unextractable"),
+        "join every page's text together",
+        "one Python string, ready for Chapter 2",
+    ], 55),
+    "theory_ch02_expand": ([
+        "raw text",
+        "for each (abbreviation, expansion) in dictionary:",
+        ("build word-boundary pattern", "case-insensitive"),
+        "substitute every match with the expansion",
+        "expanded text",
+    ], 60),
+    "theory_ch04_embed": ([
+        "text (\"stuck pipe\")",
+        ("embedding model", "all-MiniLM-L6-v2"),
+        ("vector", "384 numbers"),
+        "compare via cosine similarity",
+        "nearby vectors = similar meaning",
+    ], 55),
+    "theory_ch05_pipeline": ([
+        "DDR PDF",
+        ("Extraction", "Chapter 1 -- pdfplumber"),
+        ("Cleaning", "Chapter 2 -- abbreviation expansion"),
+        ("Embeddings", "Chapter 4 -- sentence-transformers"),
+        ("Retriever", "Chapter 4 -- cosine similarity search"),
+        ("LLM", "this chapter -- prompt + generation"),
+        "Answer + Citations",
+    ], 62),
+    "theory_ch09_hybrid": ([
+        "Query",
+        "scored two ways",
+        "BM25 (sparse, exact terms)",
+        "Dense (semantic embedding)",
+        ("Reciprocal Rank Fusion", "combine by rank, not score"),
+        ("Cross-encoder rerank", "top candidates only"),
+        "Results",
+    ], 55),
+    "theory_ch11_evalloop": ([
+        ("hand-labeled questions", "question -> expected report"),
+        "run each through the retrieval pipeline",
+        "record the rank of the expected report",
+        "compute recall@k, MRR, NDCG@k",
+        "break results down by category and difficulty",
+        ("find the weakest category", "-> that's where to improve next"),
+    ], 62),
+    "theory_ch12_complete": ([
+        ("DDR PDF", "scanned or digital"),
+        ("OCR quality gate", "Chapter 6"),
+        ("Extraction", "Chapter 1"),
+        ("Cleaning", "Chapter 2"),
+        ("Segment-aware chunking", "Chapter 7"),
+        ("Embeddings", "Chapter 4"),
+        ("Hybrid index -- BM25 + FAISS", "Chapters 8-9"),
+        ("Retriever + Reranker", "Chapter 9"),
+        ("LLM + structured facts", "Chapter 5, 10"),
+        ("Answer + Citations + Gaps flagged", "Chapter 10"),
+    ], 62),
+}
+
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmp:
         workdir = Path(tmp)
         for name, (labels, width) in DIAGRAMS.items():
+            generate(name, labels, width, workdir)
+        for name, (labels, width) in THEORY_DIAGRAMS.items():
             generate(name, labels, width, workdir)

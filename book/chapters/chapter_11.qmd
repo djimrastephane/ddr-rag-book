@@ -117,20 +117,16 @@ more valuable than the metric computation itself, because writing the
 questions forces you to think like the engineer who will actually use the
 system.
 
-```
-hand-labeled questions
-(question -> expected report)
-   ↓
-run each through the retrieval pipeline
-   ↓
-record the rank of the expected report
-   ↓
-compute recall@k, MRR, NDCG@k
-   ↓
-break results down by category and difficulty
-   ↓
-find the weakest category -> that's where to improve next
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch11_evalloop_light.svg){.diagram-light width="260"}
+![](../figures/diagrams/theory_ch11_evalloop_dark.svg){.diagram-dark width="260"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch11_evalloop.pdf){width="260"}
+:::
 
 ## Implementation
 

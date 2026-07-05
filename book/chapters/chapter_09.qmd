@@ -73,23 +73,16 @@ report placed in each ranking, not by the raw number each method
 happened to produce.
 :::
 
-```
-Query
-   ↓
-scored two ways:
-   ↓
-BM25 (sparse, exact terms)
-   ↓
-Dense (semantic embedding)
-   ↓
-Reciprocal Rank Fusion
-(combine by rank, not score)
-   ↓
-Cross-encoder rerank
-(top candidates only)
-   ↓
-Results
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch09_hybrid_light.svg){.diagram-light width="240"}
+![](../figures/diagrams/theory_ch09_hybrid_dark.svg){.diagram-dark width="240"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch09_hybrid.pdf){width="240"}
+:::
 
 **Cross-encoder reranking** is the last, most expensive step, and
 deliberately runs on only the top handful of fused candidates, not the
