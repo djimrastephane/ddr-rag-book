@@ -6,19 +6,23 @@ I wrote this book because I kept seeing the same gap on drilling and
 completions teams: the field generates enormous amounts of written
 operational knowledge — Daily Drilling Reports, end-of-well reports, morning
 reports, NPT logs — and almost none of it is *usable* by the next engineer
-who needs it [@spe_drilling_reports]. It sits in PDF form, scanned or digital, named inconsistently,
-scattered across SharePoint folders and email threads. When a rig hits a
-screenout at 9,200 ft, the fastest way to find out if this has happened
-before is usually to ask the oldest person in the room.
+who needs it [@spe_drilling_reports]. It sits in inconsistently named
+PDFs — scanned or digital — scattered across SharePoint folders and
+email threads. When the assembly loses tool face mid-slide and gets
+stuck downhole, the fastest way to find out if this has happened before
+is often to ask the engineer who's been on the project the longest,
+hoping they remember a similar incident.
 
-And this isn't solved by simply dropping every PDF into a folder and
-searching it. In this book's own archive, searching `"stuck pipe"` finds
-the report where the pipe actually got stuck — but misses the very next
-day's report entirely, because that one talks about `"tight hole,"`
-`"high torque,"` and a `"decision to pull out of hole"` instead. Same
-event, continuing, one day later — invisible to anything that only
-matches on exact words. That gap, between what a report *says* and what
-it *means*, is exactly what retrieval-augmented generation (RAG) closes.
+This book's own archive has exactly that event — a real stuck-pipe day,
+verified against the original report. But dropping the archive's PDFs
+into a folder and searching them doesn't solve it either: searching
+`"stuck pipe"` finds the report where the pipe actually got stuck — but
+misses the very next day's report entirely, because that one talks about
+`"tight hole,"` `"high torque,"` and a `"decision to pull out of hole"`
+instead. Same event, continuing, one day later — invisible to anything
+that only matches on exact words. That gap, between what a report
+*says* and what it *means*, is exactly what retrieval-augmented
+generation (RAG) closes.
 
 Large language models are genuinely useful here — not because they are
 new or exciting, but because they solve a real, boring, expensive
