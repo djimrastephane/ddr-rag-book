@@ -15,6 +15,16 @@ In *Building Industrial RAG Systems from Daily Drilling Reports*, you build a wo
 
 Every example uses real, publicly available Daily Drilling Reports from **Utah FORGE** — a Department of Energy-funded geothermal research well — not synthetic stand-ins. A real stuck-pipe event, a real packers-fail-to-fishing sequence, and a real reporting gap all appear exactly as filed.
 
+### Why Not Just Ctrl+F the PDFs?
+
+A fair question before investing any time here: why not just open the DDRs and search for a phrase, or dump them in a folder and `grep`?
+
+Because the words you'd search for are rarely the only words the archive uses for the same event. In this book's real Utah FORGE archive, searching `"stuck pipe"` finds the report where the pipe actually got stuck — but misses the very next day's report entirely, because that one talks about `"tight hole"`, `"high torque"`, and a `"decision to pull out of hole"` instead. Same underlying story, one day later, invisible to a keyword search because it never uses the word "stuck." A keyword search only ever matches spelling; it has no notion that these phrases describe the same event, and it can't handle oilfield shorthand (`BHA`, `WOB`, `MWD`) unless every abbreviation has already been expanded by hand.
+
+RAG fixes both problems. It retrieves passages by *meaning*, not exact wording — the same `"stuck pipe"` query that missed the follow-up report entirely under keyword search finds it anyway once retrieval works by meaning (Chapter 4). And instead of handing back a folder of PDFs for an engineer to read and cross-reference themselves, it generates a synthesized answer with citations back to the exact reports it drew from — the difference between *"here are some files that might be relevant"* and *"here's what happened, and here are the two reports that prove it."*
+
+This book builds that system from scratch, starting exactly where keyword search breaks (Chapter 3) and ending with a traceable, evidence-backed answer engine (Chapter 5 onward) — grounded the entire way in one real archive, not a synthetic demo.
+
 ### What You're Building
 
 This is a real interaction with the system you'll have built by Chapter 5 — the question, the generated answer, and the exact reports backing every claim in it. Nothing here is invented; both claims in the answer are directly quoted from the real report text.
