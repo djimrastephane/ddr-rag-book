@@ -103,7 +103,7 @@ diagrams have. -->
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_chNN.pdf){width="180"}
+![](../figures/diagrams/pipeline_chNN.pdf){width="180" fig-align="center"}
 :::
 <!-- PDF format embeds the compiled .pdf directly, not the SVG -- Quarto's
 LaTeX pipeline needs rsvg-convert to rasterize an SVG for PDF output,
@@ -111,7 +111,13 @@ which isn't installed on the GitHub Actions runner (confirmed by a real
 CI failure: "Could not convert a SVG to a PDF for output. Please ensure
 that rsvg-convert is available on the path."). generate_diagrams.py
 already saves the compiled PDF alongside both SVG variants for exactly
-this reason -- always reference the .pdf here, never the .svg. -->
+this reason -- always reference the .pdf here, never the .svg.
+
+fig-align="center" is required on this line -- a bare image (no caption)
+isn't wrapped in pandoc's usual centering figure environment, so without
+it the diagram renders flush against the left margin instead of
+centered. The HTML version doesn't need this (.pipeline-diagram's
+text-align: center in custom.scss already handles it there). -->
 
 <!-- Chapter status strip (rule 9). Progress bar is 12 characters total,
 N filled for chapter N. Estimated time is a plausible range for a reader

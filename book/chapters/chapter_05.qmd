@@ -8,7 +8,7 @@
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_ch05.pdf){width="180"}
+![](../figures/diagrams/pipeline_ch05.pdf){width="180" fig-align="center"}
 :::
 
 ::: {.chapter-status}
@@ -103,7 +103,7 @@ every arrow below is real, working code you've already written:
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/theory_ch05_pipeline.pdf){width="280"}
+![](../figures/diagrams/theory_ch05_pipeline.pdf){width="280" fig-align="center"}
 :::
 
 This is deliberately the simplest version of this pipeline that could

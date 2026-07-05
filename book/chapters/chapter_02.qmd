@@ -8,7 +8,7 @@
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_ch02.pdf){width="150"}
+![](../figures/diagrams/pipeline_ch02.pdf){width="150" fig-align="center"}
 :::
 
 ::: {.chapter-status}
@@ -100,7 +100,7 @@ can list every expansion it will ever make.
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/theory_ch02_expand.pdf){width="280"}
+![](../figures/diagrams/theory_ch02_expand.pdf){width="280" fig-align="center"}
 :::
 
 ## Implementation

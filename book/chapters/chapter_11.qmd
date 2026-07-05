@@ -8,7 +8,7 @@
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_ch11.pdf){width="230"}
+![](../figures/diagrams/pipeline_ch11.pdf){width="230" fig-align="center"}
 :::
 
 ::: {.chapter-status}
@@ -125,7 +125,7 @@ system.
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/theory_ch11_evalloop.pdf){width="260"}
+![](../figures/diagrams/theory_ch11_evalloop.pdf){width="260" fig-align="center"}
 :::
 
 ## Implementation

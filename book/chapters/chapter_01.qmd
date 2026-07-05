@@ -8,7 +8,7 @@
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_ch01.pdf){width="160"}
+![](../figures/diagrams/pipeline_ch01.pdf){width="160" fig-align="center"}
 :::
 
 ::: {.chapter-status}
@@ -145,7 +145,7 @@ write that from scratch.
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/theory_ch01_extract.pdf){width="260"}
+![](../figures/diagrams/theory_ch01_extract.pdf){width="260" fig-align="center"}
 :::
 
 ## Implementation

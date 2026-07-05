@@ -8,7 +8,7 @@
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_ch04.pdf){width="180"}
+![](../figures/diagrams/pipeline_ch04.pdf){width="180" fig-align="center"}
 :::
 
 ::: {.chapter-status}
@@ -98,7 +98,7 @@ comfortably in memory.
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/theory_ch04_embed.pdf){width="260"}
+![](../figures/diagrams/theory_ch04_embed.pdf){width="260" fig-align="center"}
 :::
 
 ## Implementation

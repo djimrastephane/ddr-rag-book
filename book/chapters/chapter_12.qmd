@@ -8,7 +8,7 @@
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/pipeline_ch12.pdf){width="220"}
+![](../figures/diagrams/pipeline_ch12.pdf){width="220" fig-align="center"}
 :::
 
 ::: {.chapter-status}
@@ -357,7 +357,7 @@ you completed, not an aspiration:
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/theory_ch12_complete.pdf){width="280"}
+![](../figures/diagrams/theory_ch12_complete.pdf){width="280" fig-align="center"}
 :::
 
 Two more pieces sit alongside this pipeline rather than inside it —
