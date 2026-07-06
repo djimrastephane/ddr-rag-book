@@ -14,13 +14,22 @@ from pathlib import Path
 class Citation:
     report: str
     page: int | None = None
+    report_date: str | None = None  # named report_date, not date -- date is
+                                     # the stdlib class imported below
 
 
 def format_evidence(citations: list[Citation]) -> str:
     """Turn a list of citations into a human-readable evidence block --
     the same format used throughout this book's answers, so a claim is
     never presented without a way to check it against the source."""
-    lines = [f"  {c.report}" + (f" page {c.page}" if c.page else "") for c in citations]
+    lines = []
+    for c in citations:
+        line = f"  {c.report}"
+        if c.page:
+            line += f" page {c.page}"
+        if c.report_date:
+            line += f" ({c.report_date})"
+        lines.append(line)
     return "Evidence:\n" + "\n".join(lines)
 
 
@@ -29,13 +38,14 @@ def citations_from_search(chunk_results: list[tuple[int, float]],
     """Turn raw FAISS results into real Citation objects.
 
     This is the piece the earlier chapters never wired up: `metadata[idx]`
-    -- a real report filename and page number -- came from Chapter 8's
-    build_chunk_metadata_index(), which in turn came from Chapter 7's
-    page-aware chunk_pages_by_tokens(), which came from Chapter 1's
-    "--- Page N ---" markers. A Citation here is never invented -- it's
-    read straight off the chunk that actually matched.
+    -- a real report filename, page number, and report date -- came from
+    Chapter 8's build_chunk_metadata_index(), which in turn came from
+    Chapter 7's page-aware chunk_pages_by_tokens() (page) and the report's
+    own filename (date). A Citation here is never invented -- it's read
+    straight off the chunk that actually matched.
     """
-    return [Citation(report=metadata[idx]["report"], page=metadata[idx]["page"])
+    return [Citation(report=metadata[idx]["report"], page=metadata[idx]["page"],
+                      report_date=metadata[idx].get("date"))
             for idx, _score in chunk_results]
 
 

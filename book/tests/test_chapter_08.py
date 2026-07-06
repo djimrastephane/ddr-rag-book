@@ -7,6 +7,14 @@ import numpy as np
 import pytest
 
 
+def test_report_date_reads_the_real_filename_convention():
+    from build_faiss_index import report_date
+
+    assert report_date("FORGE-16A-78-32_Drilling_038_2020-11-26.txt") == "2020-11-26"
+    assert report_date("FORGE-16A-78-32_Completion_003_2021-01-06.pdf") == "2021-01-06"
+    assert report_date("no_date_here.txt") is None
+
+
 @pytest.mark.slow
 def test_faiss_index_matches_brute_force_search(extracted_sample_text_dir, tmp_path):
     from build_faiss_index import build_index, load_index, save_index, search
@@ -49,7 +57,8 @@ def test_chunk_metadata_index_cites_the_real_stuck_pipe_page(extracted_sample_te
 
     query_vec = model.encode(["stuck pipe"], normalize_embeddings=True)[0]
     results = search(index, query_vec, top_k=3)
-    top_report, top_page = metadata[results[0][0]]["report"], metadata[results[0][0]]["page"]
+    top = metadata[results[0][0]]
 
-    assert top_report == "FORGE-16A-78-32_Drilling_038_2020-11-26.txt"
-    assert top_page == 1
+    assert top["report"] == "FORGE-16A-78-32_Drilling_038_2020-11-26.txt"
+    assert top["page"] == 1
+    assert top["date"] == "2020-11-26"

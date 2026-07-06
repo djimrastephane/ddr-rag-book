@@ -21,8 +21,8 @@ By the end of this chapter, you will be able to:
 
 - Distinguish questions that should be answered by generation from
   questions that should be answered by structured data lookup.
-- Attach a verifiable citation (report number, page) to every claim a
-  system produces.
+- Attach a verifiable citation (report number, page, and date) to every
+  claim a system produces.
 - Detect and surface gaps in your own source archive, so the system's
   silence about a period isn't mistaken for "nothing happened."
 
@@ -215,8 +215,8 @@ Every `Citation` shown so far in this chapter was typed in by hand —
 but not that the *system* can produce one. A citation is only actually
 trustworthy if it comes from the same retrieval the answer itself used.
 This step closes that loop: run a real query against Chapter 8's
-chunk-level index, and read the report and page straight off whichever
-chunk matched — never re-typed, never assumed.
+chunk-level index, and read the report, page, and date straight off
+whichever chunk matched — never re-typed, never assumed.
 
 ## Inputs
 
@@ -226,30 +226,40 @@ chunk matched — never re-typed, never assumed.
 ## Expected Output
 
 A list of `Citation` objects built entirely from the search results —
-real reports, real pages, in ranked order.
+real reports, real pages, real dates, in ranked order.
 
 ```{python}
 #| eval: false
+@dataclass
+class Citation:
+    report: str
+    page: int | None = None
+    report_date: str | None = None  # "report_date": date is the stdlib class
+
 def citations_from_search(chunk_results: list[tuple[int, float]],
                            metadata: list[dict]) -> list[Citation]:
-    return [Citation(report=metadata[idx]["report"], page=metadata[idx]["page"])
+    return [Citation(report=metadata[idx]["report"], page=metadata[idx]["page"],
+                      report_date=metadata[idx].get("date"))
             for idx, _score in chunk_results]
 ```
 
 ## What just happened?
 
 For every `(row_index, score)` pair a search returns, this looks up
-`metadata[row_index]` — the real report and page Chapter 8 recorded for
-that exact chunk — and wraps it in a `Citation`. There's no separate
-"figure out the source" step: the metadata was attached back when the
-chunk was indexed, so reading it is all citing requires.
+`metadata[row_index]` — the real report, page, and date Chapter 8
+recorded for that exact chunk — and wraps it in a `Citation`. There's no
+separate "figure out the source" step: the metadata was attached back
+when the chunk was indexed, so reading it is all citing requires. The
+field is named `report_date`, not `date` — `date` is already the name of
+the standard library class this file imports below for `find_date_gaps`,
+and shadowing it would be its own quiet bug waiting to happen.
 
 Run this against the real archive for `"stuck pipe"` and the top result
 is:
 
 ```
 Evidence:
-  FORGE-16A-78-32_Drilling_038_2020-11-26.txt page 1
+  FORGE-16A-78-32_Drilling_038_2020-11-26.txt page 1 (2020-11-26)
 ```
 
 That's the same report #38 this whole book has used for the stuck-pipe
@@ -260,7 +270,9 @@ chunk-level index. Every DDR in this sample archive is a single page, so
 `page` reads `1` every time here; the code doesn't know that in advance,
 and would report page 4 just as readily on a report that actually had
 one, which is the entire point of building it this way instead of typing
-`page=1` by hand.
+`page=1` by hand. The date, unlike the page, isn't a Chapter 7 invention
+at all — it was always sitting in the filename; this step is the first
+place anything actually reads it.
 
 ## Production Reality
 
@@ -354,7 +366,9 @@ A reference solution is in `code/chapter_10/challenge/`.
   hand-typed `page=1` proves the data structure works, not that the
   system can produce one. Chapters 7-10 wire the real value through:
   Chapter 1's page markers, Chapter 7's per-page chunking, Chapter 8's
-  chunk metadata, read back here.
+  chunk metadata, read back here. Not every field needs that much
+  plumbing, though — the report date was sitting in the filename the
+  whole time; the work there was reading it, not producing it.
 - A system that can tell you what it *doesn't have* is more trustworthy
   than one that answers fluently regardless of coverage — this archive's
   real two-day gap at the Drilling-to-Completion handover is exactly the
@@ -377,8 +391,8 @@ A reference solution is in `code/chapter_10/challenge/`.
 
 ::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
 **`traceable_answers.py`** — a citation and gap-detection layer: every
-claim carries a real, live-search-sourced citation — report and page,
-never hand-typed — and every silence in the archive gets surfaced
+claim carries a real, live-search-sourced citation — report, page, and
+date, never hand-typed — and every silence in the archive gets surfaced
 instead of hidden.
 :::
 
