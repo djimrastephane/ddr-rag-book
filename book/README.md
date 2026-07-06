@@ -94,7 +94,7 @@ reproducible offline):
 
 **Part II — Industrialising the System** (grounded in **DDR_UTAH_FORGE**,
 a companion pipeline built specifically against this book's public
-archive — real per-document extraction, a real 76-document/2,943-chunk
+archive — real per-document extraction, a real 76-document/1,428-chunk
 global index, and real, verified structural findings like the archive's
 genuine reporting gap):
 
