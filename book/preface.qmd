@@ -6,7 +6,7 @@ I wrote this book because I kept seeing the same gap on drilling and
 completions teams: the field generates enormous amounts of written
 operational knowledge — Daily Drilling Reports, end-of-well reports, morning
 reports, NPT logs — and almost none of it is *usable* by the next engineer
-who needs it [@spe_drilling_reports]. It sits in inconsistently named
+who needs it [@dawson2014ddr]. It sits in inconsistently named
 PDFs — scanned or digital — scattered across SharePoint folders and
 email threads. When the assembly loses tool face mid-slide and gets
 stuck downhole, the fastest way to find out if this has happened before
