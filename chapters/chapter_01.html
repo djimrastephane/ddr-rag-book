@@ -699,7 +699,7 @@ Pipe free</code></pre>
 FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
 ...
 FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
-<div id="5bb1e969" class="cell" data-execution_count="1">
+<div id="2c806d00" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -757,7 +757,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 <section id="expected-output-1" class="level2" data-number="1.12">
 <h2 data-number="1.12" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">1.12</span> Expected Output</h2>
 <p>The full text of the report’s first page, printed to your terminal — header block, casing and mud tables, BHA component list, survey data, and the time breakdown quoted above, all as plain text.</p>
-<div id="0a680808" class="cell" data-execution_count="2">
+<div id="8936775c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
@@ -796,7 +796,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 <section id="expected-output-2" class="level2" data-number="1.16">
 <h2 data-number="1.16" class="anchored" data-anchor-id="expected-output-2"><span class="header-section-number">1.16</span> Expected Output</h2>
 <p>One combined string containing every page’s text, with a marker like <code>--- Page 1 ---</code> showing where each page starts.</p>
-<div id="a3dfd6b7" class="cell" data-execution_count="3">
+<div id="d31822db" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
