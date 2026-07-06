@@ -9,6 +9,14 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-07-06
+
+### Added
+
+- README now links to the latest stable release and `CHANGELOG.md`, and
+  notes that the live site tracks `main`, which can be ahead of the most
+  recently tagged release.
+
 ## [1.0.0] - 2026-07-06
 
 ### Added
