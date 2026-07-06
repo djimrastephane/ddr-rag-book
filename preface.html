@@ -566,7 +566,7 @@ div.csl-indent {
 
 <section id="why-this-book-exists" class="level2">
 <h2 class="anchored" data-anchor-id="why-this-book-exists">Why this book exists</h2>
-<p>I wrote this book because I kept seeing the same gap on drilling and completions teams: the field generates enormous amounts of written operational knowledge — Daily Drilling Reports, end-of-well reports, morning reports, NPT logs — and almost none of it is <em>usable</em> by the next engineer who needs it <span class="citation" data-cites="spe_drilling_reports">(<a href="references.html#ref-spe_drilling_reports" role="doc-biblioref">Society of Petroleum Engineers 2022</a>)</span>. It sits in inconsistently named PDFs — scanned or digital — scattered across SharePoint folders and email threads. When the assembly loses tool face mid-slide and gets stuck downhole, the fastest way to find out if this has happened before is often to ask the engineer who’s been on the project the longest, hoping they remember a similar incident.</p>
+<p>I wrote this book because I kept seeing the same gap on drilling and completions teams: the field generates enormous amounts of written operational knowledge — Daily Drilling Reports, end-of-well reports, morning reports, NPT logs — and almost none of it is <em>usable</em> by the next engineer who needs it <span class="citation" data-cites="dawson2014ddr">(<a href="references.html#ref-dawson2014ddr" role="doc-biblioref">Dawson and Verkuil 2014</a>)</span>. It sits in inconsistently named PDFs — scanned or digital — scattered across SharePoint folders and email threads. When the assembly loses tool face mid-slide and gets stuck downhole, the fastest way to find out if this has happened before is often to ask the engineer who’s been on the project the longest, hoping they remember a similar incident.</p>
 <p>This book’s own archive has exactly that event — a real stuck-pipe day, verified against the original report. But dropping the archive’s PDFs into a folder and searching them doesn’t solve it either: searching <code>"stuck pipe"</code> finds the report where the pipe actually got stuck — but misses the very next day’s report entirely, because that one talks about <code>"tight hole,"</code> <code>"high torque,"</code> and a <code>"decision to pull out of hole"</code> instead. Same event, continuing, one day later — invisible to anything that only matches on exact words. That gap, between what a report <em>says</em> and what it <em>means</em>, is exactly what retrieval-augmented generation (RAG) closes.</p>
 <p>Large language models are genuinely useful here — not because they are new or exciting, but because they solve a real, boring, expensive problem: turning an unstructured archive into something you can query. This book teaches you to build that system yourself, understand every part of it, and trust its output, rather than adopting a black-box product you cannot inspect.</p>
 </section>
@@ -602,11 +602,11 @@ div.csl-indent {
 <!-- -->
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-dawson2014ddr" class="csl-entry" role="listitem">
+Dawson, Colin, and Harry Verkuil. 2014. <span>“From a Daily Drilling Report to a Data and Performance Management Tool.”</span> <em>SPE Intelligent Energy International Conference and Exhibition</em>.
+</div>
 <div id="ref-matthes2023python" class="csl-entry" role="listitem">
 Matthes, Eric. 2023. <em>Python Crash Course: A Hands-on, Project-Based Introduction to Programming</em>. 3rd ed. No Starch Press.
-</div>
-<div id="ref-spe_drilling_reports" class="csl-entry" role="listitem">
-Society of Petroleum Engineers. 2022. <span>“Digitalisation of Daily Drilling Reports: Challenges and Opportunities.”</span> <em>SPE Digital Transformation Series</em>.
 </div>
 </div>
 </section>
@@ -1101,7 +1101,7 @@ Society of Petroleum Engineers. 2022. <span>“Digitalisation of Daily Drilling 
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>completions teams: the field generates enormous amounts of written</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>operational knowledge — Daily Drilling Reports, end-of-well reports, morning</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>reports, NPT logs — and almost none of it is *usable* by the next engineer</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>who needs it <span class="co">[</span><span class="ot">@spe_drilling_reports</span><span class="co">]</span>. It sits in inconsistently named</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>who needs it <span class="co">[</span><span class="ot">@dawson2014ddr</span><span class="co">]</span>. It sits in inconsistently named</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>PDFs — scanned or digital — scattered across SharePoint folders and</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>email threads. When the assembly loses tool face mid-slide and gets</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>stuck downhole, the fastest way to find out if this has happened before</span>
