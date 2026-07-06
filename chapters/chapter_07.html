@@ -641,7 +641,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 </div>
 </div>
 <p>The companion pipeline, <strong>DDR_UTAH_FORGE</strong>, implements both in <code>src/rag_pdf/chunking.py</code>. <code>chunk_text_by_tokens()</code> does token-based splitting with configurable overlap (so context isn’t lost entirely at a boundary), falling back to a word-based approximation if <code>tiktoken</code> isn’t available. <code>split_text_for_segment_aware_chunking()</code> goes further: it walks the text line by line, detects boundary patterns, and returns a list of <code>SegmentBlock</code> objects — each one bundling together a title, its text, and a <code>boundary_type</code> (<code>MATCH</code>, <code>INSERT</code>, or <code>CONTINUATION</code>) recording <em>why</em> the segment starts where it does, the same way an equipment spec sheet bundles a component’s dimensions together instead of scattering them as loose numbers.</p>
-<p>Run against the real 76-report archive, this pipeline’s chunking produces <strong>2,943 chunks</strong> — an average of about 39 chunks per report, reflecting just how much structured content (header, seven data tables, and a narrative time breakdown) each single-page DDR actually contains.</p>
+<p>Run against the real 76-report archive, this pipeline’s chunking produces <strong>1,428 chunks</strong> — an average of about 19 chunks per report, reflecting just how much structured content (header, seven data tables, and a narrative time breakdown) each single-page DDR actually contains.</p>
 <p>Token-based chunking with overlap looks like this — each chunk shares a few tokens with its neighbour, so no boundary loses context entirely:</p>
 <pre><code>tokens:   t1  t2  t3  t4  t5  t6  t7  t8  t9  t10 t11 t12
 
@@ -669,7 +669,7 @@ chunk 3:                         [t9  t10 t11 t12]
 <section id="expected-output" class="level2" data-number="7.8">
 <h2 data-number="7.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">7.8</span> Expected Output</h2>
 <p>A list of text chunks, each roughly <code>chunk_tokens</code> tokens long, each overlapping the next by <code>overlap_tokens</code> tokens.</p>
-<div id="4f65e764" class="cell" data-execution_count="1">
+<div id="449d6e10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_07/token_chunking.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tiktoken</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -708,7 +708,7 @@ chunk 3:                         [t9  t10 t11 t12]
 <section id="expected-output-1" class="level2" data-number="7.12">
 <h2 data-number="7.12" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">7.12</span> Expected Output</h2>
 <p>A list of <code>(page_number, chunk_text)</code> pairs — the same chunks as before, each now labelled with the real page it came from.</p>
-<div id="2136a2be" class="cell" data-execution_count="2">
+<div id="4a6f7041" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>PAGE_MARKER <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"--- Page </span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs"> ---</span><span class="ch">\n</span><span class="op">?</span><span class="vs">"</span>)</span>
@@ -1444,7 +1444,7 @@ chunk 3:                         [t9  t10 t11 t12]
 <span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>scattering them as loose numbers.</span>
 <span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a>Run against the real 76-report archive, this pipeline's chunking produces</span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>**2,943 chunks** — an average of about 39 chunks per report, reflecting</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>**1,428 chunks** — an average of about 19 chunks per report, reflecting</span>
 <span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>just how much structured content (header, seven data tables, and a</span>
 <span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>narrative time breakdown) each single-page DDR actually contains.</span>
 <span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a></span>
