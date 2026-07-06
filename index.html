@@ -670,7 +670,7 @@ Evidence:
 <li><strong>Estimated time</strong> and <strong>difficulty badge</strong> (🟢 Beginner, 🟠 Intermediate, 🔴 Advanced) — next to the progress bar, so you know the commitment before you start.</li>
 <li><strong>CHECKPOINT</strong> — a checklist near the end of each chapter, confirming the specific skills you just gained.</li>
 <li><strong>WHAT YOU BUILT</strong> — a green box naming the concrete artifact (a script, an index, a pipeline) you now have, distinct from the conceptual “Key takeaways” earlier in the chapter.</li>
-<li><strong>Field notes</strong> 🔧 — a real, independently verified operational vignette: something an experienced engineer would notice in the data that a tool alone would miss.</li>
+<li><strong>Field notes</strong> 🔧 — a real operational vignette: something an experienced engineer would notice in the data that a tool alone would miss. Wherever this book’s own bundled code and data can reproduce the result, it has been checked directly; a handful draw on the companion pipeline’s own structured outputs (e.g.&nbsp;<code>ddr_facts.parquet</code>, its BM25 index) and are reported rather than independently re-derived here.</li>
 </ul>
 <p>You’ll also meet four recurring engineers, each asking the question that opens a chapter’s <strong>Operational Problem</strong>:</p>
 <table class="caption-top table">
@@ -1316,41 +1316,44 @@ Evidence:
 <span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**WHAT YOU BUILT** — a green box naming the concrete artifact (a</span>
 <span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>  script, an index, a pipeline) you now have, distinct from the</span>
 <span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>  conceptual "Key takeaways" earlier in the chapter.</span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Field notes** 🔧 — a real, independently verified operational</span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>  vignette: something an experienced engineer would notice in the data</span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>  that a tool alone would miss.</span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>You'll also meet four recurring engineers, each asking the question that</span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>opens a chapter's **Operational Problem**:</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Field notes** 🔧 — a real operational vignette: something an</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>  experienced engineer would notice in the data that a tool alone would</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>  miss. Wherever this book's own bundled code and data can reproduce the</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>  result, it has been checked directly; a handful draw on the companion</span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>  pipeline's own structured outputs (e.g. <span class="in">`ddr_facts.parquet`</span>, its BM25</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>  index) and are reported rather than independently re-derived here.</span>
 <span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Name <span class="pp">|</span> Role <span class="pp">|</span></span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Oumy <span class="pp">|</span> Drilling Engineer <span class="pp">|</span></span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mike <span class="pp">|</span> Completions Engineer <span class="pp">|</span></span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sarah <span class="pp">|</span> Intervention Engineer <span class="pp">|</span></span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sean <span class="pp">|</span> Production Engineer <span class="pp">|</span></span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>They're a framing device, not a source of data: whichever question Oumy,</span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>Mike, Sarah, or Sean asks, every report, number, and quote used to answer</span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>it is the real, unaltered Utah FORGE archive described above — never</span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>invented on their behalf.</span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Companion repository</span></span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>All code, sample datasets, and notebooks referenced in this book live in the</span>
-<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>companion repository. Every chapter lists exactly which files you need</span>
-<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>under **Repository files**.</span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>If you've never installed Python or don't know which editor to use, start</span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>with **Part 0 — Preparing Your Python Workshop**: it walks through</span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>everything from scratch, works with any of five common setups (Jupyter</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>Notebook, VS Code, PyCharm Community, Positron, or a terminal alone), and</span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>ends with your first script actually running. If you already have Python</span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>and a working setup, jump straight to Chapter 1 — Appendix A has the rest</span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>of the reference material (the sample dataset, rendering the book, the</span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>companion pipeline) if you need it later.</span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>Let's read our first DDR.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>You'll also meet four recurring engineers, each asking the question that</span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>opens a chapter's **Operational Problem**:</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Name <span class="pp">|</span> Role <span class="pp">|</span></span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Oumy <span class="pp">|</span> Drilling Engineer <span class="pp">|</span></span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mike <span class="pp">|</span> Completions Engineer <span class="pp">|</span></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sarah <span class="pp">|</span> Intervention Engineer <span class="pp">|</span></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sean <span class="pp">|</span> Production Engineer <span class="pp">|</span></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>They're a framing device, not a source of data: whichever question Oumy,</span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>Mike, Sarah, or Sean asks, every report, number, and quote used to answer</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>it is the real, unaltered Utah FORGE archive described above — never</span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>invented on their behalf.</span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a><span class="fu">## Companion repository</span></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>All code, sample datasets, and notebooks referenced in this book live in the</span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>companion repository. Every chapter lists exactly which files you need</span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>under **Repository files**.</span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>If you've never installed Python or don't know which editor to use, start</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>with **Part 0 — Preparing Your Python Workshop**: it walks through</span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>everything from scratch, works with any of five common setups (Jupyter</span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>Notebook, VS Code, PyCharm Community, Positron, or a terminal alone), and</span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>ends with your first script actually running. If you already have Python</span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>and a working setup, jump straight to Chapter 1 — Appendix A has the rest</span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>of the reference material (the sample dataset, rendering the book, the</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>companion pipeline) if you need it later.</span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>Let's read our first DDR.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
