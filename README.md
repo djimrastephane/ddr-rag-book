@@ -4,12 +4,7 @@
 
 This repository contains the chapters, code, and sample data for **Building Industrial RAG Systems from Daily Drilling Reports** — a hands-on, build-as-you-go book that teaches retrieval-augmented generation (RAG) to well, drilling, and completions engineers, assuming zero prior programming experience.
 
-<br>
-<br>
-
 <a href="https://djimrastephane.github.io/ddr-rag-book/"><img src="book/figures/cover.jpg" width="250px"></a>
-
-<br>
 
 In *Building Industrial RAG Systems from Daily Drilling Reports*, you build a working RAG system from scratch, one chapter at a time: extracting text from a real Daily Drilling Report (DDR) PDF, expanding oilfield shorthand, searching an archive by keyword and then by meaning, and finally generating cited, evidence-backed answers to real engineering questions — no machine learning background assumed, no black-box product involved.
 
@@ -27,7 +22,7 @@ This book builds that system from scratch, starting exactly where keyword search
 
 ### What You're Building
 
-This is a real interaction with the system you'll have built by Chapter 5 — the question, the generated answer, and the exact reports backing every claim in it. Nothing here is invented; both claims in the answer are directly quoted from the real report text.
+The box below is a **plain-text preview of the terminal output** you'll see once you've built the system in Chapter 5 — not code to type or run yourself. It shows a real interaction: the question, the generated answer, and the exact reports backing every claim in it. Nothing here is invented; both claims in the answer are directly quoted from the real report text.
 
 ```
 Question: What led to the fishing operation on report #50?
@@ -45,13 +40,9 @@ Evidence:
 
 That's it — a question, an answer, and the exact source reports you'd need to check it against. No black box.
 
-<br>
-
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
 - [Read the book online](https://djimrastephane.github.io/ddr-rag-book/)
 - License: code is [MIT](LICENSE); the book's text is [CC BY 4.0](LICENSE-CONTENT.md)
-
-<br>
 
 To get a copy of this repository, click the [Download ZIP](https://github.com/djimrastephane/ddr-rag-book/archive/refs/heads/main.zip) button, or run the following in a terminal:
 
@@ -61,8 +52,7 @@ git clone https://github.com/djimrastephane/ddr-rag-book.git
 
 Never used a terminal or Git before? That's exactly what **Start Here** and **Part 0** below are for — nothing past this point assumes you already know how.
 
-<br>
-<br>
+---
 
 # Start Here
 
@@ -85,8 +75,7 @@ If this is your first Python project, do these five things in order:
 
 That's under two hours from "nothing installed" to searching a real drilling report archive by keyword. You don't need to understand everything before you start — you need to run the first command. Everything else follows from there.
 
-<br>
-<br>
+---
 
 # Your Learning Journey
 
@@ -112,41 +101,18 @@ Operational Intelligence
 
 By the last arrow, you're not reading about RAG systems — you built one, and you understand every piece of it.
 
-<br>
-&nbsp;
+## What You Will Build and Learn
 
-## What You'll Build by the End
+By the end of the book you will have built seven real, working artifacts — not seven topics you read about — and be able to:
 
-By the end of the book you will have built:
-
-- ✓ PDF extraction pipeline
-- ✓ Abbreviation expansion engine
-- ✓ Keyword search engine
-- ✓ Semantic search engine
-- ✓ Industrial RAG system
-- ✓ Traceable answer engine
-- ✓ Cross-well sequence detector
-
-Seven real, working artifacts — not seven topics you read about.
-
-<br>
-&nbsp;
-
-## What You Will Be Able to Do
-
-After working through this book, you will be able to:
-
-- Extract text from drilling reports
-- Expand oilfield abbreviations automatically
-- Search historical operations by keyword
-- Build semantic search that finds reports by meaning, not just exact wording
-- Build a complete RAG pipeline, end to end
-- Generate traceable, evidence-backed answers
-- Evaluate retrieval quality with real numbers, not guesswork
-- Detect operational patterns across wells
-
-<br>
-&nbsp;
+- ✓ **PDF extraction pipeline** — extract text from drilling reports
+- ✓ **Abbreviation expansion engine** — expand oilfield abbreviations automatically
+- ✓ **Keyword search engine** — search historical operations by keyword
+- ✓ **Semantic search engine** — find reports by meaning, not just exact wording
+- ✓ **Industrial RAG system** — a complete RAG pipeline, end to end
+- ✓ **Traceable answer engine** — generate traceable, evidence-backed answers
+- ✓ **Cross-well sequence detector** — detect operational patterns across wells
+- ✓ Evaluate retrieval quality with real numbers, not guesswork
 
 ## Who This Book Is For
 
@@ -162,9 +128,6 @@ This book is written for:
 
 If you've ever read a DDR and wished you could search years of them in seconds, this book is for you.
 
-<br>
-&nbsp;
-
 ## Who This Book Is Not For
 
 This book is probably not for you if:
@@ -175,9 +138,6 @@ This book is probably not for you if:
 - you already build production-scale RAG systems professionally
 
 None of that is a criticism — it just means your time is better spent elsewhere.
-
-<br>
-&nbsp;
 
 ## Expected Background
 
@@ -195,9 +155,6 @@ None of that is a criticism — it just means your time is better spent elsewher
 - software engineering
 - Git
 - Linux
-
-<br>
-&nbsp;
 
 ## How Long Does Each Chapter Take
 
@@ -219,9 +176,6 @@ None of that is a criticism — it just means your time is better spent elsewher
 
 There's no need to do this in one sitting — most readers spread it across several days, a chapter or two at a time.
 
-<br>
-&nbsp;
-
 ## Minimum Computer Requirements
 
 **Minimum:**
@@ -236,9 +190,6 @@ There's no need to do this in one sitting — most readers spread it across seve
 
 **No GPU required. No cloud account required. No paid API required.** Everything in this book runs locally on an ordinary laptop. The embedding model used from Chapter 4 onward (`all-MiniLM-L6-v2`) and the vector index in Chapter 8 (`faiss-cpu`) are both deliberately chosen to be small and fast on CPU. Chapter 5's `llm_call` argument is provider-agnostic — you *can* plug in a hosted API if you want one, but nothing about following this book requires it.
 
-<br>
-&nbsp;
-
 ## Choose Your Workshop
 
 | Environment | Recommended for |
@@ -251,9 +202,6 @@ There's no need to do this in one sitting — most readers spread it across seve
 
 **There is no wrong choice. All examples run identically in every one of these.** Part 0 covers general setup; each link above has a short, dedicated walkthrough for that specific tool.
 
-<br>
-&nbsp;
-
 ## First Success Checkpoint
 
 You are ready for Chapter 1 when:
@@ -264,9 +212,6 @@ You are ready for Chapter 1 when:
 - ✅ your virtual environment is active
 
 All four checks are covered in Part 0 — if any of them aren't true yet, that's exactly what it's for.
-
-<br>
-&nbsp;
 
 ## Common Reader Journeys
 
@@ -279,9 +224,6 @@ All four checks are covered in Part 0 — if any of them aren't true yet, that's
 **"I already build RAG systems professionally."**
 → Skim Part I for context, then start at Part II (Chapter 6), where OCR gating, hybrid retrieval, and traceability are covered.
 
-<br>
-&nbsp;
-
 ## What Makes This Book Different
 
 - Uses real DDRs rather than synthetic examples
@@ -291,8 +233,7 @@ All four checks are covered in Part 0 — if any of them aren't true yet, that's
 - Emphasizes traceability over generation quality
 - Teaches industrial constraints (scanned reports, retrieval failures, evaluation) rather than a toy happy-path
 
-<br>
-<br>
+---
 
 # Table of Contents
 
@@ -301,9 +242,6 @@ Everything below this point is reference material — you don't need to read it 
 Please note that this `README.md` file is a Markdown (`.md`) file — GitHub renders it automatically, and if you downloaded this repository as a ZIP, any Markdown previewer will too. The book's chapters, however, are written as `.qmd` (Quarto Markdown) files, which GitHub's file viewer shows as plain unformatted source. Read them properly formatted at [djimrastephane.github.io/ddr-rag-book](https://djimrastephane.github.io/ddr-rag-book/), which renders automatically from this repository.
 
 For the full repository layout (folder tree, part/chapter file map) see [`book/README.md`](book/README.md).
-
-<br>
-<br>
 
 [![Publish book to GitHub Pages](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/publish.yml/badge.svg)](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/publish.yml)
 [![Code tests Linux](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-linux.yml/badge.svg)](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-linux.yml)
@@ -333,22 +271,13 @@ Chapter titles in the table below link to the rendered, readable page for that r
 | Appendices A1–A5: Jupyter / VS Code / PyCharm / Positron / Terminal-only | - | [./book/appendix](book/appendix) |
 | [Appendix B: Oilfield Abbreviation Glossary](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_b_oilfield_glossary.html) | - | [appendix_b_oilfield_glossary.qmd](book/appendix/appendix_b_oilfield_glossary.qmd) |
 
-<br>
-&nbsp;
-
 ## Companion Pipeline
 
 [**DDR_UTAH_FORGE**](https://github.com/djimrastephane/DDR_UTAH_FORGE) is a separate, public repository: a real, working DDR intelligence pipeline built specifically against this book's public archive, which Part II's chapters reference for verified real-world numbers (a real 2,943-chunk global index, a real detected reporting gap, and so on). This book's own code never depends on it — every chapter's script in `book/code/chapter_NN/` runs standalone against the committed sample archive. See [Appendix A, Section 3](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii) for how to clone it and how the two projects relate.
 
-<br>
-&nbsp;
-
 ## Exercises
 
 Every chapter includes a **Practical exercise** (a guided, checkable task using the real sample archive) and a **Challenge exercise** (a harder, more open-ended extension). Reference solutions for challenge exercises live alongside each chapter's code, e.g. [`book/code/chapter_01/challenge/`](book/code/chapter_01/challenge).
-
-<br>
-&nbsp;
 
 ## Automated Tests
 
@@ -359,9 +288,6 @@ pip install -r requirements.txt
 pytest -v
 ```
 
-<br>
-&nbsp;
-
 ## Bonus Material
 
 Every chapter ends with a **Repository files** table listing the exact files — in this repository and, for Part II, in the companion pipeline — that back everything the chapter claims. A few worth knowing about on their own:
@@ -370,15 +296,13 @@ Every chapter ends with a **Repository files** table listing the exact files —
 - Each chapter's **Field notes** callout is a real, independently-verified result checked against the actual archive before being written down — not an illustrative estimate.
 - [`book/appendix/appendix_b_oilfield_glossary.qmd`](book/appendix/appendix_b_oilfield_glossary.qmd) extends Chapter 2's abbreviation dictionary with common oilfield terms beyond what this specific archive contains.
 
-<br>
-&nbsp;
-
 ## Questions, Feedback, and Contributing to This Repository
 
 Questions, corrections (an oilfield abbreviation that's wrong for your basin, a chapter that assumes something it shouldn't, a bug in the code), and feedback are all welcome via [GitHub Issues](https://github.com/djimrastephane/ddr-rag-book/issues).
 
-<br>
-&nbsp;
+## A Note on AI-Assisted Development
+
+The ideas, engineering examples and technical validation are the author's. AI tools including Claude were used to accelerate coding, editing and documentation tasks.
 
 ## Citation
 

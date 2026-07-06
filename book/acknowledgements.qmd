@@ -12,6 +12,10 @@ relies on throughout: Python, Quarto, Jupyter, pandas, and the broader
 Python data and NLP ecosystem. None of the engineering in this book would
 be reproducible without them.
 
+The ideas, engineering examples and technical validation are the
+author's. AI tools including Claude were used to accelerate coding,
+editing and documentation tasks.
+
 Finally, thanks to every reader working through this material on a real
 archive of real reports. If you find an error, an oilfield abbreviation
 that's wrong for your basin, or a chapter that assumes something it
