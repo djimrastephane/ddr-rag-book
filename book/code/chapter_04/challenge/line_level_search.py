@@ -1,9 +1,11 @@
 """Chapter 4 challenge solution: reproduce the Field Notes line-level result.
 
-Embeds three isolated lines -- report #39's high-torque line, report #39's
-hole-drag line, and a genuinely unrelated line from report #36 -- and
-confirms the high-torque line scores meaningfully higher against
-"stuck pipe" than the other two, which should score close to each other.
+Embeds three isolated lines, quoted verbatim from the source reports --
+report #39's high-torque line, report #39's hole-drag line, and a
+genuinely unrelated line from report #36 -- and confirms the high-torque
+line scores highest against "stuck pipe", report #39's own hole-drag line
+scores close behind it, and the genuinely unrelated line trails both by a
+real margin.
 
 Usage:
     python code/chapter_04/challenge/line_level_search.py
@@ -20,8 +22,8 @@ from sentence_transformers import SentenceTransformer  # noqa: E402
 
 LINES = {
     "r39_high_torque": "Due to high torque decision to pull out of hole",
-    "r39_hole_drag": "Trip out of hole with BHA 21, Hole drag from 6,050 feet to 5,901 feet no issues",
-    "r36_unrelated": "Trip out of hole with BHA number 17 core assembly, lay down core barrels",
+    "r39_hole_drag": "Hole drag from 6,050' to 5,901' no issues",
+    "r36_unrelated": "Trip out of hole with BHA #17 core assembly.",
 }
 
 
@@ -45,8 +47,8 @@ if __name__ == "__main__":
     hole_drag_score = scores[keys.index("r39_hole_drag")]
     unrelated_score = scores[keys.index("r36_unrelated")]
 
-    assert high_torque_score > hole_drag_score
-    assert high_torque_score > unrelated_score
+    assert high_torque_score > hole_drag_score > unrelated_score
     print(f"\nConfirmed: high-torque line ({high_torque_score:.4f}) scores "
-          f"clearly above both hole-drag ({hole_drag_score:.4f}) and "
-          f"unrelated content ({unrelated_score:.4f}).")
+          f"highest, report #39's own hole-drag line ({hole_drag_score:.4f}) "
+          f"scores close behind it, and the genuinely unrelated line "
+          f"({unrelated_score:.4f}) trails both by a real margin.")

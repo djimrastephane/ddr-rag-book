@@ -31,7 +31,7 @@ answer: *"Show me every report that mentions the bottom hole assembly."*
 Will it find
 report #38? Open the `.txt` file you extracted from it in Chapter 1 and
 check: the report never once writes "bottom hole assembly." It writes
-`BHA` — twenty-one times. A search tool that only knows the literal words
+`BHA` — nine times. A search tool that only knows the literal words
 you typed will come back empty, on a report that was exactly the one you
 needed.
 

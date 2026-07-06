@@ -112,7 +112,7 @@ which score belongs to which report later.
 
 ## Inputs
 
-- A folder of cleaned report text, e.g. `datasets/ddr_text_expanded/`.
+- A folder of cleaned report text, e.g. `datasets/ddr_text/`.
 
 ## Expected Output
 
@@ -268,30 +268,41 @@ torque... pull out of hole" — is a small fraction of what actually goes
 into the vector.
 
 Isolate just the narrative lines instead of the whole report, and the
-picture changes completely:
+picture changes — though not as cleanly as you might hope:
 
 ```
-0.4868  report #38 — "Work pipe, circulate lube sweep, work tool
-                       back in position, Pipe free"
+0.6244  report #38 — "Pipe free"
 0.3359  report #38 — "During the slide lost tool face and became
                        assembly became stuck"
 0.2402  report #39 — "Due to high torque decision to pull out of hole"
-0.2329  report #49 — "Attempted multiple times to set packers..."
-0.2143  report #39 — "Work tight hole at 6,526 feet."
-0.1892  report #39 — "Hole drag from 6,050' to 5,901' no issues"
-0.1892  report #36 — "Trip out of hole with BHA #17 core assembly..."
-        (genuinely unrelated coring operation, same score as above)
+0.2331  report #39 — "Hole drag from 6,050' to 5,901' no issues"
+0.2206  report #49 — "Attempted multiple times to set packers"
+0.2043  report #36 — "Trip out of hole with BHA #17 core assembly."
+        (genuinely unrelated coring operation)
+0.2008  report #39 — "Work tight hole at 6,526'."
 ```
 
-At line granularity, report #39's high-torque line clearly separates
-from genuinely unrelated content (0.24 vs. 0.19) — something whole-document
-embedding couldn't show at all.
+The two lines that directly describe the stuck-pipe event itself separate
+clearly from everything else (0.62 and 0.34 vs. everything else under
+0.25) — something whole-document embedding couldn't show at all. But
+below that, there's no clean cutoff: report #39's own `"hole drag...no
+issues"` line — a routine trip note, not part of the incident — scores
+almost as high as its `"high torque"` line (0.23 vs. 0.24), while report
+#36's genuinely unrelated coring line (0.20) lands in the same narrow
+band as report #39's own `"tight hole"` line (0.20), the actual precursor
+to the stuck-pipe event. Shared drilling vocabulary ("hole," "trip,"
+"torque") pulls topically-similar-but-irrelevant lines close to
+genuinely relevant ones once you're past the two standout lines.
 
 **Lesson:** semantic search doesn't fail because the *technique* is wrong
-— it fails here because the *unit of retrieval* is too coarse. This is
-exactly the problem Chapter 7's chunking solves, and it's worth
-remembering the next time a semantic search "isn't working": check
-what's actually inside each embedded vector before blaming the model.
+— it fails here because the *unit of retrieval* is too coarse. Line-level
+granularity narrows the field dramatically, but it doesn't hand you a
+clean similarity threshold to filter on — the middle of the ranked list
+still mixes relevant and irrelevant lines together. This is exactly the
+problem Chapter 7's chunking (and later, reranking) works on, and it's
+worth remembering the next time a semantic search "isn't working": check
+what's actually inside each embedded vector before blaming the model —
+but don't expect a single score cutoff to solve it either.
 :::
 
 ## Practical exercise
@@ -310,14 +321,14 @@ didn't appear at all — even if it isn't near the top.
 🟠 **Intermediate**
 
 **Challenge:** Reproduce the Field Notes line-level result yourself.
-Manually pull three lines of text — report #39's `"Due to high torque
-decision to pull out of hole"`, report #39's `"Hole drag from 6,050' to
-5,901' no issues"`, and report #36's `"Trip out of hole with BHA #17 core
-assembly, lay down core barrels"` (a genuinely unrelated line) — embed
-just those three strings, and confirm the high-torque line scores
-meaningfully higher against `"stuck pipe"` than the other two, which
-should score close to each other. A reference solution is in
-`code/chapter_04/challenge/`.
+Manually pull three lines of text, verbatim from the source reports —
+report #39's `"Due to high torque decision to pull out of hole"`, report
+#39's `"Hole drag from 6,050' to 5,901' no issues"`, and report #36's
+`"Trip out of hole with BHA #17 core assembly."` (a genuinely unrelated
+line) — embed just those three strings, and confirm the high-torque line
+scores highest against `"stuck pipe"`, report #39's own hole-drag line
+scores close behind it, and the genuinely unrelated line trails both by
+a real margin. A reference solution is in `code/chapter_04/challenge/`.
 
 ## Key takeaways
 
