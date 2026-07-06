@@ -43,7 +43,7 @@ search across every chunk are genuinely different operations.
 ## Theory
 
 A **vector database** (or vector index library, like FAISS
-[@johnson2019faiss]) organises embeddings so that similarity search
+[@johnson2017faiss]) organises embeddings so that similarity search
 doesn't require comparing the query against every single vector.
 
 ::: {.callout-tip title="Engineering Translation: FAISS index"}
