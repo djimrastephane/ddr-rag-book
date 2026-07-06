@@ -42,6 +42,7 @@ That's it — a question, an answer, and the exact source reports you'd need to 
 
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
 - [Read the book online](https://djimrastephane.github.io/ddr-rag-book/)
+- Latest stable release: [v1.0.0](https://github.com/djimrastephane/ddr-rag-book/releases/tag/v1.0.0) — see [CHANGELOG.md](CHANGELOG.md) for what's new in each release
 - License: code is [MIT](LICENSE); the book's text is [CC BY 4.0](LICENSE-CONTENT.md)
 
 To get a copy of this repository, click the [Download ZIP](https://github.com/djimrastephane/ddr-rag-book/archive/refs/heads/main.zip) button, or run the following in a terminal:
@@ -249,6 +250,7 @@ For the full repository layout (folder tree, part/chapter file map) see [`book/R
 [![Code tests macOS](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-macos.yml/badge.svg)](https://github.com/djimrastephane/ddr-rag-book/actions/workflows/tests-macos.yml)
 
 - [Troubleshooting](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_00.html#troubleshooting) (Part 0, Section 0.11), plus [Appendix A, Section 5](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a_environment_setup.html#troubleshooting) for rendering/dependency issues
+- [Releases](https://github.com/djimrastephane/ddr-rag-book/releases) and [CHANGELOG.md](CHANGELOG.md) track what's changed since v1.0.0; the live site above always reflects the latest `main`, which may be ahead of the most recent tagged release
 
 Chapter titles in the table below link to the rendered, readable page for that reason.
 
