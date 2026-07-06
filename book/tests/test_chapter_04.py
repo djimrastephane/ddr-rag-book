@@ -41,16 +41,18 @@ def test_search_ranks_report_038_and_039_in_top_five(extracted_sample_text_dir, 
 @pytest.mark.slow
 def test_line_level_embeddings_clearly_separate_relevant_from_unrelated(model):
     """The reason Chapter 7 moves to line/chunk-level embeddings instead
-    of whole documents. These are the same three real lines documented in
-    Chapter 4's Field Notes, with the same wide, robust margin (~0.14-0.15)
-    that whole-document embeddings can't produce.
+    of whole documents. These are the same three real lines, quoted
+    verbatim from the source reports, documented in Chapter 4's Field
+    Notes: the two lines that directly describe the stuck-pipe event
+    separate clearly from a genuinely unrelated line from a different
+    report.
     """
     from semantic_search import embed_texts, search
 
     lines = [
-        "Work pipe, circulate lube sweep, work tool back in position, Pipe free",
+        "Pipe free",
         "During the slide lost tool face and became assembly became stuck",
-        "Trip out of hole with BHA #17 core assembly, lay down core barrels",
+        "Trip out of hole with BHA #17 core assembly.",
     ]
     names = ["report_038_line_a", "report_038_line_b", "report_036_line_unrelated"]
 
