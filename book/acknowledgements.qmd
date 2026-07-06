@@ -10,9 +10,9 @@ matters, because reports remain long after the people who wrote them
 have moved on.
 
 Thanks are due to the open-source communities behind the tools this book
-relies on throughout: Python, Quarto, Jupyter, pandas, and the broader
-Python data and NLP ecosystem. None of the engineering in this book would
-be reproducible without them.
+relies on throughout: Python, Quarto, Jupyter, and the broader Python
+data and NLP ecosystem. None of the engineering in this book would be
+reproducible without them.
 
 The ideas, engineering examples and technical validation are the
 author's. AI tools including Claude were used to accelerate coding,
