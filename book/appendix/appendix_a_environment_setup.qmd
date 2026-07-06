@@ -88,11 +88,11 @@ Part II chapters are written so every technique works fully standalone:
 the simplified code in `code/chapter_06/` through `code/chapter_12/` in
 *this* book's repository requires no access to the companion pipeline.
 Where a chapter cites a specific file or a specific result from
-`DDR_UTAH_FORGE` (for example, the real 2,943-chunk global index in
+`DDR_UTAH_FORGE` (for example, the real 1,428-chunk global index in
 Chapter 8, or the real report-gap dates in Chapter 10), that result was
-independently verified against the pipeline's actual output before being
-written into the book, so you can trust the numbers even without running
-the pipeline yourself.
+checked against the pipeline's actual output before being written into
+the book, so you can trust the numbers even without running the pipeline
+yourself.
 :::
 
 ## 4. A note on data handling
