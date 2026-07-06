@@ -18,7 +18,7 @@ dataset but likely to appear in others.
 |---|---|
 | AFE | authorization for expenditure (FORGE) |
 | BHA | bottom hole assembly (FORGE) |
-| BOP | blowout preventer |
+| BOP | blowout preventer (FORGE) |
 | CBL | cement bond log |
 | CIRC | circulate |
 | COND | condition |
@@ -28,7 +28,7 @@ dataset but likely to appear in others.
 | DHSV | downhole safety valve |
 | DLS | dogleg severity (FORGE) |
 | DOL | days on location (FORGE) |
-| DP | drill pipe |
+| DP | drill pipe (FORGE) |
 | ECD | equivalent circulating density (FORGE) |
 | EMW | equivalent mud weight |
 | FIT | formation integrity test |
@@ -39,12 +39,12 @@ dataset but likely to appear in others.
 | LOT | leak-off test |
 | MD | measured depth (FORGE) |
 | MIRU | move in, rig up |
-| MW | mud weight |
+| MW | mud weight (FORGE) |
 | MWD | measurement while drilling (FORGE) |
 | NMDC | non-magnetic drill collar (FORGE) |
 | NPT | non-productive time (FORGE) |
 | OBSD | observed |
-| PBTD | plugged back total depth |
+| PBTD | plugged back total depth (FORGE) |
 | PDC | polycrystalline diamond compact (bit type) (FORGE) |
 | PJSM | pre-job safety meeting (FORGE) |
 | POOH | pull out of hole |
@@ -60,8 +60,8 @@ dataset but likely to appear in others.
 | SLM | slow (rate), or short for "slim hole" depending on context — verify against operator style guide |
 | SPP | stand pipe pressure (FORGE) |
 | STDS | stands (of drill pipe) (FORGE) |
-| STK | stuck |
-| TD | total depth |
+| STK | stroke length (pump spec) (FORGE) |
+| TD | total depth (FORGE) |
 | TIH | trip in hole |
 | TOOH | trip out of hole |
 | TVD | true vertical depth (FORGE) |
