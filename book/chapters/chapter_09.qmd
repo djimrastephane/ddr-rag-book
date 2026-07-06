@@ -265,6 +265,13 @@ Compare that to `"packers fishing"` (the practical exercise above),
 where fusion helps exactly as expected — report #49 stays 1st and
 report #50 jumps from 8th (dense alone) to 2nd (fused).
 
+These specific rankings come from the companion pipeline's real BM25
+implementation (`DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py`),
+not from anything bundled in this book — `code/chapter_09/hybrid_search.py`
+only implements the RRF fusion math itself, applied here to a hardcoded
+toy ranking, so you can't reproduce the BM25-alone or fused numbers above
+by running this book's own code.
+
 **Why:** BM25 has essentially nothing useful to say about report #39 for
 `"stuck pipe"` — it shares almost no vocabulary with the query, so BM25
 ranks it 9th on its own. Fusing that weak, near-random signal in with a

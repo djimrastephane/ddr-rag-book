@@ -94,7 +94,6 @@ Found 76 docs with embeddings
 Concatenating 1,428 chunks from 76 docs...
 Building FAISS IndexFlatIP ((1428, 384))...
   faiss.index — 1,428 vectors × 384d
-  elapsed: 1.31s
 ```
 
 384 dimensions matches `all-MiniLM-L6-v2`, the same embedding model from

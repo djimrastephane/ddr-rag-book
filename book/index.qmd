@@ -121,9 +121,12 @@ they never need repeating:
 - **WHAT YOU BUILT** — a green box naming the concrete artifact (a
   script, an index, a pipeline) you now have, distinct from the
   conceptual "Key takeaways" earlier in the chapter.
-- **Field notes** 🔧 — a real, independently verified operational
-  vignette: something an experienced engineer would notice in the data
-  that a tool alone would miss.
+- **Field notes** 🔧 — a real operational vignette: something an
+  experienced engineer would notice in the data that a tool alone would
+  miss. Wherever this book's own bundled code and data can reproduce the
+  result, it has been checked directly; a handful draw on the companion
+  pipeline's own structured outputs (e.g. `ddr_facts.parquet`, its BM25
+  index) and are reported rather than independently re-derived here.
 
 You'll also meet four recurring engineers, each asking the question that
 opens a chapter's **Operational Problem**:

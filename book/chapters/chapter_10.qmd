@@ -61,8 +61,11 @@ looking something up or computing it from structured data, don't generate
 the answer — compute it.**
 
 Every report in this archive has already been parsed into a real,
-structured `ddr_facts.parquet` table by the companion pipeline. Here's an
-actual row from report #38 (2020-11-26):
+structured `ddr_facts.parquet` table by the companion pipeline — a file
+that lives in `DDR_UTAH_FORGE`, not in this book's repository, so the
+row below is a reported fact, not something you can query yourself
+without that pipeline. Here's an actual row from report #38
+(2020-11-26):
 
 ::: {.callout-note title="A real row from ddr_facts.parquet, report #38"}
 ```
@@ -366,6 +369,10 @@ data — Chapter 10's whole argument is that it beats generation — it's to
 read the classification logic once, understand exactly what it counts,
 and know the edge it sits on before you build a report or a chart on top
 of it.
+
+(`ddr_facts.parquet` and its `is_npt` classifier live in `DDR_UTAH_FORGE`,
+not in this book's repository — the rows above are reported from that
+pipeline, not something you can query with this book's own bundled code.)
 :::
 
 ## Challenge exercise

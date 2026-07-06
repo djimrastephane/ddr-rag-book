@@ -31,8 +31,13 @@ Sean, the production engineer, asks a question that matters long before
 any answer gets generated: *"Can you trust the text this archive
 extracted — even from a report that was scanned instead of born
 digital?"* Every one of the 76 Utah FORGE
-reports used in this book is digital-native — the archive's QA/QC pass
-confirms 0 unparsed PDFs across 227 source files. You got lucky: WellEz,
+reports used in this book is digital-native — extracting all 76 with
+Chapter 1's own `extract_text()` confirms zero unparsed PDFs. (The
+companion pipeline's QA/QC pass reports the same result across 227
+source files — the larger, pre-deduplication count from the raw public
+archive before Chapter 8's `build_full_archive.py` collapsed it down to
+76; that raw archive isn't part of this book's repository, so the
+227-file figure isn't independently checkable here.) You got lucky: WellEz,
 the software that generated these reports, embeds real character data on
 every page. Not every archive is this well-behaved. Faxed reports, reports
 scanned from paper files, and photos of a logbook page all produce PDFs

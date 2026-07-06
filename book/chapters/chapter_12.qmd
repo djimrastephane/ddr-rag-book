@@ -90,12 +90,14 @@ traceable and already fully verified with real text.
 
 ## Theory: how the production tool would check this at scale
 
-The companion pipeline's `src/ddr_rag/causality_analyzer.py` implements
-exactly this kind of check, generalized: for a given term, it compares
-frequency in a window before and after a boundary date, and labels a term
-**causal** only above a defined post-boundary NPT rate, and **escalating**
-only above a defined frequency-increase ratio. The real thresholds, read
-directly from the module:
+The companion pipeline's `src/ddr_rag/causality_analyzer.py` — part of
+`DDR_UTAH_FORGE`, not this book's repository — implements exactly this
+kind of check, generalized: for a given term, it compares frequency in a
+window before and after a boundary date, and labels a term **causal**
+only above a defined post-boundary NPT rate, and **escalating** only
+above a defined frequency-increase ratio. The thresholds below are
+reported directly from that module, not something you can inspect or run
+with this book's own bundled code:
 
 ```python
 TRANSITION_WINDOW_DAYS = 14   # days before/after a boundary to compare
