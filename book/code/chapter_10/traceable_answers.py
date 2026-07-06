@@ -43,10 +43,24 @@ def citations_from_search(chunk_results: list[tuple[int, float]],
     Chapter 7's page-aware chunk_pages_by_tokens() (page) and the report's
     own filename (date). A Citation here is never invented -- it's read
     straight off the chunk that actually matched.
+
+    A single report/page can supply more than one of the top-k chunks
+    (a long page gets split into several chunks, and more than one can
+    be relevant). Without deduplication the Evidence list would cite the
+    same report/page several times and hide how many *distinct* sources
+    actually back the answer, so only the first, best-ranked chunk from
+    each (report, page) pair is kept.
     """
-    return [Citation(report=metadata[idx]["report"], page=metadata[idx]["page"],
-                      report_date=metadata[idx].get("date"))
-            for idx, _score in chunk_results]
+    citations = []
+    seen_report_pages = set()
+    for idx, _score in chunk_results:
+        report_page = (metadata[idx]["report"], metadata[idx]["page"])
+        if report_page in seen_report_pages:
+            continue
+        seen_report_pages.add(report_page)
+        citations.append(Citation(report=metadata[idx]["report"], page=metadata[idx]["page"],
+                                   report_date=metadata[idx].get("date")))
+    return citations
 
 
 def find_date_gaps(report_dates: list[str]) -> list[tuple[str, str]]:
