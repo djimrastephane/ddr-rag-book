@@ -660,7 +660,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <h2 data-number="3.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">3.8</span> Expected Output</h2>
 <p>A list of lowercase words with punctuation stripped out, for example:</p>
 <pre><code>["mud", "fluids", "seepage", "losses", "in", "six", "hours", "9", "bbls"]</code></pre>
-<div id="9c42366e" class="cell" data-execution_count="1">
+<div id="e7521ee7" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_03/keyword_search.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -691,7 +691,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <pre><code>{"losses": {"FORGE-...-32_Drilling_019_2020-11-07.txt"},
  "stuck":  {"FORGE-...-32_Drilling_038_2020-11-26.txt"},
  ...}</code></pre>
-<div id="24c33829" class="cell" data-execution_count="2">
+<div id="c18995b7" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -725,7 +725,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <section id="expected-output-2" class="level2" data-number="3.16">
 <h2 data-number="3.16" class="anchored" data-anchor-id="expected-output-2"><span class="header-section-number">3.16</span> Expected Output</h2>
 <p>The set of filenames containing every word in the query, for example <code>{"FORGE-...-32_Drilling_038_2020-11-26.txt"}</code> for the query <code>"stuck"</code>.</p>
-<div id="969f6cfb" class="cell" data-execution_count="3">
+<div id="050c5219" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(index: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">set</span>[<span class="bu">str</span>]], query: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">set</span>[<span class="bu">str</span>]:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    query_tokens <span class="op">=</span> tokenize(query)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> query_tokens:</span>
