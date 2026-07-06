@@ -9,6 +9,17 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-07-06
+
+### Fixed
+
+- Corrected the FAISS paper's citation year: `johnson2019faiss` listed
+  2019, but the paper's actual arXiv submission was 2017 (confirmed via
+  arXiv/DBLP) — renamed the key to `johnson2017faiss` to match.
+- Fixed the hallucination survey citation (`ji2023hallucination`) to use
+  ACM Computing Surveys' real article-number format (article 248, DOI
+  10.1145/3571730) instead of an incorrect page range.
+
 ## [1.0.1] - 2026-07-06
 
 ### Added
