@@ -1,11 +1,13 @@
 # Acknowledgements {.unnumbered}
 
 This book exists because of the drilling and completions engineers who
-patiently explained, over many years and many wells, why the report says
-"POOH to change BHA due to erratic torque" and what that sentence actually
-means for the next twelve hours of operations. Domain knowledge like that
-does not live in a textbook — it lives in people, and in the daily reports
-they write under time pressure at the end of a twelve-hour tour.
+patiently shared, over many years and many wells, the experience hidden
+behind seemingly ordinary lines in a daily report. To an experienced
+engineer, "POOH to change BHA due to erratic torque" may suggest
+formation behaviour, equipment limitations, operational risk and the
+decisions that followed. Capturing and preserving that knowledge
+matters, because reports remain long after the people who wrote them
+have moved on.
 
 Thanks are due to the open-source communities behind the tools this book
 relies on throughout: Python, Quarto, Jupyter, pandas, and the broader
