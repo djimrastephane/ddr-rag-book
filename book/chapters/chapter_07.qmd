@@ -103,7 +103,7 @@ equipment spec sheet bundles a component's dimensions together instead of
 scattering them as loose numbers.
 
 Run against the real 76-report archive, this pipeline's chunking produces
-**2,943 chunks** — an average of about 39 chunks per report, reflecting
+**1,428 chunks** — an average of about 19 chunks per report, reflecting
 just how much structured content (header, seven data tables, and a
 narrative time breakdown) each single-page DDR actually contains.
 

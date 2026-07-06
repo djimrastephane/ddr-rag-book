@@ -32,8 +32,8 @@ reports through Chapter 5's system — but what happens when his
 ten-document prototype meets the full archive? Chapter 4's `embeddings @
 query_vec` brute-force search works fine over
 ten documents — it's a single matrix multiply. The full Utah FORGE
-archive is 76 reports. Run this book's companion pipeline's chunking and
-embedding steps against all of them and you get **2,943 chunks** — still
+archive is 76 reports. The companion pipeline's chunking and embedding
+steps, run against all 76, produce **1,428 chunks** — still
 small by industrial standards, but already the point where you want a
 persistent, queryable index rather than an in-memory NumPy array you
 rebuild every session. And a production system needs more than one query
@@ -91,10 +91,10 @@ documents produces a real, verifiable result:
 
 ```
 Found 76 docs with embeddings
-Concatenating 2,943 chunks from 76 docs...
-Building FAISS IndexFlatIP ((2943, 384))...
-  faiss.index — 2,943 vectors × 384d
-  elapsed: 2.65s
+Concatenating 1,428 chunks from 76 docs...
+Building FAISS IndexFlatIP ((1428, 384))...
+  faiss.index — 1,428 vectors × 384d
+  elapsed: 1.31s
 ```
 
 384 dimensions matches `all-MiniLM-L6-v2`, the same embedding model from
@@ -118,7 +118,7 @@ Per-doc FAISS index
 -> search THIS report
    ↓
 Global FAISS index
-(2,943 chunks, all reports)
+(1,428 chunks, all reports)
 -> search ACROSS reports
 ```
 
@@ -290,7 +290,7 @@ way a whole document can.
 
 ## Production Reality
 
-This chapter's `IndexFlatIP` scales cleanly to Utah FORGE's 2,943 chunks
+This chapter's `IndexFlatIP` scales cleanly to Utah FORGE's 1,428 chunks
 — both to build and to query. A single operator's *entire* well
 portfolio, or a service company handling multiple clients, changes the
 picture:
@@ -375,10 +375,13 @@ lines of code to confirm this one.
 **Challenge:** If you have the full 76-report Utah FORGE archive
 (`datasets/forge_archive/`) and can run the heavier dependencies
 (`sentence-transformers`, `faiss-cpu`), chunk and embed all 76 reports
-yourself and confirm you land close to the real 2,943-chunk count above.
-Small differences are expected — your chunking parameters won't be
-identical to the production pipeline's — but you should be in the same
-order of magnitude. A reference solution is in `code/chapter_08/challenge/`.
+yourself with the production pipeline's own parameters — 224 tokens,
+56-token overlap — and compare against the real 1,428-chunk count above.
+Expect a real gap, not just rounding noise: this book's chunker uses
+`pdfplumber`'s plain text extraction, which pulls noticeably less text
+out of each DDR's data tables than the production pipeline's table-aware
+extraction does, so it produces fewer chunks even with identical chunking
+parameters. A reference solution is in `code/chapter_08/challenge/`.
 
 ## Key takeaways
 
