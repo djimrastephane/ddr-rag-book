@@ -1,14 +1,17 @@
 # Core PDF and text processing (Chapter 1-2)
 pdfplumber==0.11.4
 
-# Search and retrieval (Chapter 3-4, 8-9)
+# Search and retrieval (Chapter 3-4, 8)
 numpy==1.26.4
 sentence-transformers==3.1.1
 faiss-cpu==1.8.0.post1
-rank-bm25==0.2.2
 tiktoken==0.7.0
 
-# Data handling (used throughout, esp. Chapter 10-12)
+# rank-bm25, pandas, pyarrow: not imported by this book's own
+# code/chapter_XX scripts -- included for readers who want to
+# experiment with the companion pipeline's real BM25 index and
+# ddr_facts.parquet structures directly.
+rank-bm25==0.2.2
 pandas==2.2.2
 pyarrow==24.0.0
 

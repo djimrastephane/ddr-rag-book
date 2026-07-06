@@ -70,7 +70,7 @@ data. It's a separate repository — clone it alongside this book's
 repository, not inside it:
 
 ```bash
-cd ..                      # up from book/ to your projects root
+cd ../..                   # up and out of this book's own repository
 git clone https://github.com/djimrastephane/DDR_UTAH_FORGE.git
 cd DDR_UTAH_FORGE
 python -m venv .venv && source .venv/bin/activate

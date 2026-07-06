@@ -4,15 +4,21 @@ channels:
 dependencies:
   - python=3.11
   - numpy=1.26.*
+  # pandas, pyarrow: not imported by this book's own code/chapter_XX
+  # scripts -- included for readers who want to experiment with the
+  # companion pipeline's real ddr_facts.parquet structures directly.
   - pandas=2.2.*
-  - pyarrow=17.*
+  - pyarrow=24.*
   - jupyter=1.0.*
   - ipykernel=6.29.*
-  - pytest=8.3.*
+  - pytest=9.1.*
   - pip
   - pip:
       - pdfplumber==0.11.4
       - sentence-transformers==3.1.1
       - faiss-cpu==1.8.0.post1
+      # rank-bm25: not imported by this book's own code/chapter_XX
+      # scripts -- included for readers who want to experiment with the
+      # companion pipeline's real BM25 index directly.
       - rank-bm25==0.2.2
       - tiktoken==0.7.0
