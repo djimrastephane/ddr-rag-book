@@ -592,7 +592,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="operational-problem" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">2.2</span> Operational Problem</h2>
-<p>Mike, the completions engineer, wants next chapter’s search tool to answer: <em>“Show me every report that mentions the bottom hole assembly.”</em> Will it find report #38? Open the <code>.txt</code> file you extracted from it in Chapter 1 and check: the report never once writes “bottom hole assembly.” It writes <code>BHA</code> — twenty-one times. A search tool that only knows the literal words you typed will come back empty, on a report that was exactly the one you needed.</p>
+<p>Mike, the completions engineer, wants next chapter’s search tool to answer: <em>“Show me every report that mentions the bottom hole assembly.”</em> Will it find report #38? Open the <code>.txt</code> file you extracted from it in Chapter 1 and check: the report never once writes “bottom hole assembly.” It writes <code>BHA</code> — nine times. A search tool that only knows the literal words you typed will come back empty, on a report that was exactly the one you needed.</p>
 </section>
 <section id="why-keyword-search-fails" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="why-keyword-search-fails"><span class="header-section-number">2.3</span> Why keyword search fails</h2>
@@ -666,7 +666,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <section id="expected-output" class="level2" data-number="2.9">
 <h2 data-number="2.9" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">2.9</span> Expected Output</h2>
 <p>A Python dictionary — no output printed yet, just a lookup table in memory, ready for the next step to use.</p>
-<div id="0298734b" class="cell" data-execution_count="1">
+<div id="0c199bde" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_02/expand_abbreviations.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ABBREVIATIONS <span class="op">=</span> {</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"BHA"</span>: <span class="st">"bottom hole assembly"</span>,</span>
@@ -711,7 +711,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <section id="expected-output-1" class="level2" data-number="2.13">
 <h2 data-number="2.13" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">2.13</span> Expected Output</h2>
 <p>The same text, with every whole-word abbreviation replaced by its expansion — for example, <code>Pick up Curve assembly 2, BHA 21</code> becomes <code>Pick up Curve assembly 2, bottom hole assembly 21</code>.</p>
-<div id="fbaf6817" class="cell" data-execution_count="2">
+<div id="67166eea" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expand_text(text: <span class="bu">str</span>, abbreviations: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>] <span class="op">=</span> ABBREVIATIONS) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
@@ -1398,7 +1398,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>Will it find</span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>report #38? Open the <span class="in">`.txt`</span> file you extracted from it in Chapter 1 and</span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>check: the report never once writes "bottom hole assembly." It writes</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="in">`BHA`</span> — twenty-one times. A search tool that only knows the literal words</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="in">`BHA`</span> — nine times. A search tool that only knows the literal words</span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>you typed will come back empty, on a report that was exactly the one you</span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>needed.</span>
 <span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
