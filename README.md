@@ -312,7 +312,7 @@ If you find this book or its code useful for your work, please consider citing i
 
 Chicago-style citation:
 
-> Djimra, Stephane. *Building Industrial RAG Systems from Daily Drilling Reports*. 2026. https://github.com/djimrastephane/ddr-rag-book.
+> Djimra Stephane, Soulanoudjingar. *Building Industrial RAG Systems from Daily Drilling Reports*. 2026. https://github.com/djimrastephane/ddr-rag-book.
 
 BibTeX entry:
 
