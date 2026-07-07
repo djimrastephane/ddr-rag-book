@@ -255,6 +255,14 @@ ollama pull qwen2.5:7b-instruct
 ollama serve            # leave this running in its own terminal
 ```
 
+`qwen2.5:7b-instruct` is a small, capable default, but nothing here is
+tied to it — pass any model you've pulled to `ollama_llm_call(model=...)`.
+Pick whatever runs comfortably on your hardware: `llama3.1:8b` or
+`mistral` are similar in size, `qwen2.5:14b` is stronger if you have the
+memory for it, and swapping the one HTTP call for a hosted API's would let
+you point at a cloud model instead. The retrieval and prompt work above
+doesn't change either way — only which model reads the evidence.
+
 `ollama_llm_call` talks to that local server over plain HTTP — standard
 library only, no extra package to install, and a clear message instead of
 a crash if Ollama isn't running:
