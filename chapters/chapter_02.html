@@ -522,33 +522,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">2.6</span> Implementation</a>
   <ul class="collapse">
   <li><a href="#step-1-build-the-lookup-table" id="toc-step-1-build-the-lookup-table" class="nav-link" data-scroll-target="#step-1-build-the-lookup-table"><span class="header-section-number">2.6.1</span> Step 1: build the lookup table</a></li>
+  <li><a href="#step-2-expand-every-abbreviation-safely" id="toc-step-2-expand-every-abbreviation-safely" class="nav-link" data-scroll-target="#step-2-expand-every-abbreviation-safely"><span class="header-section-number">2.6.2</span> Step 2: expand every abbreviation safely</a></li>
+  <li><a href="#step-3-run-it-across-the-whole-archive" id="toc-step-3-run-it-across-the-whole-archive" class="nav-link" data-scroll-target="#step-3-run-it-across-the-whole-archive"><span class="header-section-number">2.6.3</span> Step 3: run it across the whole archive</a></li>
   </ul></li>
-  <li><a href="#what-problem-are-we-solving" id="toc-what-problem-are-we-solving" class="nav-link" data-scroll-target="#what-problem-are-we-solving"><span class="header-section-number">2.7</span> What problem are we solving?</a></li>
-  <li><a href="#inputs" id="toc-inputs" class="nav-link" data-scroll-target="#inputs"><span class="header-section-number">2.8</span> Inputs</a></li>
-  <li><a href="#expected-output" id="toc-expected-output" class="nav-link" data-scroll-target="#expected-output"><span class="header-section-number">2.9</span> Expected Output</a></li>
-  <li><a href="#what-just-happened" id="toc-what-just-happened" class="nav-link" data-scroll-target="#what-just-happened"><span class="header-section-number">2.10</span> What just happened?</a>
-  <ul class="collapse">
-  <li><a href="#step-2-expand-every-abbreviation-safely" id="toc-step-2-expand-every-abbreviation-safely" class="nav-link" data-scroll-target="#step-2-expand-every-abbreviation-safely"><span class="header-section-number">2.10.1</span> Step 2: expand every abbreviation safely</a></li>
-  </ul></li>
-  <li><a href="#what-problem-are-we-solving-1" id="toc-what-problem-are-we-solving-1" class="nav-link" data-scroll-target="#what-problem-are-we-solving-1"><span class="header-section-number">2.11</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-1" id="toc-inputs-1" class="nav-link" data-scroll-target="#inputs-1"><span class="header-section-number">2.12</span> Inputs</a></li>
-  <li><a href="#expected-output-1" id="toc-expected-output-1" class="nav-link" data-scroll-target="#expected-output-1"><span class="header-section-number">2.13</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-1" id="toc-what-just-happened-1" class="nav-link" data-scroll-target="#what-just-happened-1"><span class="header-section-number">2.14</span> What just happened?</a>
-  <ul class="collapse">
-  <li><a href="#step-3-run-it-across-the-whole-archive" id="toc-step-3-run-it-across-the-whole-archive" class="nav-link" data-scroll-target="#step-3-run-it-across-the-whole-archive"><span class="header-section-number">2.14.1</span> Step 3: run it across the whole archive</a></li>
-  </ul></li>
-  <li><a href="#what-problem-are-we-solving-2" id="toc-what-problem-are-we-solving-2" class="nav-link" data-scroll-target="#what-problem-are-we-solving-2"><span class="header-section-number">2.15</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-2" id="toc-inputs-2" class="nav-link" data-scroll-target="#inputs-2"><span class="header-section-number">2.16</span> Inputs</a></li>
-  <li><a href="#expected-output-2" id="toc-expected-output-2" class="nav-link" data-scroll-target="#expected-output-2"><span class="header-section-number">2.17</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-2" id="toc-what-just-happened-2" class="nav-link" data-scroll-target="#what-just-happened-2"><span class="header-section-number">2.18</span> What just happened?</a></li>
-  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">2.19</span> Production Reality</a></li>
-  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">2.20</span> Practical exercise</a></li>
-  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">2.21</span> Field notes</a></li>
-  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">2.22</span> Challenge exercise</a></li>
-  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">2.23</span> Key takeaways</a></li>
-  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">2.24</span> Repository files</a></li>
-  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">2.25</span> What can you do now that you couldn’t do before?</a></li>
-  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">2.26</span> Suggested next step</a></li>
+  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">2.7</span> Production Reality</a></li>
+  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">2.8</span> Practical exercise</a></li>
+  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">2.9</span> Field notes</a></li>
+  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">2.10</span> Challenge exercise</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">2.11</span> Key takeaways</a></li>
+  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">2.12</span> Repository files</a></li>
+  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">2.13</span> What can you do now that you couldn’t do before?</a></li>
+  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">2.14</span> Suggested next step</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/djimrastephane/ddr-rag-book/edit/main/chapters/chapter_02.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/djimrastephane/ddr-rag-book/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -651,22 +635,15 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <h2 data-number="2.6" class="anchored" data-anchor-id="implementation"><span class="header-section-number">2.6</span> Implementation</h2>
 <section id="step-1-build-the-lookup-table" class="level3" data-number="2.6.1">
 <h3 data-number="2.6.1" class="anchored" data-anchor-id="step-1-build-the-lookup-table"><span class="header-section-number">2.6.1</span> Step 1: build the lookup table</h3>
-</section>
-</section>
-<section id="what-problem-are-we-solving" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="what-problem-are-we-solving"><span class="header-section-number">2.7</span> What problem are we solving?</h2>
+<p><strong>What problem are we solving?</strong></p>
 <p>Give the computer the same knowledge a drilling engineer already carries in their head: what each abbreviation stands for.</p>
-</section>
-<section id="inputs" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="inputs"><span class="header-section-number">2.8</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>A hand-built list of oilfield abbreviations and their full-text expansions, drawn from what actually appears in this archive.</li>
 </ul>
-</section>
-<section id="expected-output" class="level2" data-number="2.9">
-<h2 data-number="2.9" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">2.9</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>A Python dictionary — no output printed yet, just a lookup table in memory, ready for the next step to use.</p>
-<div id="968cb42b" class="cell" data-execution_count="1">
+<div id="2c9d75ab" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_02/expand_abbreviations.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ABBREVIATIONS <span class="op">=</span> {</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"BHA"</span>: <span class="st">"bottom hole assembly"</span>,</span>
@@ -689,29 +666,21 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"PDC"</span>: <span class="st">"polycrystalline diamond compact"</span>,</span>
 <span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened" class="level2" data-number="2.10">
-<h2 data-number="2.10" class="anchored" data-anchor-id="what-just-happened"><span class="header-section-number">2.10</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>You wrote down, once, what every abbreviation in this archive means. This list is the entire “knowledge” the expander needs — no training, no model, just a table you can read top to bottom and check by eye.</p>
-<section id="step-2-expand-every-abbreviation-safely" class="level3" data-number="2.10.1">
-<h3 data-number="2.10.1" class="anchored" data-anchor-id="step-2-expand-every-abbreviation-safely"><span class="header-section-number">2.10.1</span> Step 2: expand every abbreviation safely</h3>
 </section>
-</section>
-<section id="what-problem-are-we-solving-1" class="level2" data-number="2.11">
-<h2 data-number="2.11" class="anchored" data-anchor-id="what-problem-are-we-solving-1"><span class="header-section-number">2.11</span> What problem are we solving?</h2>
+<section id="step-2-expand-every-abbreviation-safely" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="step-2-expand-every-abbreviation-safely"><span class="header-section-number">2.6.2</span> Step 2: expand every abbreviation safely</h3>
+<p><strong>What problem are we solving?</strong></p>
 <p>Turn <code>BHA</code> into <code>bottom hole assembly</code> everywhere it appears as its own word — without also mangling words that merely happen to contain those same letters.</p>
-</section>
-<section id="inputs-1" class="level2" data-number="2.12">
-<h2 data-number="2.12" class="anchored" data-anchor-id="inputs-1"><span class="header-section-number">2.12</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>Raw report text (a Python string).</li>
 <li>The <code>ABBREVIATIONS</code> lookup table from Step 1.</li>
 </ul>
-</section>
-<section id="expected-output-1" class="level2" data-number="2.13">
-<h2 data-number="2.13" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">2.13</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>The same text, with every whole-word abbreviation replaced by its expansion — for example, <code>Pick up Curve assembly 2, BHA 21</code> becomes <code>Pick up Curve assembly 2, bottom hole assembly 21</code>.</p>
-<div id="b2a06014" class="cell" data-execution_count="2">
+<div id="dcef3e4b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expand_text(text: <span class="bu">str</span>, abbreviations: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>] <span class="op">=</span> ABBREVIATIONS) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
@@ -720,9 +689,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        text <span class="op">=</span> re.sub(pattern, expansion, text, flags<span class="op">=</span>re.IGNORECASE)</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> text</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened-1" class="level2" data-number="2.14">
-<h2 data-number="2.14" class="anchored" data-anchor-id="what-just-happened-1"><span class="header-section-number">2.14</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>For every entry in the lookup table, this checks the text for that exact word — not just those letters anywhere, but that whole word on its own — and swaps in the full expansion, regardless of whether it was typed in capitals or lowercase.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Word boundary matching">
 <div class="callout-header d-flex align-content-center">
@@ -737,32 +704,25 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <p><code>\b...\b</code> is a stricter kind of find-and-replace: instead of “contains these letters anywhere,” it means “matches this exact word, with a space or punctuation on either side.” That’s the difference between correctly expanding the word <code>MD</code> and accidentally mangling it inside an unrelated word that merely contains those two letters.</p>
 </div>
 </div>
-<section id="step-3-run-it-across-the-whole-archive" class="level3" data-number="2.14.1">
-<h3 data-number="2.14.1" class="anchored" data-anchor-id="step-3-run-it-across-the-whole-archive"><span class="header-section-number">2.14.1</span> Step 3: run it across the whole archive</h3>
 </section>
-</section>
-<section id="what-problem-are-we-solving-2" class="level2" data-number="2.15">
-<h2 data-number="2.15" class="anchored" data-anchor-id="what-problem-are-we-solving-2"><span class="header-section-number">2.15</span> What problem are we solving?</h2>
+<section id="step-3-run-it-across-the-whole-archive" class="level3" data-number="2.6.3">
+<h3 data-number="2.6.3" class="anchored" data-anchor-id="step-3-run-it-across-the-whole-archive"><span class="header-section-number">2.6.3</span> Step 3: run it across the whole archive</h3>
+<p><strong>What problem are we solving?</strong></p>
 <p>Apply the expander to every report at once, not just one file at a time.</p>
-</section>
-<section id="inputs-2" class="level2" data-number="2.16">
-<h2 data-number="2.16" class="anchored" data-anchor-id="inputs-2"><span class="header-section-number">2.16</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>The folder of <code>.txt</code> files Chapter 1 produced: <code>datasets/ddr_text/</code>.</li>
 </ul>
-</section>
-<section id="expected-output-2" class="level2" data-number="2.17">
-<h2 data-number="2.17" class="anchored" data-anchor-id="expected-output-2"><span class="header-section-number">2.17</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>A new folder, <code>datasets/ddr_text_expanded/</code>, with one expanded <code>.txt</code> file per input file, same filenames.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_02/expand_abbreviations.py <span class="dt">\</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--in-dir</span> datasets/ddr_text <span class="at">--out-dir</span> datasets/ddr_text_expanded</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="what-just-happened-2" class="level2" data-number="2.18">
-<h2 data-number="2.18" class="anchored" data-anchor-id="what-just-happened-2"><span class="header-section-number">2.18</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>The script read every <code>.txt</code> file Chapter 1 produced, ran each one through <code>expand_text</code>, and saved the result under the same filename in a new folder — so you can always find the expanded version of a report by matching its name against the original.</p>
 </section>
-<section id="production-reality" class="level2" data-number="2.19">
-<h2 data-number="2.19" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">2.19</span> Production Reality</h2>
+</section>
+<section id="production-reality" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">2.7</span> Production Reality</h2>
 <p>This chapter’s dictionary covers the abbreviations that actually appear in this archive — because it’s all one well, produced by one operator’s reporting software. A larger, multi-well or multi-operator archive is rarely that uniform. Expect:</p>
 <ul>
 <li>different operators abbreviating the same equipment differently</li>
@@ -772,14 +732,14 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 </ul>
 <p>None of that appears in Utah FORGE’s reports, which is exactly why this is the right place to learn the technique before facing a messier archive.</p>
 </section>
-<section id="practical-exercise" class="level2" data-number="2.20">
-<h2 data-number="2.20" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">2.20</span> Practical exercise</h2>
+<section id="practical-exercise" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">2.8</span> Practical exercise</h2>
 <p>🟢 <strong>Beginner</strong></p>
 <p><strong>Try it yourself:</strong> Help Mike get his answer — run the expander against <code>FORGE-16A-78-32_Drilling_038_2020-11-26.txt</code>.</p>
 <p><strong>You’ll know it worked when:</strong> <code>Pick up Curve assembly 2, BHA 21</code> becomes <code>Pick up Curve assembly 2, bottom hole assembly 21</code>, and no unrelated word (check the <code>MD</code>/<code>TVD</code> survey table carefully — short abbreviations are the ones most likely to collide with real words) gets corrupted.</p>
 </section>
-<section id="field-notes" class="level2" data-number="2.21">
-<h2 data-number="2.21" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">2.21</span> Field notes</h2>
+<section id="field-notes" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">2.9</span> Field notes</h2>
 <div class="callout callout-style-default callout-warning callout-titled" title="🔧 Field notes: the source already expands some abbreviations — but not the ones that matter">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -797,22 +757,22 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 </div>
 </div>
 </section>
-<section id="challenge-exercise" class="level2" data-number="2.22">
-<h2 data-number="2.22" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">2.22</span> Challenge exercise</h2>
+<section id="challenge-exercise" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">2.10</span> Challenge exercise</h2>
 <p>🟠 <strong>Intermediate</strong></p>
 <p><strong>Challenge:</strong> Extend <code>ABBREVIATIONS</code> using <a href="../appendix/appendix_b_oilfield_glossary.html">Appendix B</a>, and handle the mud-table abbreviations (<code>FV</code>, <code>WL</code>, <code>PV</code>, <code>YP</code>, <code>CL</code>) — notice how short these are, and think carefully about whether blindly expanding a two-letter token like <code>PV</code> is actually safe against this archive’s real text, or whether it needs a narrower match context. A reference solution is in <code>code/chapter_02/challenge/</code>.</p>
 </section>
-<section id="key-takeaways" class="level2" data-number="2.23">
-<h2 data-number="2.23" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">2.23</span> Key takeaways</h2>
+<section id="key-takeaways" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">2.11</span> Key takeaways</h2>
 <ul>
 <li>Word-boundary regex, not substring replacement, is the difference between a correct expander and a silently broken one.</li>
 <li>Real archives are inconsistent by nature — the same report can spell one abbreviation out in full while never expanding another. Don’t assume the source data will document itself.</li>
 <li>A transparent dictionary beats an opaque model here: every expansion is inspectable and testable.</li>
-<li>Cleaning text is not optional groundwork — it’s what makes every later chapter’s search and retrieval actually work.</li>
+<li>Cleaning text isn’t optional busywork — the expanded text is what Chapter 3’s keyword search matches against. (Chapter 4’s semantic search works from the raw text instead; its Field Notes measure exactly how much expansion does and doesn’t help there.)</li>
 </ul>
 </section>
-<section id="repository-files" class="level2" data-number="2.24">
-<h2 data-number="2.24" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">2.24</span> Repository files</h2>
+<section id="repository-files" class="level2" data-number="2.12">
+<h2 data-number="2.12" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">2.12</span> Repository files</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -870,12 +830,12 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 </div>
 </div>
 </section>
-<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="2.25">
-<h2 data-number="2.25" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">2.25</span> What can you do now that you couldn’t do before?</h2>
+<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="2.13">
+<h2 data-number="2.13" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">2.13</span> What can you do now that you couldn’t do before?</h2>
 <p>You can take the raw text Chapter 1 extracted and turn every shorthand term in it into plain language — so a report that only ever says <code>BHA</code> can now be found by anyone (or anything) searching for “bottom hole assembly.”</p>
 </section>
-<section id="suggested-next-step" class="level2" data-number="2.26">
-<h2 data-number="2.26" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">2.26</span> Suggested next step</h2>
+<section id="suggested-next-step" class="level2" data-number="2.14">
+<h2 data-number="2.14" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">2.14</span> Suggested next step</h2>
 <p><strong>Coming up in Chapter 3:</strong> With clean, expanded text in hand, Chapter 3 builds the first tool an engineer would actually reach for: a keyword search engine that answers “which reports mention losses?” in milliseconds.</p>
 
 
@@ -1474,17 +1434,17 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: build the lookup table</span></span>
 <span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>Give the computer the same knowledge a drilling engineer already carries</span>
 <span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>in their head: what each abbreviation stands for.</span>
 <span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A hand-built list of oilfield abbreviations and their full-text</span>
 <span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>  expansions, drawn from what actually appears in this archive.</span>
 <span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>A Python dictionary — no output printed yet, just a lookup table in</span>
 <span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a>memory, ready for the next step to use.</span>
@@ -1514,7 +1474,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>You wrote down, once, what every abbreviation in this archive means. This</span>
 <span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>list is the entire "knowledge" the expander needs — no training, no</span>
@@ -1522,18 +1482,18 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: expand every abbreviation safely</span></span>
 <span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>Turn <span class="in">`BHA`</span> into <span class="in">`bottom hole assembly`</span> everywhere it appears as its own</span>
 <span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>word — without also mangling words that merely happen to contain those</span>
 <span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>same letters.</span>
 <span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Raw report text (a Python string).</span>
 <span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The <span class="in">`ABBREVIATIONS`</span> lookup table from Step 1.</span>
 <span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a>The same text, with every whole-word abbreviation replaced by its</span>
 <span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>expansion — for example, <span class="in">`Pick up Curve assembly 2, BHA 21`</span> becomes</span>
@@ -1550,7 +1510,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> text</span>
 <span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a>For every entry in the lookup table, this checks the text for that exact</span>
 <span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>word — not just those letters anywhere, but that whole word on its own —</span>
@@ -1567,15 +1527,15 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: run it across the whole archive</span></span>
 <span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>Apply the expander to every report at once, not just one file at a time.</span>
 <span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The folder of <span class="in">`.txt`</span> files Chapter 1 produced: <span class="in">`datasets/ddr_text/`</span>.</span>
 <span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>A new folder, <span class="in">`datasets/ddr_text_expanded/`</span>, with one expanded <span class="in">`.txt`</span></span>
 <span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>file per input file, same filenames.</span>
@@ -1585,7 +1545,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a>    <span class="at">--in-dir</span> datasets/ddr_text <span class="at">--out-dir</span> datasets/ddr_text_expanded</span>
 <span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a>The script read every <span class="in">`.txt`</span> file Chapter 1 produced, ran each one through</span>
 <span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a><span class="in">`expand_text`</span>, and saved the result under the same filename in a new</span>
@@ -1668,42 +1628,44 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-305"><a href="#cb5-305" aria-hidden="true" tabindex="-1"></a>  assume the source data will document itself.</span>
 <span id="cb5-306"><a href="#cb5-306" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A transparent dictionary beats an opaque model here: every expansion is</span>
 <span id="cb5-307"><a href="#cb5-307" aria-hidden="true" tabindex="-1"></a>  inspectable and testable.</span>
-<span id="cb5-308"><a href="#cb5-308" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cleaning text is not optional groundwork — it's what makes every later</span>
-<span id="cb5-309"><a href="#cb5-309" aria-hidden="true" tabindex="-1"></a>  chapter's search and retrieval actually work.</span>
-<span id="cb5-310"><a href="#cb5-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-311"><a href="#cb5-311" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb5-308"><a href="#cb5-308" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cleaning text isn't optional busywork — the expanded text is what</span>
+<span id="cb5-309"><a href="#cb5-309" aria-hidden="true" tabindex="-1"></a>  Chapter 3's keyword search matches against. (Chapter 4's semantic search</span>
+<span id="cb5-310"><a href="#cb5-310" aria-hidden="true" tabindex="-1"></a>  works from the raw text instead; its Field Notes measure exactly how</span>
+<span id="cb5-311"><a href="#cb5-311" aria-hidden="true" tabindex="-1"></a>  much expansion does and doesn't help there.)</span>
 <span id="cb5-312"><a href="#cb5-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-313"><a href="#cb5-313" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb5-314"><a href="#cb5-314" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb5-315"><a href="#cb5-315" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_02/expand_abbreviations.py`</span> <span class="pp">|</span> Word-boundary abbreviation expander <span class="pp">|</span></span>
-<span id="cb5-316"><a href="#cb5-316" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`datasets/ddr_text_expanded/`</span> <span class="pp">|</span> Expanded output from Chapter 1's extracted text <span class="pp">|</span></span>
-<span id="cb5-317"><a href="#cb5-317" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_02_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
-<span id="cb5-318"><a href="#cb5-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-319"><a href="#cb5-319" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 2"}</span>
-<span id="cb5-320"><a href="#cb5-320" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why oilfield shorthand breaks naive text search</span>
-<span id="cb5-321"><a href="#cb5-321" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built a word-boundary-safe abbreviation dictionary</span>
-<span id="cb5-322"><a href="#cb5-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Expanded every <span class="in">`.txt`</span> file from Chapter 1 without corrupting unrelated text</span>
-<span id="cb5-323"><a href="#cb5-323" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-324"><a href="#cb5-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-325"><a href="#cb5-325" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb5-326"><a href="#cb5-326" aria-hidden="true" tabindex="-1"></a>**`expand_abbreviations.py`** — an abbreviation expansion engine: point it</span>
-<span id="cb5-327"><a href="#cb5-327" aria-hidden="true" tabindex="-1"></a>at Chapter 1's extracted text and it hands back plain-language text, ready</span>
-<span id="cb5-328"><a href="#cb5-328" aria-hidden="true" tabindex="-1"></a>for Chapter 3's search index.</span>
-<span id="cb5-329"><a href="#cb5-329" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-330"><a href="#cb5-330" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-331"><a href="#cb5-331" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb5-313"><a href="#cb5-313" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb5-314"><a href="#cb5-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-315"><a href="#cb5-315" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb5-316"><a href="#cb5-316" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb5-317"><a href="#cb5-317" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_02/expand_abbreviations.py`</span> <span class="pp">|</span> Word-boundary abbreviation expander <span class="pp">|</span></span>
+<span id="cb5-318"><a href="#cb5-318" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`datasets/ddr_text_expanded/`</span> <span class="pp">|</span> Expanded output from Chapter 1's extracted text <span class="pp">|</span></span>
+<span id="cb5-319"><a href="#cb5-319" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_02_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
+<span id="cb5-320"><a href="#cb5-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-321"><a href="#cb5-321" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 2"}</span>
+<span id="cb5-322"><a href="#cb5-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why oilfield shorthand breaks naive text search</span>
+<span id="cb5-323"><a href="#cb5-323" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built a word-boundary-safe abbreviation dictionary</span>
+<span id="cb5-324"><a href="#cb5-324" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Expanded every <span class="in">`.txt`</span> file from Chapter 1 without corrupting unrelated text</span>
+<span id="cb5-325"><a href="#cb5-325" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-326"><a href="#cb5-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-327"><a href="#cb5-327" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb5-328"><a href="#cb5-328" aria-hidden="true" tabindex="-1"></a>**`expand_abbreviations.py`** — an abbreviation expansion engine: point it</span>
+<span id="cb5-329"><a href="#cb5-329" aria-hidden="true" tabindex="-1"></a>at Chapter 1's extracted text and it hands back plain-language text, ready</span>
+<span id="cb5-330"><a href="#cb5-330" aria-hidden="true" tabindex="-1"></a>for Chapter 3's search index.</span>
+<span id="cb5-331"><a href="#cb5-331" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-332"><a href="#cb5-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-333"><a href="#cb5-333" aria-hidden="true" tabindex="-1"></a>You can take the raw text Chapter 1 extracted and turn every shorthand</span>
-<span id="cb5-334"><a href="#cb5-334" aria-hidden="true" tabindex="-1"></a>term in it into plain language — so a report that only ever says <span class="in">`BHA`</span></span>
-<span id="cb5-335"><a href="#cb5-335" aria-hidden="true" tabindex="-1"></a>can now be found by anyone (or anything) searching for "bottom hole</span>
-<span id="cb5-336"><a href="#cb5-336" aria-hidden="true" tabindex="-1"></a>assembly."</span>
-<span id="cb5-337"><a href="#cb5-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-338"><a href="#cb5-338" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb5-333"><a href="#cb5-333" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb5-334"><a href="#cb5-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-335"><a href="#cb5-335" aria-hidden="true" tabindex="-1"></a>You can take the raw text Chapter 1 extracted and turn every shorthand</span>
+<span id="cb5-336"><a href="#cb5-336" aria-hidden="true" tabindex="-1"></a>term in it into plain language — so a report that only ever says <span class="in">`BHA`</span></span>
+<span id="cb5-337"><a href="#cb5-337" aria-hidden="true" tabindex="-1"></a>can now be found by anyone (or anything) searching for "bottom hole</span>
+<span id="cb5-338"><a href="#cb5-338" aria-hidden="true" tabindex="-1"></a>assembly."</span>
 <span id="cb5-339"><a href="#cb5-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-340"><a href="#cb5-340" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 3:** With clean, expanded text in hand, Chapter 3</span>
-<span id="cb5-341"><a href="#cb5-341" aria-hidden="true" tabindex="-1"></a>builds the first tool an engineer would actually reach for: a keyword</span>
-<span id="cb5-342"><a href="#cb5-342" aria-hidden="true" tabindex="-1"></a>search engine that answers "which reports mention losses?" in</span>
-<span id="cb5-343"><a href="#cb5-343" aria-hidden="true" tabindex="-1"></a>milliseconds.</span>
+<span id="cb5-340"><a href="#cb5-340" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb5-341"><a href="#cb5-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-342"><a href="#cb5-342" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 3:** With clean, expanded text in hand, Chapter 3</span>
+<span id="cb5-343"><a href="#cb5-343" aria-hidden="true" tabindex="-1"></a>builds the first tool an engineer would actually reach for: a keyword</span>
+<span id="cb5-344"><a href="#cb5-344" aria-hidden="true" tabindex="-1"></a>search engine that answers "which reports mention losses?" in</span>
+<span id="cb5-345"><a href="#cb5-345" aria-hidden="true" tabindex="-1"></a>milliseconds.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

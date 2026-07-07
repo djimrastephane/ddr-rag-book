@@ -521,37 +521,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">1.5</span> Implementation</a>
   <ul class="collapse">
   <li><a href="#step-1-get-the-sample-archive" id="toc-step-1-get-the-sample-archive" class="nav-link" data-scroll-target="#step-1-get-the-sample-archive"><span class="header-section-number">1.5.1</span> Step 1: get the sample archive</a></li>
+  <li><a href="#step-2-extract-text-from-one-pdf" id="toc-step-2-extract-text-from-one-pdf" class="nav-link" data-scroll-target="#step-2-extract-text-from-one-pdf"><span class="header-section-number">1.5.2</span> Step 2: extract text from one PDF</a></li>
+  <li><a href="#step-3-make-it-a-script-you-can-run-from-the-command-line" id="toc-step-3-make-it-a-script-you-can-run-from-the-command-line" class="nav-link" data-scroll-target="#step-3-make-it-a-script-you-can-run-from-the-command-line"><span class="header-section-number">1.5.3</span> Step 3: make it a script you can run from the command line</a></li>
   </ul></li>
-  <li><a href="#what-problem-are-we-solving" id="toc-what-problem-are-we-solving" class="nav-link" data-scroll-target="#what-problem-are-we-solving"><span class="header-section-number">1.6</span> What problem are we solving?</a></li>
-  <li><a href="#inputs" id="toc-inputs" class="nav-link" data-scroll-target="#inputs"><span class="header-section-number">1.7</span> Inputs</a></li>
-  <li><a href="#expected-output" id="toc-expected-output" class="nav-link" data-scroll-target="#expected-output"><span class="header-section-number">1.8</span> Expected Output</a></li>
-  <li><a href="#what-just-happened" id="toc-what-just-happened" class="nav-link" data-scroll-target="#what-just-happened"><span class="header-section-number">1.9</span> What just happened?</a>
-  <ul class="collapse">
-  <li><a href="#step-2-extract-text-from-one-pdf" id="toc-step-2-extract-text-from-one-pdf" class="nav-link" data-scroll-target="#step-2-extract-text-from-one-pdf"><span class="header-section-number">1.9.1</span> Step 2: extract text from one PDF</a></li>
-  </ul></li>
-  <li><a href="#what-problem-are-we-solving-1" id="toc-what-problem-are-we-solving-1" class="nav-link" data-scroll-target="#what-problem-are-we-solving-1"><span class="header-section-number">1.10</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-1" id="toc-inputs-1" class="nav-link" data-scroll-target="#inputs-1"><span class="header-section-number">1.11</span> Inputs</a></li>
-  <li><a href="#expected-output-1" id="toc-expected-output-1" class="nav-link" data-scroll-target="#expected-output-1"><span class="header-section-number">1.12</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-1" id="toc-what-just-happened-1" class="nav-link" data-scroll-target="#what-just-happened-1"><span class="header-section-number">1.13</span> What just happened?</a></li>
-  <li><a href="#what-problem-are-we-solving-2" id="toc-what-problem-are-we-solving-2" class="nav-link" data-scroll-target="#what-problem-are-we-solving-2"><span class="header-section-number">1.14</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-2" id="toc-inputs-2" class="nav-link" data-scroll-target="#inputs-2"><span class="header-section-number">1.15</span> Inputs</a></li>
-  <li><a href="#expected-output-2" id="toc-expected-output-2" class="nav-link" data-scroll-target="#expected-output-2"><span class="header-section-number">1.16</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-2" id="toc-what-just-happened-2" class="nav-link" data-scroll-target="#what-just-happened-2"><span class="header-section-number">1.17</span> What just happened?</a>
-  <ul class="collapse">
-  <li><a href="#step-3-make-it-a-script-you-can-run-from-the-command-line" id="toc-step-3-make-it-a-script-you-can-run-from-the-command-line" class="nav-link" data-scroll-target="#step-3-make-it-a-script-you-can-run-from-the-command-line"><span class="header-section-number">1.17.1</span> Step 3: make it a script you can run from the command line</a></li>
-  </ul></li>
-  <li><a href="#what-problem-are-we-solving-3" id="toc-what-problem-are-we-solving-3" class="nav-link" data-scroll-target="#what-problem-are-we-solving-3"><span class="header-section-number">1.18</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-3" id="toc-inputs-3" class="nav-link" data-scroll-target="#inputs-3"><span class="header-section-number">1.19</span> Inputs</a></li>
-  <li><a href="#expected-output-3" id="toc-expected-output-3" class="nav-link" data-scroll-target="#expected-output-3"><span class="header-section-number">1.20</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-3" id="toc-what-just-happened-3" class="nav-link" data-scroll-target="#what-just-happened-3"><span class="header-section-number">1.21</span> What just happened?</a></li>
-  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">1.22</span> Production Reality</a></li>
-  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">1.23</span> Practical exercise</a></li>
-  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">1.24</span> Field notes</a></li>
-  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">1.25</span> Challenge exercise</a></li>
-  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">1.26</span> Key takeaways</a></li>
-  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">1.27</span> Repository files</a></li>
-  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">1.28</span> What can you do now that you couldn’t do before?</a></li>
-  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">1.29</span> Suggested next step</a></li>
+  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">1.6</span> Production Reality</a></li>
+  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">1.7</span> Practical exercise</a></li>
+  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">1.8</span> Field notes</a></li>
+  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">1.9</span> Challenge exercise</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">1.10</span> Key takeaways</a></li>
+  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">1.11</span> Repository files</a></li>
+  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">1.12</span> What can you do now that you couldn’t do before?</a></li>
+  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">1.13</span> Suggested next step</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/djimrastephane/ddr-rag-book/edit/main/chapters/chapter_01.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/djimrastephane/ddr-rag-book/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -680,26 +660,19 @@ Pipe free</code></pre>
 <h2 data-number="1.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">1.5</span> Implementation</h2>
 <section id="step-1-get-the-sample-archive" class="level3" data-number="1.5.1">
 <h3 data-number="1.5.1" class="anchored" data-anchor-id="step-1-get-the-sample-archive"><span class="header-section-number">1.5.1</span> Step 1: get the sample archive</h3>
-</section>
-</section>
-<section id="what-problem-are-we-solving" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="what-problem-are-we-solving"><span class="header-section-number">1.6</span> What problem are we solving?</h2>
+<p><strong>What problem are we solving?</strong></p>
 <p>Before extracting anything, confirm the report archive is actually there and see what you’re working with — the same way you’d check a folder of scanned tickets exists before writing a script against it.</p>
-</section>
-<section id="inputs" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="inputs"><span class="header-section-number">1.7</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>The folder <code>datasets/sample_ddrs/</code>, containing ten curated Utah FORGE DDR PDFs (already included in this repository — no download needed).</li>
 </ul>
-</section>
-<section id="expected-output" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">1.8</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>A list of ten file paths, sorted, something like:</p>
 <pre><code>FORGE-16A-78-32_Drilling_003_2020-10-22.pdf
 FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
 ...
 FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
-<div id="0dc214c3" class="cell" data-execution_count="1">
+<div id="25abd50f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -722,9 +695,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 <p>Every code block in this book works the same way; this note won’t repeat after this point.</p>
 </div>
 </div>
-</section>
-<section id="what-just-happened" class="level2" data-number="1.9">
-<h2 data-number="1.9" class="anchored" data-anchor-id="what-just-happened"><span class="header-section-number">1.9</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>You pointed Python at a folder and asked it to list every file ending in <code>.pdf</code>. Nothing was opened or read yet — this is just confirming the folder and its contents exist before you build anything on top of them.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Path and glob">
 <div class="callout-header d-flex align-content-center">
@@ -740,33 +711,25 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </div>
 </div>
 <p>If you want to build this curated subset yourself from a full local copy of the public archive (or extend it with more reports), see <code>code/chapter_01/build_sample_archive.py</code> — it’s documented in <a href="../appendix/appendix_a_environment_setup.html">Appendix A</a>.</p>
-<section id="step-2-extract-text-from-one-pdf" class="level3" data-number="1.9.1">
-<h3 data-number="1.9.1" class="anchored" data-anchor-id="step-2-extract-text-from-one-pdf"><span class="header-section-number">1.9.1</span> Step 2: extract text from one PDF</h3>
 </section>
-</section>
-<section id="what-problem-are-we-solving-1" class="level2" data-number="1.10">
-<h2 data-number="1.10" class="anchored" data-anchor-id="what-problem-are-we-solving-1"><span class="header-section-number">1.10</span> What problem are we solving?</h2>
+<section id="step-2-extract-text-from-one-pdf" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" class="anchored" data-anchor-id="step-2-extract-text-from-one-pdf"><span class="header-section-number">1.5.2</span> Step 2: extract text from one PDF</h3>
+<p><strong>What problem are we solving?</strong></p>
 <p>Prove that we can pull real text out of a single PDF before building anything more elaborate — the smallest possible version of the whole chapter’s job.</p>
-</section>
-<section id="inputs-1" class="level2" data-number="1.11">
-<h2 data-number="1.11" class="anchored" data-anchor-id="inputs-1"><span class="header-section-number">1.11</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>One PDF: <code>datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</code> (report #38, the stuck-pipe day).</li>
 </ul>
-</section>
-<section id="expected-output-1" class="level2" data-number="1.12">
-<h2 data-number="1.12" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">1.12</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>The full text of the report’s first page, printed to your terminal — header block, casing and mud tables, BHA component list, survey data, and the time breakdown quoted above, all as plain text.</p>
-<div id="01b70430" class="cell" data-execution_count="2">
+<div id="a7938c48" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    first_page <span class="op">=</span> pdf.pages[<span class="dv">0</span>]</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(first_page.extract_text())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened-1" class="level2" data-number="1.13">
-<h2 data-number="1.13" class="anchored" data-anchor-id="what-just-happened-1"><span class="header-section-number">1.13</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>You opened the PDF, grabbed its first page, and asked <code>pdfplumber</code> to hand back everything readable on it as plain text. Real DDRs pack in far more than a simple narrative — this one report alone has seven distinct data sections (header, casing, mud, BHA, survey, time breakdown, and remarks) — and all of it came back as one ordinary block of text you can now search, print, or save.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Opening a file safely">
 <div class="callout-header d-flex align-content-center">
@@ -782,21 +745,15 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </div>
 </div>
 <p>Every DDR in this archive is a single page, but that won’t be true of every report you’ll ever encounter. Loop over every page and keep track of which page each chunk of text came from — you’ll need that later for citations:</p>
-</section>
-<section id="what-problem-are-we-solving-2" class="level2" data-number="1.14">
-<h2 data-number="1.14" class="anchored" data-anchor-id="what-problem-are-we-solving-2"><span class="header-section-number">1.14</span> What problem are we solving?</h2>
+<p><strong>What problem are we solving?</strong></p>
 <p>Handle reports with more than one page, and remember which page each piece of text came from — information you’ll need in later chapters to point back to the exact source of an answer.</p>
-</section>
-<section id="inputs-2" class="level2" data-number="1.15">
-<h2 data-number="1.15" class="anchored" data-anchor-id="inputs-2"><span class="header-section-number">1.15</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>Any DDR PDF path, single-page or multi-page.</li>
 </ul>
-</section>
-<section id="expected-output-2" class="level2" data-number="1.16">
-<h2 data-number="1.16" class="anchored" data-anchor-id="expected-output-2"><span class="header-section-number">1.16</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>One combined string containing every page’s text, with a marker like <code>--- Page 1 ---</code> showing where each page starts.</p>
-<div id="b56f7661" class="cell" data-execution_count="3">
+<div id="11ff54d7" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -808,9 +765,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            pages_text.append(<span class="ss">f"--- Page </span><span class="sc">{</span>page_number<span class="sc">}</span><span class="ss"> ---</span><span class="ch">\n</span><span class="sc">{</span>text<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(pages_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened-2" class="level2" data-number="1.17">
-<h2 data-number="1.17" class="anchored" data-anchor-id="what-just-happened-2"><span class="header-section-number">1.17</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>This packages the previous step into a reusable procedure: for every page in the PDF, pull its text, label it with a page number, and stitch all the labelled pages together into one string. Instead of writing this logic out every time, you now have one named tool — <code>extract_text</code> — you can hand any PDF path to.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Function and loop">
 <div class="callout-header d-flex align-content-center">
@@ -826,36 +781,29 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </div>
 </div>
 <p>Note the <code>or ""</code>. If a page has no extractable text — a scanned page mixed into an otherwise digital report, for example — <code>extract_text()</code> returns <code>None</code>, and every downstream step in this book expects a string, not <code>None</code>. This is a safety check, the code equivalent of confirming a valve position before proceeding instead of assuming it: assume real data is messier than the happy path, and this pattern shows up throughout the book.</p>
-<section id="step-3-make-it-a-script-you-can-run-from-the-command-line" class="level3" data-number="1.17.1">
-<h3 data-number="1.17.1" class="anchored" data-anchor-id="step-3-make-it-a-script-you-can-run-from-the-command-line"><span class="header-section-number">1.17.1</span> Step 3: make it a script you can run from the command line</h3>
 </section>
-</section>
-<section id="what-problem-are-we-solving-3" class="level2" data-number="1.18">
-<h2 data-number="1.18" class="anchored" data-anchor-id="what-problem-are-we-solving-3"><span class="header-section-number">1.18</span> What problem are we solving?</h2>
+<section id="step-3-make-it-a-script-you-can-run-from-the-command-line" class="level3" data-number="1.5.3">
+<h3 data-number="1.5.3" class="anchored" data-anchor-id="step-3-make-it-a-script-you-can-run-from-the-command-line"><span class="header-section-number">1.5.3</span> Step 3: make it a script you can run from the command line</h3>
+<p><strong>What problem are we solving?</strong></p>
 <p>Turn this into a tool you can point at any file or folder from the terminal, without opening or editing the code each time.</p>
-</section>
-<section id="inputs-3" class="level2" data-number="1.19">
-<h2 data-number="1.19" class="anchored" data-anchor-id="inputs-3"><span class="header-section-number">1.19</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>A single PDF path, or a folder of PDFs plus a <code>--batch</code> flag and an <code>--out</code> destination folder.</li>
 </ul>
-</section>
-<section id="expected-output-3" class="level2" data-number="1.20">
-<h2 data-number="1.20" class="anchored" data-anchor-id="expected-output-3"><span class="header-section-number">1.20</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>Printed text to the terminal (single-file mode), or a folder of <code>.txt</code> files, one per PDF (batch mode).</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One file, printed to the terminal</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A whole folder, saved as .txt files</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/ <span class="at">--batch</span> <span class="at">--out</span> datasets/ddr_text</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="what-just-happened-3" class="level2" data-number="1.21">
-<h2 data-number="1.21" class="anchored" data-anchor-id="what-just-happened-3"><span class="header-section-number">1.21</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>The full script, <code>code/chapter_01/read_ddr.py</code>, wraps the <code>extract_text</code> function in a command-line interface: flags like <code>--batch</code> and <code>--out</code> work like switches on a control panel, letting you choose “one file, printed” or “whole folder, saved” without touching the code itself.</p>
 <p>Try the first command now. You should see the full report text, including the line: <code>During the slide lost tool face and became assembly became stuck</code> — real language from a real rig report, not a paraphrase.</p>
 </section>
-<section id="production-reality" class="level2" data-number="1.22">
-<h2 data-number="1.22" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">1.22</span> Production Reality</h2>
+</section>
+<section id="production-reality" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">1.6</span> Production Reality</h2>
 <p>This chapter assumes every DDR is a clean, digital-native PDF produced by the same software — true for this entire archive, and the easiest possible starting point. A real multi-well, multi-operator archive usually isn’t that tidy. Expect:</p>
 <ul>
 <li>scanned reports with no character data at all (Chapter 6)</li>
@@ -866,14 +814,14 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </ul>
 <p>None of that shows up in Part I’s ten curated reports, on purpose — you need a reliable extraction script before you can handle the messy cases. Chapter 6 comes back to this list once you have somewhere solid to stand.</p>
 </section>
-<section id="practical-exercise" class="level2" data-number="1.23">
-<h2 data-number="1.23" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">1.23</span> Practical exercise</h2>
+<section id="practical-exercise" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">1.7</span> Practical exercise</h2>
 <p>🟢 <strong>Beginner</strong></p>
 <p><strong>Try it yourself:</strong> Help Oumy check the rest of the archive the way she asked: run <code>read_ddr.py</code> in batch mode against <code>datasets/sample_ddrs/</code>, saving the output to <code>datasets/ddr_text/</code>. Then open <code>FORGE-16A-78-32_Drilling_050_2020-12-08.txt</code> and find the line describing what the crew milled up that day.</p>
 <p><strong>You’ll know it worked when:</strong> you have ten <code>.txt</code> files in <code>datasets/ddr_text/</code>, one per PDF, and you can find the word “Fishing” in report 050’s text without opening the original PDF.</p>
 </section>
-<section id="field-notes" class="level2" data-number="1.24">
-<h2 data-number="1.24" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">1.24</span> Field notes</h2>
+<section id="field-notes" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">1.8</span> Field notes</h2>
 <div class="callout callout-style-default callout-warning callout-titled" title="🔧 Field notes: a table that reads like nonsense until you know why">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -896,13 +844,13 @@ with MWD 6.75 3.25 30.35
 </div>
 </div>
 </section>
-<section id="challenge-exercise" class="level2" data-number="1.25">
-<h2 data-number="1.25" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">1.25</span> Challenge exercise</h2>
+<section id="challenge-exercise" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">1.9</span> Challenge exercise</h2>
 <p>🟠 <strong>Intermediate</strong></p>
 <p><strong>Challenge:</strong> Extend the script to also print, for each PDF, the total number of pages and the total character count extracted. Then compare report #3 (October 22, before the well was spudded — <code>PRESENT OPERATIONS: RIGGING UP...</code>) against report #38 (the stuck-pipe day): how much richer is the later report’s text, and why might that be? (Hint: check the <code>SPUD DATE</code> and <code>DFS</code>/<code>DOL</code> fields in each report’s header.) A reference solution is in <code>code/chapter_01/challenge/</code>.</p>
 </section>
-<section id="key-takeaways" class="level2" data-number="1.26">
-<h2 data-number="1.26" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">1.26</span> Key takeaways</h2>
+<section id="key-takeaways" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">1.10</span> Key takeaways</h2>
 <ul>
 <li>A PDF’s internal structure, not its on-screen appearance, determines whether text can be extracted directly. Digital-native PDFs can; scanned PDFs need OCR (Chapter 6).</li>
 <li><code>pdfplumber</code> turns a PDF into plain Python strings, one page at a time.</li>
@@ -910,8 +858,8 @@ with MWD 6.75 3.25 30.35
 <li>A five-line function (<code>extract_text</code>) plus a thin command-line wrapper is already a genuinely useful tool. You don’t need machine learning to save an engineer an hour of searching PDFs by hand — and it works identically whether the PDF is a synthetic example or, as here, a real report from a real well.</li>
 </ul>
 </section>
-<section id="repository-files" class="level2" data-number="1.27">
-<h2 data-number="1.27" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">1.27</span> Repository files</h2>
+<section id="repository-files" class="level2" data-number="1.11">
+<h2 data-number="1.11" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">1.11</span> Repository files</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -974,12 +922,12 @@ with MWD 6.75 3.25 30.35
 </div>
 </div>
 </section>
-<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="1.28">
-<h2 data-number="1.28" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">1.28</span> What can you do now that you couldn’t do before?</h2>
+<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="1.12">
+<h2 data-number="1.12" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">1.12</span> What can you do now that you couldn’t do before?</h2>
 <p>You can turn any digital-native DDR PDF — or a whole folder of them — into plain text you can read, search, or hand to another script, without opening a single PDF viewer.</p>
 </section>
-<section id="suggested-next-step" class="level2" data-number="1.29">
-<h2 data-number="1.29" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">1.29</span> Suggested next step</h2>
+<section id="suggested-next-step" class="level2" data-number="1.13">
+<h2 data-number="1.13" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">1.13</span> Suggested next step</h2>
 <p><strong>Coming up in Chapter 2:</strong> The text you just extracted uses real oilfield shorthand and drilling terminology — <code>BHA</code>, <code>WOB</code>, <code>SPP</code>, <code>PJSM</code> — some spelled out, some abbreviated, exactly as the field actually writes it. Chapter 2 builds an abbreviation expansion engine grounded in what’s actually in this archive, turning this raw text into something both humans and machines can search reliably.</p>
 
 
@@ -1623,18 +1571,18 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: get the sample archive</span></span>
 <span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a>Before extracting anything, confirm the report archive is actually there</span>
 <span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>and see what you're working with — the same way you'd check a folder of</span>
 <span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>scanned tickets exists before writing a script against it.</span>
 <span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The folder <span class="in">`datasets/sample_ddrs/`</span>, containing ten curated Utah FORGE</span>
 <span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a>  DDR PDFs (already included in this repository — no download needed).</span>
 <span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>A list of ten file paths, sorted, something like:</span>
 <span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a></span>
@@ -1666,7 +1614,7 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a>after this point.</span>
 <span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>You pointed Python at a folder and asked it to list every file ending in</span>
 <span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a><span class="in">`.pdf`</span>. Nothing was opened or read yet — this is just confirming the</span>
@@ -1686,18 +1634,18 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: extract text from one PDF</span></span>
 <span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>Prove that we can pull real text out of a single PDF before building</span>
 <span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>anything more elaborate — the smallest possible version of the whole</span>
 <span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>chapter's job.</span>
 <span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>One PDF: <span class="in">`datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf`</span></span>
 <span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>  (report #38, the stuck-pipe day).</span>
 <span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>The full text of the report's first page, printed to your terminal —</span>
 <span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>header block, casing and mud tables, BHA component list, survey data, and</span>
@@ -1712,7 +1660,7 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(first_page.extract_text())</span>
 <span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a>You opened the PDF, grabbed its first page, and asked <span class="in">`pdfplumber`</span> to hand</span>
 <span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a>back everything readable on it as plain text. Real DDRs pack in far more</span>
@@ -1734,17 +1682,17 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a>of which page each chunk of text came from — you'll need that later for</span>
 <span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a>citations:</span>
 <span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>Handle reports with more than one page, and remember which page each</span>
 <span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a>piece of text came from — information you'll need in later chapters to</span>
 <span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a>point back to the exact source of an answer.</span>
 <span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Any DDR PDF path, single-page or multi-page.</span>
 <span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>One combined string containing every page's text, with a marker like</span>
 <span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a><span class="in">`--- Page 1 ---`</span> showing where each page starts.</span>
@@ -1763,7 +1711,7 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-298"><a href="#cb8-298" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"</span><span class="ch">\n\n</span><span class="st">"</span>.join(pages_text)</span>
 <span id="cb8-299"><a href="#cb8-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-300"><a href="#cb8-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-302"><a href="#cb8-302" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-303"><a href="#cb8-303" aria-hidden="true" tabindex="-1"></a>This packages the previous step into a reusable procedure: for every page</span>
 <span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a>in the PDF, pull its text, label it with a page number, and stitch all the</span>
@@ -1790,17 +1738,17 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: make it a script you can run from the command line</span></span>
 <span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a>Turn this into a tool you can point at any file or folder from the</span>
 <span id="cb8-331"><a href="#cb8-331" aria-hidden="true" tabindex="-1"></a>terminal, without opening or editing the code each time.</span>
 <span id="cb8-332"><a href="#cb8-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-333"><a href="#cb8-333" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb8-333"><a href="#cb8-333" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-334"><a href="#cb8-334" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-335"><a href="#cb8-335" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A single PDF path, or a folder of PDFs plus a <span class="in">`--batch`</span> flag and an</span>
 <span id="cb8-336"><a href="#cb8-336" aria-hidden="true" tabindex="-1"></a>  <span class="in">`--out`</span> destination folder.</span>
 <span id="cb8-337"><a href="#cb8-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb8-339"><a href="#cb8-339" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-340"><a href="#cb8-340" aria-hidden="true" tabindex="-1"></a>Printed text to the terminal (single-file mode), or a folder of <span class="in">`.txt`</span></span>
 <span id="cb8-341"><a href="#cb8-341" aria-hidden="true" tabindex="-1"></a>files, one per PDF (batch mode).</span>
@@ -1813,7 +1761,7 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/ <span class="at">--batch</span> <span class="at">--out</span> datasets/ddr_text</span>
 <span id="cb8-349"><a href="#cb8-349" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-350"><a href="#cb8-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-352"><a href="#cb8-352" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-353"><a href="#cb8-353" aria-hidden="true" tabindex="-1"></a>The full script, <span class="in">`code/chapter_01/read_ddr.py`</span>, wraps the <span class="in">`extract_text`</span></span>
 <span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a>function in a command-line interface: flags like <span class="in">`--batch`</span> and <span class="in">`--out`</span></span>

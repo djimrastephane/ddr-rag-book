@@ -540,33 +540,17 @@ div.csl-indent {
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">8.5</span> Implementation</a>
   <ul class="collapse">
   <li><a href="#step-1-build-the-index-and-save-it-to-disk" id="toc-step-1-build-the-index-and-save-it-to-disk" class="nav-link" data-scroll-target="#step-1-build-the-index-and-save-it-to-disk"><span class="header-section-number">8.5.1</span> Step 1: build the index and save it to disk</a></li>
+  <li><a href="#step-2-reload-the-index-and-answer-a-query" id="toc-step-2-reload-the-index-and-answer-a-query" class="nav-link" data-scroll-target="#step-2-reload-the-index-and-answer-a-query"><span class="header-section-number">8.5.2</span> Step 2: reload the index and answer a query</a></li>
+  <li><a href="#step-3-index-real-chunks-with-real-metadata-attached" id="toc-step-3-index-real-chunks-with-real-metadata-attached" class="nav-link" data-scroll-target="#step-3-index-real-chunks-with-real-metadata-attached"><span class="header-section-number">8.5.3</span> Step 3: index real chunks, with real metadata attached</a></li>
   </ul></li>
-  <li><a href="#what-problem-are-we-solving" id="toc-what-problem-are-we-solving" class="nav-link" data-scroll-target="#what-problem-are-we-solving"><span class="header-section-number">8.6</span> What problem are we solving?</a></li>
-  <li><a href="#inputs" id="toc-inputs" class="nav-link" data-scroll-target="#inputs"><span class="header-section-number">8.7</span> Inputs</a></li>
-  <li><a href="#expected-output" id="toc-expected-output" class="nav-link" data-scroll-target="#expected-output"><span class="header-section-number">8.8</span> Expected Output</a></li>
-  <li><a href="#what-just-happened" id="toc-what-just-happened" class="nav-link" data-scroll-target="#what-just-happened"><span class="header-section-number">8.9</span> What just happened?</a>
-  <ul class="collapse">
-  <li><a href="#step-2-reload-the-index-and-answer-a-query" id="toc-step-2-reload-the-index-and-answer-a-query" class="nav-link" data-scroll-target="#step-2-reload-the-index-and-answer-a-query"><span class="header-section-number">8.9.1</span> Step 2: reload the index and answer a query</a></li>
-  </ul></li>
-  <li><a href="#what-problem-are-we-solving-1" id="toc-what-problem-are-we-solving-1" class="nav-link" data-scroll-target="#what-problem-are-we-solving-1"><span class="header-section-number">8.10</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-1" id="toc-inputs-1" class="nav-link" data-scroll-target="#inputs-1"><span class="header-section-number">8.11</span> Inputs</a></li>
-  <li><a href="#expected-output-1" id="toc-expected-output-1" class="nav-link" data-scroll-target="#expected-output-1"><span class="header-section-number">8.12</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-1" id="toc-what-just-happened-1" class="nav-link" data-scroll-target="#what-just-happened-1"><span class="header-section-number">8.13</span> What just happened?</a>
-  <ul class="collapse">
-  <li><a href="#step-3-index-real-chunks-with-real-metadata-attached" id="toc-step-3-index-real-chunks-with-real-metadata-attached" class="nav-link" data-scroll-target="#step-3-index-real-chunks-with-real-metadata-attached"><span class="header-section-number">8.13.1</span> Step 3: index real chunks, with real metadata attached</a></li>
-  </ul></li>
-  <li><a href="#what-problem-are-we-solving-2" id="toc-what-problem-are-we-solving-2" class="nav-link" data-scroll-target="#what-problem-are-we-solving-2"><span class="header-section-number">8.14</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-2" id="toc-inputs-2" class="nav-link" data-scroll-target="#inputs-2"><span class="header-section-number">8.15</span> Inputs</a></li>
-  <li><a href="#expected-output-2" id="toc-expected-output-2" class="nav-link" data-scroll-target="#expected-output-2"><span class="header-section-number">8.16</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-2" id="toc-what-just-happened-2" class="nav-link" data-scroll-target="#what-just-happened-2"><span class="header-section-number">8.17</span> What just happened?</a></li>
-  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">8.18</span> Production Reality</a></li>
-  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">8.19</span> Practical exercise</a></li>
-  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">8.20</span> Field notes</a></li>
-  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">8.21</span> Challenge exercise</a></li>
-  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">8.22</span> Key takeaways</a></li>
-  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">8.23</span> Repository files</a></li>
-  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">8.24</span> What can you do now that you couldn’t do before?</a></li>
-  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">8.25</span> Suggested next step</a></li>
+  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">8.6</span> Production Reality</a></li>
+  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">8.7</span> Practical exercise</a></li>
+  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">8.8</span> Field notes</a></li>
+  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">8.9</span> Challenge exercise</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">8.10</span> Key takeaways</a></li>
+  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">8.11</span> Repository files</a></li>
+  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">8.12</span> What can you do now that you couldn’t do before?</a></li>
+  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">8.13</span> Suggested next step</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/djimrastephane/ddr-rag-book/edit/main/chapters/chapter_08.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/djimrastephane/ddr-rag-book/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -677,23 +661,16 @@ Global FAISS index
 <h2 data-number="8.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">8.5</span> Implementation</h2>
 <section id="step-1-build-the-index-and-save-it-to-disk" class="level3" data-number="8.5.1">
 <h3 data-number="8.5.1" class="anchored" data-anchor-id="step-1-build-the-index-and-save-it-to-disk"><span class="header-section-number">8.5.1</span> Step 1: build the index and save it to disk</h3>
-</section>
-</section>
-<section id="what-problem-are-we-solving" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="what-problem-are-we-solving"><span class="header-section-number">8.6</span> What problem are we solving?</h2>
+<p><strong>What problem are we solving?</strong></p>
 <p>Turn a matrix of chunk embeddings into a fast, queryable structure, then save it so it never needs rebuilding from scratch in a future session.</p>
-</section>
-<section id="inputs" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="inputs"><span class="header-section-number">8.7</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li><code>embeddings</code>: a NumPy array of chunk vectors, shape <code>(n_chunks, 384)</code>.</li>
 <li>A destination file path for the saved index.</li>
 </ul>
-</section>
-<section id="expected-output" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">8.8</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>A <code>faiss.index</code> file on disk, plus the same in-memory index object ready to query immediately.</p>
-<div id="1d65bd1d" class="cell" data-execution_count="1">
+<div id="e1957d94" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_08/build_faiss_index.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -709,30 +686,22 @@ Global FAISS index
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> save_index(index: faiss.Index, path: Path) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    faiss.write_index(index, <span class="bu">str</span>(path))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened" class="level2" data-number="8.9">
-<h2 data-number="8.9" class="anchored" data-anchor-id="what-just-happened"><span class="header-section-number">8.9</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p><code>build_index</code> creates an empty FAISS structure sized for 384-number vectors, then loads every chunk’s embedding into it in one call. <code>save_index</code> writes that structure out to a single file — the “binder” from the Engineering Translation above — so the next session can load it back instantly instead of re-embedding every chunk again.</p>
-<section id="step-2-reload-the-index-and-answer-a-query" class="level3" data-number="8.9.1">
-<h3 data-number="8.9.1" class="anchored" data-anchor-id="step-2-reload-the-index-and-answer-a-query"><span class="header-section-number">8.9.1</span> Step 2: reload the index and answer a query</h3>
 </section>
-</section>
-<section id="what-problem-are-we-solving-1" class="level2" data-number="8.10">
-<h2 data-number="8.10" class="anchored" data-anchor-id="what-problem-are-we-solving-1"><span class="header-section-number">8.10</span> What problem are we solving?</h2>
+<section id="step-2-reload-the-index-and-answer-a-query" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="step-2-reload-the-index-and-answer-a-query"><span class="header-section-number">8.5.2</span> Step 2: reload the index and answer a query</h3>
+<p><strong>What problem are we solving?</strong></p>
 <p>In a fresh session — no re-embedding, no rebuilding — load the saved index back and answer a query against it, the same way Chapter 4’s <code>search</code> did, just backed by FAISS instead of a NumPy array in memory.</p>
-</section>
-<section id="inputs-1" class="level2" data-number="8.11">
-<h2 data-number="8.11" class="anchored" data-anchor-id="inputs-1"><span class="header-section-number">8.11</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>The saved <code>faiss.index</code> file path.</li>
 <li>A query vector (from Chapter 4’s embedding model).</li>
 <li><code>top_k</code>: how many results to return.</li>
 </ul>
-</section>
-<section id="expected-output-1" class="level2" data-number="8.12">
-<h2 data-number="8.12" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">8.12</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(chunk_index, similarity_score)</code> pairs — the same shape of result Chapter 4’s brute-force <code>search</code> returned.</p>
-<div id="c091b70b" class="cell" data-execution_count="2">
+<div id="8c21c56d" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_index(path: Path) <span class="op">-&gt;</span> faiss.Index:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> faiss.read_index(<span class="bu">str</span>(path))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -740,30 +709,22 @@ Global FAISS index
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    scores, indices <span class="op">=</span> index.search(query_vec.reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>).astype(<span class="st">"float32"</span>), top_k)</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">zip</span>(indices[<span class="dv">0</span>].tolist(), scores[<span class="dv">0</span>].tolist()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened-1" class="level2" data-number="8.13">
-<h2 data-number="8.13" class="anchored" data-anchor-id="what-just-happened-1"><span class="header-section-number">8.13</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p><code>load_index</code> reads the saved file back into a ready-to-query FAISS index — no re-embedding step, because the vectors were already saved inside it. <code>search</code> hands it one query vector and asks for the <code>top_k</code> closest matches; FAISS returns their positions and scores, which get paired up into the same kind of ranked list Chapter 4 produced by hand.</p>
 <p>This mirrors the indexing pattern in the companion pipeline’s <code>src/rag_pdf/services/search_service.py</code>, which builds <code>IndexFlatIP</code> over chunk embeddings and persists it to <code>faiss.index</code> alongside each document’s other artefacts.</p>
-<section id="step-3-index-real-chunks-with-real-metadata-attached" class="level3" data-number="8.13.1">
-<h3 data-number="8.13.1" class="anchored" data-anchor-id="step-3-index-real-chunks-with-real-metadata-attached"><span class="header-section-number">8.13.1</span> Step 3: index real chunks, with real metadata attached</h3>
 </section>
-</section>
-<section id="what-problem-are-we-solving-2" class="level2" data-number="8.14">
-<h2 data-number="8.14" class="anchored" data-anchor-id="what-problem-are-we-solving-2"><span class="header-section-number">8.14</span> What problem are we solving?</h2>
+<section id="step-3-index-real-chunks-with-real-metadata-attached" class="level3" data-number="8.5.3">
+<h3 data-number="8.5.3" class="anchored" data-anchor-id="step-3-index-real-chunks-with-real-metadata-attached"><span class="header-section-number">8.5.3</span> Step 3: index real chunks, with real metadata attached</h3>
+<p><strong>What problem are we solving?</strong></p>
 <p>Everything above indexes whole documents — Chapter 4’s <code>load_chunks()</code> loads one vector per <em>report</em>, not per chunk, so a FAISS row can only ever answer “which report,” never “which page of it,” and never “which date.” Chapter 7 already built a chunker that knows each chunk’s page number; this step puts that chunker to work and adds one more thing while it’s there — every DDR filename already carries its own report date (<code>..._2020-11-26.txt</code>), so reading it costs nothing extra and closes a second gap at the same time. One FAISS row per chunk, with a matching metadata record — report filename, page, and date — so a search result can finally point at more than just a whole file.</p>
-</section>
-<section id="inputs-2" class="level2" data-number="8.15">
-<h2 data-number="8.15" class="anchored" data-anchor-id="inputs-2"><span class="header-section-number">8.15</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>A folder of extracted <code>.txt</code> files: <code>datasets/ddr_text/</code>.</li>
 <li>Chapter 7’s <code>chunk_pages_by_tokens()</code>.</li>
 </ul>
-</section>
-<section id="expected-output-2" class="level2" data-number="8.16">
-<h2 data-number="8.16" class="anchored" data-anchor-id="expected-output-2"><span class="header-section-number">8.16</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>A FAISS index with one row per chunk, and a parallel <code>metadata</code> list — <code>metadata[i]</code> is a <code>{"report": ..., "page": ..., "date": ...}</code> dict describing exactly what <code>embeddings[i]</code> is.</p>
-<div id="fec03a0b" class="cell" data-execution_count="3">
+<div id="db17b4e7" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>REPORT_DATE <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"_</span><span class="kw">(</span><span class="dv">\d</span><span class="op">{4}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="kw">)</span><span class="ch">\.</span><span class="vs">"</span>)</span>
@@ -786,14 +747,13 @@ Global FAISS index
 <span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> build_index(embeddings)</span>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index, metadata</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened-2" class="level2" data-number="8.17">
-<h2 data-number="8.17" class="anchored" data-anchor-id="what-just-happened-2"><span class="header-section-number">8.17</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>For every report, this runs Chapter 7’s page-aware chunker, embeds each resulting chunk, and appends a matching <code>{"report", "page", "date"}</code> record to <code>metadata</code> in the same order the chunk’s vector gets added to the index. Row <code>i</code> of the FAISS index and entry <code>i</code> of <code>metadata</code> describe the same chunk — that parallel-list discipline is the entire mechanism; there’s no cleverness beyond keeping the two lists in lockstep. <code>report_date()</code> is a one-line regex against the filename, not a new data source: every filename in this archive already carries its report’s date (confirmed against all 76 real filenames in the full archive — zero exceptions to the <code>_YYYY-MM-DD.</code> pattern), so extracting it is free once you’re already reading the filename for <code>report</code>.</p>
 <p>Run this against the real ten-report sample and it builds <strong>333 chunks across 10 reports</strong> — roughly ten times the rows the whole-document index above has, all from the exact same source text. Query it for <code>"stuck pipe"</code> and the difference isn’t just more rows: report #38 — the actual stuck-pipe day — jumps to <strong>rank 1</strong> at a score of <strong>0.4362</strong>, clearly separated from its nearest competitor. The whole-document index earlier in this chapter ranked the same report <strong>2nd</strong>, at <strong>0.1978</strong>, behind a report that only mentions the topic in passing. Chunking doesn’t just enable page-level citations — it measurably sharpens the ranking itself, for the same reason Chapter 4’s Field Notes already showed: a whole report blends a few relevant sentences with pages of unrelated tables, and a smaller chunk can’t hide relevant text inside irrelevant text the way a whole document can.</p>
 </section>
-<section id="production-reality" class="level2" data-number="8.18">
-<h2 data-number="8.18" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">8.18</span> Production Reality</h2>
+</section>
+<section id="production-reality" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">8.6</span> Production Reality</h2>
 <p>This chapter’s <code>IndexFlatIP</code> scales cleanly to Utah FORGE’s 1,428 chunks — both to build and to query. A single operator’s <em>entire</em> well portfolio, or a service company handling multiple clients, changes the picture:</p>
 <ul>
 <li>millions of chunks make exact search too slow; that’s when approximate indexes (IVF, HNSW) become the right tradeoff, not just an option mentioned in passing</li>
@@ -803,14 +763,14 @@ Global FAISS index
 <li>this chapter’s own code deliberately restricts FAISS and the embedding model to a single CPU thread (<code>OMP_NUM_THREADS=1</code>). Not a hypothetical caution — a fix for a real, reproducible crash confirmed during this book’s own testing: on macOS, FAISS and PyTorch (which the embedding model runs on) each bring their own separate copy of the same multi-threading library, and letting both use more than one thread at once corrupts memory and crashes the whole program. Invisible at ten documents. A genuinely large archive would want real multi-threaded performance back, which means revisiting that limit deliberately — checking whether your specific combination of library versions still hits the same conflict — rather than leaving every embedding job capped at one thread by default forever</li>
 </ul>
 </section>
-<section id="practical-exercise" class="level2" data-number="8.19">
-<h2 data-number="8.19" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">8.19</span> Practical exercise</h2>
+<section id="practical-exercise" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">8.7</span> Practical exercise</h2>
 <p>🟢 <strong>Beginner</strong></p>
 <p><strong>Try it yourself:</strong> Build a FAISS index over the ten sample DDR embeddings from Chapter 4, save it to disk, reload it in a fresh Python session, and confirm a query for “stuck pipe” returns the same ranked order as Chapter 4’s brute-force search — report #38 at rank 2, report #39 at rank 5.</p>
 <p><strong>You’ll know it worked when:</strong> the FAISS-based and brute-force results agree — because, mathematically, <code>IndexFlatIP</code> over normalized vectors <em>is</em> cosine similarity, just implemented differently.</p>
 </section>
-<section id="field-notes" class="level2" data-number="8.20">
-<h2 data-number="8.20" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">8.20</span> Field notes</h2>
+<section id="field-notes" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">8.8</span> Field notes</h2>
 <div class="callout callout-style-default callout-warning callout-titled" title="🔧 Field notes: proving 'exact, not approximate' rather than asserting it">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -833,13 +793,13 @@ Global FAISS index
 </div>
 </div>
 </section>
-<section id="challenge-exercise" class="level2" data-number="8.21">
-<h2 data-number="8.21" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">8.21</span> Challenge exercise</h2>
+<section id="challenge-exercise" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">8.9</span> Challenge exercise</h2>
 <p>🔴 <strong>Advanced</strong></p>
 <p><strong>Challenge:</strong> If you have the full 76-report Utah FORGE archive (<code>datasets/forge_archive/</code>) and can run the heavier dependencies (<code>sentence-transformers</code>, <code>faiss-cpu</code>), chunk and embed all 76 reports yourself with the production pipeline’s own parameters — 224 tokens, 56-token overlap — and compare against the real 1,428-chunk count above. Expect a real gap, not just rounding noise: this book’s chunker uses <code>pdfplumber</code>’s plain text extraction, which pulls noticeably less text out of each DDR’s data tables than the production pipeline’s table-aware extraction does, so it produces fewer chunks even with identical chunking parameters. A reference solution is in <code>code/chapter_08/challenge/</code>.</p>
 </section>
-<section id="key-takeaways" class="level2" data-number="8.22">
-<h2 data-number="8.22" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">8.22</span> Key takeaways</h2>
+<section id="key-takeaways" class="level2" data-number="8.10">
+<h2 data-number="8.10" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">8.10</span> Key takeaways</h2>
 <ul>
 <li><code>IndexFlatIP</code> at this book’s scale is exact, not approximate — you’re not trading away accuracy, only reimplementing brute-force search more efficiently and persistently.</li>
 <li>Per-document and global indexes serve genuinely different questions; build both rather than forcing one index to do both jobs.</li>
@@ -847,8 +807,8 @@ Global FAISS index
 <li>Scaling the <em>index</em> doesn’t fix retrieval <em>quality</em> on its own — that’s the next chapter’s problem, though chunk-level indexing already closes part of the gap.</li>
 </ul>
 </section>
-<section id="repository-files" class="level2" data-number="8.23">
-<h2 data-number="8.23" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">8.23</span> Repository files</h2>
+<section id="repository-files" class="level2" data-number="8.11">
+<h2 data-number="8.11" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">8.11</span> Repository files</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -916,12 +876,12 @@ Global FAISS index
 </div>
 </div>
 </section>
-<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="8.24">
-<h2 data-number="8.24" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">8.24</span> What can you do now that you couldn’t do before?</h2>
+<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="8.12">
+<h2 data-number="8.12" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">8.12</span> What can you do now that you couldn’t do before?</h2>
 <p>You can build a persistent, queryable index over an entire report archive that survives a restart — and you’ve verified, not just assumed, that scaling up the infrastructure didn’t change a single answer the retrieval gives back. Every row in the chunk-level index also carries a real page number, ready for Chapter 10 to actually cite.</p>
 </section>
-<section id="suggested-next-step" class="level2" data-number="8.25">
-<h2 data-number="8.25" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">8.25</span> Suggested next step</h2>
+<section id="suggested-next-step" class="level2" data-number="8.13">
+<h2 data-number="8.13" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">8.13</span> Suggested next step</h2>
 <p><strong>Coming up in Chapter 9:</strong> A fast index doesn’t guarantee good retrieval. Chapter 9 looks at the retrieval scoring code itself — how sparse and dense signals get combined, and what it takes to make that combination numerically sound.</p>
 
 
@@ -1543,17 +1503,17 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: build the index and save it to disk</span></span>
 <span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>Turn a matrix of chunk embeddings into a fast, queryable structure, then</span>
 <span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>save it so it never needs rebuilding from scratch in a future session.</span>
 <span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`embeddings`</span>: a NumPy array of chunk vectors, shape <span class="in">`(n_chunks, 384)`</span>.</span>
 <span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A destination file path for the saved index.</span>
 <span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>A <span class="in">`faiss.index`</span> file on disk, plus the same in-memory index object ready</span>
 <span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>to query immediately.</span>
@@ -1576,7 +1536,7 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>    faiss.write_index(index, <span class="bu">str</span>(path))</span>
 <span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a><span class="in">`build_index`</span> creates an empty FAISS structure sized for 384-number</span>
 <span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>vectors, then loads every chunk's embedding into it in one call.</span>
@@ -1586,19 +1546,19 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: reload the index and answer a query</span></span>
 <span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>In a fresh session — no re-embedding, no rebuilding — load the saved</span>
 <span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>index back and answer a query against it, the same way Chapter 4's</span>
 <span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a><span class="in">`search`</span> did, just backed by FAISS instead of a NumPy array in memory.</span>
 <span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The saved <span class="in">`faiss.index`</span> file path.</span>
 <span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A query vector (from Chapter 4's embedding model).</span>
 <span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`top_k`</span>: how many results to return.</span>
 <span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>A ranked list of <span class="in">`(chunk_index, similarity_score)`</span> pairs — the same</span>
 <span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>shape of result Chapter 4's brute-force <span class="in">`search`</span> returned.</span>
@@ -1613,7 +1573,7 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">zip</span>(indices[<span class="dv">0</span>].tolist(), scores[<span class="dv">0</span>].tolist()))</span>
 <span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a><span class="in">`load_index`</span> reads the saved file back into a ready-to-query FAISS</span>
 <span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>index — no re-embedding step, because the vectors were already saved</span>
@@ -1628,7 +1588,7 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: index real chunks, with real metadata attached</span></span>
 <span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a>Everything above indexes whole documents — Chapter 4's <span class="in">`load_chunks()`</span></span>
 <span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a>loads one vector per *report*, not per chunk, so a FAISS row can only</span>
@@ -1641,12 +1601,12 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a>metadata record — report filename, page, and date — so a search result</span>
 <span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>can finally point at more than just a whole file.</span>
 <span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A folder of extracted <span class="in">`.txt`</span> files: <span class="in">`datasets/ddr_text/`</span>.</span>
 <span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Chapter 7's <span class="in">`chunk_pages_by_tokens()`</span>.</span>
 <span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a>A FAISS index with one row per chunk, and a parallel <span class="in">`metadata`</span> list —</span>
 <span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a><span class="in">`metadata[i]`</span> is a <span class="in">`{"report": ..., "page": ..., "date": ...}`</span> dict</span>
@@ -1677,7 +1637,7 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index, metadata</span>
 <span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a>For every report, this runs Chapter 7's page-aware chunker, embeds each</span>
 <span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>resulting chunk, and appends a matching <span class="in">`{"report", "page", "date"}`</span></span>

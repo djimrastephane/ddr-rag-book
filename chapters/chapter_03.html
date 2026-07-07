@@ -521,34 +521,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">3.5</span> Implementation</a>
   <ul class="collapse">
   <li><a href="#step-1-split-text-into-searchable-words" id="toc-step-1-split-text-into-searchable-words" class="nav-link" data-scroll-target="#step-1-split-text-into-searchable-words"><span class="header-section-number">3.5.1</span> Step 1: split text into searchable words</a></li>
+  <li><a href="#step-2-build-the-lookup-table" id="toc-step-2-build-the-lookup-table" class="nav-link" data-scroll-target="#step-2-build-the-lookup-table"><span class="header-section-number">3.5.2</span> Step 2: build the lookup table</a></li>
+  <li><a href="#step-3-answer-a-query" id="toc-step-3-answer-a-query" class="nav-link" data-scroll-target="#step-3-answer-a-query"><span class="header-section-number">3.5.3</span> Step 3: answer a query</a></li>
   </ul></li>
-  <li><a href="#what-problem-are-we-solving" id="toc-what-problem-are-we-solving" class="nav-link" data-scroll-target="#what-problem-are-we-solving"><span class="header-section-number">3.6</span> What problem are we solving?</a></li>
-  <li><a href="#inputs" id="toc-inputs" class="nav-link" data-scroll-target="#inputs"><span class="header-section-number">3.7</span> Inputs</a></li>
-  <li><a href="#expected-output" id="toc-expected-output" class="nav-link" data-scroll-target="#expected-output"><span class="header-section-number">3.8</span> Expected Output</a></li>
-  <li><a href="#what-just-happened" id="toc-what-just-happened" class="nav-link" data-scroll-target="#what-just-happened"><span class="header-section-number">3.9</span> What just happened?</a>
-  <ul class="collapse">
-  <li><a href="#step-2-build-the-lookup-table" id="toc-step-2-build-the-lookup-table" class="nav-link" data-scroll-target="#step-2-build-the-lookup-table"><span class="header-section-number">3.9.1</span> Step 2: build the lookup table</a></li>
-  </ul></li>
-  <li><a href="#what-problem-are-we-solving-1" id="toc-what-problem-are-we-solving-1" class="nav-link" data-scroll-target="#what-problem-are-we-solving-1"><span class="header-section-number">3.10</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-1" id="toc-inputs-1" class="nav-link" data-scroll-target="#inputs-1"><span class="header-section-number">3.11</span> Inputs</a></li>
-  <li><a href="#expected-output-1" id="toc-expected-output-1" class="nav-link" data-scroll-target="#expected-output-1"><span class="header-section-number">3.12</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-1" id="toc-what-just-happened-1" class="nav-link" data-scroll-target="#what-just-happened-1"><span class="header-section-number">3.13</span> What just happened?</a>
-  <ul class="collapse">
-  <li><a href="#step-3-answer-a-query" id="toc-step-3-answer-a-query" class="nav-link" data-scroll-target="#step-3-answer-a-query"><span class="header-section-number">3.13.1</span> Step 3: answer a query</a></li>
-  </ul></li>
-  <li><a href="#what-problem-are-we-solving-2" id="toc-what-problem-are-we-solving-2" class="nav-link" data-scroll-target="#what-problem-are-we-solving-2"><span class="header-section-number">3.14</span> What problem are we solving?</a></li>
-  <li><a href="#inputs-2" id="toc-inputs-2" class="nav-link" data-scroll-target="#inputs-2"><span class="header-section-number">3.15</span> Inputs</a></li>
-  <li><a href="#expected-output-2" id="toc-expected-output-2" class="nav-link" data-scroll-target="#expected-output-2"><span class="header-section-number">3.16</span> Expected Output</a></li>
-  <li><a href="#what-just-happened-2" id="toc-what-just-happened-2" class="nav-link" data-scroll-target="#what-just-happened-2"><span class="header-section-number">3.17</span> What just happened?</a></li>
-  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">3.18</span> Production Reality</a></li>
-  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">3.19</span> Practical exercise</a></li>
-  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">3.20</span> Field notes</a></li>
-  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">3.21</span> Challenge exercise</a></li>
-  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">3.22</span> Key takeaways</a></li>
-  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">3.23</span> Repository files</a></li>
-  <li><a href="#why-keyword-search-fails" id="toc-why-keyword-search-fails" class="nav-link" data-scroll-target="#why-keyword-search-fails"><span class="header-section-number">3.24</span> Why keyword search fails</a></li>
-  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">3.25</span> What can you do now that you couldn’t do before?</a></li>
-  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">3.26</span> Suggested next step</a></li>
+  <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">3.6</span> Production Reality</a></li>
+  <li><a href="#practical-exercise" id="toc-practical-exercise" class="nav-link" data-scroll-target="#practical-exercise"><span class="header-section-number">3.7</span> Practical exercise</a></li>
+  <li><a href="#field-notes" id="toc-field-notes" class="nav-link" data-scroll-target="#field-notes"><span class="header-section-number">3.8</span> Field notes</a></li>
+  <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">3.9</span> Challenge exercise</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">3.10</span> Key takeaways</a></li>
+  <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">3.11</span> Repository files</a></li>
+  <li><a href="#why-keyword-search-fails" id="toc-why-keyword-search-fails" class="nav-link" data-scroll-target="#why-keyword-search-fails"><span class="header-section-number">3.12</span> Why keyword search fails</a></li>
+  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">3.13</span> What can you do now that you couldn’t do before?</a></li>
+  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">3.14</span> Suggested next step</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/djimrastephane/ddr-rag-book/edit/main/chapters/chapter_03.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/djimrastephane/ddr-rag-book/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -644,54 +628,39 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <h2 data-number="3.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">3.5</span> Implementation</h2>
 <section id="step-1-split-text-into-searchable-words" class="level3" data-number="3.5.1">
 <h3 data-number="3.5.1" class="anchored" data-anchor-id="step-1-split-text-into-searchable-words"><span class="header-section-number">3.5.1</span> Step 1: split text into searchable words</h3>
-</section>
-</section>
-<section id="what-problem-are-we-solving" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="what-problem-are-we-solving"><span class="header-section-number">3.6</span> What problem are we solving?</h2>
+<p><strong>What problem are we solving?</strong></p>
 <p>Before we can look anything up, every report’s text needs to be broken into a consistent set of words — so “Losses”, “losses,” and “LOSSES” all count as the same match.</p>
-</section>
-<section id="inputs" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="inputs"><span class="header-section-number">3.7</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>Any string of report text.</li>
 </ul>
-</section>
-<section id="expected-output" class="level2" data-number="3.8">
-<h2 data-number="3.8" class="anchored" data-anchor-id="expected-output"><span class="header-section-number">3.8</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>A list of lowercase words with punctuation stripped out, for example:</p>
 <pre><code>["mud", "fluids", "seepage", "losses", "in", "six", "hours", "9", "bbls"]</code></pre>
-<div id="cb5ef6a5" class="cell" data-execution_count="1">
+<div id="f96c4a8f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_03/keyword_search.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tokenize(text: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">str</span>]:</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> re.findall(<span class="vs">r"</span><span class="pp">[a-z0-9]</span><span class="op">+</span><span class="vs">"</span>, text.lower())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened" class="level2" data-number="3.9">
-<h2 data-number="3.9" class="anchored" data-anchor-id="what-just-happened"><span class="header-section-number">3.9</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>This lowercases the whole report, then pulls out every run of letters or digits as one word, throwing away punctuation, quotes, and apostrophes. <code>6,507'</code> becomes just <code>6507</code> — no comma, no foot mark — so it can be matched consistently whichever way it was typed in the original report.</p>
-<section id="step-2-build-the-lookup-table" class="level3" data-number="3.9.1">
-<h3 data-number="3.9.1" class="anchored" data-anchor-id="step-2-build-the-lookup-table"><span class="header-section-number">3.9.1</span> Step 2: build the lookup table</h3>
 </section>
-</section>
-<section id="what-problem-are-we-solving-1" class="level2" data-number="3.10">
-<h2 data-number="3.10" class="anchored" data-anchor-id="what-problem-are-we-solving-1"><span class="header-section-number">3.10</span> What problem are we solving?</h2>
+<section id="step-2-build-the-lookup-table" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="step-2-build-the-lookup-table"><span class="header-section-number">3.5.2</span> Step 2: build the lookup table</h3>
+<p><strong>What problem are we solving?</strong></p>
 <p>Build a lookup table that remembers which reports contain each word, so a search never has to open and re-scan every file.</p>
-</section>
-<section id="inputs-1" class="level2" data-number="3.11">
-<h2 data-number="3.11" class="anchored" data-anchor-id="inputs-1"><span class="header-section-number">3.11</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>A folder of cleaned, expanded report text: <code>datasets/ddr_text_expanded/</code>.</li>
 </ul>
-</section>
-<section id="expected-output-1" class="level2" data-number="3.12">
-<h2 data-number="3.12" class="anchored" data-anchor-id="expected-output-1"><span class="header-section-number">3.12</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>A dictionary mapping each word to the set of report filenames that contain it, for example:</p>
 <pre><code>{"losses": {"FORGE-...-32_Drilling_019_2020-11-07.txt"},
  "stuck":  {"FORGE-...-32_Drilling_038_2020-11-26.txt"},
  ...}</code></pre>
-<div id="b984f5e1" class="cell" data-execution_count="2">
+<div id="de44f04c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -703,29 +672,21 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            index[token].add(path.name)</span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened-1" class="level2" data-number="3.13">
-<h2 data-number="3.13" class="anchored" data-anchor-id="what-just-happened-1"><span class="header-section-number">3.13</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>We built a lookup table that remembers which reports contain each word. For every report, we found its unique words and, for each one, noted “this word shows up in this report.” The result is one table you can check instead of seventy-six files you’d otherwise have to open.</p>
-<section id="step-3-answer-a-query" class="level3" data-number="3.13.1">
-<h3 data-number="3.13.1" class="anchored" data-anchor-id="step-3-answer-a-query"><span class="header-section-number">3.13.1</span> Step 3: answer a query</h3>
 </section>
-</section>
-<section id="what-problem-are-we-solving-2" class="level2" data-number="3.14">
-<h2 data-number="3.14" class="anchored" data-anchor-id="what-problem-are-we-solving-2"><span class="header-section-number">3.14</span> What problem are we solving?</h2>
+<section id="step-3-answer-a-query" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="step-3-answer-a-query"><span class="header-section-number">3.5.3</span> Step 3: answer a query</h3>
+<p><strong>What problem are we solving?</strong></p>
 <p>Given a query like “stuck pipe,” find every report that contains all of those words — instantly, using the lookup table instead of opening a single file.</p>
-</section>
-<section id="inputs-2" class="level2" data-number="3.15">
-<h2 data-number="3.15" class="anchored" data-anchor-id="inputs-2"><span class="header-section-number">3.15</span> Inputs</h2>
+<p><strong>Inputs</strong></p>
 <ul>
 <li>The lookup table from Step 2.</li>
 <li>A query string, e.g.&nbsp;<code>"stuck pipe"</code>.</li>
 </ul>
-</section>
-<section id="expected-output-2" class="level2" data-number="3.16">
-<h2 data-number="3.16" class="anchored" data-anchor-id="expected-output-2"><span class="header-section-number">3.16</span> Expected Output</h2>
+<p><strong>Expected Output</strong></p>
 <p>The set of filenames containing every word in the query, for example <code>{"FORGE-...-32_Drilling_038_2020-11-26.txt"}</code> for the query <code>"stuck"</code>.</p>
-<div id="3f05a649" class="cell" data-execution_count="3">
+<div id="dee0f0e6" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(index: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">set</span>[<span class="bu">str</span>]], query: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">set</span>[<span class="bu">str</span>]:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    query_tokens <span class="op">=</span> tokenize(query)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> query_tokens:</span>
@@ -735,13 +696,12 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        results <span class="op">&amp;=</span> index.get(token, <span class="bu">set</span>())</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section>
-<section id="what-just-happened-2" class="level2" data-number="3.17">
-<h2 data-number="3.17" class="anchored" data-anchor-id="what-just-happened-2"><span class="header-section-number">3.17</span> What just happened?</h2>
+<p><strong>What just happened?</strong></p>
 <p>For each word in the query, we looked up its list of reports in the table, then kept only the reports that appeared on <em>every</em> one of those lists. That’s why this is called an AND query: a report only matches if it contains every word you searched for, not just one of them. The challenge exercise below asks you to add an OR option too.</p>
 </section>
-<section id="production-reality" class="level2" data-number="3.18">
-<h2 data-number="3.18" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">3.18</span> Production Reality</h2>
+</section>
+<section id="production-reality" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">3.6</span> Production Reality</h2>
 <p>This index lives entirely in memory and rebuilds itself every time you run the script — fine for 76 reports, and still fine for a few thousand. A real multi-well archive stretches this in ways worth knowing about early:</p>
 <ul>
 <li>thousands of reports mean rebuilding the index on every run gets slow — real systems save the index to disk or a database instead</li>
@@ -751,14 +711,14 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </ul>
 <p>None of this changes the core idea — a lookup table beats scanning every file — but it’s why production search systems add stemming, on-disk indexes, and cleanup steps this chapter deliberately leaves out.</p>
 </section>
-<section id="practical-exercise" class="level2" data-number="3.19">
-<h2 data-number="3.19" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">3.19</span> Practical exercise</h2>
+<section id="practical-exercise" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">3.7</span> Practical exercise</h2>
 <p>🟢 <strong>Beginner</strong></p>
 <p><strong>Try it yourself:</strong> Build the index over <code>datasets/ddr_text_expanded/</code> and run <code>search(index, "fishing")</code>.</p>
 <p><strong>You’ll know it worked when:</strong> the result set contains <strong>two</strong> reports, not one: <code>FORGE-16A-78-32_Drilling_049_2020-12-07.txt</code> (the day the crew picked up a fishing BHA and logged <code>ACTIVITY PLANNED: FISHING OPERATIONS</code>) and <code>FORGE-16A-78-32_Drilling_050_2020-12-08.txt</code> (the day they actually milled up lost pieces of bit). If you expected only one result, that’s a useful surprise: the word “fishing” genuinely appears in both the planning day and the execution day, and an AND/OR keyword index has no concept of “the day it actually happened” versus “the day it was planned” — it just finds every document containing the word.</p>
 </section>
-<section id="field-notes" class="level2" data-number="3.20">
-<h2 data-number="3.20" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">3.20</span> Field notes</h2>
+<section id="field-notes" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">3.8</span> Field notes</h2>
 <div class="callout callout-style-default callout-warning callout-titled" title="🔧 Field notes: the search that misses the day after">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -782,21 +742,21 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </div>
 </div>
 </section>
-<section id="challenge-exercise" class="level2" data-number="3.21">
-<h2 data-number="3.21" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">3.21</span> Challenge exercise</h2>
+<section id="challenge-exercise" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">3.9</span> Challenge exercise</h2>
 <p>🟠 <strong>Intermediate</strong></p>
 <p><strong>Challenge:</strong> Add phrase search (query tokens must appear <em>adjacent</em> and in order, not just co-occur anywhere in the document) and an OR operator. Test <code>search(index, "stuck")</code> against report #38, then try <code>"packers OR fishing"</code> and confirm it returns both report #49 (packers) and #50 (fishing). A reference solution is in <code>code/chapter_03/challenge/</code>.</p>
 </section>
-<section id="key-takeaways" class="level2" data-number="3.22">
-<h2 data-number="3.22" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">3.22</span> Key takeaways</h2>
+<section id="key-takeaways" class="level2" data-number="3.10">
+<h2 data-number="3.10" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">3.10</span> Key takeaways</h2>
 <ul>
 <li>An inverted index turns “search every file” into “look up a word,” which is the difference between milliseconds and minutes at scale.</li>
 <li>Tokenization choices (case folding, punctuation handling) determine what counts as a match — get this wrong and searches silently fail.</li>
 <li>Exact keyword matching is fast, simple, and fundamentally limited: it cannot find report #49 (“packers did not set… pick up Fishing BHA”) when you search “lost circulation,” even though report #19’s “seepage losses” line and report #49’s packer failure are both, in a loose sense, “things going wrong downhole” — a human would connect them faster than exact keywords can.</li>
 </ul>
 </section>
-<section id="repository-files" class="level2" data-number="3.23">
-<h2 data-number="3.23" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">3.23</span> Repository files</h2>
+<section id="repository-files" class="level2" data-number="3.11">
+<h2 data-number="3.11" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">3.11</span> Repository files</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -820,8 +780,8 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </tbody>
 </table>
 </section>
-<section id="why-keyword-search-fails" class="level2" data-number="3.24">
-<h2 data-number="3.24" class="anchored" data-anchor-id="why-keyword-search-fails"><span class="header-section-number">3.24</span> Why keyword search fails</h2>
+<section id="why-keyword-search-fails" class="level2" data-number="3.12">
+<h2 data-number="3.12" class="anchored" data-anchor-id="why-keyword-search-fails"><span class="header-section-number">3.12</span> Why keyword search fails</h2>
 <p>Question: <em>“Show me previous stuck-pipe trouble on this well.”</em></p>
 <p>Keyword search for “stuck pipe” finds report #38 — the day it actually happened — and stops there. It misses report #39, filed the very next day, because that report never uses the word “stuck.” Instead it says:</p>
 <ul>
@@ -862,12 +822,12 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </div>
 </div>
 </section>
-<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="3.25">
-<h2 data-number="3.25" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">3.25</span> What can you do now that you couldn’t do before?</h2>
+<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="3.13">
+<h2 data-number="3.13" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">3.13</span> What can you do now that you couldn’t do before?</h2>
 <p>You can search an archive of reports for exact words or phrases and get an answer in milliseconds, instead of opening files one at a time.</p>
 </section>
-<section id="suggested-next-step" class="level2" data-number="3.26">
-<h2 data-number="3.26" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">3.26</span> Suggested next step</h2>
+<section id="suggested-next-step" class="level2" data-number="3.14">
+<h2 data-number="3.14" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">3.14</span> Suggested next step</h2>
 <p><strong>Coming up in Chapter 4:</strong> Keyword search is exact and unforgiving — it doesn’t know that “high torque decision to pull out of hole” and “stuck pipe” describe related trouble. Chapter 4 replaces exact matching with semantic search, so retrieval works by meaning, not just spelling — and comes back to this exact “stuck pipe” query to see how much that actually fixes.</p>
 
 
@@ -1442,17 +1402,17 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: split text into searchable words</span></span>
 <span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>Before we can look anything up, every report's text needs to be broken</span>
 <span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>into a consistent set of words — so "Losses", "losses," and "LOSSES" all</span>
 <span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>count as the same match.</span>
 <span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Any string of report text.</span>
 <span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>A list of lowercase words with punctuation stripped out, for example:</span>
 <span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a></span>
@@ -1469,7 +1429,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> re.findall(<span class="vs">r"</span><span class="pp">[a-z0-9]</span><span class="op">+</span><span class="vs">"</span>, text.lower())</span>
 <span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>This lowercases the whole report, then pulls out every run of letters or</span>
 <span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>digits as one word, throwing away punctuation, quotes, and apostrophes.</span>
@@ -1478,16 +1438,16 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: build the lookup table</span></span>
 <span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>Build a lookup table that remembers which reports contain each word, so a</span>
 <span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a>search never has to open and re-scan every file.</span>
 <span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A folder of cleaned, expanded report text: <span class="in">`datasets/ddr_text_expanded/`</span>.</span>
 <span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a>A dictionary mapping each word to the set of report filenames that</span>
 <span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a>contain it, for example:</span>
@@ -1512,7 +1472,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index</span>
 <span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>We built a lookup table that remembers which reports contain each word.</span>
 <span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a>For every report, we found its unique words and, for each one, noted</span>
@@ -1521,18 +1481,18 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: answer a query</span></span>
 <span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a><span class="fu">## What problem are we solving?</span></span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>Given a query like "stuck pipe," find every report that contains all of</span>
 <span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a>those words — instantly, using the lookup table instead of opening a</span>
 <span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a>single file.</span>
 <span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
+<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The lookup table from Step 2.</span>
 <span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A query string, e.g. <span class="in">`"stuck pipe"`</span>.</span>
 <span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expected Output</span></span>
+<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
 <span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>The set of filenames containing every word in the query, for example</span>
 <span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a><span class="in">`{"FORGE-...-32_Drilling_038_2020-11-26.txt"}`</span> for the query <span class="in">`"stuck"`</span>.</span>
@@ -1549,7 +1509,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
 <span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a><span class="fu">## What just happened?</span></span>
+<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>For each word in the query, we looked up its list of reports in the</span>
 <span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a>table, then kept only the reports that appeared on *every* one of those</span>
