@@ -22,7 +22,7 @@ This book builds that system from scratch, starting exactly where keyword search
 
 ### What You're Building
 
-The box below is a **plain-text preview of the terminal output** you'll see once you've built the system in Chapter 5 — not code to type or run yourself. It shows a real interaction: the question, the generated answer, and the exact reports backing every claim in it. Nothing here is invented; both claims in the answer are directly quoted from the real report text.
+The box below is a **plain-text preview of the kind of answer the finished system produces** — not code to type or run yourself, and not something Chapter 5 reaches on its own. It shows a real interaction: the question, the generated answer, and the exact reports backing every claim in it. Nothing here is invented; both claims in the answer are directly quoted from the real report text.
 
 ```
 Question: What led to the fishing operation on report #50?
@@ -38,7 +38,7 @@ Evidence:
   FORGE-16A-78-32_Drilling_050_2020-12-08.pdf
 ```
 
-That's it — a question, an answer, and the exact source reports you'd need to check it against. No black box.
+That's the destination. By Chapter 5 you'll have a working RAG system — retrieve, generate, cite — running on a real local model; answering a *cross-report* question like this one, which stitches the cause in report #49 to the outcome in report #50, takes the chunking and hybrid retrieval Part II adds. Either way: a question, an answer, and the exact source reports backing it. No black box.
 
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
 - [Read the book online](https://djimrastephane.github.io/ddr-rag-book/)
@@ -280,6 +280,8 @@ Chapter titles in the table below link to the rendered, readable page for that r
 ### What this becomes
 
 The companion pipeline wraps the same retrieval, citation, and gap-detection logic the book builds into a searchable interface over the whole archive — you ask a question and get a cited answer back across every report at once.
+
+_A screenshot of that interface is coming in a future revision._
 
 <!-- TODO(author): add a real screenshot of the DDR Intelligence / Streamlit interface
      at book/figures/app_screenshot.png and uncomment the image below. Do NOT substitute

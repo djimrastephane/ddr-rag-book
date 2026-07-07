@@ -237,6 +237,17 @@ With both ranked signals in hand, `hybrid_search()` in
 sparse ranking, Chapter 4's dense ranking, fused with the weights above.
 That's the function the practical exercise below calls.
 
+One consistency note, tying back to Chapter 4: BM25 is a lexical method,
+so by that chapter's Field Note it belongs on the *expanded* text, while
+the dense signal uses the raw. This exercise runs both over the same raw
+sample archive for simplicity, and for its queries that's harmless — the
+report you're checking for tops the BM25 ranking either way (report #49
+for `"packers fishing"`, report #38 for `"stuck pipe"`). Where it *would*
+matter is an abbreviation query like `"bottom hole assembly"`: on expanded
+text BM25 surfaces report #38, which only ever writes `BHA`; on raw text
+it misses it entirely. A production pipeline points the sparse signal at
+the expanded text for exactly that reason.
+
 ## Production Reality
 
 This chapter tunes two signals with fixed weights (BM25 × 2.0, dense ×

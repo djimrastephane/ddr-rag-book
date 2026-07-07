@@ -73,6 +73,9 @@ answer back — the same shape as the interaction above — across every
 report at once. [Appendix A](appendix/appendix_a_environment_setup.qmd)
 shows how to set it up and point it at your own archive.
 
+*A screenshot of that interface is coming in a future revision; for now,
+Appendix A walks through running it yourself.*
+
 <!-- TODO(author): add a real screenshot of the DDR Intelligence / Streamlit
      interface at figures/app_screenshot.png, then uncomment the image below.
      Do NOT substitute a mockup or an AI-generated UI image as evidence of
