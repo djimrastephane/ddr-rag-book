@@ -23,6 +23,30 @@ def test_stub_llm_call_echoes_the_prompt():
     assert stub_llm_call("hello") == "hello"
 
 
+def test_ollama_llm_call_falls_back_cleanly_when_unreachable():
+    """If Ollama isn't running, generation must degrade to a clear message
+    rather than crashing -- so the retrieval and prompt-assembly work is
+    never lost to a missing external dependency."""
+    from first_rag import ollama_llm_call
+
+    # Nothing listens on port 1; the call must return, not raise.
+    result = ollama_llm_call("anything", host="http://localhost:1")
+
+    assert "not reachable" in result.lower()
+    assert "ollama" in result.lower()
+
+
+def test_evidence_excerpts_pairs_each_report_with_a_snippet():
+    from first_rag import evidence_excerpts
+
+    filenames = ["report_a.txt", "report_b.txt"]
+    texts = ["alpha text here", "beta text here"]
+
+    excerpts = evidence_excerpts(["report_b.txt"], filenames, texts, width=4)
+
+    assert excerpts == [("report_b.txt", "beta")]
+
+
 @pytest.mark.slow
 def test_answer_question_evidence_matches_documented_field_notes(extracted_sample_text_dir):
     """device="cpu" is forced explicitly -- sentence-transformers

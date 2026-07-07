@@ -1,10 +1,24 @@
 """Chapter 5: first RAG system -- retrieve, then generate, with citations.
 
+Generation runs on a local model through Ollama. Setup (once):
+
+    # install Ollama from https://ollama.com, then:
+    ollama pull qwen2.5:7b-instruct
+    ollama serve            # leave running in another terminal
+
+If Ollama isn't running, the pipeline still works -- retrieval and prompt
+assembly run offline, and ollama_llm_call() returns a clear message
+instead of crashing, so you can see exactly what the model would have been
+given.
+
 Usage:
-    python code/chapter_05/first_rag.py "What led to the fishing operation on report 50?"
+    python code/chapter_05/first_rag.py "What led to the packers failing to set?"
 """
 
+import json
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "chapter_04"))
@@ -40,8 +54,38 @@ def build_prompt(question: str, retrieved: list[tuple[str, float]],
 
 def stub_llm_call(prompt: str) -> str:
     """Stand-in for a real LLM: just echoes the evidence back, so you can
-    verify retrieval and prompt assembly before spending an API call."""
+    verify retrieval and prompt assembly before wiring up generation."""
     return prompt
+
+
+def ollama_llm_call(prompt: str, model: str = "qwen2.5:7b-instruct",
+                    host: str = "http://localhost:11434") -> str:
+    """Generate an answer with a local model served by Ollama.
+
+    This stays provider-agnostic in spirit: it speaks Ollama's plain HTTP
+    API using only the standard library, so there's no extra package to
+    install and no report text ever leaves your machine. Swap `host`/`model`
+    (or replace this function entirely) to point at a different local or
+    hosted model. If the Ollama server isn't reachable -- not installed,
+    not running, or the model isn't pulled -- it returns a clear message
+    rather than crashing, so the retrieval and prompt work above is never
+    lost to a missing dependency.
+    """
+    payload = json.dumps({"model": model, "prompt": prompt, "stream": False}).encode()
+    request = urllib.request.Request(
+        f"{host}/api/generate", data=payload,
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response:
+            return json.loads(response.read())["response"].strip()
+    except (urllib.error.URLError, OSError) as error:
+        return (
+            f"[Ollama not reachable at {host}: {error}. Install it from "
+            f"ollama.com, run `ollama pull {model}` then `ollama serve`, and "
+            f"re-run. Retrieval and prompt assembly still worked above — only "
+            f"generation was skipped.]"
+        )
 
 
 def answer_question(question: str, model, filenames, texts, embeddings,
@@ -57,12 +101,24 @@ def answer_question(question: str, model, filenames, texts, embeddings,
     return answer_text, evidence
 
 
+def evidence_excerpts(evidence: list[str], filenames: list[str],
+                      texts: list[str], width: int = 200) -> list[tuple[str, str]]:
+    """For each retrieved report, return (filename, short excerpt) -- the
+    same text the model was handed -- so a reader sees not just WHICH
+    reports backed the answer but a taste of what was actually in them."""
+    excerpts = []
+    for name in evidence:
+        text = " ".join(texts[filenames.index(name)].split())
+        excerpts.append((name, text[:width]))
+    return excerpts
+
+
 if __name__ == "__main__":
     text_dir = Path("datasets/ddr_text")
     if not text_dir.exists():
         raise SystemExit(f"{text_dir} does not exist -- run Chapter 1's batch extraction first.")
 
-    question = " ".join(sys.argv[1:]) or "What led to the fishing operation on report 50?"
+    question = " ".join(sys.argv[1:]) or "What led to the packers failing to set?"
     # device="cpu" pinned explicitly -- see code/chapter_04/semantic_search.py
     # for why: Apple Silicon otherwise auto-selects the MPS backend, which
     # produces meaningfully different embeddings than CPU.
@@ -70,8 +126,16 @@ if __name__ == "__main__":
     filenames, texts = load_chunks(text_dir)
     embeddings = embed_texts(model, texts)
 
-    _answer, evidence = answer_question(question, model, filenames, texts, embeddings, stub_llm_call, top_k=3)
-    print(f"Question: {question!r}")
-    print("Evidence:")
-    for name in evidence:
+    # top_k=1 here: hand the model the single best-matching report. With
+    # Part I's whole-document evidence, one focused report generates a
+    # cleaner answer than three concatenated pages of tables -- see the
+    # chapter's Field Notes for what happens when you widen this to 3.
+    answer, evidence = answer_question(
+        question, model, filenames, texts, embeddings, ollama_llm_call, top_k=1)
+
+    print(f"Question: {question}\n")
+    print(f"Answer:\n{answer}\n")
+    print("Sources:")
+    for name, excerpt in evidence_excerpts(evidence, filenames, texts):
         print(f"  {name}")
+        print(f'    "{excerpt}..."')

@@ -23,8 +23,9 @@ By the end of this chapter, you will be able to:
   inspectable steps: retrieve, then generate.
 - Assemble retrieved chunks into a prompt that forces a language model to
   answer only from the evidence it's given.
-- Produce an answer with an explicit, per-claim evidence list — report
-  number and page — rather than an unsupported paragraph.
+- Generate that answer with a real local model (via Ollama) and return it
+  with an explicit evidence list — the source reports and excerpts —
+  rather than an unsupported paragraph.
 
 ## Operational Problem
 
@@ -241,6 +242,90 @@ first testing the retrieval and prompt logic — a stub that just echoes the
 evidence back, so you can verify the pipeline end to end before spending a
 single API call.
 
+### Step 4: plug in a real local model
+
+The stub proved the plumbing. Now generate for real — locally, so no
+report text ever leaves your machine. [Ollama](https://ollama.com) runs a
+small open model on your own hardware. Install it, pull a model, and start
+the server:
+
+```bash
+# install Ollama from https://ollama.com, then:
+ollama pull qwen2.5:7b-instruct
+ollama serve            # leave this running in its own terminal
+```
+
+`ollama_llm_call` talks to that local server over plain HTTP — standard
+library only, no extra package to install, and a clear message instead of
+a crash if Ollama isn't running:
+
+```{python}
+#| eval: false
+import json
+import urllib.error
+import urllib.request
+
+def ollama_llm_call(prompt: str, model: str = "qwen2.5:7b-instruct") -> str:
+    payload = json.dumps({"model": model, "prompt": prompt, "stream": False}).encode()
+    request = urllib.request.Request("http://localhost:11434/api/generate", data=payload,
+                                     headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response:
+            return json.loads(response.read())["response"].strip()
+    except (urllib.error.URLError, OSError) as error:
+        return f"[Ollama not reachable: {error}. See setup above; retrieval still ran.]"
+```
+
+Run the whole system against the single best-matching report:
+
+```bash
+python code/chapter_05/first_rag.py "What led to the packers failing to set?"
+```
+
+::: {.callout-note title="One real run — qwen2.5:7b-instruct, top_k=1 (your wording will differ)"}
+```
+Question: What led to the packers failing to set?
+
+Answer:
+According to the report, pressures indicated that the ball did not seat
+and the packers did not set during an attempt to set packers multiple
+times.
+
+Reference:
+[FORGE-16A-78-32_Drilling_049_2020-12-07.txt] Page 15: "Production
+Drilling Other Pressures indicated that ball did not seat and packers
+did not set."
+
+Sources:
+  FORGE-16A-78-32_Drilling_049_2020-12-07.txt
+    "--- Page 1 --- RPT DATE:12/07/2020 DAILY DRILLING REPORT RPT NUM.:49
+     ... WELL NAME:FORGE 16A [78]-32 ..."
+```
+:::
+
+That's a real RAG answer: a plain-English cause, grounded in report #49's
+own words, with the source report named and an excerpt you can open and
+check. **Your exact wording will differ** — LLM output isn't
+deterministic (the Production Reality note below says why) — but the
+grounded fact, the ball that didn't seat, comes back every time, because
+it's sitting in the evidence the model was handed.
+
+Two honest limits are already visible in that single run:
+
+- **Evidence width matters.** This ran at `top_k=1` — the one closest
+  report. Widen it to `top_k=3` and the model is handed three full pages
+  of tables at once; in testing it lost the packer line in the noise and
+  answered "the report doesn't mention it." That isn't the model being
+  dim — it's the whole-document granularity problem from Chapter 4,
+  biting generation now instead of retrieval. Chapter 7's chunking is
+  what fixes it.
+- **The model can still invent a citation.** Notice the answer cites
+  "Page 15." These reports are a single page — there is no page 15. The
+  *fact* is grounded; the *page number* is fabricated. A prompt asking
+  for citations gets citation-shaped text, not guaranteed-correct
+  citations. Chapter 10 wires the real page in from metadata so the model
+  can't make one up.
+
 ## Production Reality
 
 This chapter's prompt says "answer only from the evidence" — but an
@@ -344,15 +429,15 @@ reference solution is in `code/chapter_05/challenge/`.
 ::: {.callout-caution title="CHECKPOINT — Chapter 5"}
 - [x] Explained RAG as two separate, inspectable steps: retrieve, then generate
 - [x] Assembled retrieved evidence into a prompt that forces answers from that evidence only
-- [x] Produced an answer with an explicit, per-report evidence list
+- [x] Generated a real answer with a local model (Ollama), returned with its source reports and excerpts
 - [x] Caught a real case where the cited report wasn't actually in the evidence
 :::
 
 ::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
 **`first_rag.py`** — an Industrial RAG system: ask it a question in plain
-English, and it retrieves evidence, generates an answer, and hands back
-the exact list of reports that answer is traceable to. This is Part I's
-capstone artifact.
+English, and it retrieves evidence, generates an answer with a local
+model, and hands back the source reports and excerpts that answer is
+traceable to. This is Part I's capstone artifact.
 :::
 
 ## What can you do now that you couldn't do before?

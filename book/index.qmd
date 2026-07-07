@@ -35,11 +35,12 @@ one, ask whoever's been around the project longest and hope they
 remember, or rely on memory and risk repeating a mistake nobody wrote
 down clearly enough to find again.
 
-By Chapter 5, you'll have built a system that answers the same kind of
-question differently — not a guess, not a folder of files to read
-yourself, but a direct answer with the evidence attached:
+By Chapter 5, you'll have built a working RAG system — retrieve, generate,
+cite — and run it against a real local model. By the end of the book, it
+answers cross-report questions like this one, pulling the cause from one
+report and the outcome from the next:
 
-::: {.callout-note title="A real interaction with the system you'll build by Chapter 5"}
+::: {.callout-note title="Where this is headed: a cross-report answer from the finished system"}
 ```
 Question: What led to the fishing operation on report #50?
 
@@ -56,9 +57,12 @@ Evidence:
 :::
 
 Both claims in that answer are directly quoted from the real report
-text — nothing here is invented. That's the destination. The rest of
-this book is how you build the road to it, one working script at a
-time, starting with a single PDF.
+text — nothing here is invented. Getting there takes the whole book:
+Chapter 5's first system answers from a single best-matching report;
+stitching two reports together like this — the cause in #49, the outcome
+in #50 — needs the chunking (Chapter 7) and hybrid retrieval (Chapter 9)
+that Part II builds. The rest of this book is how you build that road,
+one working script at a time, starting with a single PDF.
 
 ## What this becomes
 
