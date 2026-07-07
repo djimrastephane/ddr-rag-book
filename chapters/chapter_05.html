@@ -672,7 +672,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A reusable prompt template with two blanks: the evidence, and the question.</p>
-<div id="390cbc05" class="cell" data-execution_count="1">
+<div id="4e681c40" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_05/first_rag.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>PROMPT_TEMPLATE <span class="op">=</span> <span class="st">"""Answer the question using ONLY the evidence below.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">If the evidence doesn't contain the answer, say so — do not guess.</span></span>
@@ -699,7 +699,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One complete prompt string, evidence labelled by source filename, ready to send to a model.</p>
-<div id="db2ee45e" class="cell" data-execution_count="2">
+<div id="c46da9de" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> semantic_search <span class="im">import</span> embed_texts, load_chunks, search  <span class="co"># from Chapter 4</span></span>
@@ -730,7 +730,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A tuple: the generated answer text, and the list of report filenames that were actually retrieved and shown to the model.</p>
-<div id="159c4e75" class="cell" data-execution_count="3">
+<div id="f35e47a8" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> answer_question(question: <span class="bu">str</span>, model, filenames, texts, embeddings,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                     llm_call) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    retrieved <span class="op">=</span> search(model, question, filenames, embeddings, top_k<span class="op">=</span><span class="dv">3</span>)</span>
@@ -749,8 +749,9 @@ Evidence:
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install Ollama from https://ollama.com, then:</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> pull qwen2.5:7b-instruct</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve            <span class="co"># leave this running in its own terminal</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>qwen2.5:7b-instruct</code> is a small, capable default, but nothing here is tied to it — pass any model you’ve pulled to <code>ollama_llm_call(model=...)</code>. Pick whatever runs comfortably on your hardware: <code>llama3.1:8b</code> or <code>mistral</code> are similar in size, <code>qwen2.5:14b</code> is stronger if you have the memory for it, and swapping the one HTTP call for a hosted API’s would let you point at a cloud model instead. The retrieval and prompt work above doesn’t change either way — only which model reads the evidence.</p>
 <p><code>ollama_llm_call</code> talks to that local server over plain HTTP — standard library only, no extra package to install, and a clear message instead of a crash if Ollama isn’t running:</p>
-<div id="5d04b7ac" class="cell" data-execution_count="4">
+<div id="68d49036" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.error</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
@@ -1670,208 +1671,216 @@ Lewis, Patrick, Ethan Perez, Aleksandra Piktus, et al. 2020. <span>“Retrieval-
 <span id="cb10-261"><a href="#cb10-261" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve            <span class="co"># leave this running in its own terminal</span></span>
 <span id="cb10-262"><a href="#cb10-262" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb10-263"><a href="#cb10-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-264"><a href="#cb10-264" aria-hidden="true" tabindex="-1"></a><span class="in">`ollama_llm_call`</span> talks to that local server over plain HTTP — standard</span>
-<span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a>library only, no extra package to install, and a clear message instead of</span>
-<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a>a crash if Ollama isn't running:</span>
-<span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-270"><a href="#cb10-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb10-271"><a href="#cb10-271" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb10-272"><a href="#cb10-272" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb10-273"><a href="#cb10-273" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.error</span>
-<span id="cb10-274"><a href="#cb10-274" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
+<span id="cb10-264"><a href="#cb10-264" aria-hidden="true" tabindex="-1"></a><span class="in">`qwen2.5:7b-instruct`</span> is a small, capable default, but nothing here is</span>
+<span id="cb10-265"><a href="#cb10-265" aria-hidden="true" tabindex="-1"></a>tied to it — pass any model you've pulled to <span class="in">`ollama_llm_call(model=...)`</span>.</span>
+<span id="cb10-266"><a href="#cb10-266" aria-hidden="true" tabindex="-1"></a>Pick whatever runs comfortably on your hardware: <span class="in">`llama3.1:8b`</span> or</span>
+<span id="cb10-267"><a href="#cb10-267" aria-hidden="true" tabindex="-1"></a><span class="in">`mistral`</span> are similar in size, <span class="in">`qwen2.5:14b`</span> is stronger if you have the</span>
+<span id="cb10-268"><a href="#cb10-268" aria-hidden="true" tabindex="-1"></a>memory for it, and swapping the one HTTP call for a hosted API's would let</span>
+<span id="cb10-269"><a href="#cb10-269" aria-hidden="true" tabindex="-1"></a>you point at a cloud model instead. The retrieval and prompt work above</span>
+<span id="cb10-270"><a href="#cb10-270" aria-hidden="true" tabindex="-1"></a>doesn't change either way — only which model reads the evidence.</span>
+<span id="cb10-271"><a href="#cb10-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-272"><a href="#cb10-272" aria-hidden="true" tabindex="-1"></a><span class="in">`ollama_llm_call`</span> talks to that local server over plain HTTP — standard</span>
+<span id="cb10-273"><a href="#cb10-273" aria-hidden="true" tabindex="-1"></a>library only, no extra package to install, and a clear message instead of</span>
+<span id="cb10-274"><a href="#cb10-274" aria-hidden="true" tabindex="-1"></a>a crash if Ollama isn't running:</span>
 <span id="cb10-275"><a href="#cb10-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-276"><a href="#cb10-276" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ollama_llm_call(prompt: <span class="bu">str</span>, model: <span class="bu">str</span> <span class="op">=</span> <span class="st">"qwen2.5:7b-instruct"</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb10-277"><a href="#cb10-277" aria-hidden="true" tabindex="-1"></a>    payload <span class="op">=</span> json.dumps({<span class="st">"model"</span>: model, <span class="st">"prompt"</span>: prompt, <span class="st">"stream"</span>: <span class="va">False</span>}).encode()</span>
-<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a>    request <span class="op">=</span> urllib.request.Request(<span class="st">"http://localhost:11434/api/generate"</span>, data<span class="op">=</span>payload,</span>
-<span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a>                                     headers<span class="op">=</span>{<span class="st">"Content-Type"</span>: <span class="st">"application/json"</span>})</span>
-<span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb10-281"><a href="#cb10-281" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> urllib.request.urlopen(request, timeout<span class="op">=</span><span class="dv">120</span>) <span class="im">as</span> response:</span>
-<span id="cb10-282"><a href="#cb10-282" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> json.loads(response.read())[<span class="st">"response"</span>].strip()</span>
-<span id="cb10-283"><a href="#cb10-283" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> (urllib.error.URLError, <span class="pp">OSError</span>) <span class="im">as</span> error:</span>
-<span id="cb10-284"><a href="#cb10-284" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"[Ollama not reachable: </span><span class="sc">{</span>error<span class="sc">}</span><span class="ss">. See setup above; retrieval still ran.]"</span></span>
-<span id="cb10-285"><a href="#cb10-285" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-286"><a href="#cb10-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-287"><a href="#cb10-287" aria-hidden="true" tabindex="-1"></a>Run the whole system against the single best-matching report:</span>
-<span id="cb10-288"><a href="#cb10-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-289"><a href="#cb10-289" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb10-290"><a href="#cb10-290" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_05/first_rag.py <span class="st">"What led to the packers failing to set?"</span></span>
-<span id="cb10-291"><a href="#cb10-291" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-292"><a href="#cb10-292" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-293"><a href="#cb10-293" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="One real run — qwen2.5:7b-instruct, top_k=1 (your wording will differ)"}</span>
-<span id="cb10-294"><a href="#cb10-294" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-295"><a href="#cb10-295" aria-hidden="true" tabindex="-1"></a><span class="in">Question: What led to the packers failing to set?</span></span>
+<span id="cb10-278"><a href="#cb10-278" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb10-279"><a href="#cb10-279" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb10-280"><a href="#cb10-280" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb10-281"><a href="#cb10-281" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.error</span>
+<span id="cb10-282"><a href="#cb10-282" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
+<span id="cb10-283"><a href="#cb10-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-284"><a href="#cb10-284" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ollama_llm_call(prompt: <span class="bu">str</span>, model: <span class="bu">str</span> <span class="op">=</span> <span class="st">"qwen2.5:7b-instruct"</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb10-285"><a href="#cb10-285" aria-hidden="true" tabindex="-1"></a>    payload <span class="op">=</span> json.dumps({<span class="st">"model"</span>: model, <span class="st">"prompt"</span>: prompt, <span class="st">"stream"</span>: <span class="va">False</span>}).encode()</span>
+<span id="cb10-286"><a href="#cb10-286" aria-hidden="true" tabindex="-1"></a>    request <span class="op">=</span> urllib.request.Request(<span class="st">"http://localhost:11434/api/generate"</span>, data<span class="op">=</span>payload,</span>
+<span id="cb10-287"><a href="#cb10-287" aria-hidden="true" tabindex="-1"></a>                                     headers<span class="op">=</span>{<span class="st">"Content-Type"</span>: <span class="st">"application/json"</span>})</span>
+<span id="cb10-288"><a href="#cb10-288" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb10-289"><a href="#cb10-289" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> urllib.request.urlopen(request, timeout<span class="op">=</span><span class="dv">120</span>) <span class="im">as</span> response:</span>
+<span id="cb10-290"><a href="#cb10-290" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> json.loads(response.read())[<span class="st">"response"</span>].strip()</span>
+<span id="cb10-291"><a href="#cb10-291" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> (urllib.error.URLError, <span class="pp">OSError</span>) <span class="im">as</span> error:</span>
+<span id="cb10-292"><a href="#cb10-292" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"[Ollama not reachable: </span><span class="sc">{</span>error<span class="sc">}</span><span class="ss">. See setup above; retrieval still ran.]"</span></span>
+<span id="cb10-293"><a href="#cb10-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-294"><a href="#cb10-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-295"><a href="#cb10-295" aria-hidden="true" tabindex="-1"></a>Run the whole system against the single best-matching report:</span>
 <span id="cb10-296"><a href="#cb10-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-297"><a href="#cb10-297" aria-hidden="true" tabindex="-1"></a><span class="in">Answer:</span></span>
-<span id="cb10-298"><a href="#cb10-298" aria-hidden="true" tabindex="-1"></a><span class="in">According to the report, pressures indicated that the ball did not seat</span></span>
-<span id="cb10-299"><a href="#cb10-299" aria-hidden="true" tabindex="-1"></a><span class="in">and the packers did not set during an attempt to set packers multiple</span></span>
-<span id="cb10-300"><a href="#cb10-300" aria-hidden="true" tabindex="-1"></a><span class="in">times.</span></span>
-<span id="cb10-301"><a href="#cb10-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-302"><a href="#cb10-302" aria-hidden="true" tabindex="-1"></a><span class="in">Reference:</span></span>
-<span id="cb10-303"><a href="#cb10-303" aria-hidden="true" tabindex="-1"></a><span class="in">[FORGE-16A-78-32_Drilling_049_2020-12-07.txt] Page 15: "Production</span></span>
-<span id="cb10-304"><a href="#cb10-304" aria-hidden="true" tabindex="-1"></a><span class="in">Drilling Other Pressures indicated that ball did not seat and packers</span></span>
-<span id="cb10-305"><a href="#cb10-305" aria-hidden="true" tabindex="-1"></a><span class="in">did not set."</span></span>
-<span id="cb10-306"><a href="#cb10-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-307"><a href="#cb10-307" aria-hidden="true" tabindex="-1"></a><span class="in">Sources:</span></span>
-<span id="cb10-308"><a href="#cb10-308" aria-hidden="true" tabindex="-1"></a><span class="in">  FORGE-16A-78-32_Drilling_049_2020-12-07.txt</span></span>
-<span id="cb10-309"><a href="#cb10-309" aria-hidden="true" tabindex="-1"></a><span class="in">    "--- Page 1 --- RPT DATE:12/07/2020 DAILY DRILLING REPORT RPT NUM.:49</span></span>
-<span id="cb10-310"><a href="#cb10-310" aria-hidden="true" tabindex="-1"></a><span class="in">     ... WELL NAME:FORGE 16A [78]-32 ..."</span></span>
-<span id="cb10-311"><a href="#cb10-311" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-312"><a href="#cb10-312" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-313"><a href="#cb10-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-314"><a href="#cb10-314" aria-hidden="true" tabindex="-1"></a>That's a real RAG answer: a plain-English cause, grounded in report #49's</span>
-<span id="cb10-315"><a href="#cb10-315" aria-hidden="true" tabindex="-1"></a>own words, with the source report named and an excerpt you can open and</span>
-<span id="cb10-316"><a href="#cb10-316" aria-hidden="true" tabindex="-1"></a>check. **Your exact wording will differ** — LLM output isn't</span>
-<span id="cb10-317"><a href="#cb10-317" aria-hidden="true" tabindex="-1"></a>deterministic (the Production Reality note below says why) — but the</span>
-<span id="cb10-318"><a href="#cb10-318" aria-hidden="true" tabindex="-1"></a>grounded fact, the ball that didn't seat, comes back every time, because</span>
-<span id="cb10-319"><a href="#cb10-319" aria-hidden="true" tabindex="-1"></a>it's sitting in the evidence the model was handed.</span>
-<span id="cb10-320"><a href="#cb10-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-321"><a href="#cb10-321" aria-hidden="true" tabindex="-1"></a>Two honest limits are already visible in that single run:</span>
-<span id="cb10-322"><a href="#cb10-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-323"><a href="#cb10-323" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Evidence width matters.** This ran at <span class="in">`top_k=1`</span> — the one closest</span>
-<span id="cb10-324"><a href="#cb10-324" aria-hidden="true" tabindex="-1"></a>  report. Widen it to <span class="in">`top_k=3`</span> and the model is handed three full pages</span>
-<span id="cb10-325"><a href="#cb10-325" aria-hidden="true" tabindex="-1"></a>  of tables at once; in testing it lost the packer line in the noise and</span>
-<span id="cb10-326"><a href="#cb10-326" aria-hidden="true" tabindex="-1"></a>  answered "the report doesn't mention it." That isn't the model being</span>
-<span id="cb10-327"><a href="#cb10-327" aria-hidden="true" tabindex="-1"></a>  dim — it's the whole-document granularity problem from Chapter 4,</span>
-<span id="cb10-328"><a href="#cb10-328" aria-hidden="true" tabindex="-1"></a>  biting generation now instead of retrieval. Chapter 7's chunking is</span>
-<span id="cb10-329"><a href="#cb10-329" aria-hidden="true" tabindex="-1"></a>  what fixes it.</span>
-<span id="cb10-330"><a href="#cb10-330" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The model can still invent a citation.** Notice the answer cites</span>
-<span id="cb10-331"><a href="#cb10-331" aria-hidden="true" tabindex="-1"></a>  "Page 15." These reports are a single page — there is no page 15. The</span>
-<span id="cb10-332"><a href="#cb10-332" aria-hidden="true" tabindex="-1"></a>  *fact* is grounded; the *page number* is fabricated. A prompt asking</span>
-<span id="cb10-333"><a href="#cb10-333" aria-hidden="true" tabindex="-1"></a>  for citations gets citation-shaped text, not guaranteed-correct</span>
-<span id="cb10-334"><a href="#cb10-334" aria-hidden="true" tabindex="-1"></a>  citations. Chapter 10 wires the real page in from metadata so the model</span>
-<span id="cb10-335"><a href="#cb10-335" aria-hidden="true" tabindex="-1"></a>  can't make one up.</span>
-<span id="cb10-336"><a href="#cb10-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-337"><a href="#cb10-337" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
-<span id="cb10-338"><a href="#cb10-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-339"><a href="#cb10-339" aria-hidden="true" tabindex="-1"></a>This chapter's prompt says "answer only from the evidence" — but an</span>
-<span id="cb10-340"><a href="#cb10-340" aria-hidden="true" tabindex="-1"></a>instruction in a prompt is a strong nudge, not a guarantee. Real systems</span>
-<span id="cb10-341"><a href="#cb10-341" aria-hidden="true" tabindex="-1"></a>have to plan around what happens when that nudge isn't enough:</span>
-<span id="cb10-342"><a href="#cb10-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-343"><a href="#cb10-343" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>models don't follow instructions perfectly every time — occasionally</span>
-<span id="cb10-344"><a href="#cb10-344" aria-hidden="true" tabindex="-1"></a>  one will still answer from general knowledge instead of the evidence,</span>
-<span id="cb10-345"><a href="#cb10-345" aria-hidden="true" tabindex="-1"></a>  or blend the two without saying so</span>
-<span id="cb10-346"><a href="#cb10-346" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>the same question, asked twice, can produce two differently worded</span>
-<span id="cb10-347"><a href="#cb10-347" aria-hidden="true" tabindex="-1"></a>  answers — LLM output isn't fully deterministic, which matters when</span>
-<span id="cb10-348"><a href="#cb10-348" aria-hidden="true" tabindex="-1"></a>  someone asks "why did it say something different yesterday?"</span>
-<span id="cb10-349"><a href="#cb10-349" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>long evidence sections eventually hit the model's context window limit</span>
-<span id="cb10-350"><a href="#cb10-350" aria-hidden="true" tabindex="-1"></a>  — a real archive's retrieved chunks can't just grow without bound</span>
-<span id="cb10-351"><a href="#cb10-351" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>every call to a hosted LLM API costs money and takes time; a system</span>
-<span id="cb10-352"><a href="#cb10-352" aria-hidden="true" tabindex="-1"></a>  answering hundreds of engineering questions a day needs a cost and</span>
-<span id="cb10-353"><a href="#cb10-353" aria-hidden="true" tabindex="-1"></a>  latency budget, not just a working prompt</span>
-<span id="cb10-354"><a href="#cb10-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-355"><a href="#cb10-355" aria-hidden="true" tabindex="-1"></a>None of this means RAG doesn't work — it means "answer only from</span>
-<span id="cb10-356"><a href="#cb10-356" aria-hidden="true" tabindex="-1"></a>evidence" is a design goal you build toward, not a switch you flip.</span>
-<span id="cb10-357"><a href="#cb10-357" aria-hidden="true" tabindex="-1"></a>Chapter 10 covers the guardrails that close this gap further.</span>
-<span id="cb10-358"><a href="#cb10-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-359"><a href="#cb10-359" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
-<span id="cb10-360"><a href="#cb10-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-361"><a href="#cb10-361" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
+<span id="cb10-297"><a href="#cb10-297" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb10-298"><a href="#cb10-298" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_05/first_rag.py <span class="st">"What led to the packers failing to set?"</span></span>
+<span id="cb10-299"><a href="#cb10-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-300"><a href="#cb10-300" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-301"><a href="#cb10-301" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="One real run — qwen2.5:7b-instruct, top_k=1 (your wording will differ)"}</span>
+<span id="cb10-302"><a href="#cb10-302" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-303"><a href="#cb10-303" aria-hidden="true" tabindex="-1"></a><span class="in">Question: What led to the packers failing to set?</span></span>
+<span id="cb10-304"><a href="#cb10-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-305"><a href="#cb10-305" aria-hidden="true" tabindex="-1"></a><span class="in">Answer:</span></span>
+<span id="cb10-306"><a href="#cb10-306" aria-hidden="true" tabindex="-1"></a><span class="in">According to the report, pressures indicated that the ball did not seat</span></span>
+<span id="cb10-307"><a href="#cb10-307" aria-hidden="true" tabindex="-1"></a><span class="in">and the packers did not set during an attempt to set packers multiple</span></span>
+<span id="cb10-308"><a href="#cb10-308" aria-hidden="true" tabindex="-1"></a><span class="in">times.</span></span>
+<span id="cb10-309"><a href="#cb10-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-310"><a href="#cb10-310" aria-hidden="true" tabindex="-1"></a><span class="in">Reference:</span></span>
+<span id="cb10-311"><a href="#cb10-311" aria-hidden="true" tabindex="-1"></a><span class="in">[FORGE-16A-78-32_Drilling_049_2020-12-07.txt] Page 15: "Production</span></span>
+<span id="cb10-312"><a href="#cb10-312" aria-hidden="true" tabindex="-1"></a><span class="in">Drilling Other Pressures indicated that ball did not seat and packers</span></span>
+<span id="cb10-313"><a href="#cb10-313" aria-hidden="true" tabindex="-1"></a><span class="in">did not set."</span></span>
+<span id="cb10-314"><a href="#cb10-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-315"><a href="#cb10-315" aria-hidden="true" tabindex="-1"></a><span class="in">Sources:</span></span>
+<span id="cb10-316"><a href="#cb10-316" aria-hidden="true" tabindex="-1"></a><span class="in">  FORGE-16A-78-32_Drilling_049_2020-12-07.txt</span></span>
+<span id="cb10-317"><a href="#cb10-317" aria-hidden="true" tabindex="-1"></a><span class="in">    "--- Page 1 --- RPT DATE:12/07/2020 DAILY DRILLING REPORT RPT NUM.:49</span></span>
+<span id="cb10-318"><a href="#cb10-318" aria-hidden="true" tabindex="-1"></a><span class="in">     ... WELL NAME:FORGE 16A [78]-32 ..."</span></span>
+<span id="cb10-319"><a href="#cb10-319" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-320"><a href="#cb10-320" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-321"><a href="#cb10-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-322"><a href="#cb10-322" aria-hidden="true" tabindex="-1"></a>That's a real RAG answer: a plain-English cause, grounded in report #49's</span>
+<span id="cb10-323"><a href="#cb10-323" aria-hidden="true" tabindex="-1"></a>own words, with the source report named and an excerpt you can open and</span>
+<span id="cb10-324"><a href="#cb10-324" aria-hidden="true" tabindex="-1"></a>check. **Your exact wording will differ** — LLM output isn't</span>
+<span id="cb10-325"><a href="#cb10-325" aria-hidden="true" tabindex="-1"></a>deterministic (the Production Reality note below says why) — but the</span>
+<span id="cb10-326"><a href="#cb10-326" aria-hidden="true" tabindex="-1"></a>grounded fact, the ball that didn't seat, comes back every time, because</span>
+<span id="cb10-327"><a href="#cb10-327" aria-hidden="true" tabindex="-1"></a>it's sitting in the evidence the model was handed.</span>
+<span id="cb10-328"><a href="#cb10-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-329"><a href="#cb10-329" aria-hidden="true" tabindex="-1"></a>Two honest limits are already visible in that single run:</span>
+<span id="cb10-330"><a href="#cb10-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-331"><a href="#cb10-331" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Evidence width matters.** This ran at <span class="in">`top_k=1`</span> — the one closest</span>
+<span id="cb10-332"><a href="#cb10-332" aria-hidden="true" tabindex="-1"></a>  report. Widen it to <span class="in">`top_k=3`</span> and the model is handed three full pages</span>
+<span id="cb10-333"><a href="#cb10-333" aria-hidden="true" tabindex="-1"></a>  of tables at once; in testing it lost the packer line in the noise and</span>
+<span id="cb10-334"><a href="#cb10-334" aria-hidden="true" tabindex="-1"></a>  answered "the report doesn't mention it." That isn't the model being</span>
+<span id="cb10-335"><a href="#cb10-335" aria-hidden="true" tabindex="-1"></a>  dim — it's the whole-document granularity problem from Chapter 4,</span>
+<span id="cb10-336"><a href="#cb10-336" aria-hidden="true" tabindex="-1"></a>  biting generation now instead of retrieval. Chapter 7's chunking is</span>
+<span id="cb10-337"><a href="#cb10-337" aria-hidden="true" tabindex="-1"></a>  what fixes it.</span>
+<span id="cb10-338"><a href="#cb10-338" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The model can still invent a citation.** Notice the answer cites</span>
+<span id="cb10-339"><a href="#cb10-339" aria-hidden="true" tabindex="-1"></a>  "Page 15." These reports are a single page — there is no page 15. The</span>
+<span id="cb10-340"><a href="#cb10-340" aria-hidden="true" tabindex="-1"></a>  *fact* is grounded; the *page number* is fabricated. A prompt asking</span>
+<span id="cb10-341"><a href="#cb10-341" aria-hidden="true" tabindex="-1"></a>  for citations gets citation-shaped text, not guaranteed-correct</span>
+<span id="cb10-342"><a href="#cb10-342" aria-hidden="true" tabindex="-1"></a>  citations. Chapter 10 wires the real page in from metadata so the model</span>
+<span id="cb10-343"><a href="#cb10-343" aria-hidden="true" tabindex="-1"></a>  can't make one up.</span>
+<span id="cb10-344"><a href="#cb10-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-345"><a href="#cb10-345" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
+<span id="cb10-346"><a href="#cb10-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-347"><a href="#cb10-347" aria-hidden="true" tabindex="-1"></a>This chapter's prompt says "answer only from the evidence" — but an</span>
+<span id="cb10-348"><a href="#cb10-348" aria-hidden="true" tabindex="-1"></a>instruction in a prompt is a strong nudge, not a guarantee. Real systems</span>
+<span id="cb10-349"><a href="#cb10-349" aria-hidden="true" tabindex="-1"></a>have to plan around what happens when that nudge isn't enough:</span>
+<span id="cb10-350"><a href="#cb10-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-351"><a href="#cb10-351" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>models don't follow instructions perfectly every time — occasionally</span>
+<span id="cb10-352"><a href="#cb10-352" aria-hidden="true" tabindex="-1"></a>  one will still answer from general knowledge instead of the evidence,</span>
+<span id="cb10-353"><a href="#cb10-353" aria-hidden="true" tabindex="-1"></a>  or blend the two without saying so</span>
+<span id="cb10-354"><a href="#cb10-354" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>the same question, asked twice, can produce two differently worded</span>
+<span id="cb10-355"><a href="#cb10-355" aria-hidden="true" tabindex="-1"></a>  answers — LLM output isn't fully deterministic, which matters when</span>
+<span id="cb10-356"><a href="#cb10-356" aria-hidden="true" tabindex="-1"></a>  someone asks "why did it say something different yesterday?"</span>
+<span id="cb10-357"><a href="#cb10-357" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>long evidence sections eventually hit the model's context window limit</span>
+<span id="cb10-358"><a href="#cb10-358" aria-hidden="true" tabindex="-1"></a>  — a real archive's retrieved chunks can't just grow without bound</span>
+<span id="cb10-359"><a href="#cb10-359" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>every call to a hosted LLM API costs money and takes time; a system</span>
+<span id="cb10-360"><a href="#cb10-360" aria-hidden="true" tabindex="-1"></a>  answering hundreds of engineering questions a day needs a cost and</span>
+<span id="cb10-361"><a href="#cb10-361" aria-hidden="true" tabindex="-1"></a>  latency budget, not just a working prompt</span>
 <span id="cb10-362"><a href="#cb10-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-363"><a href="#cb10-363" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Wire up <span class="in">`answer_question`</span> with a stub <span class="in">`llm_call`</span> that</span>
-<span id="cb10-364"><a href="#cb10-364" aria-hidden="true" tabindex="-1"></a>simply returns the evidence text, run it for "What led to the fishing</span>
-<span id="cb10-365"><a href="#cb10-365" aria-hidden="true" tabindex="-1"></a>operation on report #50?" with <span class="in">`top_k=3`</span>, and print the evidence list.</span>
+<span id="cb10-363"><a href="#cb10-363" aria-hidden="true" tabindex="-1"></a>None of this means RAG doesn't work — it means "answer only from</span>
+<span id="cb10-364"><a href="#cb10-364" aria-hidden="true" tabindex="-1"></a>evidence" is a design goal you build toward, not a switch you flip.</span>
+<span id="cb10-365"><a href="#cb10-365" aria-hidden="true" tabindex="-1"></a>Chapter 10 covers the guardrails that close this gap further.</span>
 <span id="cb10-366"><a href="#cb10-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-367"><a href="#cb10-367" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** you can see exactly which three reports</span>
-<span id="cb10-368"><a href="#cb10-368" aria-hidden="true" tabindex="-1"></a>came back — and, before reading further, decide for yourself whether</span>
-<span id="cb10-369"><a href="#cb10-369" aria-hidden="true" tabindex="-1"></a>that list actually contains what the target answer above needs.</span>
+<span id="cb10-367"><a href="#cb10-367" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
+<span id="cb10-368"><a href="#cb10-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-369"><a href="#cb10-369" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
 <span id="cb10-370"><a href="#cb10-370" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-371"><a href="#cb10-371" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
-<span id="cb10-372"><a href="#cb10-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-373"><a href="#cb10-373" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: the report the question is about isn't in the evidence"}</span>
-<span id="cb10-374"><a href="#cb10-374" aria-hidden="true" tabindex="-1"></a>**Query:** <span class="in">`"What led to the fishing operation on report #50?"`</span>, <span class="in">`top_k=3`</span>.</span>
-<span id="cb10-375"><a href="#cb10-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-376"><a href="#cb10-376" aria-hidden="true" tabindex="-1"></a>**Result:** retrieval returns report #49 (rank 1) plus two other reports</span>
-<span id="cb10-377"><a href="#cb10-377" aria-hidden="true" tabindex="-1"></a>— but **not report #50**, the report the question is literally about.</span>
-<span id="cb10-378"><a href="#cb10-378" aria-hidden="true" tabindex="-1"></a>The full ranking:</span>
-<span id="cb10-379"><a href="#cb10-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-380"><a href="#cb10-380" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb10-381"><a href="#cb10-381" aria-hidden="true" tabindex="-1"></a><span class="in">1. 0.4540  Drilling_049_2020-12-07   &lt;- packers fail (correctly retrieved)</span></span>
-<span id="cb10-382"><a href="#cb10-382" aria-hidden="true" tabindex="-1"></a><span class="in">2. 0.3639  Drilling_038_2020-11-26</span></span>
-<span id="cb10-383"><a href="#cb10-383" aria-hidden="true" tabindex="-1"></a><span class="in">3. 0.3469  Drilling_003_2020-10-22</span></span>
-<span id="cb10-384"><a href="#cb10-384" aria-hidden="true" tabindex="-1"></a><span class="in">...</span></span>
-<span id="cb10-385"><a href="#cb10-385" aria-hidden="true" tabindex="-1"></a><span class="in">7. 0.3190  Drilling_050_2020-12-08   &lt;- the fishing report itself</span></span>
-<span id="cb10-386"><a href="#cb10-386" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-371"><a href="#cb10-371" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Wire up <span class="in">`answer_question`</span> with a stub <span class="in">`llm_call`</span> that</span>
+<span id="cb10-372"><a href="#cb10-372" aria-hidden="true" tabindex="-1"></a>simply returns the evidence text, run it for "What led to the fishing</span>
+<span id="cb10-373"><a href="#cb10-373" aria-hidden="true" tabindex="-1"></a>operation on report #50?" with <span class="in">`top_k=3`</span>, and print the evidence list.</span>
+<span id="cb10-374"><a href="#cb10-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-375"><a href="#cb10-375" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** you can see exactly which three reports</span>
+<span id="cb10-376"><a href="#cb10-376" aria-hidden="true" tabindex="-1"></a>came back — and, before reading further, decide for yourself whether</span>
+<span id="cb10-377"><a href="#cb10-377" aria-hidden="true" tabindex="-1"></a>that list actually contains what the target answer above needs.</span>
+<span id="cb10-378"><a href="#cb10-378" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-379"><a href="#cb10-379" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
+<span id="cb10-380"><a href="#cb10-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-381"><a href="#cb10-381" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: the report the question is about isn't in the evidence"}</span>
+<span id="cb10-382"><a href="#cb10-382" aria-hidden="true" tabindex="-1"></a>**Query:** <span class="in">`"What led to the fishing operation on report #50?"`</span>, <span class="in">`top_k=3`</span>.</span>
+<span id="cb10-383"><a href="#cb10-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-384"><a href="#cb10-384" aria-hidden="true" tabindex="-1"></a>**Result:** retrieval returns report #49 (rank 1) plus two other reports</span>
+<span id="cb10-385"><a href="#cb10-385" aria-hidden="true" tabindex="-1"></a>— but **not report #50**, the report the question is literally about.</span>
+<span id="cb10-386"><a href="#cb10-386" aria-hidden="true" tabindex="-1"></a>The full ranking:</span>
 <span id="cb10-387"><a href="#cb10-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-388"><a href="#cb10-388" aria-hidden="true" tabindex="-1"></a>**Why:** report #50's own text — bit-mill fishing narrative buried among</span>
-<span id="cb10-389"><a href="#cb10-389" aria-hidden="true" tabindex="-1"></a>casing tables, mud tables, and a full BHA component list — is, at</span>
-<span id="cb10-390"><a href="#cb10-390" aria-hidden="true" tabindex="-1"></a>whole-document granularity, more similar to *several other reports'*</span>
-<span id="cb10-391"><a href="#cb10-391" aria-hidden="true" tabindex="-1"></a>tables than it is to a question about fishing. This is the same</span>
-<span id="cb10-392"><a href="#cb10-392" aria-hidden="true" tabindex="-1"></a>granularity problem Chapter 4 already flagged; here it has a sharper</span>
-<span id="cb10-393"><a href="#cb10-393" aria-hidden="true" tabindex="-1"></a>consequence.</span>
-<span id="cb10-394"><a href="#cb10-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-395"><a href="#cb10-395" aria-hidden="true" tabindex="-1"></a>**Lesson:** this is exactly the failure mode this chapter's own Key</span>
-<span id="cb10-396"><a href="#cb10-396" aria-hidden="true" tabindex="-1"></a>Takeaways warn about — and it's a dangerous one specifically *because*</span>
-<span id="cb10-397"><a href="#cb10-397" aria-hidden="true" tabindex="-1"></a>the question names "report #50" directly. A careless <span class="in">`llm_call`</span></span>
-<span id="cb10-398"><a href="#cb10-398" aria-hidden="true" tabindex="-1"></a>implementation could echo that report number back in its answer without</span>
-<span id="cb10-399"><a href="#cb10-399" aria-hidden="true" tabindex="-1"></a>ever having actually retrieved report #50's content, producing a</span>
-<span id="cb10-400"><a href="#cb10-400" aria-hidden="true" tabindex="-1"></a>citation-shaped sentence that *looks* grounded and isn't. Always check</span>
-<span id="cb10-401"><a href="#cb10-401" aria-hidden="true" tabindex="-1"></a>what's actually in the evidence list — not what the question happens to</span>
-<span id="cb10-402"><a href="#cb10-402" aria-hidden="true" tabindex="-1"></a>mention — before trusting an answer. Chapter 7's chunking and Chapter 9's</span>
-<span id="cb10-403"><a href="#cb10-403" aria-hidden="true" tabindex="-1"></a>hybrid retrieval are what actually close this gap; Part I's simple</span>
-<span id="cb10-404"><a href="#cb10-404" aria-hidden="true" tabindex="-1"></a>system doesn't, and pretending otherwise would defeat the entire point</span>
-<span id="cb10-405"><a href="#cb10-405" aria-hidden="true" tabindex="-1"></a>of this book.</span>
-<span id="cb10-406"><a href="#cb10-406" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-407"><a href="#cb10-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-408"><a href="#cb10-408" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
-<span id="cb10-409"><a href="#cb10-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-410"><a href="#cb10-410" aria-hidden="true" tabindex="-1"></a>🔴 **Advanced**</span>
-<span id="cb10-411"><a href="#cb10-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-412"><a href="#cb10-412" aria-hidden="true" tabindex="-1"></a>**Challenge:** Connect a real LLM (local via <span class="in">`transformers`</span>/<span class="in">`ollama`</span>, or a</span>
-<span id="cb10-413"><a href="#cb10-413" aria-hidden="true" tabindex="-1"></a>hosted API) as <span class="in">`llm_call`</span>, and add a check that rejects the answer if it</span>
-<span id="cb10-414"><a href="#cb10-414" aria-hidden="true" tabindex="-1"></a>mentions a report filename that wasn't in the retrieved evidence list — a</span>
-<span id="cb10-415"><a href="#cb10-415" aria-hidden="true" tabindex="-1"></a>first, crude hallucination guard. Then ask it a question the ten-report</span>
-<span id="cb10-416"><a href="#cb10-416" aria-hidden="true" tabindex="-1"></a>sample archive genuinely can't answer (e.g. "what happened on report</span>
-<span id="cb10-417"><a href="#cb10-417" aria-hidden="true" tabindex="-1"></a>#100?") and confirm it says so rather than inventing an answer. A</span>
-<span id="cb10-418"><a href="#cb10-418" aria-hidden="true" tabindex="-1"></a>reference solution is in <span class="in">`code/chapter_05/challenge/`</span>.</span>
+<span id="cb10-388"><a href="#cb10-388" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-389"><a href="#cb10-389" aria-hidden="true" tabindex="-1"></a><span class="in">1. 0.4540  Drilling_049_2020-12-07   &lt;- packers fail (correctly retrieved)</span></span>
+<span id="cb10-390"><a href="#cb10-390" aria-hidden="true" tabindex="-1"></a><span class="in">2. 0.3639  Drilling_038_2020-11-26</span></span>
+<span id="cb10-391"><a href="#cb10-391" aria-hidden="true" tabindex="-1"></a><span class="in">3. 0.3469  Drilling_003_2020-10-22</span></span>
+<span id="cb10-392"><a href="#cb10-392" aria-hidden="true" tabindex="-1"></a><span class="in">...</span></span>
+<span id="cb10-393"><a href="#cb10-393" aria-hidden="true" tabindex="-1"></a><span class="in">7. 0.3190  Drilling_050_2020-12-08   &lt;- the fishing report itself</span></span>
+<span id="cb10-394"><a href="#cb10-394" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb10-395"><a href="#cb10-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-396"><a href="#cb10-396" aria-hidden="true" tabindex="-1"></a>**Why:** report #50's own text — bit-mill fishing narrative buried among</span>
+<span id="cb10-397"><a href="#cb10-397" aria-hidden="true" tabindex="-1"></a>casing tables, mud tables, and a full BHA component list — is, at</span>
+<span id="cb10-398"><a href="#cb10-398" aria-hidden="true" tabindex="-1"></a>whole-document granularity, more similar to *several other reports'*</span>
+<span id="cb10-399"><a href="#cb10-399" aria-hidden="true" tabindex="-1"></a>tables than it is to a question about fishing. This is the same</span>
+<span id="cb10-400"><a href="#cb10-400" aria-hidden="true" tabindex="-1"></a>granularity problem Chapter 4 already flagged; here it has a sharper</span>
+<span id="cb10-401"><a href="#cb10-401" aria-hidden="true" tabindex="-1"></a>consequence.</span>
+<span id="cb10-402"><a href="#cb10-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-403"><a href="#cb10-403" aria-hidden="true" tabindex="-1"></a>**Lesson:** this is exactly the failure mode this chapter's own Key</span>
+<span id="cb10-404"><a href="#cb10-404" aria-hidden="true" tabindex="-1"></a>Takeaways warn about — and it's a dangerous one specifically *because*</span>
+<span id="cb10-405"><a href="#cb10-405" aria-hidden="true" tabindex="-1"></a>the question names "report #50" directly. A careless <span class="in">`llm_call`</span></span>
+<span id="cb10-406"><a href="#cb10-406" aria-hidden="true" tabindex="-1"></a>implementation could echo that report number back in its answer without</span>
+<span id="cb10-407"><a href="#cb10-407" aria-hidden="true" tabindex="-1"></a>ever having actually retrieved report #50's content, producing a</span>
+<span id="cb10-408"><a href="#cb10-408" aria-hidden="true" tabindex="-1"></a>citation-shaped sentence that *looks* grounded and isn't. Always check</span>
+<span id="cb10-409"><a href="#cb10-409" aria-hidden="true" tabindex="-1"></a>what's actually in the evidence list — not what the question happens to</span>
+<span id="cb10-410"><a href="#cb10-410" aria-hidden="true" tabindex="-1"></a>mention — before trusting an answer. Chapter 7's chunking and Chapter 9's</span>
+<span id="cb10-411"><a href="#cb10-411" aria-hidden="true" tabindex="-1"></a>hybrid retrieval are what actually close this gap; Part I's simple</span>
+<span id="cb10-412"><a href="#cb10-412" aria-hidden="true" tabindex="-1"></a>system doesn't, and pretending otherwise would defeat the entire point</span>
+<span id="cb10-413"><a href="#cb10-413" aria-hidden="true" tabindex="-1"></a>of this book.</span>
+<span id="cb10-414"><a href="#cb10-414" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-415"><a href="#cb10-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-416"><a href="#cb10-416" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
+<span id="cb10-417"><a href="#cb10-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-418"><a href="#cb10-418" aria-hidden="true" tabindex="-1"></a>🔴 **Advanced**</span>
 <span id="cb10-419"><a href="#cb10-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-420"><a href="#cb10-420" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
-<span id="cb10-421"><a href="#cb10-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-422"><a href="#cb10-422" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>RAG is retrieval, then generation — two separate, individually</span>
-<span id="cb10-423"><a href="#cb10-423" aria-hidden="true" tabindex="-1"></a>  debuggable steps, not one opaque black box.</span>
-<span id="cb10-424"><a href="#cb10-424" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>If retrieval is wrong, generation cannot save you — always verify the</span>
-<span id="cb10-425"><a href="#cb10-425" aria-hidden="true" tabindex="-1"></a>  evidence list before trusting the generated answer.</span>
-<span id="cb10-426"><a href="#cb10-426" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A prompt that instructs "answer only from evidence, cite sources" is</span>
-<span id="cb10-427"><a href="#cb10-427" aria-hidden="true" tabindex="-1"></a>  necessary but not sufficient for trustworthy answers. Part II builds the</span>
-<span id="cb10-428"><a href="#cb10-428" aria-hidden="true" tabindex="-1"></a>  guardrails that make it sufficient.</span>
+<span id="cb10-420"><a href="#cb10-420" aria-hidden="true" tabindex="-1"></a>**Challenge:** Connect a real LLM (local via <span class="in">`transformers`</span>/<span class="in">`ollama`</span>, or a</span>
+<span id="cb10-421"><a href="#cb10-421" aria-hidden="true" tabindex="-1"></a>hosted API) as <span class="in">`llm_call`</span>, and add a check that rejects the answer if it</span>
+<span id="cb10-422"><a href="#cb10-422" aria-hidden="true" tabindex="-1"></a>mentions a report filename that wasn't in the retrieved evidence list — a</span>
+<span id="cb10-423"><a href="#cb10-423" aria-hidden="true" tabindex="-1"></a>first, crude hallucination guard. Then ask it a question the ten-report</span>
+<span id="cb10-424"><a href="#cb10-424" aria-hidden="true" tabindex="-1"></a>sample archive genuinely can't answer (e.g. "what happened on report</span>
+<span id="cb10-425"><a href="#cb10-425" aria-hidden="true" tabindex="-1"></a>#100?") and confirm it says so rather than inventing an answer. A</span>
+<span id="cb10-426"><a href="#cb10-426" aria-hidden="true" tabindex="-1"></a>reference solution is in <span class="in">`code/chapter_05/challenge/`</span>.</span>
+<span id="cb10-427"><a href="#cb10-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-428"><a href="#cb10-428" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
 <span id="cb10-429"><a href="#cb10-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-430"><a href="#cb10-430" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
-<span id="cb10-431"><a href="#cb10-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-432"><a href="#cb10-432" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb10-433"><a href="#cb10-433" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb10-434"><a href="#cb10-434" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_05/first_rag.py`</span> <span class="pp">|</span> Prompt assembly and evidence-tracked question answering <span class="pp">|</span></span>
-<span id="cb10-435"><a href="#cb10-435" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_05_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
-<span id="cb10-436"><a href="#cb10-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-437"><a href="#cb10-437" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 5"}</span>
-<span id="cb10-438"><a href="#cb10-438" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained RAG as two separate, inspectable steps: retrieve, then generate</span>
-<span id="cb10-439"><a href="#cb10-439" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Assembled retrieved evidence into a prompt that forces answers from that evidence only</span>
-<span id="cb10-440"><a href="#cb10-440" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Generated a real answer with a local model (Ollama), returned with its source reports and excerpts</span>
-<span id="cb10-441"><a href="#cb10-441" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Caught a real case where the cited report wasn't actually in the evidence</span>
-<span id="cb10-442"><a href="#cb10-442" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-443"><a href="#cb10-443" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-444"><a href="#cb10-444" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb10-445"><a href="#cb10-445" aria-hidden="true" tabindex="-1"></a>**`first_rag.py`** — an Industrial RAG system: ask it a question in plain</span>
-<span id="cb10-446"><a href="#cb10-446" aria-hidden="true" tabindex="-1"></a>English, and it retrieves evidence, generates an answer with a local</span>
-<span id="cb10-447"><a href="#cb10-447" aria-hidden="true" tabindex="-1"></a>model, and hands back the source reports and excerpts that answer is</span>
-<span id="cb10-448"><a href="#cb10-448" aria-hidden="true" tabindex="-1"></a>traceable to. This is Part I's capstone artifact.</span>
-<span id="cb10-449"><a href="#cb10-449" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-450"><a href="#cb10-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-451"><a href="#cb10-451" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
-<span id="cb10-452"><a href="#cb10-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-453"><a href="#cb10-453" aria-hidden="true" tabindex="-1"></a>You can ask an engineering question in plain English and get back a</span>
-<span id="cb10-454"><a href="#cb10-454" aria-hidden="true" tabindex="-1"></a>generated answer with an explicit, checkable list of exactly which</span>
-<span id="cb10-455"><a href="#cb10-455" aria-hidden="true" tabindex="-1"></a>reports it came from — not just ranked passages you'd still have to read</span>
-<span id="cb10-456"><a href="#cb10-456" aria-hidden="true" tabindex="-1"></a>and synthesise yourself.</span>
-<span id="cb10-457"><a href="#cb10-457" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-458"><a href="#cb10-458" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
-<span id="cb10-459"><a href="#cb10-459" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-460"><a href="#cb10-460" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 6:** What you've built in Part I works — on ten</span>
-<span id="cb10-461"><a href="#cb10-461" aria-hidden="true" tabindex="-1"></a>clean, digital, hand-picked reports out of the full 76-report Utah FORGE</span>
-<span id="cb10-462"><a href="#cb10-462" aria-hidden="true" tabindex="-1"></a>archive. Part II industrialises this system against the reality of a</span>
-<span id="cb10-463"><a href="#cb10-463" aria-hidden="true" tabindex="-1"></a>full archive: retrieval that has to be both fast and precise across</span>
-<span id="cb10-464"><a href="#cb10-464" aria-hidden="true" tabindex="-1"></a>every report, and answers that have to survive scrutiny from someone who</span>
-<span id="cb10-465"><a href="#cb10-465" aria-hidden="true" tabindex="-1"></a>wasn't in the room when they were generated. Chapter 6 starts with the</span>
-<span id="cb10-466"><a href="#cb10-466" aria-hidden="true" tabindex="-1"></a>first thing that breaks in a typical real-world archive: scanned reports</span>
-<span id="cb10-467"><a href="#cb10-467" aria-hidden="true" tabindex="-1"></a>with no extractable text at all.</span>
+<span id="cb10-430"><a href="#cb10-430" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>RAG is retrieval, then generation — two separate, individually</span>
+<span id="cb10-431"><a href="#cb10-431" aria-hidden="true" tabindex="-1"></a>  debuggable steps, not one opaque black box.</span>
+<span id="cb10-432"><a href="#cb10-432" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>If retrieval is wrong, generation cannot save you — always verify the</span>
+<span id="cb10-433"><a href="#cb10-433" aria-hidden="true" tabindex="-1"></a>  evidence list before trusting the generated answer.</span>
+<span id="cb10-434"><a href="#cb10-434" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A prompt that instructs "answer only from evidence, cite sources" is</span>
+<span id="cb10-435"><a href="#cb10-435" aria-hidden="true" tabindex="-1"></a>  necessary but not sufficient for trustworthy answers. Part II builds the</span>
+<span id="cb10-436"><a href="#cb10-436" aria-hidden="true" tabindex="-1"></a>  guardrails that make it sufficient.</span>
+<span id="cb10-437"><a href="#cb10-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-438"><a href="#cb10-438" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb10-439"><a href="#cb10-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-440"><a href="#cb10-440" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb10-441"><a href="#cb10-441" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb10-442"><a href="#cb10-442" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_05/first_rag.py`</span> <span class="pp">|</span> Prompt assembly and evidence-tracked question answering <span class="pp">|</span></span>
+<span id="cb10-443"><a href="#cb10-443" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_05_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
+<span id="cb10-444"><a href="#cb10-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-445"><a href="#cb10-445" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 5"}</span>
+<span id="cb10-446"><a href="#cb10-446" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained RAG as two separate, inspectable steps: retrieve, then generate</span>
+<span id="cb10-447"><a href="#cb10-447" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Assembled retrieved evidence into a prompt that forces answers from that evidence only</span>
+<span id="cb10-448"><a href="#cb10-448" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Generated a real answer with a local model (Ollama), returned with its source reports and excerpts</span>
+<span id="cb10-449"><a href="#cb10-449" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Caught a real case where the cited report wasn't actually in the evidence</span>
+<span id="cb10-450"><a href="#cb10-450" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-451"><a href="#cb10-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-452"><a href="#cb10-452" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb10-453"><a href="#cb10-453" aria-hidden="true" tabindex="-1"></a>**`first_rag.py`** — an Industrial RAG system: ask it a question in plain</span>
+<span id="cb10-454"><a href="#cb10-454" aria-hidden="true" tabindex="-1"></a>English, and it retrieves evidence, generates an answer with a local</span>
+<span id="cb10-455"><a href="#cb10-455" aria-hidden="true" tabindex="-1"></a>model, and hands back the source reports and excerpts that answer is</span>
+<span id="cb10-456"><a href="#cb10-456" aria-hidden="true" tabindex="-1"></a>traceable to. This is Part I's capstone artifact.</span>
+<span id="cb10-457"><a href="#cb10-457" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-458"><a href="#cb10-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-459"><a href="#cb10-459" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb10-460"><a href="#cb10-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-461"><a href="#cb10-461" aria-hidden="true" tabindex="-1"></a>You can ask an engineering question in plain English and get back a</span>
+<span id="cb10-462"><a href="#cb10-462" aria-hidden="true" tabindex="-1"></a>generated answer with an explicit, checkable list of exactly which</span>
+<span id="cb10-463"><a href="#cb10-463" aria-hidden="true" tabindex="-1"></a>reports it came from — not just ranked passages you'd still have to read</span>
+<span id="cb10-464"><a href="#cb10-464" aria-hidden="true" tabindex="-1"></a>and synthesise yourself.</span>
+<span id="cb10-465"><a href="#cb10-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-466"><a href="#cb10-466" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb10-467"><a href="#cb10-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-468"><a href="#cb10-468" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 6:** What you've built in Part I works — on ten</span>
+<span id="cb10-469"><a href="#cb10-469" aria-hidden="true" tabindex="-1"></a>clean, digital, hand-picked reports out of the full 76-report Utah FORGE</span>
+<span id="cb10-470"><a href="#cb10-470" aria-hidden="true" tabindex="-1"></a>archive. Part II industrialises this system against the reality of a</span>
+<span id="cb10-471"><a href="#cb10-471" aria-hidden="true" tabindex="-1"></a>full archive: retrieval that has to be both fast and precise across</span>
+<span id="cb10-472"><a href="#cb10-472" aria-hidden="true" tabindex="-1"></a>every report, and answers that have to survive scrutiny from someone who</span>
+<span id="cb10-473"><a href="#cb10-473" aria-hidden="true" tabindex="-1"></a>wasn't in the room when they were generated. Chapter 6 starts with the</span>
+<span id="cb10-474"><a href="#cb10-474" aria-hidden="true" tabindex="-1"></a>first thing that breaks in a typical real-world archive: scanned reports</span>
+<span id="cb10-475"><a href="#cb10-475" aria-hidden="true" tabindex="-1"></a>with no extractable text at all.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
