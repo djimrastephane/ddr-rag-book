@@ -301,8 +301,10 @@ it needs a narrower match context. A reference solution is in
   assume the source data will document itself.
 - A transparent dictionary beats an opaque model here: every expansion is
   inspectable and testable.
-- Cleaning text is not optional groundwork — it's what makes every later
-  chapter's search and retrieval actually work.
+- Cleaning text isn't optional busywork — the expanded text is what
+  Chapter 3's keyword search matches against. (Chapter 4's semantic search
+  works from the raw text instead; its Field Notes measure exactly how
+  much expansion does and doesn't help there.)
 
 ## Repository files
 

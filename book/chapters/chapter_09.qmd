@@ -209,6 +209,34 @@ report by its total credit. Because this uses each list's rank, not its
 own raw numbers, a method that happens to score everything on a bigger
 scale can't unfairly take over the fused result.
 
+### Turning that into a real hybrid search
+
+`reciprocal_rank_fusion` fuses ranked lists — but it needs two of them to
+fuse. Chapter 4's semantic `search()` already returns one. The missing
+piece is a ranked *sparse* signal: Chapter 3's `search()` returns an
+unordered set — a report either contains every query word or it doesn't —
+which RRF has nothing to order. `code/chapter_09/sparse_ranking.py` closes
+that gap with `rank_bm25()`, a BM25 ranking over the same archive (with a
+plain term-frequency fallback if `rank-bm25` isn't installed):
+
+```{python}
+#| eval: false
+# code/chapter_09/sparse_ranking.py
+from rank_bm25 import BM25Okapi
+
+def rank_bm25(text_dir, query):
+    paths = sorted(text_dir.glob("*.txt"))
+    corpus = [tokenize(p.read_text(encoding="utf-8")) for p in paths]
+    scores = BM25Okapi(corpus).get_scores(tokenize(query))
+    ranked = sorted(zip(paths, scores), key=lambda ps: ps[1], reverse=True)
+    return [p.name for p, _ in ranked]
+```
+
+With both ranked signals in hand, `hybrid_search()` in
+`code/chapter_09/hybrid_search.py` runs all three steps end to end: BM25
+sparse ranking, Chapter 4's dense ranking, fused with the weights above.
+That's the function the practical exercise below calls.
+
 ## Production Reality
 
 This chapter tunes two signals with fixed weights (BM25 × 2.0, dense ×
@@ -235,13 +263,15 @@ tuning honest over time, not treat it as a one-time decision:
 
 🟢 **Beginner**
 
-**Try it yourself:** Rank the ten sample DDRs for "packers fishing" using
-Chapter 3's keyword search and Chapter 4's semantic search separately,
-then fuse the two ranked lists with `reciprocal_rank_fusion(lists, k=20,
-weights=[2.0, 0.5])` — matching the companion pipeline's real weighting.
+**Try it yourself:** Rank the ten sample DDRs for `"packers fishing"` two
+ways — `rank_bm25()` for the sparse signal, Chapter 4's `search()` for the
+dense one — then fuse them with `reciprocal_rank_fusion([sparse, dense],
+k=20, weights=[2.0, 0.5])`, matching the companion pipeline's real
+weighting. `hybrid_search()` does all three steps in one call if you'd
+rather run it end to end.
 
 **You'll know it worked when:** report #49 (packers) and #50 (fishing)
-both rank near the top of the fused list, and you can explain why the
+both rank in the top two of the fused list, and you can explain why the
 weighting favours the keyword signal here.
 
 ## Field notes
@@ -265,12 +295,14 @@ Compare that to `"packers fishing"` (the practical exercise above),
 where fusion helps exactly as expected — report #49 stays 1st and
 report #50 jumps from 8th (dense alone) to 2nd (fused).
 
-These specific rankings come from the companion pipeline's real BM25
-implementation (`DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py`),
-not from anything bundled in this book — `code/chapter_09/hybrid_search.py`
-only implements the RRF fusion math itself, applied here to a hardcoded
-toy ranking, so you can't reproduce the BM25-alone or fused numbers above
-by running this book's own code.
+You can reproduce every rank above with this book's own code:
+`rank_bm25()` and `hybrid_search()` (from the implementation section)
+give report #39 exactly these positions over the sample archive — 9th on
+BM25 alone, 9th fused at 2.0/0.5, 7th at 1.0/1.0. The companion
+pipeline's fuller BM25 implementation
+(`DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py`) lands on the same
+ordering for this query, which is a good sign the simplified version here
+captures what actually matters.
 
 **Why:** BM25 has essentially nothing useful to say about report #39 for
 `"stuck pipe"` — it shares almost no vocabulary with the query, so BM25
@@ -318,7 +350,8 @@ solution is in `code/chapter_09/challenge/`.
 
 | File | Purpose |
 |---|---|
-| `code/chapter_09/hybrid_search.py` | Reciprocal Rank Fusion implementation |
+| `code/chapter_09/sparse_ranking.py` | Ranked BM25 sparse retriever — the ranked signal RRF fuses |
+| `code/chapter_09/hybrid_search.py` | Reciprocal Rank Fusion, plus `hybrid_search()` end-to-end |
 | `DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py` | BM25 index, IDF formula, score fusion (companion repo) |
 | `DDR_UTAH_FORGE/src/rag_pdf/retrieval/canonical_hybrid.py` | Full hybrid retrieval pipeline (companion repo) |
 | `DDR_UTAH_FORGE/src/rag_pdf/services/search_service.py` | Cross-encoder rerank + fusion weights (companion repo) |

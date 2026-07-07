@@ -277,6 +277,15 @@ Chapter titles in the table below link to the rendered, readable page for that r
 
 [**DDR_UTAH_FORGE**](https://github.com/djimrastephane/DDR_UTAH_FORGE) is a separate, public repository: a real, working DDR intelligence pipeline built specifically against this book's public archive, which Part II's chapters reference for verified real-world numbers (a real 1,428-chunk global index, a real detected reporting gap, and so on). This book's own code never depends on it — every chapter's script in `book/code/chapter_NN/` runs standalone against the committed sample archive. See [Appendix A, Section 3](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii) for how to clone it and how the two projects relate.
 
+### What this becomes
+
+The companion pipeline wraps the same retrieval, citation, and gap-detection logic the book builds into a searchable interface over the whole archive — you ask a question and get a cited answer back across every report at once.
+
+<!-- TODO(author): add a real screenshot of the DDR Intelligence / Streamlit interface
+     at book/figures/app_screenshot.png and uncomment the image below. Do NOT substitute
+     a mockup or an AI-generated UI image as evidence of the real app. -->
+<!-- ![The companion DDR Intelligence interface](book/figures/app_screenshot.png) -->
+
 ## Exercises
 
 Every chapter includes a **Practical exercise** (a guided, checkable task using the real sample archive) and a **Challenge exercise** (a harder, more open-ended extension). Reference solutions for challenge exercises live alongside each chapter's code, e.g. [`book/code/chapter_01/challenge/`](book/code/chapter_01/challenge).

@@ -263,13 +263,17 @@ deployment. A few realities worth planning for:
 🟢 **Beginner**
 
 **Try it yourself:** Run the five questions above through Chapter 9's
-hybrid search over the ten-report sample archive, record each correct
+`hybrid_search()` over the ten-report sample archive, record each correct
 report's rank, and compute `recall@3` by hand.
 
 **You'll know it worked when:** you have a small CSV or JSON file mapping
 question → expected report → observed rank, and a `recall@3` score you
 can quote and defend — because you wrote and verified every question
-yourself.
+yourself. On this five-question set every expected report lands in the
+top three, so `recall@3` comes out to 1.0; don't read that as "retrieval
+is solved," though — five hand-picked, distinctly-worded questions over
+ten reports is the easiest case there is, which is exactly why the
+challenge below scales it up to fifteen questions over all 76.
 
 ## Field notes
 

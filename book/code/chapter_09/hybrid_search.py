@@ -31,6 +31,37 @@ def reciprocal_rank_fusion(ranked_lists: list[list[str]], k: int = 20,
     return sorted(scores.items(), key=lambda item: item[1], reverse=True)
 
 
+def hybrid_search(text_dir, model, query: str, k: int = 20,
+                  weights: tuple[float, float] = (2.0, 0.5),
+                  top_k: int = 10) -> list[tuple[str, float]]:
+    """End-to-end hybrid retrieval over a real archive.
+
+    Fuses two genuine ranked lists -- BM25 sparse (this chapter's
+    sparse_ranking.py) and Chapter 4's dense semantic search -- with
+    Reciprocal Rank Fusion. The default weights (BM25 2.0, dense 0.5)
+    match the companion pipeline's real weighting. Imports are kept inside
+    the function so reciprocal_rank_fusion above stays importable without
+    pulling in sentence-transformers.
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "chapter_04"))
+    from semantic_search import embed_texts, load_chunks, search  # noqa: E402
+    from sparse_ranking import rank_bm25  # noqa: E402
+
+    text_dir = Path(text_dir)
+    sparse_ranked = rank_bm25(text_dir, query)
+
+    filenames, texts = load_chunks(text_dir)
+    embeddings = embed_texts(model, texts)
+    dense_ranked = [name for name, _score
+                    in search(model, query, filenames, embeddings, top_k=len(filenames))]
+
+    fused = reciprocal_rank_fusion([sparse_ranked, dense_ranked], k=k, weights=list(weights))
+    return fused[:top_k]
+
+
 if __name__ == "__main__":
     # A small worked example: two retrieval methods disagree on ordering,
     # and RRF blends their opinions into one ranking.
@@ -42,6 +73,22 @@ if __name__ == "__main__":
         k=20,
         weights=[2.0, 0.5],  # matches the companion pipeline's real BM25/dense weighting
     )
-    print("Fused ranking (BM25 weight 2.0, dense weight 0.5):")
+    print("Fused ranking, toy example (BM25 weight 2.0, dense weight 0.5):")
     for doc_id, score in fused:
         print(f"  {score:.5f}  {doc_id}")
+
+    # The real thing: hybrid retrieval over the ten-report sample archive.
+    import sys
+    from pathlib import Path
+
+    text_dir = Path("datasets/ddr_text")
+    if text_dir.exists():
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "chapter_04"))
+        # device="cpu" pinned explicitly -- see code/chapter_04/semantic_search.py.
+        from semantic_search import MODEL_NAME  # noqa: E402
+        from sentence_transformers import SentenceTransformer  # noqa: E402
+
+        model = SentenceTransformer(MODEL_NAME, device="cpu")
+        print("\nHybrid ranking for 'packers fishing' over the sample archive:")
+        for rank, (name, score) in enumerate(hybrid_search(text_dir, model, "packers fishing"), start=1):
+            print(f"  {rank:2d}. {score:.5f}  {name}")

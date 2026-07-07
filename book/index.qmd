@@ -60,6 +60,22 @@ text — nothing here is invented. That's the destination. The rest of
 this book is how you build the road to it, one working script at a
 time, starting with a single PDF.
 
+## What this becomes
+
+The scripts in this book are the engine. The companion pipeline wraps the
+same retrieval, citation, and gap-detection logic in a searchable
+interface over the whole archive: you ask a question and get a cited
+answer back — the same shape as the interaction above — across every
+report at once. [Appendix A](appendix/appendix_a_environment_setup.qmd)
+shows how to set it up and point it at your own archive.
+
+<!-- TODO(author): add a real screenshot of the DDR Intelligence / Streamlit
+     interface at figures/app_screenshot.png, then uncomment the image below.
+     Do NOT substitute a mockup or an AI-generated UI image as evidence of
+     the real app. -->
+<!-- ![The companion DDR Intelligence interface: a question, a cited answer, and the source reports.](figures/app_screenshot.png){fig-alt="Screenshot of the DDR Intelligence application"} -->
+
+
 ## Who this book is for
 
 You should read this book if you are a drilling engineer, completions
@@ -92,6 +108,35 @@ building useful engineering tools.
 | 4 | Search DDRs by meaning, not just exact words |
 | 5 | Ask a question and get a cited, evidence-backed answer |
 | 6–12 | Scale the system to scanned reports, large archives, hybrid retrieval, reranking, and full traceability |
+
+## Management view: why this matters
+
+If you're deciding whether to fund or adopt work like this, here's the
+case in plain terms — and its limits.
+
+- **Search time.** Finding a prior stuck-pipe or fishing precedent goes
+  from opening reports one at a time to a single query — minutes to
+  seconds on the archives used here.
+- **Offset and lessons-learned reuse.** The same index that answers one
+  question surfaces related events across every report, so a lesson
+  written once can be found again instead of re-learned.
+- **Onboarding.** An engineer new to a well can ask what happened and get
+  cited reports back, rather than depending on catching whoever remembers.
+- **Less reliance on tribal knowledge.** Answers come with the report and
+  page they came from, so the knowledge lives in the archive, not only in
+  one person's memory.
+- **Auditability.** Every generated claim carries a citation an engineer
+  can open and check (Chapter 10) — the system shows its work.
+- **Build vs. buy.** The core is a few hundred lines of standard Python.
+  The trade-off against a vendor product is control and inspectability
+  versus vendor support and maintenance.
+- **Private deployment.** It runs locally against a local model (Chapter
+  5), so confidential DDRs need never leave your environment.
+
+This supports an engineer's judgment and a reviewer's audit; it doesn't
+replace either. It makes no claim to reduce operational risk on its own —
+a faster way to find the right report is only as good as the decision
+someone makes with it.
 
 ## How this book works
 

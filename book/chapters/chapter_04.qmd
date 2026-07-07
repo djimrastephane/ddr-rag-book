@@ -137,6 +137,10 @@ Nothing about meaning yet — this just reads every text file into memory
 and keeps a matching list of filenames, so that whatever score we
 calculate next can be traced back to the report it came from.
 
+Note the folder: `datasets/ddr_text/`, Chapter 1's raw extraction — *not*
+Chapter 2's `datasets/ddr_text_expanded/`. That's deliberate, and the
+Field Notes at the end of this chapter measure exactly why.
+
 ### Step 2: convert text into vectors
 
 ## What problem are we solving?
@@ -303,6 +307,39 @@ problem Chapter 7's chunking (and later, reranking) works on, and it's
 worth remembering the next time a semantic search "isn't working": check
 what's actually inside each embedded vector before blaming the model —
 but don't expect a single score cutoff to solve it either.
+:::
+
+::: {.callout-warning title="🔧 Field notes: does expanding abbreviations actually help semantic search?"}
+**Action:** embed the ten reports twice — once from Chapter 1's raw text
+(`datasets/ddr_text/`), once from Chapter 2's expanded text
+(`datasets/ddr_text_expanded/`) — and compare the same two queries at
+`top_k=3`.
+
+**Result:**
+
+```
+Query "bottom hole assembly":
+  raw text:      report #38 ranks 2nd  (0.302)
+  expanded text: report #38 ranks 1st  (0.372)   <- BHA now reads in full
+
+Query "stuck pipe":
+  raw text:      report #38 ranks 2nd
+  expanded text: report #38 ranks 2nd            <- essentially unchanged
+```
+
+**Why:** expansion only helps a query whose wording matches a term you
+actually expanded. `"bottom hole assembly"` improves because the reports
+now literally contain that phrase instead of only `BHA` — so report #38
+climbs from 2nd to 1st. `"stuck pipe"` doesn't move, because "stuck" was
+never an abbreviation to begin with.
+
+**Lesson:** expansion earns its keep for keyword search (Chapter 3, which
+matches literal words), but its benefit to *semantic* search is real yet
+narrow — confined to queries that happen to use a term you expanded. That
+narrowness is why this book feeds the raw text to the embedding model from
+here on, rather than adding a whole pipeline stage the semantic path
+barely uses. Keyword search keeps using the expanded text; embeddings use
+the raw. Neither choice is arbitrary, and now you've measured why.
 :::
 
 ## Practical exercise
