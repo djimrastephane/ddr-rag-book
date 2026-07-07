@@ -9,6 +9,36 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-07-07
+
+### Fixed
+
+- The README's "What You're Building" preview claimed the cross-report
+  report-#50 interaction was "the terminal output you'll see once you've
+  built the system in Chapter 5" — the same overpromise removed from the
+  welcome page in 1.1.0, since Part I's whole-document retrieval can't
+  retrieve report #50. Reframed as the finished system's destination, to
+  match the welcome page.
+- Reconciled a contradiction between Chapter 4's rule (keyword search uses
+  expanded text, embeddings use raw) and Chapter 9's BM25 defaulting to
+  raw text. Added a verified note: the exercise's own queries are
+  unaffected at the top (report #49 tops "packers fishing", report #38
+  tops "stuck pipe" either way), but an abbreviation query like "bottom
+  hole assembly" genuinely differs — so a production sparse signal uses
+  the expanded text, exactly as Chapter 4 concluded.
+- Made the pending-app-screenshot state reader-visible on the welcome
+  page and README, rather than only in an author-only HTML comment.
+
+### Changed
+
+- Chapter 5 now notes explicitly that `qwen2.5:7b-instruct` is only a
+  default — any pulled Ollama model, or a hosted API, works via
+  `ollama_llm_call(model=...)`.
+- Expanded the acknowledgements' AI-tools disclosure to cover the
+  educational approach and iterative review, and to state that all
+  engineering decisions, implementation choices and final content remain
+  the author's responsibility.
+
 ## [1.1.0] - 2026-07-07
 
 A revision pass answering an editorial review, focused on making the book
