@@ -9,6 +9,61 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-07-07
+
+A revision pass answering an editorial review, focused on making the book
+run what it claims and say only what it can reproduce.
+
+### Added
+
+- Chapter 5 now generates for real, not just a stub. `first_rag.py` gains
+  `ollama_llm_call()` — a local-LLM path via Ollama (`qwen2.5:7b-instruct`),
+  standard library only, no report text leaving the machine, with a
+  graceful fallback if Ollama isn't running — and `evidence_excerpts()`. A
+  new Step 4 gives the exact setup commands and a real captured sample
+  answer grounded in report #49, labeled non-deterministic.
+- Chapter 9 ships a runnable ranked sparse retriever
+  (`code/chapter_09/sparse_ranking.py`, BM25 with a term-frequency
+  fallback) and a `hybrid_search()` orchestration, so the Chapter 9 and
+  Chapter 11 practical exercises run end to end — they previously asked
+  readers to fuse a ranked sparse list that didn't exist.
+- Chapter 6 gains a real OCR round-trip
+  (`code/chapter_06/make_scanned_example.py`): it rasterizes a real report
+  to an image-only PDF, shows digital extraction returning nothing,
+  recovers the text with OCR, and scores both through the quality gate —
+  replacing the hypothetical degraded string as the chapter's main
+  example. Adds `pytesseract` and `pdf2image` as Chapter-6-only
+  dependencies.
+- A qualified "Management view: why this matters" section and a "What this
+  becomes" pointer (with an honest screenshot placeholder, no invented
+  image) on the welcome page and README.
+
+### Changed
+
+- The welcome page's "what led to the fishing operation on report #50"
+  interaction is now framed as the finished system's destination, not
+  something Chapter 5 reproduces — Part I's whole-document retrieval
+  provably can't retrieve report #50.
+- Resolved the `ddr_text` vs `ddr_text_expanded` inconsistency with a
+  measured Chapter 4 Field Note: abbreviation expansion helps keyword
+  search but only narrowly helps semantic search (report #38 moves from
+  rank 2 to rank 1 on "bottom hole assembly", unchanged on "stuck pipe"),
+  so keyword search uses the expanded text and embeddings use the raw
+  text — and the book now measures why instead of contradicting itself.
+- Converted the repeated implementation-step scaffolding headings (What
+  problem are we solving?, Inputs, Expected Output, What just happened?)
+  from H2 headings to bold lead-ins across all chapters, fixing a
+  malformed heading hierarchy that produced duplicated HTML anchors and
+  cluttered the HTML and PDF tables of contents.
+
+### Fixed
+
+- Chapter 9's Field Notes previously said its BM25/fusion ranks couldn't
+  be reproduced with the book's own code. The new sparse retriever
+  reproduces them exactly (report #39: 9th on BM25 alone, 9th fused at
+  2.0/0.5, 7th at 1.0/1.0), so the caveat now points readers to run it
+  themselves.
+
 ## [1.0.4] - 2026-07-07
 
 ### Changed
