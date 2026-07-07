@@ -20,8 +20,8 @@ Progress `██████░░░░░░` **6 / 12** &nbsp;·&nbsp; **Esti
 By the end of this chapter, you will be able to:
 
 - Recognise when a DDR PDF has no extractable text and needs OCR.
-- Run OCR on a scanned page and understand why the raw output is often
-  too noisy to index as-is.
+- Make a scanned-style page from a digital report, recover its text with
+  OCR, and score whether that text is trustworthy enough to index.
 - Build a quality gate that rejects bad OCR output *before* it enters your
   search index, rather than trying to fix it after the fact.
 
@@ -59,7 +59,10 @@ Degraded OCR output from a hypothetical poor scan of the same line:
 ```
 The second block is exactly the kind of text a naive pipeline would embed
 and index without complaint — and exactly the kind of text a quality gate
-should catch and route to a review queue instead.
+should catch and route to a review queue instead. That degraded line is
+illustrative; further down, "Seeing it on a real scanned page" makes an
+actual scanned page from report #38 and runs the whole extract-fails →
+OCR → gate round-trip on it, no hypotheticals.
 :::
 
 ## Theory
@@ -182,6 +185,60 @@ for detecting and correcting upside-down or sideways scans, and
 `src/rag_pdf/table_ocr_handoff.py` for the case where a *table* (not
 narrative text) needs OCR fallback.
 
+## Seeing it on a real scanned page
+
+The gate scores text — but where does bad OCR text actually come from?
+This archive is entirely digital, so to see the whole problem end to end
+you have to make a scanned page first. `make_scanned_example.py`
+rasterizes a real report to a page image and writes it back out as an
+image-only PDF: pictures of text, no character data, exactly what a scan
+of a paper report looks like to software.
+
+Install the OCR tools (Chapter 6 only — nothing earlier needs them):
+
+```bash
+pip install pytesseract pdf2image
+# plus the system tools they wrap:
+#   macOS:  brew install tesseract poppler
+#   Ubuntu: apt install tesseract-ocr poppler-utils
+```
+
+Then run the round-trip — make the scanned page from report #38, try to
+extract it, OCR it, and gate both:
+
+```bash
+python code/chapter_06/make_scanned_example.py
+```
+
+::: {.callout-note title="A real digital-vs-OCR round-trip on report #38"}
+```
+Digital extraction:   3851 chars   stuck line present: True
+pdfplumber on scan:      0 chars   stuck line present: False
+OCR on scan:          3376 chars   stuck line present: True
+
+Quality gate:
+  digital  reject=False  flags={'low_text_density': False, 'high_symbol_ratio': False}
+  OCR      reject=False  flags={'low_text_density': False, 'high_symbol_ratio': False}
+```
+:::
+
+Three real facts fall out of that run:
+
+- **Chapter 1's extraction returns nothing on a scan.** `pdfplumber` on
+  the image-only PDF recovers **0 characters** — there's no character
+  data to read, only a picture. That's the exact failure a real archive's
+  scanned reports hit, reproduced here on a real FORGE page instead of a
+  hypothetical one.
+- **OCR recovers the text.** Tesseract reads 3,376 of the digital
+  version's 3,851 characters back off the image, and the stuck-pipe line
+  comes through intact: `During the slide lost tool face and became
+  assembly became stuck`.
+- **The gate passes clean OCR.** This scan was sharp, so the recovered
+  text is good and the gate accepts it — which is the point of a gate as
+  much as rejection is: it has to wave good OCR through as readily as it
+  stops bad OCR. The degraded line back in the Example section is the
+  other half — what the gate catches when a scan *isn't* this clean.
+
 ## Production Reality
 
 This chapter's quality gate answers one narrow question: should this
@@ -275,11 +332,13 @@ encounter the real noisy data it's meant to catch.
 | File | Purpose |
 |---|---|
 | `code/chapter_06/ocr_quality_gate.py` | Simplified OCR quality gate |
+| `code/chapter_06/make_scanned_example.py` | Make an image-only PDF from a real report, then OCR and gate it |
 | `DDR_UTAH_FORGE/src/rag_pdf/ocr_quality.py` | Production quality gate (companion repo) |
 | `DDR_UTAH_FORGE/src/rag_pdf/rotation_handler.py` | Scan rotation detection (companion repo) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 6"}
 - [x] Recognised when a DDR PDF needs OCR instead of direct extraction
+- [x] Made a real scanned-style page from a digital report and recovered its text with OCR
 - [x] Explained why raw OCR output can't be trusted without scoring it first
 - [x] Built a quality gate that rejects bad text before it reaches the index
 - [x] Verified the gate doesn't false-positive on legitimately sparse reports

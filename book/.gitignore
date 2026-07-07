@@ -24,6 +24,7 @@ datasets/ddr_text_expanded/
 datasets/*.index
 datasets/*.faiss
 datasets/global_index/
+datasets/_scanned_example_*.pdf
 
 # OS
 .DS_Store
