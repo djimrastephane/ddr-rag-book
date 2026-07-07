@@ -245,10 +245,10 @@ with pdfplumber.open("datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-
 
 You opened the PDF, grabbed its first page, and asked `pdfplumber` to hand
 back everything readable on it as plain text. Real DDRs pack in far more
-than a simple narrative — this one report alone has seven distinct data
-sections (header, casing, mud, BHA, survey, time breakdown, and remarks) —
-and all of it came back as one ordinary block of text you can now search,
-print, or save.
+than a simple narrative — this one report alone holds seven distinct data
+tables (casing, mud, drill bits, pumps, BHA, survey data, consumables),
+plus a header and a narrative time breakdown — and all of it came back as
+one ordinary block of text you can now search, print, or save.
 
 ::: {.callout-tip title="Engineering Translation: Opening a file safely"}
 `with pdfplumber.open(...) as pdf:` is like signing a piece of equipment

@@ -141,6 +141,16 @@ Note the folder: `datasets/ddr_text/`, Chapter 1's raw extraction — *not*
 Chapter 2's `datasets/ddr_text_expanded/`. That's deliberate, and the
 Field Notes at the end of this chapter measure exactly why.
 
+::: {.callout-tip title="Engineering Translation: Type hints"}
+The `-> tuple[list[str], list[str]]` after the function name looks
+cryptic but is only a label: it says this function hands back a pair of
+lists of text strings — the filenames, and the report texts. Python
+doesn't enforce it; it's a note for the next reader and your editor, the
+same way a valve tag states what flows through without changing the
+valve. You'll see these `: Path` and `-> str` annotations throughout the
+book — you can read straight past them without losing the thread.
+:::
+
 ### Step 2: convert text into vectors
 
 **What problem are we solving?**
@@ -210,6 +220,17 @@ report's vector at once. Because every vector was normalized to the same
 length in Step 2, one matrix multiplication (`embeddings @ query_vec`)
 gives back the cosine similarity for every report simultaneously —
 that's the "arithmetic" that replaces exact word matching.
+
+::: {.callout-tip title="Engineering Translation: Sorting and list comprehensions"}
+Two lines of shorthand do the ranking. `np.argsort(-scores)[:top_k]`
+returns the *positions* that would put the scores in order — the minus
+sign flips it to highest-first — and `[:top_k]` keeps just the first few.
+Then `[(filenames[i], float(scores[i])) for i in top_indices]` is a *list
+comprehension*: read it left to right as "for each position `i` in the
+top list, pair its filename with its score." It's a compact way to build
+a list without writing out a full loop, and it's a pattern you'll meet
+often from here on.
+:::
 
 Run this against all ten sample reports with `query="stuck pipe"` and
 `top_k=10` (the whole ranking, not just the top few), and you get the

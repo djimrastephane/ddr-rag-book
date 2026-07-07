@@ -117,6 +117,16 @@ more valuable than the metric computation itself, because writing the
 questions forces you to think like the engineer who will actually use the
 system.
 
+One caveat applies to all three at this book's scale: with five questions
+over ten reports, every one of these numbers is *coarse*. `recall@k` can
+only move in whole 20% steps (one question out of five), and a single
+answer sliding from rank 1 to rank 2 swings MRR and NDCG noticeably.
+Treat the values you compute here as showing how the metrics *behave*,
+not as a benchmark — they only start to mean something once the question
+set is large enough that no single answer can move them much. The
+challenge exercise's fifteen questions over all 76 reports is the first
+step in that direction.
+
 ::: {.content-visible when-format="html"}
 ::: {.pipeline-diagram}
 ![](../figures/diagrams/theory_ch11_evalloop_light.svg){.diagram-light width="260"}

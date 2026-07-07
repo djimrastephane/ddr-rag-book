@@ -207,7 +207,10 @@ on *where it placed* — a high rank (near the top) contributes a bigger
 credit than a low rank, scaled by that list's weight — then sorts every
 report by its total credit. Because this uses each list's rank, not its
 own raw numbers, a method that happens to score everything on a bigger
-scale can't unfairly take over the fused result.
+scale can't unfairly take over the fused result. (The `key=lambda item:
+item[1]` on the sort line is just Python's way of saying "order by the
+second thing in each pair" — here, the fused score rather than the report
+name.)
 
 ### Turning that into a real hybrid search
 

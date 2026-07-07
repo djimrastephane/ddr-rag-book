@@ -31,7 +31,7 @@ retrieval results: why does the exact sentence she needs keep landing
 right on a chunk boundary? Chapters 1–5 embedded each report as a single
 unit — fine for a
 ten-report sample corpus, unworkable at the full archive's scale. A
-single Utah FORGE report already has seven distinct sections (WELL/JOB
+single Utah FORGE report already has ten distinct sections (WELL/JOB
 INFORMATION, BOP, CASING, MUD, DRILL BITS, PUMPS, BHA, SURVEY DATA,
 CONSUMABLES, TIME BREAKDOWN) packed onto one page. Embed too much of that
 in one vector and the embedding blurs the casing programme together with

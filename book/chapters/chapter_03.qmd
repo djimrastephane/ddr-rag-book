@@ -295,26 +295,6 @@ fishing"` and confirm it returns both report #49 (packers) and #50
 | `code/chapter_03/keyword_search.py` | Inverted index and AND-query search |
 | `notebooks/chapter_03_explore.ipynb` | Interactive companion notebook |
 
-## Why keyword search fails
-
-Question: *"Show me previous stuck-pipe trouble on this well."*
-
-Keyword search for "stuck pipe" finds report #38 — the day it actually
-happened — and stops there. It misses report #39, filed the very next
-day, because that report never uses the word "stuck." Instead it says:
-
-- "Work tight hole"
-- "high torque decision to pull out of hole"
-- "Hole drag from 6,050' to 5,901'"
-
-That's the same operational story — continued stuck-pipe risk, one day
-later — written in entirely different words. Keyword search cannot
-connect them, because it only ever checks for exact spelling. It doesn't
-know what any word *means*, only whether it's present or absent.
-
-That gap — matching meaning, not just spelling — is exactly what Chapter
-4 solves, using a technique called embeddings.
-
 ::: {.callout-caution title="CHECKPOINT — Chapter 3"}
 - [x] Built an inverted index over a folder of cleaned DDR text
 - [x] Answered keyword queries in milliseconds instead of minutes
