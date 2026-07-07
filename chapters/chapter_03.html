@@ -530,9 +530,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#challenge-exercise" id="toc-challenge-exercise" class="nav-link" data-scroll-target="#challenge-exercise"><span class="header-section-number">3.9</span> Challenge exercise</a></li>
   <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">3.10</span> Key takeaways</a></li>
   <li><a href="#repository-files" id="toc-repository-files" class="nav-link" data-scroll-target="#repository-files"><span class="header-section-number">3.11</span> Repository files</a></li>
-  <li><a href="#why-keyword-search-fails" id="toc-why-keyword-search-fails" class="nav-link" data-scroll-target="#why-keyword-search-fails"><span class="header-section-number">3.12</span> Why keyword search fails</a></li>
-  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">3.13</span> What can you do now that you couldn’t do before?</a></li>
-  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">3.14</span> Suggested next step</a></li>
+  <li><a href="#what-can-you-do-now-that-you-couldnt-do-before" id="toc-what-can-you-do-now-that-you-couldnt-do-before" class="nav-link" data-scroll-target="#what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">3.12</span> What can you do now that you couldn’t do before?</a></li>
+  <li><a href="#suggested-next-step" id="toc-suggested-next-step" class="nav-link" data-scroll-target="#suggested-next-step"><span class="header-section-number">3.13</span> Suggested next step</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/djimrastephane/ddr-rag-book/edit/main/chapters/chapter_03.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/djimrastephane/ddr-rag-book/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -637,7 +636,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <p><strong>Expected Output</strong></p>
 <p>A list of lowercase words with punctuation stripped out, for example:</p>
 <pre><code>["mud", "fluids", "seepage", "losses", "in", "six", "hours", "9", "bbls"]</code></pre>
-<div id="13d5231e" class="cell" data-execution_count="1">
+<div id="0ae1396f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_03/keyword_search.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -660,7 +659,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <pre><code>{"losses": {"FORGE-...-32_Drilling_019_2020-11-07.txt"},
  "stuck":  {"FORGE-...-32_Drilling_038_2020-11-26.txt"},
  ...}</code></pre>
-<div id="064a66bc" class="cell" data-execution_count="2">
+<div id="8d0e266b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -686,7 +685,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The set of filenames containing every word in the query, for example <code>{"FORGE-...-32_Drilling_038_2020-11-26.txt"}</code> for the query <code>"stuck"</code>.</p>
-<div id="b79b3e45" class="cell" data-execution_count="3">
+<div id="cd829910" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(index: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">set</span>[<span class="bu">str</span>]], query: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">set</span>[<span class="bu">str</span>]:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    query_tokens <span class="op">=</span> tokenize(query)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> query_tokens:</span>
@@ -779,18 +778,6 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </tr>
 </tbody>
 </table>
-</section>
-<section id="why-keyword-search-fails" class="level2" data-number="3.12">
-<h2 data-number="3.12" class="anchored" data-anchor-id="why-keyword-search-fails"><span class="header-section-number">3.12</span> Why keyword search fails</h2>
-<p>Question: <em>“Show me previous stuck-pipe trouble on this well.”</em></p>
-<p>Keyword search for “stuck pipe” finds report #38 — the day it actually happened — and stops there. It misses report #39, filed the very next day, because that report never uses the word “stuck.” Instead it says:</p>
-<ul>
-<li>“Work tight hole”</li>
-<li>“high torque decision to pull out of hole”</li>
-<li>“Hole drag from 6,050’ to 5,901’”</li>
-</ul>
-<p>That’s the same operational story — continued stuck-pipe risk, one day later — written in entirely different words. Keyword search cannot connect them, because it only ever checks for exact spelling. It doesn’t know what any word <em>means</em>, only whether it’s present or absent.</p>
-<p>That gap — matching meaning, not just spelling — is exactly what Chapter 4 solves, using a technique called embeddings.</p>
 <div class="callout callout-style-default callout-caution callout-titled" title="CHECKPOINT — Chapter 3">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -822,12 +809,12 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </div>
 </div>
 </section>
-<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="3.13">
-<h2 data-number="3.13" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">3.13</span> What can you do now that you couldn’t do before?</h2>
+<section id="what-can-you-do-now-that-you-couldnt-do-before" class="level2" data-number="3.12">
+<h2 data-number="3.12" class="anchored" data-anchor-id="what-can-you-do-now-that-you-couldnt-do-before"><span class="header-section-number">3.12</span> What can you do now that you couldn’t do before?</h2>
 <p>You can search an archive of reports for exact words or phrases and get an answer in milliseconds, instead of opening files one at a time.</p>
 </section>
-<section id="suggested-next-step" class="level2" data-number="3.14">
-<h2 data-number="3.14" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">3.14</span> Suggested next step</h2>
+<section id="suggested-next-step" class="level2" data-number="3.13">
+<h2 data-number="3.13" class="anchored" data-anchor-id="suggested-next-step"><span class="header-section-number">3.13</span> Suggested next step</h2>
 <p><strong>Coming up in Chapter 4:</strong> Keyword search is exact and unforgiving — it doesn’t know that “high torque decision to pull out of hole” and “stuck pipe” describe related trouble. Chapter 4 replaces exact matching with semantic search, so retrieval works by meaning, not just spelling — and comes back to this exact “stuck pipe” query to see how much that actually fixes.</p>
 
 
@@ -1614,51 +1601,31 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_03/keyword_search.py`</span> <span class="pp">|</span> Inverted index and AND-query search <span class="pp">|</span></span>
 <span id="cb8-302"><a href="#cb8-302" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_03_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
 <span id="cb8-303"><a href="#cb8-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why keyword search fails</span></span>
-<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a>Question: *"Show me previous stuck-pipe trouble on this well."*</span>
-<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>Keyword search for "stuck pipe" finds report #38 — the day it actually</span>
-<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>happened — and stops there. It misses report #39, filed the very next</span>
-<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>day, because that report never uses the word "stuck." Instead it says:</span>
-<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"Work tight hole"</span>
-<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"high torque decision to pull out of hole"</span>
-<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>"Hole drag from 6,050' to 5,901'"</span>
+<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 3"}</span>
+<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built an inverted index over a folder of cleaned DDR text</span>
+<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Answered keyword queries in milliseconds instead of minutes</span>
+<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Identified exactly where and why exact-word matching misses related reports</span>
+<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a>**`keyword_search.py`** — an inverted-index keyword search engine over the</span>
+<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>whole cleaned archive, fast enough to answer a query while someone's</span>
+<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>still on the call.</span>
+<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a>That's the same operational story — continued stuck-pipe risk, one day</span>
-<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a>later — written in entirely different words. Keyword search cannot</span>
-<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a>connect them, because it only ever checks for exact spelling. It doesn't</span>
-<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a>know what any word *means*, only whether it's present or absent.</span>
+<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a>You can search an archive of reports for exact words or phrases and get</span>
+<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a>an answer in milliseconds, instead of opening files one at a time.</span>
 <span id="cb8-320"><a href="#cb8-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a>That gap — matching meaning, not just spelling — is exactly what Chapter</span>
-<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a>4 solves, using a technique called embeddings.</span>
-<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 3"}</span>
-<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built an inverted index over a folder of cleaned DDR text</span>
-<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Answered keyword queries in milliseconds instead of minutes</span>
-<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Identified exactly where and why exact-word matching misses related reports</span>
-<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb8-331"><a href="#cb8-331" aria-hidden="true" tabindex="-1"></a>**`keyword_search.py`** — an inverted-index keyword search engine over the</span>
-<span id="cb8-332"><a href="#cb8-332" aria-hidden="true" tabindex="-1"></a>whole cleaned archive, fast enough to answer a query while someone's</span>
-<span id="cb8-333"><a href="#cb8-333" aria-hidden="true" tabindex="-1"></a>still on the call.</span>
-<span id="cb8-334"><a href="#cb8-334" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-335"><a href="#cb8-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-336"><a href="#cb8-336" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
-<span id="cb8-337"><a href="#cb8-337" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a>You can search an archive of reports for exact words or phrases and get</span>
-<span id="cb8-339"><a href="#cb8-339" aria-hidden="true" tabindex="-1"></a>an answer in milliseconds, instead of opening files one at a time.</span>
-<span id="cb8-340"><a href="#cb8-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-341"><a href="#cb8-341" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
-<span id="cb8-342"><a href="#cb8-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-343"><a href="#cb8-343" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 4:** Keyword search is exact and unforgiving — it</span>
-<span id="cb8-344"><a href="#cb8-344" aria-hidden="true" tabindex="-1"></a>doesn't know that "high torque decision to pull out of hole" and "stuck</span>
-<span id="cb8-345"><a href="#cb8-345" aria-hidden="true" tabindex="-1"></a>pipe" describe related trouble. Chapter 4 replaces exact matching with</span>
-<span id="cb8-346"><a href="#cb8-346" aria-hidden="true" tabindex="-1"></a>semantic search, so retrieval works by meaning, not just spelling — and</span>
-<span id="cb8-347"><a href="#cb8-347" aria-hidden="true" tabindex="-1"></a>comes back to this exact "stuck pipe" query to see how much that</span>
-<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a>actually fixes.</span>
+<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 4:** Keyword search is exact and unforgiving — it</span>
+<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a>doesn't know that "high torque decision to pull out of hole" and "stuck</span>
+<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a>pipe" describe related trouble. Chapter 4 replaces exact matching with</span>
+<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a>semantic search, so retrieval works by meaning, not just spelling — and</span>
+<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a>comes back to this exact "stuck pipe" query to see how much that</span>
+<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>actually fixes.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

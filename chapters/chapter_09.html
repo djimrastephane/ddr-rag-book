@@ -691,7 +691,7 @@ div.csl-indent {
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single fused ranking: a list of <code>(doc_id, score)</code> pairs, sorted highest-scoring first.</p>
-<div id="0d7cd2f2" class="cell" data-execution_count="1">
+<div id="d1c19d8e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/hybrid_search.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -705,11 +705,11 @@ div.csl-indent {
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>(scores.items(), key<span class="op">=</span><span class="kw">lambda</span> item: item[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
-<p>For every report, this adds up a small credit from each ranked list based on <em>where it placed</em> — a high rank (near the top) contributes a bigger credit than a low rank, scaled by that list’s weight — then sorts every report by its total credit. Because this uses each list’s rank, not its own raw numbers, a method that happens to score everything on a bigger scale can’t unfairly take over the fused result.</p>
+<p>For every report, this adds up a small credit from each ranked list based on <em>where it placed</em> — a high rank (near the top) contributes a bigger credit than a low rank, scaled by that list’s weight — then sorts every report by its total credit. Because this uses each list’s rank, not its own raw numbers, a method that happens to score everything on a bigger scale can’t unfairly take over the fused result. (The <code>key=lambda item: item[1]</code> on the sort line is just Python’s way of saying “order by the second thing in each pair” — here, the fused score rather than the report name.)</p>
 <section id="turning-that-into-a-real-hybrid-search" class="level3" data-number="9.5.1">
 <h3 data-number="9.5.1" class="anchored" data-anchor-id="turning-that-into-a-real-hybrid-search"><span class="header-section-number">9.5.1</span> Turning that into a real hybrid search</h3>
 <p><code>reciprocal_rank_fusion</code> fuses ranked lists — but it needs two of them to fuse. Chapter 4’s semantic <code>search()</code> already returns one. The missing piece is a ranked <em>sparse</em> signal: Chapter 3’s <code>search()</code> returns an unordered set — a report either contains every query word or it doesn’t — which RRF has nothing to order. <code>code/chapter_09/sparse_ranking.py</code> closes that gap with <code>rank_bm25()</code>, a BM25 ranking over the same archive (with a plain term-frequency fallback if <code>rank-bm25</code> isn’t installed):</p>
-<div id="c37bf3e1" class="cell" data-execution_count="2">
+<div id="1ab0105b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/sparse_ranking.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rank_bm25 <span class="im">import</span> BM25Okapi</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1556,193 +1556,196 @@ Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevanc
 <span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a>credit than a low rank, scaled by that list's weight — then sorts every</span>
 <span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a>report by its total credit. Because this uses each list's rank, not its</span>
 <span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a>own raw numbers, a method that happens to score everything on a bigger</span>
-<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a>scale can't unfairly take over the fused result.</span>
-<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a><span class="fu">### Turning that into a real hybrid search</span></span>
-<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a><span class="in">`reciprocal_rank_fusion`</span> fuses ranked lists — but it needs two of them to</span>
-<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a>fuse. Chapter 4's semantic <span class="in">`search()`</span> already returns one. The missing</span>
-<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a>piece is a ranked *sparse* signal: Chapter 3's <span class="in">`search()`</span> returns an</span>
-<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a>unordered set — a report either contains every query word or it doesn't —</span>
-<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a>which RRF has nothing to order. <span class="in">`code/chapter_09/sparse_ranking.py`</span> closes</span>
-<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a>that gap with <span class="in">`rank_bm25()`</span>, a BM25 ranking over the same archive (with a</span>
-<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a>plain term-frequency fallback if <span class="in">`rank-bm25`</span> isn't installed):</span>
-<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/sparse_ranking.py</span></span>
-<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rank_bm25 <span class="im">import</span> BM25Okapi</span>
-<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rank_bm25(text_dir, query):</span>
-<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a>    paths <span class="op">=</span> <span class="bu">sorted</span>(text_dir.glob(<span class="st">"*.txt"</span>))</span>
-<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a>    corpus <span class="op">=</span> [tokenize(p.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)) <span class="cf">for</span> p <span class="kw">in</span> paths]</span>
-<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> BM25Okapi(corpus).get_scores(tokenize(query))</span>
-<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a>    ranked <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">zip</span>(paths, scores), key<span class="op">=</span><span class="kw">lambda</span> ps: ps[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [p.name <span class="cf">for</span> p, _ <span class="kw">in</span> ranked]</span>
-<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a>With both ranked signals in hand, <span class="in">`hybrid_search()`</span> in</span>
-<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a><span class="in">`code/chapter_09/hybrid_search.py`</span> runs all three steps end to end: BM25</span>
-<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a>sparse ranking, Chapter 4's dense ranking, fused with the weights above.</span>
-<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a>That's the function the practical exercise below calls.</span>
-<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a>One consistency note, tying back to Chapter 4: BM25 is a lexical method,</span>
-<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a>so by that chapter's Field Note it belongs on the *expanded* text, while</span>
-<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a>the dense signal uses the raw. This exercise runs both over the same raw</span>
-<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>sample archive for simplicity, and for its queries that's harmless — the</span>
-<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>report you're checking for tops the BM25 ranking either way (report #49</span>
-<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>for <span class="in">`"packers fishing"`</span>, report #38 for <span class="in">`"stuck pipe"`</span>). Where it *would*</span>
-<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>matter is an abbreviation query like <span class="in">`"bottom hole assembly"`</span>: on expanded</span>
-<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>text BM25 surfaces report #38, which only ever writes <span class="in">`BHA`</span>; on raw text</span>
-<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a>it misses it entirely. A production pipeline points the sparse signal at</span>
-<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a>the expanded text for exactly that reason.</span>
-<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
-<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a>This chapter tunes two signals with fixed weights (BM25 × 2.0, dense ×</span>
-<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a>0.5) chosen for DDR text specifically. Real systems have to keep that</span>
-<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a>tuning honest over time, not treat it as a one-time decision:</span>
-<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>these weights were tuned for this domain's language — a different</span>
-<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a>  report type (well completions versus drilling, say, or a different</span>
-<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a>  operator's writing style) may need genuinely different weights, not the</span>
-<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a>  same ones reused out of habit</span>
-<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>cross-encoder reranking adds real per-query latency, the same way an</span>
-<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a>  LLM call does (Chapter 5) — it has to be budgeted for, not just</span>
-<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a>  switched on and forgotten</span>
-<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>production systems often fuse more than two signals — metadata filters</span>
-<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>  like well name, date range, or report type frequently join BM25 and</span>
-<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>  dense scores in the same fusion step, and each added signal is one more</span>
-<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a>  way the weighting can go wrong</span>
-<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>as this chapter's own Field Notes show below, adding a signal isn't</span>
-<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a>  automatically an improvement — a production system needs ongoing</span>
-<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>  evaluation (Chapter 11), not a one-time tuning pass assumed to hold</span>
-<span id="cb6-275"><a href="#cb6-275" aria-hidden="true" tabindex="-1"></a>  forever</span>
-<span id="cb6-276"><a href="#cb6-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-277"><a href="#cb6-277" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
-<span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
-<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Rank the ten sample DDRs for <span class="in">`"packers fishing"`</span> two</span>
-<span id="cb6-282"><a href="#cb6-282" aria-hidden="true" tabindex="-1"></a>ways — <span class="in">`rank_bm25()`</span> for the sparse signal, Chapter 4's <span class="in">`search()`</span> for the</span>
-<span id="cb6-283"><a href="#cb6-283" aria-hidden="true" tabindex="-1"></a>dense one — then fuse them with `reciprocal_rank_fusion(<span class="co">[</span><span class="ot">sparse, dense</span><span class="co">]</span>,</span>
-<span id="cb6-284"><a href="#cb6-284" aria-hidden="true" tabindex="-1"></a>k=20, weights=<span class="co">[</span><span class="ot">2.0, 0.5</span><span class="co">]</span>)`, matching the companion pipeline's real</span>
-<span id="cb6-285"><a href="#cb6-285" aria-hidden="true" tabindex="-1"></a>weighting. <span class="in">`hybrid_search()`</span> does all three steps in one call if you'd</span>
-<span id="cb6-286"><a href="#cb6-286" aria-hidden="true" tabindex="-1"></a>rather run it end to end.</span>
-<span id="cb6-287"><a href="#cb6-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-288"><a href="#cb6-288" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** report #49 (packers) and #50 (fishing)</span>
-<span id="cb6-289"><a href="#cb6-289" aria-hidden="true" tabindex="-1"></a>both rank in the top two of the fused list, and you can explain why the</span>
-<span id="cb6-290"><a href="#cb6-290" aria-hidden="true" tabindex="-1"></a>weighting favours the keyword signal here.</span>
-<span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
-<span id="cb6-293"><a href="#cb6-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: hybrid fusion isn't automatically better — check both directions"}</span>
-<span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a>**Query:** the same <span class="in">`"stuck pipe"`</span> query from Chapters 3 and 4.</span>
+<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a>scale can't unfairly take over the fused result. (The `key=lambda item:</span>
+<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a>item<span class="co">[</span><span class="ot">1</span><span class="co">]</span>` on the sort line is just Python's way of saying "order by the</span>
+<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a>second thing in each pair" — here, the fused score rather than the report</span>
+<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a>name.)</span>
+<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a><span class="fu">### Turning that into a real hybrid search</span></span>
+<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a><span class="in">`reciprocal_rank_fusion`</span> fuses ranked lists — but it needs two of them to</span>
+<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a>fuse. Chapter 4's semantic <span class="in">`search()`</span> already returns one. The missing</span>
+<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a>piece is a ranked *sparse* signal: Chapter 3's <span class="in">`search()`</span> returns an</span>
+<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a>unordered set — a report either contains every query word or it doesn't —</span>
+<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a>which RRF has nothing to order. <span class="in">`code/chapter_09/sparse_ranking.py`</span> closes</span>
+<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a>that gap with <span class="in">`rank_bm25()`</span>, a BM25 ranking over the same archive (with a</span>
+<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a>plain term-frequency fallback if <span class="in">`rank-bm25`</span> isn't installed):</span>
+<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/sparse_ranking.py</span></span>
+<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rank_bm25 <span class="im">import</span> BM25Okapi</span>
+<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> rank_bm25(text_dir, query):</span>
+<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a>    paths <span class="op">=</span> <span class="bu">sorted</span>(text_dir.glob(<span class="st">"*.txt"</span>))</span>
+<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a>    corpus <span class="op">=</span> [tokenize(p.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>)) <span class="cf">for</span> p <span class="kw">in</span> paths]</span>
+<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> BM25Okapi(corpus).get_scores(tokenize(query))</span>
+<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>    ranked <span class="op">=</span> <span class="bu">sorted</span>(<span class="bu">zip</span>(paths, scores), key<span class="op">=</span><span class="kw">lambda</span> ps: ps[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [p.name <span class="cf">for</span> p, _ <span class="kw">in</span> ranked]</span>
+<span id="cb6-240"><a href="#cb6-240" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-241"><a href="#cb6-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a>With both ranked signals in hand, <span class="in">`hybrid_search()`</span> in</span>
+<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a><span class="in">`code/chapter_09/hybrid_search.py`</span> runs all three steps end to end: BM25</span>
+<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a>sparse ranking, Chapter 4's dense ranking, fused with the weights above.</span>
+<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a>That's the function the practical exercise below calls.</span>
+<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a>One consistency note, tying back to Chapter 4: BM25 is a lexical method,</span>
+<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>so by that chapter's Field Note it belongs on the *expanded* text, while</span>
+<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a>the dense signal uses the raw. This exercise runs both over the same raw</span>
+<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a>sample archive for simplicity, and for its queries that's harmless — the</span>
+<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>report you're checking for tops the BM25 ranking either way (report #49</span>
+<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a>for <span class="in">`"packers fishing"`</span>, report #38 for <span class="in">`"stuck pipe"`</span>). Where it *would*</span>
+<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a>matter is an abbreviation query like <span class="in">`"bottom hole assembly"`</span>: on expanded</span>
+<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a>text BM25 surfaces report #38, which only ever writes <span class="in">`BHA`</span>; on raw text</span>
+<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>it misses it entirely. A production pipeline points the sparse signal at</span>
+<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a>the expanded text for exactly that reason.</span>
+<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
+<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a>This chapter tunes two signals with fixed weights (BM25 × 2.0, dense ×</span>
+<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a>0.5) chosen for DDR text specifically. Real systems have to keep that</span>
+<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a>tuning honest over time, not treat it as a one-time decision:</span>
+<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>these weights were tuned for this domain's language — a different</span>
+<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a>  report type (well completions versus drilling, say, or a different</span>
+<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a>  operator's writing style) may need genuinely different weights, not the</span>
+<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a>  same ones reused out of habit</span>
+<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>cross-encoder reranking adds real per-query latency, the same way an</span>
+<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>  LLM call does (Chapter 5) — it has to be budgeted for, not just</span>
+<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>  switched on and forgotten</span>
+<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>production systems often fuse more than two signals — metadata filters</span>
+<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a>  like well name, date range, or report type frequently join BM25 and</span>
+<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a>  dense scores in the same fusion step, and each added signal is one more</span>
+<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>  way the weighting can go wrong</span>
+<span id="cb6-275"><a href="#cb6-275" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>as this chapter's own Field Notes show below, adding a signal isn't</span>
+<span id="cb6-276"><a href="#cb6-276" aria-hidden="true" tabindex="-1"></a>  automatically an improvement — a production system needs ongoing</span>
+<span id="cb6-277"><a href="#cb6-277" aria-hidden="true" tabindex="-1"></a>  evaluation (Chapter 11), not a one-time tuning pass assumed to hold</span>
+<span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a>  forever</span>
+<span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
+<span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-282"><a href="#cb6-282" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
+<span id="cb6-283"><a href="#cb6-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-284"><a href="#cb6-284" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Rank the ten sample DDRs for <span class="in">`"packers fishing"`</span> two</span>
+<span id="cb6-285"><a href="#cb6-285" aria-hidden="true" tabindex="-1"></a>ways — <span class="in">`rank_bm25()`</span> for the sparse signal, Chapter 4's <span class="in">`search()`</span> for the</span>
+<span id="cb6-286"><a href="#cb6-286" aria-hidden="true" tabindex="-1"></a>dense one — then fuse them with `reciprocal_rank_fusion(<span class="co">[</span><span class="ot">sparse, dense</span><span class="co">]</span>,</span>
+<span id="cb6-287"><a href="#cb6-287" aria-hidden="true" tabindex="-1"></a>k=20, weights=<span class="co">[</span><span class="ot">2.0, 0.5</span><span class="co">]</span>)`, matching the companion pipeline's real</span>
+<span id="cb6-288"><a href="#cb6-288" aria-hidden="true" tabindex="-1"></a>weighting. <span class="in">`hybrid_search()`</span> does all three steps in one call if you'd</span>
+<span id="cb6-289"><a href="#cb6-289" aria-hidden="true" tabindex="-1"></a>rather run it end to end.</span>
+<span id="cb6-290"><a href="#cb6-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** report #49 (packers) and #50 (fishing)</span>
+<span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a>both rank in the top two of the fused list, and you can explain why the</span>
+<span id="cb6-293"><a href="#cb6-293" aria-hidden="true" tabindex="-1"></a>weighting favours the keyword signal here.</span>
+<span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
 <span id="cb6-296"><a href="#cb6-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a>**Result:** with the pipeline's real fusion weights (BM25 × 2.0, dense ×</span>
-<span id="cb6-298"><a href="#cb6-298" aria-hidden="true" tabindex="-1"></a>0.5), report #39 ranks **9th of 10** — *worse* than Chapter 4's</span>
-<span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a>dense-only search, which ranked it 5th. Equal weighting (1.0 / 1.0)</span>
-<span id="cb6-300"><a href="#cb6-300" aria-hidden="true" tabindex="-1"></a>still only gets it to 7th.</span>
-<span id="cb6-301"><a href="#cb6-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-302"><a href="#cb6-302" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-303"><a href="#cb6-303" aria-hidden="true" tabindex="-1"></a><span class="in">BM25 alone:    report #39 ranks 9th of 10</span></span>
-<span id="cb6-304"><a href="#cb6-304" aria-hidden="true" tabindex="-1"></a><span class="in">Dense alone:   report #39 ranks 5th of 10   (Chapter 4)</span></span>
-<span id="cb6-305"><a href="#cb6-305" aria-hidden="true" tabindex="-1"></a><span class="in">RRF (2.0/0.5): report #39 ranks 9th of 10   (pipeline default weights)</span></span>
-<span id="cb6-306"><a href="#cb6-306" aria-hidden="true" tabindex="-1"></a><span class="in">RRF (1.0/1.0): report #39 ranks 7th of 10</span></span>
-<span id="cb6-307"><a href="#cb6-307" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-308"><a href="#cb6-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-309"><a href="#cb6-309" aria-hidden="true" tabindex="-1"></a>Compare that to <span class="in">`"packers fishing"`</span> (the practical exercise above),</span>
-<span id="cb6-310"><a href="#cb6-310" aria-hidden="true" tabindex="-1"></a>where fusion helps exactly as expected — report #49 stays 1st and</span>
-<span id="cb6-311"><a href="#cb6-311" aria-hidden="true" tabindex="-1"></a>report #50 jumps from 8th (dense alone) to 2nd (fused).</span>
-<span id="cb6-312"><a href="#cb6-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-313"><a href="#cb6-313" aria-hidden="true" tabindex="-1"></a>You can reproduce every rank above with this book's own code:</span>
-<span id="cb6-314"><a href="#cb6-314" aria-hidden="true" tabindex="-1"></a><span class="in">`rank_bm25()`</span> and <span class="in">`hybrid_search()`</span> (from the implementation section)</span>
-<span id="cb6-315"><a href="#cb6-315" aria-hidden="true" tabindex="-1"></a>give report #39 exactly these positions over the sample archive — 9th on</span>
-<span id="cb6-316"><a href="#cb6-316" aria-hidden="true" tabindex="-1"></a>BM25 alone, 9th fused at 2.0/0.5, 7th at 1.0/1.0. The companion</span>
-<span id="cb6-317"><a href="#cb6-317" aria-hidden="true" tabindex="-1"></a>pipeline's fuller BM25 implementation</span>
-<span id="cb6-318"><a href="#cb6-318" aria-hidden="true" tabindex="-1"></a>(<span class="in">`DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py`</span>) lands on the same</span>
-<span id="cb6-319"><a href="#cb6-319" aria-hidden="true" tabindex="-1"></a>ordering for this query, which is a good sign the simplified version here</span>
-<span id="cb6-320"><a href="#cb6-320" aria-hidden="true" tabindex="-1"></a>captures what actually matters.</span>
-<span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a>**Why:** BM25 has essentially nothing useful to say about report #39 for</span>
-<span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a><span class="in">`"stuck pipe"`</span> — it shares almost no vocabulary with the query, so BM25</span>
-<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a>ranks it 9th on its own. Fusing that weak, near-random signal in with a</span>
-<span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a>weight of <span class="in">`2.0`</span> doesn't cancel out — it actively drags a mediocre dense</span>
-<span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a>result down further. For <span class="in">`"packers fishing"`</span>, by contrast, both signals</span>
-<span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a>carry real information (the word "fishing" genuinely appears in report</span>
-<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>#50), so combining them helps.</span>
-<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>**Lesson:** hybrid retrieval's benefit depends on *both* signals being</span>
-<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a>informative for the query at hand — not on combining more signals being</span>
-<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a>unconditionally better. A sparse signal with nothing to contribute isn't</span>
-<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>neutral when fused; it's noise with a weight attached, and can make a</span>
-<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>weak dense ranking worse. This is exactly why Chapter 11 insists on</span>
-<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>per-category evaluation rather than one aggregate score — "hybrid beats</span>
-<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a>dense on average" can still be actively wrong for a specific,</span>
-<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>operationally important query like this one.</span>
-<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
-<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a>🔴 **Advanced**</span>
-<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a>**Challenge:** Implement the two guards from the code study above against</span>
-<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a>deliberately constructed edge cases: a term that appears in every sample</span>
-<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a>document (test that your IDF stays non-negative), and a batch where every</span>
-<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a>candidate scores identically (test that your normalization doesn't</span>
-<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a>divide by zero). Confirm an unguarded version fails first. A reference</span>
-<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a>solution is in <span class="in">`code/chapter_09/challenge/`</span>.</span>
-<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
-<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Sparse and dense retrieval fail on different, complementary query</span>
-<span id="cb6-354"><a href="#cb6-354" aria-hidden="true" tabindex="-1"></a>  types — combine them rather than picking one.</span>
-<span id="cb6-355"><a href="#cb6-355" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Rank-based fusion (RRF) avoids the scale-mismatch problem that plagues</span>
-<span id="cb6-356"><a href="#cb6-356" aria-hidden="true" tabindex="-1"></a>  naive score-averaging across different retrieval methods.</span>
-<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cross-encoder reranking buys precision at a real latency cost — apply</span>
-<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a>  it only to a small, already-fused candidate set.</span>
-<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Retrieval scoring is numerical code. Boundary conditions — universal</span>
-<span id="cb6-360"><a href="#cb6-360" aria-hidden="true" tabindex="-1"></a>  terms, tied scores — deserve explicit guards, and reading *why* a</span>
-<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a>  formula is shaped the way it is tells you more than reading what it</span>
-<span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a>  computes.</span>
-<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
-<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_09/sparse_ranking.py`</span> <span class="pp">|</span> Ranked BM25 sparse retriever — the ranked signal RRF fuses <span class="pp">|</span></span>
-<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_09/hybrid_search.py`</span> <span class="pp">|</span> Reciprocal Rank Fusion, plus <span class="in">`hybrid_search()`</span> end-to-end <span class="pp">|</span></span>
-<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py`</span> <span class="pp">|</span> BM25 index, IDF formula, score fusion (companion repo) <span class="pp">|</span></span>
-<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/src/rag_pdf/retrieval/canonical_hybrid.py`</span> <span class="pp">|</span> Full hybrid retrieval pipeline (companion repo) <span class="pp">|</span></span>
-<span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/src/rag_pdf/services/search_service.py`</span> <span class="pp">|</span> Cross-encoder rerank + fusion weights (companion repo) <span class="pp">|</span></span>
-<span id="cb6-373"><a href="#cb6-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-374"><a href="#cb6-374" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 9"}</span>
-<span id="cb6-375"><a href="#cb6-375" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why semantic search alone underperforms on precise, entity-heavy queries</span>
-<span id="cb6-376"><a href="#cb6-376" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Combined BM25 and dense retrieval using Reciprocal Rank Fusion</span>
-<span id="cb6-377"><a href="#cb6-377" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Read production scoring code closely enough to explain why its guards exist</span>
-<span id="cb6-378"><a href="#cb6-378" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Confirmed fusion helps on one query and actively hurts on another, using real evidence</span>
-<span id="cb6-379"><a href="#cb6-379" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-380"><a href="#cb6-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-381"><a href="#cb6-381" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a>**`hybrid_search.py`** — a Reciprocal Rank Fusion engine combining</span>
-<span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a>keyword and semantic retrieval into one ranked list that plays to both</span>
-<span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a>methods' strengths.</span>
-<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
-<span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-389"><a href="#cb6-389" aria-hidden="true" tabindex="-1"></a>You can combine exact keyword matching and semantic search into a single</span>
-<span id="cb6-390"><a href="#cb6-390" aria-hidden="true" tabindex="-1"></a>ranked list that plays to each method's strengths — and, from real</span>
-<span id="cb6-391"><a href="#cb6-391" aria-hidden="true" tabindex="-1"></a>evidence rather than assumption, you know that combining signals only</span>
-<span id="cb6-392"><a href="#cb6-392" aria-hidden="true" tabindex="-1"></a>helps when both of them actually have something useful to say about the</span>
-<span id="cb6-393"><a href="#cb6-393" aria-hidden="true" tabindex="-1"></a>query at hand.</span>
-<span id="cb6-394"><a href="#cb6-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-395"><a href="#cb6-395" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
-<span id="cb6-396"><a href="#cb6-396" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-397"><a href="#cb6-397" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 10:** Better retrieval still isn't the same as a</span>
-<span id="cb6-398"><a href="#cb6-398" aria-hidden="true" tabindex="-1"></a>trustworthy answer. Chapter 10 tackles the harder problem: making sure</span>
-<span id="cb6-399"><a href="#cb6-399" aria-hidden="true" tabindex="-1"></a>every generated claim traces back to real evidence, and that the system</span>
-<span id="cb6-400"><a href="#cb6-400" aria-hidden="true" tabindex="-1"></a>tells you honestly when it doesn't know.</span>
+<span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: hybrid fusion isn't automatically better — check both directions"}</span>
+<span id="cb6-298"><a href="#cb6-298" aria-hidden="true" tabindex="-1"></a>**Query:** the same <span class="in">`"stuck pipe"`</span> query from Chapters 3 and 4.</span>
+<span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-300"><a href="#cb6-300" aria-hidden="true" tabindex="-1"></a>**Result:** with the pipeline's real fusion weights (BM25 × 2.0, dense ×</span>
+<span id="cb6-301"><a href="#cb6-301" aria-hidden="true" tabindex="-1"></a>0.5), report #39 ranks **9th of 10** — *worse* than Chapter 4's</span>
+<span id="cb6-302"><a href="#cb6-302" aria-hidden="true" tabindex="-1"></a>dense-only search, which ranked it 5th. Equal weighting (1.0 / 1.0)</span>
+<span id="cb6-303"><a href="#cb6-303" aria-hidden="true" tabindex="-1"></a>still only gets it to 7th.</span>
+<span id="cb6-304"><a href="#cb6-304" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-305"><a href="#cb6-305" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-306"><a href="#cb6-306" aria-hidden="true" tabindex="-1"></a><span class="in">BM25 alone:    report #39 ranks 9th of 10</span></span>
+<span id="cb6-307"><a href="#cb6-307" aria-hidden="true" tabindex="-1"></a><span class="in">Dense alone:   report #39 ranks 5th of 10   (Chapter 4)</span></span>
+<span id="cb6-308"><a href="#cb6-308" aria-hidden="true" tabindex="-1"></a><span class="in">RRF (2.0/0.5): report #39 ranks 9th of 10   (pipeline default weights)</span></span>
+<span id="cb6-309"><a href="#cb6-309" aria-hidden="true" tabindex="-1"></a><span class="in">RRF (1.0/1.0): report #39 ranks 7th of 10</span></span>
+<span id="cb6-310"><a href="#cb6-310" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-311"><a href="#cb6-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-312"><a href="#cb6-312" aria-hidden="true" tabindex="-1"></a>Compare that to <span class="in">`"packers fishing"`</span> (the practical exercise above),</span>
+<span id="cb6-313"><a href="#cb6-313" aria-hidden="true" tabindex="-1"></a>where fusion helps exactly as expected — report #49 stays 1st and</span>
+<span id="cb6-314"><a href="#cb6-314" aria-hidden="true" tabindex="-1"></a>report #50 jumps from 8th (dense alone) to 2nd (fused).</span>
+<span id="cb6-315"><a href="#cb6-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-316"><a href="#cb6-316" aria-hidden="true" tabindex="-1"></a>You can reproduce every rank above with this book's own code:</span>
+<span id="cb6-317"><a href="#cb6-317" aria-hidden="true" tabindex="-1"></a><span class="in">`rank_bm25()`</span> and <span class="in">`hybrid_search()`</span> (from the implementation section)</span>
+<span id="cb6-318"><a href="#cb6-318" aria-hidden="true" tabindex="-1"></a>give report #39 exactly these positions over the sample archive — 9th on</span>
+<span id="cb6-319"><a href="#cb6-319" aria-hidden="true" tabindex="-1"></a>BM25 alone, 9th fused at 2.0/0.5, 7th at 1.0/1.0. The companion</span>
+<span id="cb6-320"><a href="#cb6-320" aria-hidden="true" tabindex="-1"></a>pipeline's fuller BM25 implementation</span>
+<span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a>(<span class="in">`DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py`</span>) lands on the same</span>
+<span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a>ordering for this query, which is a good sign the simplified version here</span>
+<span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a>captures what actually matters.</span>
+<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a>**Why:** BM25 has essentially nothing useful to say about report #39 for</span>
+<span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a><span class="in">`"stuck pipe"`</span> — it shares almost no vocabulary with the query, so BM25</span>
+<span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a>ranks it 9th on its own. Fusing that weak, near-random signal in with a</span>
+<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>weight of <span class="in">`2.0`</span> doesn't cancel out — it actively drags a mediocre dense</span>
+<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a>result down further. For <span class="in">`"packers fishing"`</span>, by contrast, both signals</span>
+<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>carry real information (the word "fishing" genuinely appears in report</span>
+<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a>#50), so combining them helps.</span>
+<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>**Lesson:** hybrid retrieval's benefit depends on *both* signals being</span>
+<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>informative for the query at hand — not on combining more signals being</span>
+<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>unconditionally better. A sparse signal with nothing to contribute isn't</span>
+<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a>neutral when fused; it's noise with a weight attached, and can make a</span>
+<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>weak dense ranking worse. This is exactly why Chapter 11 insists on</span>
+<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>per-category evaluation rather than one aggregate score — "hybrid beats</span>
+<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a>dense on average" can still be actively wrong for a specific,</span>
+<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a>operationally important query like this one.</span>
+<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
+<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a>🔴 **Advanced**</span>
+<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a>**Challenge:** Implement the two guards from the code study above against</span>
+<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a>deliberately constructed edge cases: a term that appears in every sample</span>
+<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a>document (test that your IDF stays non-negative), and a batch where every</span>
+<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a>candidate scores identically (test that your normalization doesn't</span>
+<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a>divide by zero). Confirm an unguarded version fails first. A reference</span>
+<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a>solution is in <span class="in">`code/chapter_09/challenge/`</span>.</span>
+<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-354"><a href="#cb6-354" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb6-355"><a href="#cb6-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-356"><a href="#cb6-356" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Sparse and dense retrieval fail on different, complementary query</span>
+<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a>  types — combine them rather than picking one.</span>
+<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Rank-based fusion (RRF) avoids the scale-mismatch problem that plagues</span>
+<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a>  naive score-averaging across different retrieval methods.</span>
+<span id="cb6-360"><a href="#cb6-360" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cross-encoder reranking buys precision at a real latency cost — apply</span>
+<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a>  it only to a small, already-fused candidate set.</span>
+<span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Retrieval scoring is numerical code. Boundary conditions — universal</span>
+<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a>  terms, tied scores — deserve explicit guards, and reading *why* a</span>
+<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a>  formula is shaped the way it is tells you more than reading what it</span>
+<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a>  computes.</span>
+<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_09/sparse_ranking.py`</span> <span class="pp">|</span> Ranked BM25 sparse retriever — the ranked signal RRF fuses <span class="pp">|</span></span>
+<span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_09/hybrid_search.py`</span> <span class="pp">|</span> Reciprocal Rank Fusion, plus <span class="in">`hybrid_search()`</span> end-to-end <span class="pp">|</span></span>
+<span id="cb6-373"><a href="#cb6-373" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py`</span> <span class="pp">|</span> BM25 index, IDF formula, score fusion (companion repo) <span class="pp">|</span></span>
+<span id="cb6-374"><a href="#cb6-374" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/src/rag_pdf/retrieval/canonical_hybrid.py`</span> <span class="pp">|</span> Full hybrid retrieval pipeline (companion repo) <span class="pp">|</span></span>
+<span id="cb6-375"><a href="#cb6-375" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/src/rag_pdf/services/search_service.py`</span> <span class="pp">|</span> Cross-encoder rerank + fusion weights (companion repo) <span class="pp">|</span></span>
+<span id="cb6-376"><a href="#cb6-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-377"><a href="#cb6-377" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 9"}</span>
+<span id="cb6-378"><a href="#cb6-378" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why semantic search alone underperforms on precise, entity-heavy queries</span>
+<span id="cb6-379"><a href="#cb6-379" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Combined BM25 and dense retrieval using Reciprocal Rank Fusion</span>
+<span id="cb6-380"><a href="#cb6-380" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Read production scoring code closely enough to explain why its guards exist</span>
+<span id="cb6-381"><a href="#cb6-381" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Confirmed fusion helps on one query and actively hurts on another, using real evidence</span>
+<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a>**`hybrid_search.py`** — a Reciprocal Rank Fusion engine combining</span>
+<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a>keyword and semantic retrieval into one ranked list that plays to both</span>
+<span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a>methods' strengths.</span>
+<span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-389"><a href="#cb6-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-390"><a href="#cb6-390" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb6-391"><a href="#cb6-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-392"><a href="#cb6-392" aria-hidden="true" tabindex="-1"></a>You can combine exact keyword matching and semantic search into a single</span>
+<span id="cb6-393"><a href="#cb6-393" aria-hidden="true" tabindex="-1"></a>ranked list that plays to each method's strengths — and, from real</span>
+<span id="cb6-394"><a href="#cb6-394" aria-hidden="true" tabindex="-1"></a>evidence rather than assumption, you know that combining signals only</span>
+<span id="cb6-395"><a href="#cb6-395" aria-hidden="true" tabindex="-1"></a>helps when both of them actually have something useful to say about the</span>
+<span id="cb6-396"><a href="#cb6-396" aria-hidden="true" tabindex="-1"></a>query at hand.</span>
+<span id="cb6-397"><a href="#cb6-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-398"><a href="#cb6-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb6-399"><a href="#cb6-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-400"><a href="#cb6-400" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 10:** Better retrieval still isn't the same as a</span>
+<span id="cb6-401"><a href="#cb6-401" aria-hidden="true" tabindex="-1"></a>trustworthy answer. Chapter 10 tackles the harder problem: making sure</span>
+<span id="cb6-402"><a href="#cb6-402" aria-hidden="true" tabindex="-1"></a>every generated claim traces back to real evidence, and that the system</span>
+<span id="cb6-403"><a href="#cb6-403" aria-hidden="true" tabindex="-1"></a>tells you honestly when it doesn't know.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

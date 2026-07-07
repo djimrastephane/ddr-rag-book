@@ -672,7 +672,7 @@ Pipe free</code></pre>
 FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
 ...
 FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
-<div id="023a9459" class="cell" data-execution_count="1">
+<div id="3622cfb4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -722,7 +722,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The full text of the report’s first page, printed to your terminal — header block, casing and mud tables, BHA component list, survey data, and the time breakdown quoted above, all as plain text.</p>
-<div id="6f82650f" class="cell" data-execution_count="2">
+<div id="451e0b1e" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
@@ -730,7 +730,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(first_page.extract_text())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
-<p>You opened the PDF, grabbed its first page, and asked <code>pdfplumber</code> to hand back everything readable on it as plain text. Real DDRs pack in far more than a simple narrative — this one report alone has seven distinct data sections (header, casing, mud, BHA, survey, time breakdown, and remarks) — and all of it came back as one ordinary block of text you can now search, print, or save.</p>
+<p>You opened the PDF, grabbed its first page, and asked <code>pdfplumber</code> to hand back everything readable on it as plain text. Real DDRs pack in far more than a simple narrative — this one report alone holds seven distinct data tables (casing, mud, drill bits, pumps, BHA, survey data, consumables), plus a header and a narrative time breakdown — and all of it came back as one ordinary block of text you can now search, print, or save.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Opening a file safely">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -753,7 +753,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One combined string containing every page’s text, with a marker like <code>--- Page 1 ---</code> showing where each page starts.</p>
-<div id="1dbd3fa6" class="cell" data-execution_count="3">
+<div id="78da44d6" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1664,10 +1664,10 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a>You opened the PDF, grabbed its first page, and asked <span class="in">`pdfplumber`</span> to hand</span>
 <span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a>back everything readable on it as plain text. Real DDRs pack in far more</span>
-<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a>than a simple narrative — this one report alone has seven distinct data</span>
-<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a>sections (header, casing, mud, BHA, survey, time breakdown, and remarks) —</span>
-<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a>and all of it came back as one ordinary block of text you can now search,</span>
-<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a>print, or save.</span>
+<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a>than a simple narrative — this one report alone holds seven distinct data</span>
+<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a>tables (casing, mud, drill bits, pumps, BHA, survey data, consumables),</span>
+<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a>plus a header and a narrative time breakdown — and all of it came back as</span>
+<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a>one ordinary block of text you can now search, print, or save.</span>
 <span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Opening a file safely"}</span>
 <span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a><span class="in">`with pdfplumber.open(...) as pdf:`</span> is like signing a piece of equipment</span>
