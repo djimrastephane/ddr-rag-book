@@ -42,7 +42,7 @@ That's the destination. By Chapter 5 you'll have a working RAG system — retrie
 
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
 - [Read the book online](https://djimrastephane.github.io/ddr-rag-book/)
-- Latest stable release: [v1.1.1](https://github.com/djimrastephane/ddr-rag-book/releases/tag/v1.1.1) — see [CHANGELOG.md](CHANGELOG.md) for what's new in each release
+- Latest stable release: [v1.1.2](https://github.com/djimrastephane/ddr-rag-book/releases/tag/v1.1.2) — see [CHANGELOG.md](CHANGELOG.md) for what's new in each release
 - License: code is [MIT](LICENSE); the book's text is [CC BY 4.0](LICENSE-CONTENT.md)
 
 To get a copy of this repository, click the [Download ZIP](https://github.com/djimrastephane/ddr-rag-book/archive/refs/heads/main.zip) button, or run the following in a terminal:

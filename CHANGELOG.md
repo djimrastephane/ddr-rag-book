@@ -9,6 +9,33 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-07-07
+
+Clears the non-release-gating items from the publication-readiness audit.
+
+### Fixed
+
+- Reconciled the section-count enumeration against report #38's real
+  structure (ten sections: WELL/JOB INFORMATION, BOP, seven data tables,
+  and TIME BREAKDOWN). Chapter 1 no longer invents a "remarks" section or
+  a wrong seven-item list, and Chapter 7 no longer says "seven" while
+  listing ten; Chapter 4's "seven data tables" was already accurate and
+  now agrees with the others.
+- Removed a duplicated, stranded "Why keyword search fails" section from
+  Chapter 3 — it sat after Repository files and repeated both the
+  chapter's Field Notes and its Suggested next step. The heading now
+  appears only in Chapter 2, and Chapter 3 follows the standard order.
+
+### Changed
+
+- Added Engineering Translation boxes for the code idioms that debut
+  unexplained in Chapter 4 for non-programmers — type hints, and
+  `np.argsort`/list comprehensions — plus a one-line `lambda` note in
+  Chapter 9.
+- Added a sample-size caveat in Chapter 11 covering all three metrics:
+  at five questions over ten reports the numbers are coarse and show how
+  the metrics behave, not a benchmark.
+
 ## [1.1.1] - 2026-07-07
 
 ### Fixed
