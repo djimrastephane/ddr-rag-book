@@ -535,10 +535,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This book exists because of the drilling and completions engineers who patiently shared, over many years and many wells, the experience hidden behind seemingly ordinary lines in a daily report. To an experienced engineer, “POOH to change BHA due to erratic torque” may suggest formation behaviour, equipment limitations, operational risk and the decisions that followed. Capturing and preserving that knowledge matters, because reports remain long after the people who wrote them have moved on.</p>
+<p>This book exists because daily drilling reports capture far more than operational summaries. Behind short entries such as “POOH to change BHA due to erratic torque” sit decisions, experience and operational context that are obvious to the engineers involved in the operation but often invisible to everyone else.</p>
 <p>Thanks are due to the open-source communities behind the tools this book relies on throughout: Python, Quarto, Jupyter, and the broader Python data and NLP ecosystem. None of the engineering in this book would be reproducible without them.</p>
-<p>The ideas, engineering examples and technical validation are the author’s. AI tools including Claude were used to accelerate coding, editing and documentation tasks.</p>
 <p>Finally, thanks to every reader working through this material on a real archive of real reports. If you find an error, an oilfield abbreviation that’s wrong for your basin, or a chapter that assumes something it shouldn’t, please open an issue in the companion repository — corrections from practitioners are what keep a book like this honest.</p>
+<p>The ideas, engineering examples and technical validation are the author’s. AI tools including Claude were used to accelerate coding, editing and documentation tasks.</p>
 
 
 <!-- -->
@@ -1028,29 +1028,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Acknowledgements {.unnumbered}</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>This book exists because of the drilling and completions engineers who</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>patiently shared, over many years and many wells, the experience hidden</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>behind seemingly ordinary lines in a daily report. To an experienced</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>engineer, "POOH to change BHA due to erratic torque" may suggest</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>formation behaviour, equipment limitations, operational risk and the</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>decisions that followed. Capturing and preserving that knowledge</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>matters, because reports remain long after the people who wrote them</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>have moved on.</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>Thanks are due to the open-source communities behind the tools this book</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>relies on throughout: Python, Quarto, Jupyter, and the broader Python</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>data and NLP ecosystem. None of the engineering in this book would be</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>reproducible without them.</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>The ideas, engineering examples and technical validation are the</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>author's. AI tools including Claude were used to accelerate coding,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>editing and documentation tasks.</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>Finally, thanks to every reader working through this material on a real</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>archive of real reports. If you find an error, an oilfield abbreviation</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>that's wrong for your basin, or a chapter that assumes something it</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>shouldn't, please open an issue in the companion repository — corrections</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>from practitioners are what keep a book like this honest.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>This book exists because daily drilling reports capture far more than</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>operational summaries. Behind short entries such as "POOH to change BHA</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>due to erratic torque" sit decisions, experience and operational context</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>that are obvious to the engineers involved in the operation but often</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>invisible to everyone else.</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>Thanks are due to the open-source communities behind the tools this book</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>relies on throughout: Python, Quarto, Jupyter, and the broader Python</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>data and NLP ecosystem. None of the engineering in this book would be</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>reproducible without them.</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>Finally, thanks to every reader working through this material on a real</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>archive of real reports. If you find an error, an oilfield abbreviation</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>that's wrong for your basin, or a chapter that assumes something it</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>shouldn't, please open an issue in the companion repository — corrections</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>from practitioners are what keep a book like this honest.</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>The ideas, engineering examples and technical validation are the</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>author's. AI tools including Claude were used to accelerate coding,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>editing and documentation tasks.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
