@@ -152,18 +152,18 @@ write that from scratch.
 
 ### Step 1: get the sample archive
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Before extracting anything, confirm the report archive is actually there
 and see what you're working with — the same way you'd check a folder of
 scanned tickets exists before writing a script against it.
 
-## Inputs
+**Inputs**
 
 - The folder `datasets/sample_ddrs/`, containing ten curated Utah FORGE
   DDR PDFs (already included in this repository — no download needed).
 
-## Expected Output
+**Expected Output**
 
 A list of ten file paths, sorted, something like:
 
@@ -195,7 +195,7 @@ Every code block in this book works the same way; this note won't repeat
 after this point.
 :::
 
-## What just happened?
+**What just happened?**
 
 You pointed Python at a folder and asked it to list every file ending in
 `.pdf`. Nothing was opened or read yet — this is just confirming the
@@ -215,18 +215,18 @@ of the public archive (or extend it with more reports), see
 
 ### Step 2: extract text from one PDF
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Prove that we can pull real text out of a single PDF before building
 anything more elaborate — the smallest possible version of the whole
 chapter's job.
 
-## Inputs
+**Inputs**
 
 - One PDF: `datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf`
   (report #38, the stuck-pipe day).
 
-## Expected Output
+**Expected Output**
 
 The full text of the report's first page, printed to your terminal —
 header block, casing and mud tables, BHA component list, survey data, and
@@ -241,7 +241,7 @@ with pdfplumber.open("datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-
     print(first_page.extract_text())
 ```
 
-## What just happened?
+**What just happened?**
 
 You opened the PDF, grabbed its first page, and asked `pdfplumber` to hand
 back everything readable on it as plain text. Real DDRs pack in far more
@@ -263,17 +263,17 @@ every report you'll ever encounter. Loop over every page and keep track
 of which page each chunk of text came from — you'll need that later for
 citations:
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Handle reports with more than one page, and remember which page each
 piece of text came from — information you'll need in later chapters to
 point back to the exact source of an answer.
 
-## Inputs
+**Inputs**
 
 - Any DDR PDF path, single-page or multi-page.
 
-## Expected Output
+**Expected Output**
 
 One combined string containing every page's text, with a marker like
 `--- Page 1 ---` showing where each page starts.
@@ -292,7 +292,7 @@ def extract_text(pdf_path: Path) -> str:
     return "\n\n".join(pages_text)
 ```
 
-## What just happened?
+**What just happened?**
 
 This packages the previous step into a reusable procedure: for every page
 in the PDF, pull its text, label it with a page number, and stitch all the
@@ -319,17 +319,17 @@ book.
 
 ### Step 3: make it a script you can run from the command line
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Turn this into a tool you can point at any file or folder from the
 terminal, without opening or editing the code each time.
 
-## Inputs
+**Inputs**
 
 - A single PDF path, or a folder of PDFs plus a `--batch` flag and an
   `--out` destination folder.
 
-## Expected Output
+**Expected Output**
 
 Printed text to the terminal (single-file mode), or a folder of `.txt`
 files, one per PDF (batch mode).
@@ -342,7 +342,7 @@ python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling
 python code/chapter_01/read_ddr.py datasets/sample_ddrs/ --batch --out datasets/ddr_text
 ```
 
-## What just happened?
+**What just happened?**
 
 The full script, `code/chapter_01/read_ddr.py`, wraps the `extract_text`
 function in a command-line interface: flags like `--batch` and `--out`

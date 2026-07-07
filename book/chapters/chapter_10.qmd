@@ -122,17 +122,17 @@ the presence.
 
 ### Step 1: give every claim a checkable tag
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Attach a checkable source to every claim — which report, which page —
 instead of a citation-shaped sentence a reader has to take on faith.
 
-## Inputs
+**Inputs**
 
 - A report name/number, and an optional page number.
 - A list of such citations to attach to one answer.
 
-## Expected Output
+**Expected Output**
 
 A plain-text "Evidence:" block listing each source, ready to show
 alongside a generated answer.
@@ -152,7 +152,7 @@ def format_evidence(citations: list[Citation]) -> str:
     return "Evidence:\n" + "\n".join(lines)
 ```
 
-## What just happened?
+**What just happened?**
 
 `Citation` bundles a report and a page number together as one unit — the
 equivalent of an evidence tag on an exhibit, so a claim's source can never
@@ -169,18 +169,18 @@ numbers you could mix up.
 
 ### Step 2: check the archive for real gaps
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Detect whether the archive has days with no report at all, so the system
 can say "I have nothing for that date" instead of guessing or silently
 retrieving the nearest available report.
 
-## Inputs
+**Inputs**
 
 - A list of report dates, as ISO date strings, covering a period that
   should have one report per day.
 
-## Expected Output
+**Expected Output**
 
 A list of `(start, end)` date ranges with no report — empty if the
 archive is complete.
@@ -201,7 +201,7 @@ def find_date_gaps(report_dates: list[str]) -> list[tuple[str, str]]:
     return gaps
 ```
 
-## What just happened?
+**What just happened?**
 
 The dates get sorted, then checked one consecutive pair at a time: if
 more than one day passes between two reports, everything in between gets
@@ -211,7 +211,7 @@ enough to catch the real two-day gap in this archive.
 
 ### Step 3: build a citation from a real search, not by hand
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Every `Citation` shown so far in this chapter was typed in by hand —
 `Citation(report="...", page=1)` — which proves the data structure works
@@ -221,12 +221,12 @@ This step closes that loop: run a real query against Chapter 8's
 chunk-level index, and read the report, page, and date straight off
 whichever chunk matched — never re-typed, never assumed.
 
-## Inputs
+**Inputs**
 
 - Chapter 8's `build_chunk_metadata_index()` and `search()`.
 - A query string.
 
-## Expected Output
+**Expected Output**
 
 A list of `Citation` objects built entirely from the search results —
 real reports, real pages, real dates, in ranked order.
@@ -253,7 +253,7 @@ def citations_from_search(chunk_results: list[tuple[int, float]],
     return citations
 ```
 
-## What just happened?
+**What just happened?**
 
 For every `(row_index, score)` pair a search returns, this looks up
 `metadata[row_index]` — the real report, page, and date Chapter 8

@@ -122,20 +122,20 @@ chunk 3:                         [t9  t10 t11 t12]
 
 ## Implementation
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Split a report's text into pieces small enough to embed precisely,
 without severing the exact sentence a future query needs right at a
 chunk boundary.
 
-## Inputs
+**Inputs**
 
 - Full report text (a Python string).
 - `chunk_tokens`: how many tokens each chunk should hold.
 - `overlap_tokens`: how many tokens each chunk repeats from the end of
   the previous one.
 
-## Expected Output
+**Expected Output**
 
 A list of text chunks, each roughly `chunk_tokens` tokens long, each
 overlapping the next by `overlap_tokens` tokens.
@@ -159,7 +159,7 @@ def chunk_text_by_tokens(text: str, chunk_tokens: int = 200,
     return chunks
 ```
 
-## What just happened?
+**What just happened?**
 
 The text got converted into tokens, then sliced into fixed-size windows
 that each step forward by less than a full window's width — that gap is
@@ -174,7 +174,7 @@ the word-based fallback path. Read the full version, plus
 
 ### Step 2: give every chunk back its page number
 
-## What problem are we solving?
+**What problem are we solving?**
 
 `chunk_text_by_tokens()` above returns plain strings — once a chunk is
 made, nothing about it remembers which page it came from. That's fine
@@ -184,12 +184,12 @@ there isn't one to cite. Chapter 1's `extract_text()` already writes a
 markers back out and chunks each page separately, so no chunk can ever
 straddle a page boundary or lose track of which one it belongs to.
 
-## Inputs
+**Inputs**
 
 - The full `--- Page N ---`-marked text Chapter 1's `extract_text()`
   produces, not a single page's text in isolation.
 
-## Expected Output
+**Expected Output**
 
 A list of `(page_number, chunk_text)` pairs — the same chunks as before,
 each now labelled with the real page it came from.
@@ -219,7 +219,7 @@ def chunk_pages_by_tokens(pages_text: str, chunk_tokens: int = 60,
     return chunks_with_pages
 ```
 
-## What just happened?
+**What just happened?**
 
 `split_pages` undoes Chapter 1's markers, turning the joined text back
 into `(page_number, page_text)` pairs. `chunk_pages_by_tokens` then chunks

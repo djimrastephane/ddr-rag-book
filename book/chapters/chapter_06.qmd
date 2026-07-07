@@ -122,19 +122,19 @@ count how many are True
 
 Build a simplified version of the same idea.
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Decide whether a page's extracted text is trustworthy enough to add to
 the search index, or whether it should be set aside for a human to check
 instead.
 
-## Inputs
+**Inputs**
 
 - Extracted text (from OCR, or from Chapter 1's digital extraction).
 - Thresholds: minimum characters, minimum alphabetic words, maximum
   symbol ratio, and how many flags must fire before rejecting.
 
-## Expected Output
+**Expected Output**
 
 A dictionary reporting the decision and which specific checks failed, for
 example:
@@ -165,7 +165,7 @@ def evaluate_ocr_quality(text: str, min_chars: int = 200,
     return {"reject_ocr": len(active) >= reject_min_flags, "flags": flags}
 ```
 
-## What just happened?
+**What just happened?**
 
 This measures two things about the text: how much of it is real,
 readable words (`low_text_density`), and how much of it is odd symbols

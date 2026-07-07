@@ -165,14 +165,14 @@ pure similarity.
 
 ## Implementation
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Combine two independently-ranked lists of reports — one from BM25, one
 from dense/semantic search — into a single fused ranking, without
 letting whichever method happens to produce larger raw numbers unfairly
 dominate the result.
 
-## Inputs
+**Inputs**
 
 - `ranked_lists`: two or more ranked lists of document IDs, best match
   first (e.g. one from Chapter 3's keyword search, one from Chapter 4's
@@ -180,7 +180,7 @@ dominate the result.
 - `k`: a constant controlling how much rank position matters.
 - `weights`: how much to trust each list relative to the others.
 
-## Expected Output
+**Expected Output**
 
 A single fused ranking: a list of `(doc_id, score)` pairs, sorted
 highest-scoring first.
@@ -200,7 +200,7 @@ def reciprocal_rank_fusion(ranked_lists: list[list[str]], k: int = 20,
     return sorted(scores.items(), key=lambda item: item[1], reverse=True)
 ```
 
-## What just happened?
+**What just happened?**
 
 For every report, this adds up a small credit from each ranked list based
 on *where it placed* — a high rank (near the top) contributes a bigger

@@ -145,17 +145,17 @@ well's data, and some aren't yet.
 
 ### Step 1: measure day-over-day change, not just the raw numbers
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Turn a list of daily torque readings into a measured day-over-day
 percentage change, so "roughly a third" becomes an exact, checkable
 number.
 
-## Inputs
+**Inputs**
 
 - `readings`: a chronological list of `(date, torque_value)` pairs.
 
-## Expected Output
+**Expected Output**
 
 A list of `(date, torque_value, percentage_change)` — one entry for every
 day after the first, since a percentage change needs a previous day to
@@ -174,7 +174,7 @@ def torque_trend(readings: list[tuple[str, float]]) -> list[tuple[str, float, fl
     return trend
 ```
 
-## What just happened?
+**What just happened?**
 
 This walks through the readings one consecutive pair at a time and
 computes how much each day's torque changed relative to the day before,
@@ -183,16 +183,16 @@ higher" story told in prose above.
 
 ### Step 2: run it against report #38's real numbers
 
-## What problem are we solving?
+**What problem are we solving?**
 
 See the actual percentage change for reports #36–38, printed as real
 numbers instead of an approximate description.
 
-## Inputs
+**Inputs**
 
 - The three real `TORQUE` header values from reports #36, #37, and #38.
 
-## Expected Output
+**Expected Output**
 
 ```
 2020-11-25: 4200 (-4.5%)
@@ -210,7 +210,7 @@ for date, val, pct in torque_trend(readings):
     print(f"{date}: {val} ({pct:+.1%})")
 ```
 
-## What just happened?
+**What just happened?**
 
 Running the real header values through `torque_trend` confirms the
 pattern precisely: a 4.5% *dip* the day before, then a 33.7% jump on the

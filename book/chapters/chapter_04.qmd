@@ -105,16 +105,16 @@ comfortably in memory.
 
 ### Step 1: load every report's text
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Get every report's text into memory, alongside its filename, so we know
 which score belongs to which report later.
 
-## Inputs
+**Inputs**
 
 - A folder of cleaned report text, e.g. `datasets/ddr_text/`.
 
-## Expected Output
+**Expected Output**
 
 Two matching lists: report filenames, and each report's full text.
 
@@ -131,7 +131,7 @@ def load_chunks(text_dir: Path) -> tuple[list[str], list[str]]:
     return filenames, texts
 ```
 
-## What just happened?
+**What just happened?**
 
 Nothing about meaning yet — this just reads every text file into memory
 and keeps a matching list of filenames, so that whatever score we
@@ -143,18 +143,18 @@ Field Notes at the end of this chapter measure exactly why.
 
 ### Step 2: convert text into vectors
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Turn each report's text into a numeric representation of its meaning, so
 that "similar meaning" can be measured with arithmetic instead of exact
 word matching.
 
-## Inputs
+**Inputs**
 
 - `MODEL_NAME = "all-MiniLM-L6-v2"`, a pre-trained embedding model.
 - The list of report texts from Step 1.
 
-## Expected Output
+**Expected Output**
 
 One 384-number vector per report, all packed into a single array.
 
@@ -170,7 +170,7 @@ def embed_texts(model: SentenceTransformer, texts: list[str]) -> np.ndarray:
     return np.asarray(embeddings)
 ```
 
-## What just happened?
+**What just happened?**
 
 The model read each report and produced its "GPS coordinates for
 meaning" — one vector per report. `normalize_embeddings=True` scales
@@ -179,17 +179,17 @@ which is exactly what cosine similarity needs.
 
 ### Step 3: rank reports against a query
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Given a query like "stuck pipe," find which reports are closest in
 meaning — not which reports contain those exact words.
 
-## Inputs
+**Inputs**
 
 - The query string.
 - The array of report vectors from Step 2.
 
-## Expected Output
+**Expected Output**
 
 A ranked list of `(filename, score)` pairs, highest similarity first.
 
@@ -203,7 +203,7 @@ def search(model: SentenceTransformer, query: str, filenames: list[str],
     return [(filenames[i], float(scores[i])) for i in top_indices]
 ```
 
-## What just happened?
+**What just happened?**
 
 The query got turned into its own vector, then compared against every
 report's vector at once. Because every vector was normalized to the same

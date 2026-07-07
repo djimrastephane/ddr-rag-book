@@ -83,17 +83,17 @@ query "stuck" -> look up "stuck" -> {report_038}   (one dict lookup,
 
 ### Step 1: split text into searchable words
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Before we can look anything up, every report's text needs to be broken
 into a consistent set of words — so "Losses", "losses," and "LOSSES" all
 count as the same match.
 
-## Inputs
+**Inputs**
 
 - Any string of report text.
 
-## Expected Output
+**Expected Output**
 
 A list of lowercase words with punctuation stripped out, for example:
 
@@ -110,7 +110,7 @@ def tokenize(text: str) -> list[str]:
     return re.findall(r"[a-z0-9]+", text.lower())
 ```
 
-## What just happened?
+**What just happened?**
 
 This lowercases the whole report, then pulls out every run of letters or
 digits as one word, throwing away punctuation, quotes, and apostrophes.
@@ -119,16 +119,16 @@ matched consistently whichever way it was typed in the original report.
 
 ### Step 2: build the lookup table
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Build a lookup table that remembers which reports contain each word, so a
 search never has to open and re-scan every file.
 
-## Inputs
+**Inputs**
 
 - A folder of cleaned, expanded report text: `datasets/ddr_text_expanded/`.
 
-## Expected Output
+**Expected Output**
 
 A dictionary mapping each word to the set of report filenames that
 contain it, for example:
@@ -153,7 +153,7 @@ def build_index(text_dir: Path) -> dict[str, set[str]]:
     return index
 ```
 
-## What just happened?
+**What just happened?**
 
 We built a lookup table that remembers which reports contain each word.
 For every report, we found its unique words and, for each one, noted
@@ -162,18 +162,18 @@ check instead of seventy-six files you'd otherwise have to open.
 
 ### Step 3: answer a query
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Given a query like "stuck pipe," find every report that contains all of
 those words — instantly, using the lookup table instead of opening a
 single file.
 
-## Inputs
+**Inputs**
 
 - The lookup table from Step 2.
 - A query string, e.g. `"stuck pipe"`.
 
-## Expected Output
+**Expected Output**
 
 The set of filenames containing every word in the query, for example
 `{"FORGE-...-32_Drilling_038_2020-11-26.txt"}` for the query `"stuck"`.
@@ -190,7 +190,7 @@ def search(index: dict[str, set[str]], query: str) -> set[str]:
     return results
 ```
 
-## What just happened?
+**What just happened?**
 
 For each word in the query, we looked up its list of reports in the
 table, then kept only the reports that appeared on *every* one of those

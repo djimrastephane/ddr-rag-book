@@ -107,17 +107,17 @@ can list every expansion it will ever make.
 
 ### Step 1: build the lookup table
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Give the computer the same knowledge a drilling engineer already carries
 in their head: what each abbreviation stands for.
 
-## Inputs
+**Inputs**
 
 - A hand-built list of oilfield abbreviations and their full-text
   expansions, drawn from what actually appears in this archive.
 
-## Expected Output
+**Expected Output**
 
 A Python dictionary — no output printed yet, just a lookup table in
 memory, ready for the next step to use.
@@ -147,7 +147,7 @@ ABBREVIATIONS = {
 }
 ```
 
-## What just happened?
+**What just happened?**
 
 You wrote down, once, what every abbreviation in this archive means. This
 list is the entire "knowledge" the expander needs — no training, no
@@ -155,18 +155,18 @@ model, just a table you can read top to bottom and check by eye.
 
 ### Step 2: expand every abbreviation safely
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Turn `BHA` into `bottom hole assembly` everywhere it appears as its own
 word — without also mangling words that merely happen to contain those
 same letters.
 
-## Inputs
+**Inputs**
 
 - Raw report text (a Python string).
 - The `ABBREVIATIONS` lookup table from Step 1.
 
-## Expected Output
+**Expected Output**
 
 The same text, with every whole-word abbreviation replaced by its
 expansion — for example, `Pick up Curve assembly 2, BHA 21` becomes
@@ -183,7 +183,7 @@ def expand_text(text: str, abbreviations: dict[str, str] = ABBREVIATIONS) -> str
     return text
 ```
 
-## What just happened?
+**What just happened?**
 
 For every entry in the lookup table, this checks the text for that exact
 word — not just those letters anywhere, but that whole word on its own —
@@ -200,15 +200,15 @@ word that merely contains those two letters.
 
 ### Step 3: run it across the whole archive
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Apply the expander to every report at once, not just one file at a time.
 
-## Inputs
+**Inputs**
 
 - The folder of `.txt` files Chapter 1 produced: `datasets/ddr_text/`.
 
-## Expected Output
+**Expected Output**
 
 A new folder, `datasets/ddr_text_expanded/`, with one expanded `.txt`
 file per input file, same filenames.
@@ -218,7 +218,7 @@ python code/chapter_02/expand_abbreviations.py \
     --in-dir datasets/ddr_text --out-dir datasets/ddr_text_expanded
 ```
 
-## What just happened?
+**What just happened?**
 
 The script read every `.txt` file Chapter 1 produced, ran each one through
 `expand_text`, and saved the result under the same filename in a new

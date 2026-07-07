@@ -132,19 +132,19 @@ system.
 
 ### Step 1: did the right answer make the shortlist at all?
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Check, for every evaluation question, whether the correct report showed
 up anywhere in the top `k` retrieved results — a simple yes/no per
 question.
 
-## Inputs
+**Inputs**
 
 - A list of result dicts, one per evaluation question, each recording the
   rank the correct report was found at (or `None` if it wasn't found).
 - `k`: how far down the results to look.
 
-## Expected Output
+**Expected Output**
 
 A single number between 0 and 1 — the fraction of questions where the
 correct report was within the top `k`.
@@ -157,7 +157,7 @@ def recall_at_k(results: list[dict], k: int) -> float:
     return len(hits) / len(results) if results else 0.0
 ```
 
-## What just happened?
+**What just happened?**
 
 For each question, this checks whether the correct report's rank is
 within `k` — a plain hit or miss — then reports what fraction of all
@@ -166,17 +166,17 @@ a hit was, which is exactly the gap the next two metrics fill.
 
 ### Step 2: reward landing near the top, not just anywhere
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Give more credit to a correct answer that ranked first than one that
 merely appeared somewhere in the results — closer to what a user actually
 experiences when scanning a results list top to bottom.
 
-## Inputs
+**Inputs**
 
 - The same list of result dicts as Step 1.
 
-## Expected Output
+**Expected Output**
 
 A single average score: higher when correct answers tend to rank near
 the top, lower when they're buried further down or missing.
@@ -188,7 +188,7 @@ def mrr(results: list[dict]) -> float:
     return sum(scores) / len(scores) if scores else 0.0
 ```
 
-## What just happened?
+**What just happened?**
 
 Each question's score is `1 / rank` — rank 1 scores a full 1.0, rank 5
 scores only 0.2, and a miss scores 0. Averaging those scores across every
@@ -197,17 +197,17 @@ far more than answers merely present somewhere in the list.
 
 ### Step 3: give partial credit based on exact position
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Combine the best of both previous metrics: a graded score, like MRR, but
 one that treats "found in the top k" as the relevant window, like
 recall@k.
 
-## Inputs
+**Inputs**
 
 - The same list of result dicts, plus `k`.
 
-## Expected Output
+**Expected Output**
 
 A single average score, weighted so a hit at rank 1 counts more than a
 hit at rank 5, and anything beyond `k` counts as zero.
@@ -223,7 +223,7 @@ def ndcg_at_k(results: list[dict], k: int) -> float:
     return sum(scores) / len(scores) if scores else 0.0
 ```
 
-## What just happened?
+**What just happened?**
 
 Instead of `1 / rank` (MRR), each hit's credit shrinks by `1 / log2(rank
 + 1)` — a gentler slope that still rewards a rank-1 hit the most, still

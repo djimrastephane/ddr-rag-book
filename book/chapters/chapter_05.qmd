@@ -117,17 +117,17 @@ archive.
 
 ### Step 1: write the instructions the model must follow
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Make sure the model answers from the evidence you hand it, not from
 whatever it remembers from training — and make sure it tells you which
 report each part of the answer came from.
 
-## Inputs
+**Inputs**
 
 - None yet — this is a fixed template, filled in for each question later.
 
-## Expected Output
+**Expected Output**
 
 A reusable prompt template with two blanks: the evidence, and the
 question.
@@ -146,7 +146,7 @@ Question: {question}
 Answer:"""
 ```
 
-## What just happened?
+**What just happened?**
 
 This is the "brief" you hand the model every single time: answer only
 from what's provided, admit it when the evidence doesn't cover the
@@ -155,18 +155,18 @@ in this chapter exists to fill in `{evidence}` and `{question}` correctly.
 
 ### Step 2: assemble the evidence into that template
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Take the reports Chapter 4's retriever found and package them, labelled
 by filename, into the prompt template's `{evidence}` blank.
 
-## Inputs
+**Inputs**
 
 - A question string.
 - The retrieved `(filename, score)` pairs from Chapter 4's `search`.
 - The full filename and text lists from Chapter 4's `load_chunks`.
 
-## Expected Output
+**Expected Output**
 
 One complete prompt string, evidence labelled by source filename, ready
 to send to a model.
@@ -189,7 +189,7 @@ def build_prompt(question: str, retrieved: list[tuple[str, float]],
     )
 ```
 
-## What just happened?
+**What just happened?**
 
 For every report Chapter 4's retriever returned, this tags its full text
 with its own filename in square brackets, then stitches all of them
@@ -199,20 +199,20 @@ from.
 
 ### Step 3: retrieve, then generate, then report the sources
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Chain retrieval and generation into one function: given a question, find
 the evidence, ask the model to answer from it, and hand back both the
 answer and the exact list of reports it was allowed to use.
 
-## Inputs
+**Inputs**
 
 - A question string.
 - The embedding model, filenames, texts, and embeddings from Chapter 4.
 - `llm_call`: any function that takes a prompt string and returns the
   model's answer.
 
-## Expected Output
+**Expected Output**
 
 A tuple: the generated answer text, and the list of report filenames
 that were actually retrieved and shown to the model.
@@ -228,7 +228,7 @@ def answer_question(question: str, model, filenames, texts, embeddings,
     return answer_text, evidence
 ```
 
-## What just happened?
+**What just happened?**
 
 This is the whole system end to end: retrieve the top matching reports,
 build a prompt from them, generate an answer, and return that answer

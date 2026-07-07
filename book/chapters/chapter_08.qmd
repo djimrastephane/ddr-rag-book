@@ -125,17 +125,17 @@ Global FAISS index
 
 ### Step 1: build the index and save it to disk
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Turn a matrix of chunk embeddings into a fast, queryable structure, then
 save it so it never needs rebuilding from scratch in a future session.
 
-## Inputs
+**Inputs**
 
 - `embeddings`: a NumPy array of chunk vectors, shape `(n_chunks, 384)`.
 - A destination file path for the saved index.
 
-## Expected Output
+**Expected Output**
 
 A `faiss.index` file on disk, plus the same in-memory index object ready
 to query immediately.
@@ -158,7 +158,7 @@ def save_index(index: faiss.Index, path: Path) -> None:
     faiss.write_index(index, str(path))
 ```
 
-## What just happened?
+**What just happened?**
 
 `build_index` creates an empty FAISS structure sized for 384-number
 vectors, then loads every chunk's embedding into it in one call.
@@ -168,19 +168,19 @@ back instantly instead of re-embedding every chunk again.
 
 ### Step 2: reload the index and answer a query
 
-## What problem are we solving?
+**What problem are we solving?**
 
 In a fresh session — no re-embedding, no rebuilding — load the saved
 index back and answer a query against it, the same way Chapter 4's
 `search` did, just backed by FAISS instead of a NumPy array in memory.
 
-## Inputs
+**Inputs**
 
 - The saved `faiss.index` file path.
 - A query vector (from Chapter 4's embedding model).
 - `top_k`: how many results to return.
 
-## Expected Output
+**Expected Output**
 
 A ranked list of `(chunk_index, similarity_score)` pairs — the same
 shape of result Chapter 4's brute-force `search` returned.
@@ -195,7 +195,7 @@ def search(index: faiss.Index, query_vec: np.ndarray, top_k: int = 5):
     return list(zip(indices[0].tolist(), scores[0].tolist()))
 ```
 
-## What just happened?
+**What just happened?**
 
 `load_index` reads the saved file back into a ready-to-query FAISS
 index — no re-embedding step, because the vectors were already saved
@@ -210,7 +210,7 @@ document's other artefacts.
 
 ### Step 3: index real chunks, with real metadata attached
 
-## What problem are we solving?
+**What problem are we solving?**
 
 Everything above indexes whole documents — Chapter 4's `load_chunks()`
 loads one vector per *report*, not per chunk, so a FAISS row can only
@@ -223,12 +223,12 @@ a second gap at the same time. One FAISS row per chunk, with a matching
 metadata record — report filename, page, and date — so a search result
 can finally point at more than just a whole file.
 
-## Inputs
+**Inputs**
 
 - A folder of extracted `.txt` files: `datasets/ddr_text/`.
 - Chapter 7's `chunk_pages_by_tokens()`.
 
-## Expected Output
+**Expected Output**
 
 A FAISS index with one row per chunk, and a parallel `metadata` list —
 `metadata[i]` is a `{"report": ..., "page": ..., "date": ...}` dict
@@ -259,7 +259,7 @@ def build_chunk_metadata_index(text_dir: Path, model: SentenceTransformer,
     return index, metadata
 ```
 
-## What just happened?
+**What just happened?**
 
 For every report, this runs Chapter 7's page-aware chunker, embeds each
 resulting chunk, and appends a matching `{"report", "page", "date"}`
