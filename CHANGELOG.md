@@ -9,6 +9,19 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-07-07
+
+### Changed
+
+- Revised the Acknowledgements' opening paragraph, and moved the note on
+  the author's ideas/technical validation and AI-tool use to the end of
+  the section.
+
+### Fixed
+
+- Updated the README's "Latest stable release" link, which was never
+  bumped through v1.0.1/v1.0.2/v1.0.3 and still pointed at v1.0.0.
+
 ## [1.0.3] - 2026-07-06
 
 ### Fixed
