@@ -42,7 +42,7 @@ That's it — a question, an answer, and the exact source reports you'd need to 
 
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
 - [Read the book online](https://djimrastephane.github.io/ddr-rag-book/)
-- Latest stable release: [v1.0.3](https://github.com/djimrastephane/ddr-rag-book/releases/tag/v1.0.3) — see [CHANGELOG.md](CHANGELOG.md) for what's new in each release
+- Latest stable release: [v1.0.4](https://github.com/djimrastephane/ddr-rag-book/releases/tag/v1.0.4) — see [CHANGELOG.md](CHANGELOG.md) for what's new in each release
 - License: code is [MIT](LICENSE); the book's text is [CC BY 4.0](LICENSE-CONTENT.md)
 
 To get a copy of this repository, click the [Download ZIP](https://github.com/djimrastephane/ddr-rag-book/archive/refs/heads/main.zip) button, or run the following in a terminal:
