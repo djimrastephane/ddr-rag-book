@@ -21,6 +21,10 @@ pyarrow==24.0.0
 pytesseract==0.3.13
 pdf2image==1.17.0
 
+# Companion app (book/app/streamlit_app.py) -- optional, only needed to run
+# the interactive DDR RAG Companion App. Ollama is a separate local install.
+streamlit==1.59.0
+
 # Notebooks and book authoring
 jupyter==1.0.0
 ipykernel==6.29.5

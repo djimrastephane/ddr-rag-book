@@ -448,6 +448,16 @@ model, and hands back the source reports and excerpts that answer is
 traceable to. This is Part I's capstone artifact.
 :::
 
+::: {.callout-note title="Try it in the browser: the companion app"}
+The optional [DDR RAG Companion App](../app/README.md) (`book/app/`) wraps
+this same retrieve-then-generate-then-cite flow in a small Streamlit
+screen. Run `streamlit run book/app/streamlit_app.py`, pick a question,
+and see the evidence cards, the local-model answer, and a "Why this
+answer?" panel side by side. It reuses this chapter's code (plus Chapter
+9's hybrid retrieval) — nothing new to learn, just the payoff on one
+screen.
+:::
+
 ## What can you do now that you couldn't do before?
 
 You can ask an engineering question in plain English and get back a
