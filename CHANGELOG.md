@@ -9,6 +9,21 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-07-08
+
+### Added
+
+- A real screenshot of the running DDR RAG Companion App on the welcome
+  page and README (a question, a cited local-model answer, and the
+  retrieved evidence cards), replacing the pending placeholder. Captured
+  from the actual app, not a mockup.
+
+### Changed
+
+- The companion app's default top-k is now **3** (was 5) — it matches
+  Chapter 5, reduces whole-document noise, and gives the flagship sample
+  question a clean cited answer at the default settings.
+
 ## [1.2.0] - 2026-07-08
 
 The repository becomes both a technical book and a runnable educational

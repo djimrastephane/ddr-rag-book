@@ -3,6 +3,22 @@
 Per-release highlights for *Building Industrial RAG Systems from Daily
 Drilling Reports*. See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
+## v1.2.1
+
+A small follow-up to the companion app.
+
+### Added
+
+- A real screenshot of the running DDR RAG Companion App on the welcome
+  page and README — a question, a cited local-model answer, and the
+  retrieved evidence cards. Captured from the actual app, not a mockup.
+
+### Changed
+
+- The companion app's default top-k is now **3** (was 5): it matches
+  Chapter 5, reduces whole-document noise, and gives the flagship sample
+  question a clean cited answer at the default settings.
+
 ## v1.2.0
 
 The repository is now both a technical book and a runnable educational
