@@ -24,7 +24,7 @@
     "href": "index.html#what-this-becomes",
     "title": "Building Industrial RAG Systems from Daily Drilling Reports",
     "section": "What this becomes",
-    "text": "What this becomes\nThe scripts in this book are the engine. The companion pipeline wraps the same retrieval, citation, and gap-detection logic in a searchable interface over the whole archive: you ask a question and get a cited answer back — the same shape as the interaction above — across every report at once. Appendix A shows how to set it up and point it at your own archive.\nA screenshot of that interface is coming in a future revision; for now, Appendix A walks through running it yourself.",
+    "text": "What this becomes\nThe scripts in this book are the engine. The book’s optional companion app (book/app/) puts the same flow on one screen — a question, a local-model answer, and the evidence it’s traceable to — over the sample archive:\n\n\n\nThe DDR RAG Companion App: a question, a local-model answer, and the source reports it’s traceable to.\n\n\nThe companion pipeline scales the same idea to the whole 76-report archive. Appendix A shows how to set either one up and point it at your own reports.",
     "crumbs": [
       "Welcome"
     ]
