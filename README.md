@@ -288,6 +288,22 @@ _A screenshot of that interface is coming in a future revision._
      a mockup or an AI-generated UI image as evidence of the real app. -->
 <!-- ![The companion DDR Intelligence interface](book/figures/app_screenshot.png) -->
 
+## Companion App
+
+An **optional**, educational companion — you don't need it to follow the book. This small Streamlit app shows the book's payoff end to end — ask one engineering question against the sample DDR archive and see **retrieval → local-model answer → citations → the original evidence**. It reuses the book's own code (Chapters 4, 5, and 9); it does not reimplement the pipeline.
+
+```bash
+pip install -r book/requirements.txt      # includes Streamlit
+ollama pull qwen2.5:7b-instruct           # for generated answers (optional)
+streamlit run book/app/streamlit_app.py
+```
+
+- **Ollama is optional for retrieval** — without it you still see the matched reports, scores, and evidence excerpts.
+- **Ollama is required for generated answers** — if it isn't running, the app says so and shows the retrieved evidence anyway.
+- The app runs on the **ten-report public sample archive**. It is an educational companion, not a production system — always verify answers against the original report before using them for engineering decisions.
+
+See [`book/app/README.md`](book/app/README.md) for details.
+
 ## Exercises
 
 Every chapter includes a **Practical exercise** (a guided, checkable task using the real sample archive) and a **Challenge exercise** (a harder, more open-ended extension). Reference solutions for challenge exercises live alongside each chapter's code, e.g. [`book/code/chapter_01/challenge/`](book/code/chapter_01/challenge).
