@@ -9,6 +9,33 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-07-08
+
+The repository becomes both a technical book and a runnable educational
+software project. See [RELEASE.md](RELEASE.md) for the full v1.2.0 notes.
+
+### Added
+
+- **DDR RAG Companion App** (`book/app/streamlit_app.py`) — a small
+  Streamlit app that shows the book's payoff end to end: retrieval →
+  local-model answer → citations → evidence. It reuses the book's own code
+  (Chapters 4, 5, and 9) rather than reimplementing the pipeline, with
+  evidence cards (filename, date, score, focused excerpt), a "Why this
+  answer?" transparency panel, and a limitations note.
+- Local Ollama support for generated answers (default
+  `qwen2.5:7b-instruct`, swappable), with a graceful retrieval-only
+  fallback and a clear message when Ollama isn't running.
+- `book/app/helpers.py` (pure, unit-tested glue), `book/app/README.md`,
+  `book/tests/test_app.py` (9 app tests; suite now 44), and `RELEASE.md`.
+- A "Companion App" section in the README and a pointer to the app from
+  Chapter 5.
+
+### Fixed
+
+- The companion app rebuilds the gitignored extracted-text folder from the
+  committed sample PDFs when it's empty, so it runs from a clean clone
+  (a fresh checkout previously left the BM25 corpus empty).
+
 ## [1.1.2] - 2026-07-07
 
 Clears the non-release-gating items from the publication-readiness audit.
