@@ -34,11 +34,12 @@ def load_model():
     return SentenceTransformer(MODEL_NAME, device="cpu")
 
 
-@st.cache_data(show_spinner="Reading the sample DDR archive…")
-def load_texts():
-    """Read the ten sample reports once (Chapter 4's load_chunks)."""
-    from semantic_search import load_chunks
-    return load_chunks(helpers.TEXT_DIR)
+@st.cache_data(show_spinner="Preparing the sample archive (first run only)…")
+def prepare_archive():
+    """Make sure the extracted-text folder exists (rebuild it from the
+    committed sample PDFs on a fresh clone). Runs once, then cached."""
+    helpers.ensure_text_dir()
+    return True
 
 
 def render_pipeline():
@@ -130,12 +131,12 @@ def main():
     asked = st.sidebar.button("Ask", type="primary", use_container_width=True)
 
     if asked:
+        prepare_archive()
         model = load_model()
-        filenames, texts = load_texts()
         spinner = "Retrieving evidence" + ("… and generating an answer" if generate else "") + "…"
         with st.spinner(spinner):
             st.session_state["result"] = run_query(
-                question, filenames, texts, model,
+                question, model,
                 top_k=top_k, generate=generate, model_name=model_name,
             )
 

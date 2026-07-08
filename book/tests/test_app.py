@@ -53,22 +53,28 @@ def test_streamlit_app_imports_without_launching_ui():
     assert len(streamlit_app.SAMPLE_QUESTIONS) >= 3
 
 
+def test_ensure_text_dir_rebuilds_from_sample_pdfs(tmp_path):
+    # The text folder is gitignored/generated; the app must rebuild it from
+    # the committed sample PDFs on a clean checkout (the bug CI caught).
+    out = helpers.ensure_text_dir(tmp_path / "ddr_text")
+    txts = list(out.glob("*.txt"))
+    assert len(txts) == 10  # one per sample PDF
+    assert any("became stuck" in p.read_text(encoding="utf-8").lower() for p in txts)
+
+
 @pytest.fixture(scope="module")
-def model_and_texts():
-    from semantic_search import MODEL_NAME, load_chunks
+def model():
+    from semantic_search import MODEL_NAME
     from sentence_transformers import SentenceTransformer
 
-    model = SentenceTransformer(MODEL_NAME, device="cpu")
-    filenames, texts = load_chunks(helpers.TEXT_DIR)
-    return model, filenames, texts
+    return SentenceTransformer(MODEL_NAME, device="cpu")
 
 
 @pytest.mark.slow
-def test_run_query_returns_evidence_cards_with_filenames(model_and_texts):
-    model, filenames, texts = model_and_texts
+def test_run_query_returns_evidence_cards_with_filenames(model, extracted_sample_text_dir):
     result = helpers.run_query(
         "What led to the fishing operation on report #50?",
-        filenames, texts, model, top_k=3, generate=False,
+        model, text_dir=extracted_sample_text_dir, top_k=3, generate=False,
     )
     assert result["cards"], "expected retrieved evidence"
     for card in result["cards"]:
@@ -81,13 +87,12 @@ def test_run_query_returns_evidence_cards_with_filenames(model_and_texts):
 
 
 @pytest.mark.slow
-def test_run_query_handles_missing_ollama_gracefully(model_and_texts, monkeypatch):
-    model, filenames, texts = model_and_texts
+def test_run_query_handles_missing_ollama_gracefully(model, extracted_sample_text_dir, monkeypatch):
     monkeypatch.setattr(helpers, "ollama_available", lambda host=helpers.OLLAMA_HOST: False)
 
     result = helpers.run_query(
         "Which reports mention high torque?",
-        filenames, texts, model, top_k=3, generate=True,
+        model, text_dir=extracted_sample_text_dir, top_k=3, generate=True,
     )
     # Retrieval still works; generation degrades to a clear message.
     assert result["cards"]
