@@ -125,7 +125,7 @@ def main():
     sample = st.sidebar.selectbox("Sample question", SAMPLE_QUESTIONS)
     custom = st.sidebar.text_input("…or type your own", "")
     question = custom.strip() or sample
-    top_k = st.sidebar.slider("Reports to retrieve (top-k)", 1, 10, 5)
+    top_k = st.sidebar.slider("Reports to retrieve (top-k)", 1, 10, 3)
     generate = st.sidebar.checkbox("Generate an answer with a local model", value=True)
     model_name = st.sidebar.text_input("Ollama model", helpers.DEFAULT_MODEL)
     asked = st.sidebar.button("Ask", type="primary", use_container_width=True)

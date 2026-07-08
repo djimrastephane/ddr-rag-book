@@ -279,18 +279,13 @@ Chapter titles in the table below link to the rendered, readable page for that r
 
 ### What this becomes
 
-The companion pipeline wraps the same retrieval, citation, and gap-detection logic the book builds into a searchable interface over the whole archive — you ask a question and get a cited answer back across every report at once.
-
-_A screenshot of that interface is coming in a future revision._
-
-<!-- TODO(author): add a real screenshot of the DDR Intelligence / Streamlit interface
-     at book/figures/app_screenshot.png and uncomment the image below. Do NOT substitute
-     a mockup or an AI-generated UI image as evidence of the real app. -->
-<!-- ![The companion DDR Intelligence interface](book/figures/app_screenshot.png) -->
+The companion pipeline wraps the same retrieval, citation, and gap-detection logic the book builds into a searchable interface over the whole archive — you ask a question and get a cited answer back across every report at once. (For a runnable, smaller version you can see right now, see the **Companion App** below.)
 
 ## Companion App
 
 An **optional**, educational companion — you don't need it to follow the book. This small Streamlit app shows the book's payoff end to end — ask one engineering question against the sample DDR archive and see **retrieval → local-model answer → citations → the original evidence**. It reuses the book's own code (Chapters 4, 5, and 9); it does not reimplement the pipeline.
+
+![The DDR RAG Companion App — a question, a local-model answer, and the source reports it's traceable to.](book/figures/app_screenshot.png)
 
 ```bash
 pip install -r book/requirements.txt      # includes Streamlit

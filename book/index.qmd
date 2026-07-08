@@ -66,21 +66,15 @@ one working script at a time, starting with a single PDF.
 
 ## What this becomes
 
-The scripts in this book are the engine. The companion pipeline wraps the
-same retrieval, citation, and gap-detection logic in a searchable
-interface over the whole archive: you ask a question and get a cited
-answer back — the same shape as the interaction above — across every
-report at once. [Appendix A](appendix/appendix_a_environment_setup.qmd)
-shows how to set it up and point it at your own archive.
+The scripts in this book are the engine. The book's optional companion app
+(`book/app/`) puts the same flow on one screen — a question, a local-model
+answer, and the evidence it's traceable to — over the sample archive:
 
-*A screenshot of that interface is coming in a future revision; for now,
-Appendix A walks through running it yourself.*
+![The DDR RAG Companion App: a question, a local-model answer, and the source reports it's traceable to.](figures/app_screenshot.png){fig-alt="Screenshot of the DDR RAG Companion App showing a question, a cited generated answer, and retrieved evidence cards"}
 
-<!-- TODO(author): add a real screenshot of the DDR Intelligence / Streamlit
-     interface at figures/app_screenshot.png, then uncomment the image below.
-     Do NOT substitute a mockup or an AI-generated UI image as evidence of
-     the real app. -->
-<!-- ![The companion DDR Intelligence interface: a question, a cited answer, and the source reports.](figures/app_screenshot.png){fig-alt="Screenshot of the DDR Intelligence application"} -->
+The companion pipeline scales the same idea to the whole 76-report archive.
+[Appendix A](appendix/appendix_a_environment_setup.qmd) shows how to set
+either one up and point it at your own reports.
 
 
 ## Who this book is for
