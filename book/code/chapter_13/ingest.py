@@ -13,8 +13,8 @@ It reuses the book's own code end to end and adds only the orchestration:
 Two things make this "incremental", not "rebuild":
   - The dense index is append-only: faiss.IndexFlatIP.add() bolts the new
     chunks onto the existing index; nothing is re-embedded.
-  - Because an append-only index can't easily un-add a row, ingestion is
-    made idempotent up front: a report already in the index is skipped.
+  - Because an append-only index can't easily un-add a row, ingestion
+    checks up front and skips any report already in the index.
 
 Usage:
     # ingest one report
@@ -72,8 +72,8 @@ def already_ingested(metadata: list[dict], report: str) -> bool:
 def ingest_report(pdf_path: Path, model, index, metadata: list[dict]):
     """Ingest one report PDF into the live index, incrementally.
 
-    Returns (index, chunks_added, status). Idempotent: a report already in
-    the index is skipped; a report the quality gate rejects is not indexed.
+    Returns (index, chunks_added, status). A report already in the index
+    is skipped; a report the quality gate rejects is not indexed.
     """
     report = pdf_path.name
     if already_ingested(metadata, report):

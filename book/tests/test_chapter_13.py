@@ -29,7 +29,7 @@ def model():
 
 
 @pytest.mark.slow
-def test_ingest_appends_is_searchable_and_idempotent(model, sample_ddrs_dir):
+def test_ingest_appends_is_searchable_and_skips_duplicates(model, sample_ddrs_dir):
     import ingest
     from build_faiss_index import search
 
@@ -54,7 +54,7 @@ def test_ingest_appends_is_searchable_and_idempotent(model, sample_ddrs_dir):
     top = [metadata[i]["report"] for i, _score in search(index, query_vec, top_k=3)]
     assert any("050" in name for name in top)
 
-    # Idempotent: re-ingesting the same report is a no-op.
+    # Skip duplicates: re-ingesting the same report is a no-op.
     index, added_again, status_again = ingest.ingest_report(new_report, model, index, metadata)
     assert added_again == 0
     assert status_again.startswith("skipped")

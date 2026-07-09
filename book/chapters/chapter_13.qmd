@@ -25,7 +25,7 @@ By the end of this chapter, you will be able to:
 - Ingest a single new report into a live, persisted index by *appending*
   to it, without re-embedding everything that came before.
 - Explain why the dense index appends cleanly but the BM25 signal does
-  not, and make ingestion idempotent on an append-only index.
+  not, and make sure a report never gets added to the index twice.
 
 ## Operational Problem
 
@@ -94,8 +94,8 @@ this book's scale and a real cost at millions of documents, and it's the
 honest asymmetry at the heart of incremental retrieval: **the dense
 signal appends, the sparse signal recomputes.**
 
-**An append-only index has to be idempotent at the door.** Because you
-can't easily un-add a row, the moment to prevent a report being indexed
+**An append-only index has to catch duplicates at the door.** Because you
+can't easily un-add a row, the moment to stop a report being indexed
 twice is *before* you add it — not after. This archive already makes the
 point: its raw form has duplicate filename variants of the same report
 (Chapter 8's `build_full_archive.py` deduplicates them). Ingest report #38
@@ -110,7 +110,7 @@ Here's the daily loop, end to end — every box is a tool you already built:
                   │
       extract text (Ch 1)  ──►  quality gate (Ch 6)  ──► reject → review queue
                   │                     │ pass
-                  │            already ingested? (idempotency) ──► yes → skip
+                  │            already added? (skip duplicates) ──► yes → skip
                   │                     │ no
         page-aware chunk (Ch 7)  ──►  embed (Ch 4)  ──►  index.add() (Ch 8)
                   │
@@ -159,7 +159,7 @@ exactly as Chapter 8 saved them. The metadata list is what lets a bare
 FAISS row number turn back into a report and page for a citation; it has
 to travel with the index, so it's persisted alongside it.
 
-### Step 2: ingest one report, incrementally and idempotently
+### Step 2: ingest one report — and never the same one twice
 
 **What problem are we solving?**
 
@@ -185,7 +185,7 @@ import faiss
 
 def ingest_report(pdf_path, model, index, metadata):
     report = pdf_path.name
-    if any(m["report"] == report for m in metadata):        # idempotent
+    if any(m["report"] == report for m in metadata):        # skip if already added
         return index, 0, "skipped (already ingested)"
 
     text = extract_text(pdf_path)                            # Chapter 1
@@ -209,7 +209,7 @@ def ingest_report(pdf_path, model, index, metadata):
 **What just happened?**
 
 Read top to bottom, this is the daily loop in one function. The
-idempotency check comes *first*, because an append-only index can't take
+duplicate check comes *first*, because an append-only index can't take
 it back afterwards. The quality gate runs before anything gets indexed, so
 bad OCR is routed to review instead of silently polluting the index. Then
 the real work — chunk, embed, `index.add()` — is exactly Chapter 8's
@@ -340,8 +340,8 @@ decides what you can do per-arrival and what you have to schedule.
 
 **Challenge:** Handle a **corrected re-file**. A report is re-issued under
 a new filename with the same date and report number but revised text.
-Naive idempotency (match on filename) would treat it as new and index it
-alongside the stale version, so a query could retrieve both. Extend
+A simple duplicate check on the filename alone would treat it as new and
+index it alongside the stale version, so a query could retrieve both. Extend
 `ingest_report` to detect that a report with the same `(report number,
 date)` is already indexed and refuse — or, harder, to supersede it. Note
 what the append-only index makes hard about *replacing* a report's chunks,
@@ -358,8 +358,8 @@ a periodic compaction rebuild). A reference solution is in
   index a full rebuild produces — incremental is not a lossy shortcut here.
 - Not every signal appends. The dense index does; BM25's corpus statistics
   are recomputed. Know which is which before you deploy.
-- An append-only index must be made idempotent at ingestion, because it
-  can't cleanly un-add a row after the fact.
+- An append-only index must catch duplicates at ingestion, because it
+  can't cleanly remove a row after the fact.
 - The gap detector from Chapter 10 earns its keep by running continuously,
   turning "a hole in the historical archive" into "no report filed this
   morning."
@@ -376,7 +376,7 @@ a periodic compaction rebuild). A reference solution is in
 - [x] Ingested one new report by appending to a live index, no rebuild
 - [x] Confirmed incremental ingestion converges on the identical batch index
 - [x] Explained why the dense index appends but BM25 recomputes
-- [x] Made ingestion idempotent on an append-only index, and re-ran the gap check
+- [x] Made sure a report can't be added to the index twice, and re-ran the gap check
 :::
 
 ::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
