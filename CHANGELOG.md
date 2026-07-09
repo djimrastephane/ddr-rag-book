@@ -9,6 +9,19 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-07-09
+
+### Changed
+
+- Editorial pass to keep the prose plain for the book's stated
+  zero-programming audience. Replaced or glossed jargon that appeared
+  bare: "idempotent/idempotency" throughout Chapter 13 (now "catch
+  duplicates at the door", "never the same one twice", etc.); "corpus"
+  across the book (now "archive"); and glossed "heuristic", "context
+  window", "regular expression/regex", while rewording "rasterize",
+  "concatenated", and "memory/latency". Behaviour and code unchanged;
+  test suite still 47 passing.
+
 ## [1.3.0] - 2026-07-09
 
 Adds a new Part II finale chapter. See [RELEASE.md](RELEASE.md) for the

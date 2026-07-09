@@ -3,6 +3,24 @@
 Per-release highlights for *Building Industrial RAG Systems from Daily
 Drilling Reports*. See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
+## v1.3.1
+
+A plain-language editorial pass, keeping the prose accessible to the
+book's zero-programming audience.
+
+### Changed
+
+- Replaced or glossed jargon that appeared without explanation:
+  **"idempotent/idempotency"** throughout Chapter 13 (now plain terms like
+  "catch duplicates at the door" and "never the same one twice");
+  **"corpus"** across the book (now "archive"); and glossed **"heuristic"**,
+  **"context window"**, and **"regular expression / regex"**, while
+  rewording **"rasterize"**, **"concatenated"**, and **"memory/latency"**.
+- Terms the book already defines at first use or teaches via Engineering
+  Translation callouts (metadata, sparse/dense, embeddings, tokens, BM25,
+  cross-encoder…) were left as-is. Behaviour and code unchanged; test
+  suite still 47 passing.
+
 ## v1.3.0
 
 Adds **Chapter 13 — Daily Ingestion**, a new Part II finale that turns the
