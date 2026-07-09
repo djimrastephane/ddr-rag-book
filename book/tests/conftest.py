@@ -31,7 +31,7 @@ import pytest
 BOOK_ROOT = Path(__file__).resolve().parents[1]
 SAMPLE_DDRS_DIR = BOOK_ROOT / "datasets" / "sample_ddrs"
 
-for _n in range(1, 13):
+for _n in range(1, 14):
     _chapter_dir = BOOK_ROOT / "code" / f"chapter_{_n:02d}"
     if _chapter_dir.is_dir() and str(_chapter_dir) not in sys.path:
         sys.path.insert(0, str(_chapter_dir))

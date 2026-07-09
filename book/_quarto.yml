@@ -46,6 +46,7 @@ book:
         - chapters/chapter_10.qmd
         - chapters/chapter_11.qmd
         - chapters/chapter_12.qmd
+        - chapters/chapter_13.qmd
 
     - part: "Appendices"
       chapters:
@@ -116,7 +117,7 @@ format:
         % render fine in HTML but have no glyph in the PDF engine's fonts --
         % without a mapping they'd print as blank boxes. Each one is always
         % paired with an adjacent text label carrying the same meaning
-        % ("Beginner", "1 / 12", "Field notes"), so the PDF-safe substitution
+        % ("Beginner", "1 / 13", "Field notes"), so the PDF-safe substitution
         % below just needs to preserve the bar shape (as plain ASCII) or drop
         % the purely decorative icon -- nothing said in HTML is lost.
         \usepackage{newunicodechar}
