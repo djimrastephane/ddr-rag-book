@@ -1,5 +1,16 @@
 # Daily Ingestion: Keeping the System Live {#sec-chapter-13}
 
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/pipeline_ch13_light.svg){.diagram-light width="180"}
+![](../figures/diagrams/pipeline_ch13_dark.svg){.diagram-dark width="180"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/pipeline_ch13.pdf){width="180" fig-align="center"}
+:::
+
 ::: {.chapter-status}
 Progress `█████████████` **13 / 13** &nbsp;·&nbsp; **Estimated time:** 45–60 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced
 :::
