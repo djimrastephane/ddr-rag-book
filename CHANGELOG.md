@@ -9,6 +9,29 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-07-09
+
+Adds a new Part II finale chapter. See [RELEASE.md](RELEASE.md) for the
+full v1.3.0 notes.
+
+### Added
+
+- **Chapter 13: Daily Ingestion** — turns the batch system into a live
+  one. `code/chapter_13/ingest.py` ingests one new report PDF by
+  *appending* to a live, persisted index (`faiss.IndexFlatIP.add`),
+  reusing the book's own Chapter 1/4/6/7/8/10 code, and re-runs the gap
+  check. Idempotent on the append-only index. Verified that incremental
+  ingestion converges on the identical 333-chunk index a batch build
+  produces, with the honest dense-appends / BM25-recomputes lesson.
+- `tests/test_chapter_13.py` (3 tests; suite now 47) and a generated
+  pipeline diagram for the chapter.
+
+### Changed
+
+- Every chapter's progress strip is now `N / 13`; Part II runs Chapters
+  6–13; Chapter 12's closing hands off to Chapter 13, which carries the
+  book's finale.
+
 ## [1.2.1] - 2026-07-08
 
 ### Added

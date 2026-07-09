@@ -3,6 +3,32 @@
 Per-release highlights for *Building Industrial RAG Systems from Daily
 Drilling Reports*. See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
+## v1.3.0
+
+Adds **Chapter 13 — Daily Ingestion**, a new Part II finale that turns the
+batch system into a live one.
+
+### Added
+
+- **Chapter 13: Daily Ingestion.** `code/chapter_13/ingest.py` ingests one
+  new report PDF by *appending* to a live, persisted index
+  (`faiss.IndexFlatIP.add`), reusing the book's own code end to end:
+  extract (Ch 1) → quality gate (Ch 6) → chunk (Ch 7) → embed (Ch 4) →
+  append (Ch 8) → re-run the gap check (Ch 10). Idempotent on the
+  append-only index.
+- The chapter's two verified lessons: incremental ingestion converges on
+  the **identical** index a batch build produces (296 → 333 chunks, the
+  exact Chapter 8 total), and the honest asymmetry that **the dense index
+  appends but BM25 recomputes**.
+- `tests/test_chapter_13.py` (3 tests; suite now 47 passing) and a
+  generated pipeline diagram for the chapter.
+
+### Changed
+
+- Every chapter's progress strip is now `N / 13`; Part II runs Chapters
+  6–13; Chapter 12's closing hands off to Chapter 13, which now carries
+  the book's finale.
+
 ## v1.2.1
 
 A small follow-up to the companion app.
