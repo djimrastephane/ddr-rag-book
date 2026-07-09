@@ -15,7 +15,7 @@ You are free to:
 
 under the following terms:
 
-- **Attribution** -- You must give appropriate credit to Stephane Djimra,
+- **Attribution** -- You must give appropriate credit to Djimra Stephane Soulanoudjingar,
   provide a link to this license, and indicate if changes were made. You
   may do so in any reasonable manner, but not in any way that suggests
   the licensor endorses you or your use.

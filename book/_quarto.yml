@@ -5,7 +5,7 @@ project:
 book:
   title: "Building Industrial RAG Systems from Daily Drilling Reports"
   subtitle: "A hands-on guide to retrieval-augmented engineering intelligence"
-  author: "Stephane Djimra"
+  author: "Djimra Stephane Soulanoudjingar"
   date: today
   date-format: "MMMM YYYY"
   page-footer:
