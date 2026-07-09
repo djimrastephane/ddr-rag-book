@@ -73,7 +73,8 @@ break it:
 
 1. **Word boundaries.** `str.replace("MD", ...)` will happily mangle a
    word that merely *contains* "MD" as a substring. Match on whole words
-   using regex `\b...\b`, not raw substring replacement.
+   with a *regular expression* — a text-matching pattern, or *regex* for
+   short — `\b...\b`, not raw substring replacement.
 2. **Case.** DDRs mix cases inconsistently — this archive's headers are
    often all-caps while narrative text is mixed-case — so expansion needs
    to be case-insensitive without forcing the rest of the sentence to

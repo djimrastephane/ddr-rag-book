@@ -84,12 +84,12 @@ matters (more on that below).
 :::
 
 **BM25 is not append-only, and pretending otherwise is a bug.** Chapter
-9's sparse signal scores a term by its rarity across the whole corpus
+9's sparse signal scores a term by its rarity across the whole archive
 (inverse document frequency) and normalizes for average document length.
 Both of those depend on *every* report. Add one report and every term's
 IDF shifts a little and the average length moves — so the correct BM25
 score for a document you indexed last week is now slightly different. You
-can't append to BM25; you recompute its corpus statistics. That's cheap at
+can't append to BM25; you recompute its whole-archive statistics. That's cheap at
 this book's scale and a real cost at millions of documents, and it's the
 honest asymmetry at the heart of incremental retrieval: **the dense
 signal appends, the sparse signal recomputes.**
@@ -320,13 +320,13 @@ from Chapter 9.
 
 **Result:** the dense side needs one `index.add()` — nothing already
 stored changes. The BM25 side has no equivalent: adding a report shifts
-every term's inverse document frequency and the corpus's average document
+every term's inverse document frequency and the archive's average document
 length, so the correct score for a report indexed last week is now
 different. There's nothing to append to; the statistics are recomputed.
 
 **Why:** a dense embedding is a property of a chunk *alone*. A BM25 score
-is a property of a chunk *relative to the whole corpus*. Anything defined
-relative to the whole corpus moves when the corpus moves.
+is a property of a chunk *relative to the whole archive*. Anything defined
+relative to the whole archive moves when the archive moves.
 
 **Lesson:** "incremental" isn't one property of a retrieval system — it's
 per-signal. The most useful thing you can know before you deploy is which
@@ -356,8 +356,8 @@ a periodic compaction rebuild). A reference solution is in
   rebuilding the whole index per arrival doesn't scale past a toy archive.
 - An exact flat index is append-only, and appending converges on the same
   index a full rebuild produces — incremental is not a lossy shortcut here.
-- Not every signal appends. The dense index does; BM25's corpus statistics
-  are recomputed. Know which is which before you deploy.
+- Not every signal appends. The dense index does; BM25's whole-archive
+  statistics are recomputed. Know which is which before you deploy.
 - An append-only index must catch duplicates at ingestion, because it
   can't cleanly remove a row after the fact.
 - The gap detector from Chapter 10 earns its keep by running continuously,

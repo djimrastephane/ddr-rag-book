@@ -44,8 +44,8 @@ systems combine both.
 ## Theory
 
 **BM25** [@robertson2009bm25] scores a document by term frequency,
-adjusted by how rare each term is across the corpus (inverse document
-frequency, IDF) and normalised for document length. It's decades old,
+adjusted by how rare each term is across the whole archive (inverse
+document frequency, IDF) and normalised for document length. It's decades old,
 computationally cheap, and excellent at exact and near-exact matches —
 the opposite profile from dense embeddings.
 
@@ -86,7 +86,7 @@ happened to produce.
 
 **Cross-encoder reranking** is the last, most expensive step, and
 deliberately runs on only the top handful of fused candidates, not the
-whole corpus. Unlike a dense embedding (which encodes the query and each
+whole archive. Unlike a dense embedding (which encodes the query and each
 document *separately*, then compares vectors), a cross-encoder scores the
 query and a candidate passage *together*, letting it capture interactions
 between them that no fixed vector representation can. This makes it

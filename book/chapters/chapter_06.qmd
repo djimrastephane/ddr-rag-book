@@ -72,7 +72,7 @@ PDF-rendering libraries all do a competent job of turning a page image
 into text. The hard part, and the one that actually determines whether
 your downstream system is trustworthy, is deciding **whether to trust the
 output at all**. A quality gate scores OCR text against a handful of cheap
-heuristics — is there enough text, is the alphabetic-to-symbol ratio
+heuristics — quick rule-of-thumb checks: is there enough text, is the alphabetic-to-symbol ratio
 sane, is there suspicious repeated garbage — and rejects anything that
 fails, routing it to manual review instead of silently indexing noise.
 
@@ -190,7 +190,7 @@ narrative text) needs OCR fallback.
 The gate scores text — but where does bad OCR text actually come from?
 This archive is entirely digital, so to see the whole problem end to end
 you have to make a scanned page first. `make_scanned_example.py`
-rasterizes a real report to a page image and writes it back out as an
+turns each page of a real report into a plain image and writes it back out as an
 image-only PDF: pictures of text, no character data, exactly what a scan
 of a paper report looks like to software.
 

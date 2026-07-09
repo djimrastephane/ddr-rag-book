@@ -19,8 +19,9 @@ Progress `████████░░░░░` **8 / 13** &nbsp;·&nbsp; **E
 
 By the end of this chapter, you will be able to:
 
-- Explain why brute-force cosine search stops being adequate as a corpus
-  grows, in concrete terms (memory and latency).
+- Explain why brute-force cosine search stops being adequate as the
+  archive grows, in concrete terms — the memory it uses and the delay
+  before you get an answer.
 - Build and query a FAISS index over DDR chunk embeddings.
 - Understand the difference between a per-document index and a
   campaign-wide global index, and when each is the right tool.
@@ -407,7 +408,7 @@ parameters. A reference solution is in `code/chapter_08/challenge/`.
 | `DDR_UTAH_FORGE/scripts/build_global_index.py` | Campaign-wide global index builder (companion repo) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 8"}
-- [x] Explained why brute-force search stops scaling, in concrete memory/latency terms
+- [x] Explained why brute-force search stops scaling, in concrete terms of memory and speed
 - [x] Built and queried a FAISS index over DDR chunk embeddings
 - [x] Persisted an index to disk and reloaded it in a fresh session
 - [x] Verified FAISS results match brute-force results exactly, not approximately

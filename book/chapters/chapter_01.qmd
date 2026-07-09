@@ -404,7 +404,7 @@ side-by-side sub-tables** — components 1–6 on the left half of the page,
 components 7–10 on the right half. Visually, that's obvious: two neat
 columns. But `extract_text()` reads left to right, top to bottom, so
 component 1's row and component 7's row — which just happen to sit on
-the same horizontal line of the page — get concatenated into one line of
+the same horizontal line of the page — get run together into one line of
 output text, with no marker showing where the left sub-table ends and
 the right one begins.
 

@@ -101,7 +101,7 @@ no  -> retrieve + generate (Ch.5)
 
 ## A real, honest gap in this archive
 
-The second mitigation is **corpus-completeness awareness**. This archive
+The second mitigation is **archive-completeness awareness**. This archive
 has a genuine one: the last Drilling report is #76, dated **2021-01-03**.
 The Completion report (a DFIT — Diagnostic Fracture Injection Test) is
 dated **2021-01-06**. Two calendar days — January 4th and 5th — have no

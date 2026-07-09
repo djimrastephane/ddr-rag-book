@@ -346,7 +346,8 @@ have to plan around what happens when that nudge isn't enough:
 - the same question, asked twice, can produce two differently worded
   answers — LLM output isn't fully deterministic, which matters when
   someone asks "why did it say something different yesterday?"
-- long evidence sections eventually hit the model's context window limit
+- long evidence sections eventually hit the model's context window — the
+  limit on how much text it can read at once
   — a real archive's retrieved chunks can't just grow without bound
 - every call to a hosted LLM API costs money and takes time; a system
   answering hundreds of engineering questions a day needs a cost and
