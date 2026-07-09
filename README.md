@@ -40,6 +40,7 @@ Evidence:
 
 That's the destination. By Chapter 5 you'll have a working RAG system — retrieve, generate, cite — running on a real local model; answering a *cross-report* question like this one, which stitches the cause in report #49 to the outcome in report #50, takes the chunking and hybrid retrieval Part II adds. Either way: a question, an answer, and the exact source reports backing it. No black box.
 
+- Visit the [book website](https://ddr-rag-book-website.vercel.app)
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
 - [Read the book online](https://djimrastephane.github.io/ddr-rag-book/)
 - Latest stable release: [v1.3.2](https://github.com/djimrastephane/ddr-rag-book/releases/tag/v1.3.2) — see [CHANGELOG.md](CHANGELOG.md) for what's new in each release
