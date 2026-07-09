@@ -602,7 +602,7 @@ Degraded OCR output from a hypothetical poor scan of the same line:
 </section>
 <section id="theory" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="theory"><span class="header-section-number">6.4</span> Theory</h2>
-<p>Getting OCR to run is the easy part — <code>pytesseract</code>, cloud OCR APIs, and PDF-rendering libraries all do a competent job of turning a page image into text. The hard part, and the one that actually determines whether your downstream system is trustworthy, is deciding <strong>whether to trust the output at all</strong>. A quality gate scores OCR text against a handful of cheap heuristics — is there enough text, is the alphabetic-to-symbol ratio sane, is there suspicious repeated garbage — and rejects anything that fails, routing it to manual review instead of silently indexing noise.</p>
+<p>Getting OCR to run is the easy part — <code>pytesseract</code>, cloud OCR APIs, and PDF-rendering libraries all do a competent job of turning a page image into text. The hard part, and the one that actually determines whether your downstream system is trustworthy, is deciding <strong>whether to trust the output at all</strong>. A quality gate scores OCR text against a handful of cheap heuristics — quick rule-of-thumb checks: is there enough text, is the alphabetic-to-symbol ratio sane, is there suspicious repeated garbage — and rejects anything that fails, routing it to manual review instead of silently indexing noise.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Quality gate">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -656,7 +656,7 @@ count how many are True
 <p><strong>Expected Output</strong></p>
 <p>A dictionary reporting the decision and which specific checks failed, for example:</p>
 <pre><code>{"reject_ocr": True, "flags": {"low_text_density": True, "high_symbol_ratio": True}}</code></pre>
-<div id="676a7752" class="cell" data-execution_count="1">
+<div id="ca6350f7" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_06/ocr_quality_gate.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -683,7 +683,7 @@ count how many are True
 </section>
 <section id="seeing-it-on-a-real-scanned-page" class="level2" data-number="6.6">
 <h2 data-number="6.6" class="anchored" data-anchor-id="seeing-it-on-a-real-scanned-page"><span class="header-section-number">6.6</span> Seeing it on a real scanned page</h2>
-<p>The gate scores text — but where does bad OCR text actually come from? This archive is entirely digital, so to see the whole problem end to end you have to make a scanned page first. <code>make_scanned_example.py</code> rasterizes a real report to a page image and writes it back out as an image-only PDF: pictures of text, no character data, exactly what a scan of a paper report looks like to software.</p>
+<p>The gate scores text — but where does bad OCR text actually come from? This archive is entirely digital, so to see the whole problem end to end you have to make a scanned page first. <code>make_scanned_example.py</code> turns each page of a real report into a plain image and writes it back out as an image-only PDF: pictures of text, no character data, exactly what a scan of a paper report looks like to software.</p>
 <p>Install the OCR tools (Chapter 6 only — nothing earlier needs them):</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pytesseract pdf2image</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plus the system tools they wrap:</span></span>
@@ -1401,7 +1401,7 @@ Quality gate:
 <span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>into text. The hard part, and the one that actually determines whether</span>
 <span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>your downstream system is trustworthy, is deciding **whether to trust the</span>
 <span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>output at all**. A quality gate scores OCR text against a handful of cheap</span>
-<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>heuristics — is there enough text, is the alphabetic-to-symbol ratio</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>heuristics — quick rule-of-thumb checks: is there enough text, is the alphabetic-to-symbol ratio</span>
 <span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>sane, is there suspicious repeated garbage — and rejects anything that</span>
 <span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>fails, routing it to manual review instead of silently indexing noise.</span>
 <span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
@@ -1519,7 +1519,7 @@ Quality gate:
 <span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>The gate scores text — but where does bad OCR text actually come from?</span>
 <span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>This archive is entirely digital, so to see the whole problem end to end</span>
 <span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>you have to make a scanned page first. <span class="in">`make_scanned_example.py`</span></span>
-<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>rasterizes a real report to a page image and writes it back out as an</span>
+<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>turns each page of a real report into a plain image and writes it back out as an</span>
 <span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a>image-only PDF: pictures of text, no character data, exactly what a scan</span>
 <span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a>of a paper report looks like to software.</span>
 <span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a></span>

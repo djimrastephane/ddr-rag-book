@@ -655,7 +655,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 <p>Cosine similarity is a compass bearing, not a ruler. It asks “which way is this thing pointing?”, not “how big is it?” — so a short sentence and a long paragraph about the same topic can still score as pointing the same direction, the same way two surveys can report the same azimuth regardless of how long each run was.</p>
 </div>
 </div>
-<p>We use <code>sentence-transformers</code> <span class="citation" data-cites="reimers2019sbert">(<a href="../references.html#ref-reimers2019sbert" role="doc-biblioref">Reimers and Gurevych 2019</a>)</span> with a small, fast model (<code>all-MiniLM-L6-v2</code>) — good enough to prove the concept and small enough to run on a laptop CPU. Chapter 8 replaces the brute-force search here with a proper vector database once the corpus grows past what fits comfortably in memory.</p>
+<p>We use <code>sentence-transformers</code> <span class="citation" data-cites="reimers2019sbert">(<a href="../references.html#ref-reimers2019sbert" role="doc-biblioref">Reimers and Gurevych 2019</a>)</span> with a small, fast model (<code>all-MiniLM-L6-v2</code>) — good enough to prove the concept and small enough to run on a laptop CPU. Chapter 8 replaces the brute-force search here with a proper vector database once the archive grows past what fits comfortably in memory.</p>
 <div class="pipeline-diagram">
 <p><img src="../figures/diagrams/theory_ch04_embed_light.svg" class="diagram-light img-fluid" width="260"> <img src="../figures/diagrams/theory_ch04_embed_dark.svg" class="diagram-dark img-fluid" width="260"></p>
 </div>
@@ -672,7 +672,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>Two matching lists: report filenames, and each report’s full text.</p>
-<div id="63608e86" class="cell" data-execution_count="1">
+<div id="5104723a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -711,7 +711,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One 384-number vector per report, all packed into a single array.</p>
-<div id="ba586eac" class="cell" data-execution_count="2">
+<div id="09e956ef" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -735,7 +735,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(filename, score)</code> pairs, highest similarity first.</p>
-<div id="5e548876" class="cell" data-execution_count="3">
+<div id="b351e78e" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(model: SentenceTransformer, query: <span class="bu">str</span>, filenames: <span class="bu">list</span>[<span class="bu">str</span>],</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>           embeddings: np.ndarray, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    query_vec <span class="op">=</span> model.encode([query], normalize_embeddings<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>]</span>
@@ -1501,7 +1501,7 @@ Reimers, Nils, and Iryna Gurevych. 2019. <span>“Sentence-<span>BERT</span>: Se
 <span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>We use <span class="in">`sentence-transformers`</span> <span class="co">[</span><span class="ot">@reimers2019sbert</span><span class="co">]</span> with a small, fast</span>
 <span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>model (<span class="in">`all-MiniLM-L6-v2`</span>) — good enough to prove the concept and small</span>
 <span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>enough to run on a laptop CPU. Chapter 8 replaces the brute-force search here</span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>with a proper vector database once the corpus grows past what fits</span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>with a proper vector database once the archive grows past what fits</span>
 <span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a>comfortably in memory.</span>
 <span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>

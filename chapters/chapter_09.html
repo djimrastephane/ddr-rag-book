@@ -603,7 +603,7 @@ div.csl-indent {
 </section>
 <section id="theory" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="theory"><span class="header-section-number">9.3</span> Theory</h2>
-<p><strong>BM25</strong> <span class="citation" data-cites="robertson2009bm25">(<a href="../references.html#ref-robertson2009bm25" role="doc-biblioref">Robertson and Zaragoza 2009</a>)</span> scores a document by term frequency, adjusted by how rare each term is across the corpus (inverse document frequency, IDF) and normalised for document length. It’s decades old, computationally cheap, and excellent at exact and near-exact matches — the opposite profile from dense embeddings.</p>
+<p><strong>BM25</strong> <span class="citation" data-cites="robertson2009bm25">(<a href="../references.html#ref-robertson2009bm25" role="doc-biblioref">Robertson and Zaragoza 2009</a>)</span> scores a document by term frequency, adjusted by how rare each term is across the whole archive (inverse document frequency, IDF) and normalised for document length. It’s decades old, computationally cheap, and excellent at exact and near-exact matches — the opposite profile from dense embeddings.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: BM25">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -634,7 +634,7 @@ div.csl-indent {
 <div class="pipeline-diagram">
 <p><img src="../figures/diagrams/theory_ch09_hybrid_light.svg" class="diagram-light img-fluid" width="240"> <img src="../figures/diagrams/theory_ch09_hybrid_dark.svg" class="diagram-dark img-fluid" width="240"></p>
 </div>
-<p><strong>Cross-encoder reranking</strong> is the last, most expensive step, and deliberately runs on only the top handful of fused candidates, not the whole corpus. Unlike a dense embedding (which encodes the query and each document <em>separately</em>, then compares vectors), a cross-encoder scores the query and a candidate passage <em>together</em>, letting it capture interactions between them that no fixed vector representation can. This makes it substantially slower per comparison — which is exactly why it’s applied after fusion has already narrowed the field, not instead of it.</p>
+<p><strong>Cross-encoder reranking</strong> is the last, most expensive step, and deliberately runs on only the top handful of fused candidates, not the whole archive. Unlike a dense embedding (which encodes the query and each document <em>separately</em>, then compares vectors), a cross-encoder scores the query and a candidate passage <em>together</em>, letting it capture interactions between them that no fixed vector representation can. This makes it substantially slower per comparison — which is exactly why it’s applied after fusion has already narrowed the field, not instead of it.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Cross-encoder">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -697,7 +697,7 @@ div.csl-indent {
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single fused ranking: a list of <code>(doc_id, score)</code> pairs, sorted highest-scoring first.</p>
-<div id="dacc3d45" class="cell" data-execution_count="1">
+<div id="94581549" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/hybrid_search.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -715,7 +715,7 @@ div.csl-indent {
 <section id="turning-that-into-a-real-hybrid-search" class="level3" data-number="9.5.1">
 <h3 data-number="9.5.1" class="anchored" data-anchor-id="turning-that-into-a-real-hybrid-search"><span class="header-section-number">9.5.1</span> Turning that into a real hybrid search</h3>
 <p><code>reciprocal_rank_fusion</code> fuses ranked lists — but it needs two of them to fuse. Chapter 4’s semantic <code>search()</code> already returns one. The missing piece is a ranked <em>sparse</em> signal: Chapter 3’s <code>search()</code> returns an unordered set — a report either contains every query word or it doesn’t — which RRF has nothing to order. <code>code/chapter_09/sparse_ranking.py</code> closes that gap with <code>rank_bm25()</code>, a BM25 ranking over the same archive (with a plain term-frequency fallback if <code>rank-bm25</code> isn’t installed):</p>
-<div id="a78b8830" class="cell" data-execution_count="2">
+<div id="e4d220ce" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/sparse_ranking.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rank_bm25 <span class="im">import</span> BM25Okapi</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1399,8 +1399,8 @@ Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevanc
 <span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory</span></span>
 <span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>**BM25** <span class="co">[</span><span class="ot">@robertson2009bm25</span><span class="co">]</span> scores a document by term frequency,</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>adjusted by how rare each term is across the corpus (inverse document</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>frequency, IDF) and normalised for document length. It's decades old,</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>adjusted by how rare each term is across the whole archive (inverse</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>document frequency, IDF) and normalised for document length. It's decades old,</span>
 <span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>computationally cheap, and excellent at exact and near-exact matches —</span>
 <span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>the opposite profile from dense embeddings.</span>
 <span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
@@ -1441,7 +1441,7 @@ Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevanc
 <span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>**Cross-encoder reranking** is the last, most expensive step, and</span>
 <span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>deliberately runs on only the top handful of fused candidates, not the</span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>whole corpus. Unlike a dense embedding (which encodes the query and each</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>whole archive. Unlike a dense embedding (which encodes the query and each</span>
 <span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>document *separately*, then compares vectors), a cross-encoder scores the</span>
 <span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>query and a candidate passage *together*, letting it capture interactions</span>
 <span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>between them that no fixed vector representation can. This makes it</span>

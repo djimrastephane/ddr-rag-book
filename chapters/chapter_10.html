@@ -653,7 +653,7 @@ no  -&gt; retrieve + generate (Ch.5)
 </section>
 <section id="a-real-honest-gap-in-this-archive" class="level2" data-number="10.4">
 <h2 data-number="10.4" class="anchored" data-anchor-id="a-real-honest-gap-in-this-archive"><span class="header-section-number">10.4</span> A real, honest gap in this archive</h2>
-<p>The second mitigation is <strong>corpus-completeness awareness</strong>. This archive has a genuine one: the last Drilling report is #76, dated <strong>2021-01-03</strong>. The Completion report (a DFIT — Diagnostic Fracture Injection Test) is dated <strong>2021-01-06</strong>. Two calendar days — January 4th and 5th — have no report of any kind. Every other day in the drilling programme, from spud on October 30, 2020 through report #76, has exactly one report, so this gap is real and specific to the Drilling-to-Completion handover, not an artefact of messy source data.</p>
+<p>The second mitigation is <strong>archive-completeness awareness</strong>. This archive has a genuine one: the last Drilling report is #76, dated <strong>2021-01-03</strong>. The Completion report (a DFIT — Diagnostic Fracture Injection Test) is dated <strong>2021-01-06</strong>. Two calendar days — January 4th and 5th — have no report of any kind. Every other day in the drilling programme, from spud on October 30, 2020 through report #76, has exactly one report, so this gap is real and specific to the Drilling-to-Completion handover, not an artefact of messy source data.</p>
 <p>A RAG system only knows what’s in its index. If you ask it “what happened on January 5th, 2021?” without gap-awareness, a poorly built system might either hallucinate an answer or simply retrieve the nearest chunks (report #76 or the Completion report) without ever telling you neither actually covers that date. Detecting the gap is a matter of checking the <em>sequence</em> of report numbers and dates for holes — not the content, just the presence.</p>
 </section>
 <section id="implementation" class="level2" data-number="10.5">
@@ -669,7 +669,7 @@ no  -&gt; retrieve + generate (Ch.5)
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A plain-text “Evidence:” block listing each source, ready to show alongside a generated answer.</p>
-<div id="efcd6455" class="cell" data-execution_count="1">
+<div id="0365dac6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_10/traceable_answers.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -708,7 +708,7 @@ no  -&gt; retrieve + generate (Ch.5)
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(start, end)</code> date ranges with no report — empty if the archive is complete.</p>
-<div id="20e38b8d" class="cell" data-execution_count="2">
+<div id="4b24f903" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_date_gaps(report_dates: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">str</span>]]:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return (start, end) date ranges with no report, given a sorted</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    list of ISO date strings covering a continuous daily-reporting period."""</span></span>
@@ -736,7 +736,7 @@ no  -&gt; retrieve + generate (Ch.5)
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>Citation</code> objects built entirely from the search results — real reports, real pages, real dates, in ranked order.</p>
-<div id="684e96de" class="cell" data-execution_count="3">
+<div id="8f0e117c" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Citation:</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    report: <span class="bu">str</span></span>
@@ -1483,7 +1483,7 @@ Ji, Ziwei, Nayeon Lee, Rita Frieske, et al. 2023. <span>“Survey of Hallucinati
 <span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## A real, honest gap in this archive</span></span>
 <span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>The second mitigation is **corpus-completeness awareness**. This archive</span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>The second mitigation is **archive-completeness awareness**. This archive</span>
 <span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>has a genuine one: the last Drilling report is #76, dated **2021-01-03**.</span>
 <span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>The Completion report (a DFIT — Diagnostic Fracture Injection Test) is</span>
 <span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>dated **2021-01-06**. Two calendar days — January 4th and 5th — have no</span>

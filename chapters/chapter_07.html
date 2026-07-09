@@ -579,7 +579,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="operational-problem" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">7.2</span> Operational Problem</h2>
-<p>Oumy, the drilling engineer, notices something odd while reviewing retrieval results: why does the exact sentence she needs keep landing right on a chunk boundary? Chapters 1–5 embedded each report as a single unit — fine for a ten-report sample corpus, unworkable at the full archive’s scale. A single Utah FORGE report already has ten distinct sections (WELL/JOB INFORMATION, BOP, CASING, MUD, DRILL BITS, PUMPS, BHA, SURVEY DATA, CONSUMABLES, TIME BREAKDOWN) packed onto one page. Embed too much of that in one vector and the embedding blurs the casing programme together with the stuck-pipe narrative, hurting retrieval precision. Split naively at a fixed character count and you’ll cut report #38’s stuck-pipe sentence in half mid-word, right across a chunk boundary — the exact passage you most need to retrieve becomes the two chunks least likely to score well.</p>
+<p>Oumy, the drilling engineer, notices something odd while reviewing retrieval results: why does the exact sentence she needs keep landing right on a chunk boundary? Chapters 1–5 embedded each report as a single unit — fine for a ten-report sample, unworkable at the full archive’s scale. A single Utah FORGE report already has ten distinct sections (WELL/JOB INFORMATION, BOP, CASING, MUD, DRILL BITS, PUMPS, BHA, SURVEY DATA, CONSUMABLES, TIME BREAKDOWN) packed onto one page. Embed too much of that in one vector and the embedding blurs the casing programme together with the stuck-pipe narrative, hurting retrieval precision. Split naively at a fixed character count and you’ll cut report #38’s stuck-pipe sentence in half mid-word, right across a chunk boundary — the exact passage you most need to retrieve becomes the two chunks least likely to score well.</p>
 </section>
 <section id="example-ddr-extract" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="example-ddr-extract"><span class="header-section-number">7.3</span> Example DDR extract</h2>
@@ -661,7 +661,7 @@ chunk 3:                         [t9  t10 t11 t12]
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of text chunks, each roughly <code>chunk_tokens</code> tokens long, each overlapping the next by <code>overlap_tokens</code> tokens.</p>
-<div id="09012ef4" class="cell" data-execution_count="1">
+<div id="e7195ce5" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_07/token_chunking.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tiktoken</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -691,7 +691,7 @@ chunk 3:                         [t9  t10 t11 t12]
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(page_number, chunk_text)</code> pairs — the same chunks as before, each now labelled with the real page it came from.</p>
-<div id="afae4f2c" class="cell" data-execution_count="2">
+<div id="02d30efb" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>PAGE_MARKER <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"--- Page </span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs"> ---</span><span class="ch">\n</span><span class="op">?</span><span class="vs">"</span>)</span>
@@ -1353,7 +1353,7 @@ chunk 3:                         [t9  t10 t11 t12]
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>retrieval results: why does the exact sentence she needs keep landing</span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>right on a chunk boundary? Chapters 1–5 embedded each report as a single</span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>unit — fine for a</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>ten-report sample corpus, unworkable at the full archive's scale. A</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>ten-report sample, unworkable at the full archive's scale. A</span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>single Utah FORGE report already has ten distinct sections (WELL/JOB</span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>INFORMATION, BOP, CASING, MUD, DRILL BITS, PUMPS, BHA, SURVEY DATA,</span>
 <span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>CONSUMABLES, TIME BREAKDOWN) packed onto one page. Embed too much of that</span>

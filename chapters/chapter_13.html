@@ -622,7 +622,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <p>An <strong>append-only</strong> index is a bound logbook, not a whiteboard: you add tomorrow’s entry to the next blank line without rewriting yesterday’s. That makes adding cheap and safe — but it also means you can’t quietly erase a line, which is why getting each entry right <em>before</em> you write it matters (more on that below).</p>
 </div>
 </div>
-<p><strong>BM25 is not append-only, and pretending otherwise is a bug.</strong> Chapter 9’s sparse signal scores a term by its rarity across the whole corpus (inverse document frequency) and normalizes for average document length. Both of those depend on <em>every</em> report. Add one report and every term’s IDF shifts a little and the average length moves — so the correct BM25 score for a document you indexed last week is now slightly different. You can’t append to BM25; you recompute its corpus statistics. That’s cheap at this book’s scale and a real cost at millions of documents, and it’s the honest asymmetry at the heart of incremental retrieval: <strong>the dense signal appends, the sparse signal recomputes.</strong></p>
+<p><strong>BM25 is not append-only, and pretending otherwise is a bug.</strong> Chapter 9’s sparse signal scores a term by its rarity across the whole archive (inverse document frequency) and normalizes for average document length. Both of those depend on <em>every</em> report. Add one report and every term’s IDF shifts a little and the average length moves — so the correct BM25 score for a document you indexed last week is now slightly different. You can’t append to BM25; you recompute its whole-archive statistics. That’s cheap at this book’s scale and a real cost at millions of documents, and it’s the honest asymmetry at the heart of incremental retrieval: <strong>the dense signal appends, the sparse signal recomputes.</strong></p>
 <p><strong>An append-only index has to catch duplicates at the door.</strong> Because you can’t easily un-add a row, the moment to stop a report being indexed twice is <em>before</em> you add it — not after. This archive already makes the point: its raw form has duplicate filename variants of the same report (Chapter 8’s <code>build_full_archive.py</code> deduplicates them). Ingest report #38 twice and it contributes its chunks twice, silently inflating how much “evidence” a query appears to have. So ingestion checks first: is this report already in the index? If so, skip it.</p>
 <p>Here’s the daily loop, end to end — every box is a tool you already built:</p>
 <pre><code>        a new report PDF arrives
@@ -648,7 +648,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The loaded index and metadata list — or empty state (<code>None</code>, <code>[]</code>) on the very first run.</p>
-<div id="e702117e" class="cell" data-execution_count="1">
+<div id="39fc87b2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -671,7 +671,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The updated index, the number of chunks added (0 if skipped or rejected), and a status string.</p>
-<div id="34a48444" class="cell" data-execution_count="2">
+<div id="5f543526" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
@@ -709,7 +709,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The current list of reporting gaps — ideally empty.</p>
-<div id="3d7dedf5" class="cell" data-execution_count="3">
+<div id="fa547f93" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -766,8 +766,8 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </div>
 <div class="callout-body-container callout-body">
 <p><strong>Action:</strong> think about what has to change in the index when one report arrives — for the dense (FAISS) signal, and for the BM25 sparse signal from Chapter 9.</p>
-<p><strong>Result:</strong> the dense side needs one <code>index.add()</code> — nothing already stored changes. The BM25 side has no equivalent: adding a report shifts every term’s inverse document frequency and the corpus’s average document length, so the correct score for a report indexed last week is now different. There’s nothing to append to; the statistics are recomputed.</p>
-<p><strong>Why:</strong> a dense embedding is a property of a chunk <em>alone</em>. A BM25 score is a property of a chunk <em>relative to the whole corpus</em>. Anything defined relative to the whole corpus moves when the corpus moves.</p>
+<p><strong>Result:</strong> the dense side needs one <code>index.add()</code> — nothing already stored changes. The BM25 side has no equivalent: adding a report shifts every term’s inverse document frequency and the archive’s average document length, so the correct score for a report indexed last week is now different. There’s nothing to append to; the statistics are recomputed.</p>
+<p><strong>Why:</strong> a dense embedding is a property of a chunk <em>alone</em>. A BM25 score is a property of a chunk <em>relative to the whole archive</em>. Anything defined relative to the whole archive moves when the archive moves.</p>
 <p><strong>Lesson:</strong> “incremental” isn’t one property of a retrieval system — it’s per-signal. The most useful thing you can know before you deploy is which parts of your index append and which parts recompute, because that decides what you can do per-arrival and what you have to schedule.</p>
 </div>
 </div>
@@ -782,7 +782,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <ul>
 <li>A Daily Drilling Report system’s real operating mode is incremental: one report arrives, gets folded in, and is queryable within minutes — rebuilding the whole index per arrival doesn’t scale past a toy archive.</li>
 <li>An exact flat index is append-only, and appending converges on the same index a full rebuild produces — incremental is not a lossy shortcut here.</li>
-<li>Not every signal appends. The dense index does; BM25’s corpus statistics are recomputed. Know which is which before you deploy.</li>
+<li>Not every signal appends. The dense index does; BM25’s whole-archive statistics are recomputed. Know which is which before you deploy.</li>
 <li>An append-only index must catch duplicates at ingestion, because it can’t cleanly remove a row after the fact.</li>
 <li>The gap detector from Chapter 10 earns its keep by running continuously, turning “a hole in the historical archive” into “no report filed this morning.”</li>
 </ul>
@@ -1429,12 +1429,12 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>**BM25 is not append-only, and pretending otherwise is a bug.** Chapter</span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>9's sparse signal scores a term by its rarity across the whole corpus</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>9's sparse signal scores a term by its rarity across the whole archive</span>
 <span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>(inverse document frequency) and normalizes for average document length.</span>
 <span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>Both of those depend on *every* report. Add one report and every term's</span>
 <span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>IDF shifts a little and the average length moves — so the correct BM25</span>
 <span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>score for a document you indexed last week is now slightly different. You</span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>can't append to BM25; you recompute its corpus statistics. That's cheap at</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>can't append to BM25; you recompute its whole-archive statistics. That's cheap at</span>
 <span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>this book's scale and a real cost at millions of documents, and it's the</span>
 <span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>honest asymmetry at the heart of incremental retrieval: **the dense</span>
 <span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>signal appends, the sparse signal recomputes.**</span>
@@ -1665,13 +1665,13 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a>**Result:** the dense side needs one <span class="in">`index.add()`</span> — nothing already</span>
 <span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>stored changes. The BM25 side has no equivalent: adding a report shifts</span>
-<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a>every term's inverse document frequency and the corpus's average document</span>
+<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a>every term's inverse document frequency and the archive's average document</span>
 <span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>length, so the correct score for a report indexed last week is now</span>
 <span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a>different. There's nothing to append to; the statistics are recomputed.</span>
 <span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>**Why:** a dense embedding is a property of a chunk *alone*. A BM25 score</span>
-<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>is a property of a chunk *relative to the whole corpus*. Anything defined</span>
-<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>relative to the whole corpus moves when the corpus moves.</span>
+<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>is a property of a chunk *relative to the whole archive*. Anything defined</span>
+<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>relative to the whole archive moves when the archive moves.</span>
 <span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>**Lesson:** "incremental" isn't one property of a retrieval system — it's</span>
 <span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>per-signal. The most useful thing you can know before you deploy is which</span>
@@ -1701,8 +1701,8 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a>  rebuilding the whole index per arrival doesn't scale past a toy archive.</span>
 <span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An exact flat index is append-only, and appending converges on the same</span>
 <span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a>  index a full rebuild produces — incremental is not a lossy shortcut here.</span>
-<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Not every signal appends. The dense index does; BM25's corpus statistics</span>
-<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a>  are recomputed. Know which is which before you deploy.</span>
+<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Not every signal appends. The dense index does; BM25's whole-archive</span>
+<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a>  statistics are recomputed. Know which is which before you deploy.</span>
 <span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An append-only index must catch duplicates at ingestion, because it</span>
 <span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>  can't cleanly remove a row after the fact.</span>
 <span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The gap detector from Chapter 10 earns its keep by running continuously,</span>
