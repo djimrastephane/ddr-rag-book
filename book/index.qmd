@@ -108,7 +108,7 @@ building useful engineering tools.
 | 3 | Keyword-search your entire DDR archive |
 | 4 | Search DDRs by meaning, not just exact words |
 | 5 | Ask a question and get a cited, evidence-backed answer |
-| 6–12 | Scale the system to scanned reports, large archives, hybrid retrieval, reranking, and full traceability |
+| 6–13 | Scale the system to scanned reports, large archives, hybrid retrieval, reranking, full traceability, and daily ingestion of new reports |
 
 ## Management view: why this matters
 
@@ -157,7 +157,7 @@ built to show its work, every time.
 A few recurring elements appear in every chapter, explained once here so
 they never need repeating:
 
-- **Progress bar** — `███░░░░░░░░░ 3 / 12` at the top of every chapter,
+- **Progress bar** — `███░░░░░░░░░░ 3 / 13` at the top of every chapter,
   showing exactly how far you are through the book.
 - **Estimated time** and **difficulty badge** (🟢 Beginner, 🟠
   Intermediate, 🔴 Advanced) — next to the progress bar, so you know the

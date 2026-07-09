@@ -174,6 +174,7 @@ None of that is a criticism — it just means your time is better spent elsewher
 | Chapter 10 | 30 min |
 | Chapter 11 | 30 min |
 | Chapter 12 | 45 min |
+| Chapter 13 | 45–60 min |
 
 There's no need to do this in one sitting — most readers spread it across several days, a chapter or two at a time.
 
@@ -269,6 +270,7 @@ Chapter titles in the table below link to the rendered, readable page for that r
 | [Ch 10: Traceable Answers and Hallucination Mitigation](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_10.html) | - [traceable_answers.py](book/code/chapter_10/traceable_answers.py) | [./book/code/chapter_10](book/code/chapter_10) |
 | [Ch 11: Evaluating Retrieval Quality](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_11.html) | - [eval_metrics.py](book/code/chapter_11/eval_metrics.py) | [./book/code/chapter_11](book/code/chapter_11) |
 | [Ch 12: Sequence Detection: Building Toward Cross-Well Intelligence](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_12.html) | - [torque_trend_check.py](book/code/chapter_12/torque_trend_check.py) | [./book/code/chapter_12](book/code/chapter_12) |
+| [Ch 13: Daily Ingestion: Keeping the System Live](https://djimrastephane.github.io/ddr-rag-book/chapters/chapter_13.html) | - [ingest.py](book/code/chapter_13/ingest.py) | [./book/code/chapter_13](book/code/chapter_13) |
 | [Appendix A: Environment Setup](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_a_environment_setup.html) | - | [./book/appendix](book/appendix) |
 | Appendices A1–A5: Jupyter / VS Code / PyCharm / Positron / Terminal-only | - | [./book/appendix](book/appendix) |
 | [Appendix B: Oilfield Abbreviation Glossary](https://djimrastephane.github.io/ddr-rag-book/appendix/appendix_b_oilfield_glossary.html) | - | [appendix_b_oilfield_glossary.qmd](book/appendix/appendix_b_oilfield_glossary.qmd) |

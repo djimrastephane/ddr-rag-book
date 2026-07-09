@@ -21,6 +21,8 @@ __pycache__/
 # confidential operator data. Only derived/generated artefacts are ignored.
 datasets/ddr_text/
 datasets/ddr_text_expanded/
+datasets/ddr_live.index
+datasets/ddr_live_meta.json
 datasets/*.index
 datasets/*.faiss
 datasets/global_index/

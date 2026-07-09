@@ -107,6 +107,7 @@ genuine reporting gap):
 | 10 | Traceable, citation-backed answers with gap detection |
 | 11 | Building your own retrieval evaluation set (recall@k, MRR, NDCG@k) |
 | 12 | Sequence detection and the path to cross-well intelligence |
+| 13 | Daily ingestion: keeping the live index current as new reports arrive |
 
 Each Part II chapter includes a simplified, standalone implementation in
 `code/chapter_NN/` (no companion-pipeline access required to follow

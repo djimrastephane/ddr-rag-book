@@ -12,7 +12,7 @@
 :::
 
 ::: {.chapter-status}
-Progress `████████████` **12 / 12** &nbsp;·&nbsp; **Estimated time:** 60–90 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced
+Progress `████████████░` **12 / 13** &nbsp;·&nbsp; **Estimated time:** 60–90 min &nbsp;·&nbsp; **Difficulty:** 🔴 Advanced
 :::
 
 ## Learning objectives
@@ -384,10 +384,9 @@ belonged. None of the complexity here is complexity for its own sake.
 
 ## Suggested next step
 
-**Where to go from here:** You've now built, chapter by chapter, a working RAG system grounded
-entirely in real, public DDRs — from extracting a single PDF's text
-through checking a real numeric trend against a real narrative event.
-[Appendix A](../appendix/appendix_a_environment_setup.qmd) shows how to
-set up the full companion pipeline and point it at your own DDR archive,
-whether that's more Utah FORGE data as it becomes available, or a
-different well entirely.
+**Coming up in Chapter 13:** Everything you've built so far processes a
+fixed archive in one pass. But these are *Daily* Drilling Reports — one
+new report arrives every day. Chapter 13 makes the system live: it folds
+each new report into the index as it arrives, without rebuilding, and
+keeps the gap check running so you know the morning a report *doesn't*
+show up.

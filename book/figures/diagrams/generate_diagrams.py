@@ -130,6 +130,7 @@ DIAGRAMS = {
     "pipeline_ch10": (["Plausible Answer", "Provable Answer"], 38),
     "pipeline_ch11": (["\"It Feels Like It's Working\"", "Measured, Defensible Performance"], 54),
     "pipeline_ch12": (["1 Well, 76 Reports", "Checkable Patterns", "Toward Cross-Well Intelligence"], 50),
+    "pipeline_ch13": (["New Report", "Append, No Rebuild", "Live Index"], 46),
 }
 
 # Second category: linear-chain diagrams inside Theory/Implementation
