@@ -676,7 +676,7 @@ Global FAISS index
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A <code>faiss.index</code> file on disk, plus the same in-memory index object ready to query immediately.</p>
-<div id="61dd9421" class="cell" data-execution_count="1">
+<div id="fee7c638" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_08/build_faiss_index.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -707,7 +707,7 @@ Global FAISS index
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(chunk_index, similarity_score)</code> pairs — the same shape of result Chapter 4’s brute-force <code>search</code> returned.</p>
-<div id="2c7efbd3" class="cell" data-execution_count="2">
+<div id="17f0e3a7" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_index(path: Path) <span class="op">-&gt;</span> faiss.Index:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> faiss.read_index(<span class="bu">str</span>(path))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -730,7 +730,7 @@ Global FAISS index
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A FAISS index with one row per chunk, and a parallel <code>metadata</code> list — <code>metadata[i]</code> is a <code>{"report": ..., "page": ..., "date": ...}</code> dict describing exactly what <code>embeddings[i]</code> is.</p>
-<div id="04095515" class="cell" data-execution_count="3">
+<div id="598ac886" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>REPORT_DATE <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"_</span><span class="kw">(</span><span class="dv">\d</span><span class="op">{4}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="kw">)</span><span class="ch">\.</span><span class="vs">"</span>)</span>
