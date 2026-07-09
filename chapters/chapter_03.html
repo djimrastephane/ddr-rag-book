@@ -443,6 +443,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sequence Detection: Building Toward Cross-Well Intelligence</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter_13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Daily Ingestion: Keeping the System Live</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -562,7 +568,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="../figures/diagrams/pipeline_ch03_light.svg" class="diagram-light img-fluid" width="180"> <img src="../figures/diagrams/pipeline_ch03_dark.svg" class="diagram-dark img-fluid" width="180"></p>
 </div>
 <div class="chapter-status">
-<p>Progress <code>███░░░░░░░░░</code> <strong>3 / 12</strong> &nbsp;·&nbsp; <strong>Estimated time:</strong> 45–60 min &nbsp;·&nbsp; <strong>Difficulty:</strong> 🟢 Beginner</p>
+<p>Progress <code>███░░░░░░░░░░</code> <strong>3 / 13</strong> &nbsp;·&nbsp; <strong>Estimated time:</strong> 45–60 min &nbsp;·&nbsp; <strong>Difficulty:</strong> 🟢 Beginner</p>
 </div>
 <section id="learning-objectives" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">3.1</span> Learning objectives</h2>
@@ -636,7 +642,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <p><strong>Expected Output</strong></p>
 <p>A list of lowercase words with punctuation stripped out, for example:</p>
 <pre><code>["mud", "fluids", "seepage", "losses", "in", "six", "hours", "9", "bbls"]</code></pre>
-<div id="662b2d34" class="cell" data-execution_count="1">
+<div id="e0a521f2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_03/keyword_search.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -659,7 +665,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <pre><code>{"losses": {"FORGE-...-32_Drilling_019_2020-11-07.txt"},
  "stuck":  {"FORGE-...-32_Drilling_038_2020-11-26.txt"},
  ...}</code></pre>
-<div id="1de7dcf5" class="cell" data-execution_count="2">
+<div id="6bb1f785" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -685,7 +691,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The set of filenames containing every word in the query, for example <code>{"FORGE-...-32_Drilling_038_2020-11-26.txt"}</code> for the query <code>"stuck"</code>.</p>
-<div id="54eb7eab" class="cell" data-execution_count="3">
+<div id="ef8f01d9" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(index: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">set</span>[<span class="bu">str</span>]], query: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">set</span>[<span class="bu">str</span>]:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    query_tokens <span class="op">=</span> tokenize(query)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> query_tokens:</span>
@@ -1318,7 +1324,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>::: {.chapter-status}</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`███░░░░░░░░░`</span> **3 / 12** &amp;nbsp;·&amp;nbsp; **Estimated time:** 45–60 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🟢 Beginner</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`███░░░░░░░░░░`</span> **3 / 13** &amp;nbsp;·&amp;nbsp; **Estimated time:** 45–60 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🟢 Beginner</span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>

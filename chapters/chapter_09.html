@@ -462,6 +462,12 @@ div.csl-indent {
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sequence Detection: Building Toward Cross-Well Intelligence</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter_13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Daily Ingestion: Keeping the System Live</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -579,7 +585,7 @@ div.csl-indent {
 <p><img src="../figures/diagrams/pipeline_ch09_light.svg" class="diagram-light img-fluid" width="220"> <img src="../figures/diagrams/pipeline_ch09_dark.svg" class="diagram-dark img-fluid" width="220"></p>
 </div>
 <div class="chapter-status">
-<p>Progress <code>█████████░░░</code> <strong>9 / 12</strong> &nbsp;·&nbsp; <strong>Estimated time:</strong> 60–75 min &nbsp;·&nbsp; <strong>Difficulty:</strong> 🔴 Advanced</p>
+<p>Progress <code>█████████░░░░</code> <strong>9 / 13</strong> &nbsp;·&nbsp; <strong>Estimated time:</strong> 60–75 min &nbsp;·&nbsp; <strong>Difficulty:</strong> 🔴 Advanced</p>
 </div>
 <section id="learning-objectives" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">9.1</span> Learning objectives</h2>
@@ -691,7 +697,7 @@ div.csl-indent {
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single fused ranking: a list of <code>(doc_id, score)</code> pairs, sorted highest-scoring first.</p>
-<div id="5284e75e" class="cell" data-execution_count="1">
+<div id="74ca843e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/hybrid_search.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -709,7 +715,7 @@ div.csl-indent {
 <section id="turning-that-into-a-real-hybrid-search" class="level3" data-number="9.5.1">
 <h3 data-number="9.5.1" class="anchored" data-anchor-id="turning-that-into-a-real-hybrid-search"><span class="header-section-number">9.5.1</span> Turning that into a real hybrid search</h3>
 <p><code>reciprocal_rank_fusion</code> fuses ranked lists — but it needs two of them to fuse. Chapter 4’s semantic <code>search()</code> already returns one. The missing piece is a ranked <em>sparse</em> signal: Chapter 3’s <code>search()</code> returns an unordered set — a report either contains every query word or it doesn’t — which RRF has nothing to order. <code>code/chapter_09/sparse_ranking.py</code> closes that gap with <code>rank_bm25()</code>, a BM25 ranking over the same archive (with a plain term-frequency fallback if <code>rank-bm25</code> isn’t installed):</p>
-<div id="a1731854" class="cell" data-execution_count="2">
+<div id="7d5e2c55" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/sparse_ranking.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rank_bm25 <span class="im">import</span> BM25Okapi</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1361,7 +1367,7 @@ Robertson, Stephen, and Hugo Zaragoza. 2009. <span>“The Probabilistic Relevanc
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>::: {.chapter-status}</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`█████████░░░`</span> **9 / 12** &amp;nbsp;·&amp;nbsp; **Estimated time:** 60–75 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🔴 Advanced</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`█████████░░░░`</span> **9 / 13** &amp;nbsp;·&amp;nbsp; **Estimated time:** 60–75 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🔴 Advanced</span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>

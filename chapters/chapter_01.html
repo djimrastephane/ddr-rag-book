@@ -443,6 +443,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sequence Detection: Building Toward Cross-Well Intelligence</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter_13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Daily Ingestion: Keeping the System Live</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -562,7 +568,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="../figures/diagrams/pipeline_ch01_light.svg" class="diagram-light img-fluid" width="160"> <img src="../figures/diagrams/pipeline_ch01_dark.svg" class="diagram-dark img-fluid" width="160"></p>
 </div>
 <div class="chapter-status">
-<p>Progress <code>█░░░░░░░░░░░</code> <strong>1 / 12</strong> &nbsp;·&nbsp; <strong>Estimated time:</strong> 45–60 min &nbsp;·&nbsp; <strong>Difficulty:</strong> 🟢 Beginner</p>
+<p>Progress <code>█░░░░░░░░░░░░</code> <strong>1 / 13</strong> &nbsp;·&nbsp; <strong>Estimated time:</strong> 45–60 min &nbsp;·&nbsp; <strong>Difficulty:</strong> 🟢 Beginner</p>
 </div>
 <section id="learning-objectives" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1.1</span> Learning objectives</h2>
@@ -672,7 +678,7 @@ Pipe free</code></pre>
 FORGE-16A-78-32_Drilling_038_2020-11-26.pdf
 ...
 FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
-<div id="e4848db7" class="cell" data-execution_count="1">
+<div id="bf9b446f" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(pathlib.Path(<span class="st">"datasets/sample_ddrs"</span>).glob(<span class="st">"*.pdf"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -722,7 +728,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The full text of the report’s first page, printed to your terminal — header block, casing and mud tables, BHA component list, survey data, and the time breakdown quoted above, all as plain text.</p>
-<div id="5ffa3bb9" class="cell" data-execution_count="2">
+<div id="9e48b25c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pdfplumber.<span class="bu">open</span>(<span class="st">"datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf"</span>) <span class="im">as</span> pdf:</span>
@@ -753,7 +759,7 @@ FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One combined string containing every page’s text, with a marker like <code>--- Page 1 ---</code> showing where each page starts.</p>
-<div id="ef06e45f" class="cell" data-execution_count="3">
+<div id="9b81a0a7" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdfplumber</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1431,7 +1437,7 @@ with MWD 6.75 3.25 30.35
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>::: {.chapter-status}</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`█░░░░░░░░░░░`</span> **1 / 12** &amp;nbsp;·&amp;nbsp; **Estimated time:** 45–60 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🟢 Beginner</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`█░░░░░░░░░░░░`</span> **1 / 13** &amp;nbsp;·&amp;nbsp; **Estimated time:** 45–60 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🟢 Beginner</span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>

@@ -443,6 +443,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Sequence Detection: Building Toward Cross-Well Intelligence</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter_13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Daily Ingestion: Keeping the System Live</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -560,7 +566,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="../figures/diagrams/pipeline_ch07_light.svg" class="diagram-light img-fluid" width="180"> <img src="../figures/diagrams/pipeline_ch07_dark.svg" class="diagram-dark img-fluid" width="180"></p>
 </div>
 <div class="chapter-status">
-<p>Progress <code>███████░░░░░</code> <strong>7 / 12</strong> &nbsp;·&nbsp; <strong>Estimated time:</strong> 45–60 min &nbsp;·&nbsp; <strong>Difficulty:</strong> 🟠 Intermediate</p>
+<p>Progress <code>███████░░░░░░</code> <strong>7 / 13</strong> &nbsp;·&nbsp; <strong>Estimated time:</strong> 45–60 min &nbsp;·&nbsp; <strong>Difficulty:</strong> 🟠 Intermediate</p>
 </div>
 <section id="learning-objectives" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">7.1</span> Learning objectives</h2>
@@ -655,7 +661,7 @@ chunk 3:                         [t9  t10 t11 t12]
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of text chunks, each roughly <code>chunk_tokens</code> tokens long, each overlapping the next by <code>overlap_tokens</code> tokens.</p>
-<div id="77ac5ff9" class="cell" data-execution_count="1">
+<div id="4903f7e4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_07/token_chunking.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tiktoken</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -685,7 +691,7 @@ chunk 3:                         [t9  t10 t11 t12]
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(page_number, chunk_text)</code> pairs — the same chunks as before, each now labelled with the real page it came from.</p>
-<div id="45dbdfed" class="cell" data-execution_count="2">
+<div id="832be5d4" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>PAGE_MARKER <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"--- Page </span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs"> ---</span><span class="ch">\n</span><span class="op">?</span><span class="vs">"</span>)</span>
@@ -1329,7 +1335,7 @@ chunk 3:                         [t9  t10 t11 t12]
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>::: {.chapter-status}</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`███████░░░░░`</span> **7 / 12** &amp;nbsp;·&amp;nbsp; **Estimated time:** 45–60 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🟠 Intermediate</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`███████░░░░░░`</span> **7 / 13** &amp;nbsp;·&amp;nbsp; **Estimated time:** 45–60 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🟠 Intermediate</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
