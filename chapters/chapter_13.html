@@ -527,7 +527,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">13.5</span> Implementation</a>
   <ul class="collapse">
   <li><a href="#step-1-load-the-live-index-or-start-one" id="toc-step-1-load-the-live-index-or-start-one" class="nav-link" data-scroll-target="#step-1-load-the-live-index-or-start-one"><span class="header-section-number">13.5.1</span> Step 1: load the live index, or start one</a></li>
-  <li><a href="#step-2-ingest-one-report-incrementally-and-idempotently" id="toc-step-2-ingest-one-report-incrementally-and-idempotently" class="nav-link" data-scroll-target="#step-2-ingest-one-report-incrementally-and-idempotently"><span class="header-section-number">13.5.2</span> Step 2: ingest one report, incrementally and idempotently</a></li>
+  <li><a href="#step-2-ingest-one-report-and-never-the-same-one-twice" id="toc-step-2-ingest-one-report-and-never-the-same-one-twice" class="nav-link" data-scroll-target="#step-2-ingest-one-report-and-never-the-same-one-twice"><span class="header-section-number">13.5.2</span> Step 2: ingest one report — and never the same one twice</a></li>
   <li><a href="#step-3-re-check-the-archive-for-gaps" id="toc-step-3-re-check-the-archive-for-gaps" class="nav-link" data-scroll-target="#step-3-re-check-the-archive-for-gaps"><span class="header-section-number">13.5.3</span> Step 3: re-check the archive for gaps</a></li>
   </ul></li>
   <li><a href="#production-reality" id="toc-production-reality" class="nav-link" data-scroll-target="#production-reality"><span class="header-section-number">13.6</span> Production Reality</a></li>
@@ -577,7 +577,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Explain why a Daily Drilling Report system’s real operating mode is incremental, not batch — and what breaks if you rebuild from scratch every night.</li>
 <li>Ingest a single new report into a live, persisted index by <em>appending</em> to it, without re-embedding everything that came before.</li>
-<li>Explain why the dense index appends cleanly but the BM25 signal does not, and make ingestion idempotent on an append-only index.</li>
+<li>Explain why the dense index appends cleanly but the BM25 signal does not, and make sure a report never gets added to the index twice.</li>
 </ul>
 </section>
 <section id="operational-problem" class="level2" data-number="13.2">
@@ -623,13 +623,13 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </div>
 </div>
 <p><strong>BM25 is not append-only, and pretending otherwise is a bug.</strong> Chapter 9’s sparse signal scores a term by its rarity across the whole corpus (inverse document frequency) and normalizes for average document length. Both of those depend on <em>every</em> report. Add one report and every term’s IDF shifts a little and the average length moves — so the correct BM25 score for a document you indexed last week is now slightly different. You can’t append to BM25; you recompute its corpus statistics. That’s cheap at this book’s scale and a real cost at millions of documents, and it’s the honest asymmetry at the heart of incremental retrieval: <strong>the dense signal appends, the sparse signal recomputes.</strong></p>
-<p><strong>An append-only index has to be idempotent at the door.</strong> Because you can’t easily un-add a row, the moment to prevent a report being indexed twice is <em>before</em> you add it — not after. This archive already makes the point: its raw form has duplicate filename variants of the same report (Chapter 8’s <code>build_full_archive.py</code> deduplicates them). Ingest report #38 twice and it contributes its chunks twice, silently inflating how much “evidence” a query appears to have. So ingestion checks first: is this report already in the index? If so, skip it.</p>
+<p><strong>An append-only index has to catch duplicates at the door.</strong> Because you can’t easily un-add a row, the moment to stop a report being indexed twice is <em>before</em> you add it — not after. This archive already makes the point: its raw form has duplicate filename variants of the same report (Chapter 8’s <code>build_full_archive.py</code> deduplicates them). Ingest report #38 twice and it contributes its chunks twice, silently inflating how much “evidence” a query appears to have. So ingestion checks first: is this report already in the index? If so, skip it.</p>
 <p>Here’s the daily loop, end to end — every box is a tool you already built:</p>
 <pre><code>        a new report PDF arrives
                   │
       extract text (Ch 1)  ──►  quality gate (Ch 6)  ──► reject → review queue
                   │                     │ pass
-                  │            already ingested? (idempotency) ──► yes → skip
+                  │            already added? (skip duplicates) ──► yes → skip
                   │                     │ no
         page-aware chunk (Ch 7)  ──►  embed (Ch 4)  ──►  index.add() (Ch 8)
                   │
@@ -648,7 +648,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The loaded index and metadata list — or empty state (<code>None</code>, <code>[]</code>) on the very first run.</p>
-<div id="377578c8" class="cell" data-execution_count="1">
+<div id="e702117e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -661,8 +661,8 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <p><strong>What just happened?</strong></p>
 <p>Nothing clever — the index and its metadata are read back from disk exactly as Chapter 8 saved them. The metadata list is what lets a bare FAISS row number turn back into a report and page for a citation; it has to travel with the index, so it’s persisted alongside it.</p>
 </section>
-<section id="step-2-ingest-one-report-incrementally-and-idempotently" class="level3" data-number="13.5.2">
-<h3 data-number="13.5.2" class="anchored" data-anchor-id="step-2-ingest-one-report-incrementally-and-idempotently"><span class="header-section-number">13.5.2</span> Step 2: ingest one report, incrementally and idempotently</h3>
+<section id="step-2-ingest-one-report-and-never-the-same-one-twice" class="level3" data-number="13.5.2">
+<h3 data-number="13.5.2" class="anchored" data-anchor-id="step-2-ingest-one-report-and-never-the-same-one-twice"><span class="header-section-number">13.5.2</span> Step 2: ingest one report — and never the same one twice</h3>
 <p><strong>What problem are we solving?</strong></p>
 <p>Take one new report PDF and fold it into the live index — running it through the same extraction, quality gate, and chunker the batch pipeline used — then <em>append</em> its vectors instead of rebuilding. And do it safely: skip a report already indexed, and never index text the quality gate rejects.</p>
 <p><strong>Inputs</strong></p>
@@ -671,12 +671,12 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The updated index, the number of chunks added (0 if skipped or rejected), and a status string.</p>
-<div id="ee3bcfd7" class="cell" data-execution_count="2">
+<div id="34a48444" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    report <span class="op">=</span> pdf_path.name</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(m[<span class="st">"report"</span>] <span class="op">==</span> report <span class="cf">for</span> m <span class="kw">in</span> metadata):        <span class="co"># idempotent</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(m[<span class="st">"report"</span>] <span class="op">==</span> report <span class="cf">for</span> m <span class="kw">in</span> metadata):        <span class="co"># skip if already added</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="st">"skipped (already ingested)"</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> extract_text(pdf_path)                            <span class="co"># Chapter 1</span></span>
@@ -697,7 +697,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index, <span class="bu">len</span>(pairs), <span class="st">"ingested"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
-<p>Read top to bottom, this is the daily loop in one function. The idempotency check comes <em>first</em>, because an append-only index can’t take it back afterwards. The quality gate runs before anything gets indexed, so bad OCR is routed to review instead of silently polluting the index. Then the real work — chunk, embed, <code>index.add()</code> — is exactly Chapter 8’s build, applied to one report instead of the whole folder, and the parallel metadata records are appended in the same order the vectors were, so <code>metadata[i]</code> still describes row <code>i</code>.</p>
+<p>Read top to bottom, this is the daily loop in one function. The duplicate check comes <em>first</em>, because an append-only index can’t take it back afterwards. The quality gate runs before anything gets indexed, so bad OCR is routed to review instead of silently polluting the index. Then the real work — chunk, embed, <code>index.add()</code> — is exactly Chapter 8’s build, applied to one report instead of the whole folder, and the parallel metadata records are appended in the same order the vectors were, so <code>metadata[i]</code> still describes row <code>i</code>.</p>
 </section>
 <section id="step-3-re-check-the-archive-for-gaps" class="level3" data-number="13.5.3">
 <h3 data-number="13.5.3" class="anchored" data-anchor-id="step-3-re-check-the-archive-for-gaps"><span class="header-section-number">13.5.3</span> Step 3: re-check the archive for gaps</h3>
@@ -709,7 +709,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The current list of reporting gaps — ideally empty.</p>
-<div id="309d4e45" class="cell" data-execution_count="3">
+<div id="3d7dedf5" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -775,7 +775,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <section id="challenge-exercise" class="level2" data-number="13.9">
 <h2 data-number="13.9" class="anchored" data-anchor-id="challenge-exercise"><span class="header-section-number">13.9</span> Challenge exercise</h2>
 <p>🔴 <strong>Advanced</strong></p>
-<p><strong>Challenge:</strong> Handle a <strong>corrected re-file</strong>. A report is re-issued under a new filename with the same date and report number but revised text. Naive idempotency (match on filename) would treat it as new and index it alongside the stale version, so a query could retrieve both. Extend <code>ingest_report</code> to detect that a report with the same <code>(report number, date)</code> is already indexed and refuse — or, harder, to supersede it. Note what the append-only index makes hard about <em>replacing</em> a report’s chunks, and how you’d work around it (hint: a “tombstone” flag in the metadata, or a periodic compaction rebuild). A reference solution is in <code>code/chapter_13/challenge/</code>.</p>
+<p><strong>Challenge:</strong> Handle a <strong>corrected re-file</strong>. A report is re-issued under a new filename with the same date and report number but revised text. A simple duplicate check on the filename alone would treat it as new and index it alongside the stale version, so a query could retrieve both. Extend <code>ingest_report</code> to detect that a report with the same <code>(report number, date)</code> is already indexed and refuse — or, harder, to supersede it. Note what the append-only index makes hard about <em>replacing</em> a report’s chunks, and how you’d work around it (hint: a “tombstone” flag in the metadata, or a periodic compaction rebuild). A reference solution is in <code>code/chapter_13/challenge/</code>.</p>
 </section>
 <section id="key-takeaways" class="level2" data-number="13.10">
 <h2 data-number="13.10" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">13.10</span> Key takeaways</h2>
@@ -783,7 +783,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <li>A Daily Drilling Report system’s real operating mode is incremental: one report arrives, gets folded in, and is queryable within minutes — rebuilding the whole index per arrival doesn’t scale past a toy archive.</li>
 <li>An exact flat index is append-only, and appending converges on the same index a full rebuild produces — incremental is not a lossy shortcut here.</li>
 <li>Not every signal appends. The dense index does; BM25’s corpus statistics are recomputed. Know which is which before you deploy.</li>
-<li>An append-only index must be made idempotent at ingestion, because it can’t cleanly un-add a row after the fact.</li>
+<li>An append-only index must catch duplicates at ingestion, because it can’t cleanly remove a row after the fact.</li>
 <li>The gap detector from Chapter 10 earns its keep by running continuously, turning “a hole in the historical archive” into “no report filed this morning.”</li>
 </ul>
 </section>
@@ -826,7 +826,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <li><label><input type="checkbox" checked="">Ingested one new report by appending to a live index, no rebuild</label></li>
 <li><label><input type="checkbox" checked="">Confirmed incremental ingestion converges on the identical batch index</label></li>
 <li><label><input type="checkbox" checked="">Explained why the dense index appends but BM25 recomputes</label></li>
-<li><label><input type="checkbox" checked="">Made ingestion idempotent on an append-only index, and re-ran the gap check</label></li>
+<li><label><input type="checkbox" checked="">Made sure a report can’t be added to the index twice, and re-ran the gap check</label></li>
 </ul>
 </div>
 </div>
@@ -1370,7 +1370,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ingest a single new report into a live, persisted index by *appending*</span>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  to it, without re-embedding everything that came before.</span>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain why the dense index appends cleanly but the BM25 signal does</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  not, and make ingestion idempotent on an append-only index.</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  not, and make sure a report never gets added to the index twice.</span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
 <span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
@@ -1439,8 +1439,8 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>honest asymmetry at the heart of incremental retrieval: **the dense</span>
 <span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>signal appends, the sparse signal recomputes.**</span>
 <span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>**An append-only index has to be idempotent at the door.** Because you</span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>can't easily un-add a row, the moment to prevent a report being indexed</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>**An append-only index has to catch duplicates at the door.** Because you</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>can't easily un-add a row, the moment to stop a report being indexed</span>
 <span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>twice is *before* you add it — not after. This archive already makes the</span>
 <span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>point: its raw form has duplicate filename variants of the same report</span>
 <span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>(Chapter 8's <span class="in">`build_full_archive.py`</span> deduplicates them). Ingest report #38</span>
@@ -1455,7 +1455,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="in">                  │</span></span>
 <span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="in">      extract text (Ch 1)  ──►  quality gate (Ch 6)  ──► reject → review queue</span></span>
 <span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a><span class="in">                  │                     │ pass</span></span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="in">                  │            already ingested? (idempotency) ──► yes → skip</span></span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="in">                  │            already added? (skip duplicates) ──► yes → skip</span></span>
 <span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a><span class="in">                  │                     │ no</span></span>
 <span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="in">        page-aware chunk (Ch 7)  ──►  embed (Ch 4)  ──►  index.add() (Ch 8)</span></span>
 <span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="in">                  │</span></span>
@@ -1504,7 +1504,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a>FAISS row number turn back into a report and page for a citation; it has</span>
 <span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a>to travel with the index, so it's persisted alongside it.</span>
 <span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: ingest one report, incrementally and idempotently</span></span>
+<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: ingest one report — and never the same one twice</span></span>
 <span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a></span>
@@ -1530,7 +1530,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
 <span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a>    report <span class="op">=</span> pdf_path.name</span>
-<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(m[<span class="st">"report"</span>] <span class="op">==</span> report <span class="cf">for</span> m <span class="kw">in</span> metadata):        <span class="co"># idempotent</span></span>
+<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(m[<span class="st">"report"</span>] <span class="op">==</span> report <span class="cf">for</span> m <span class="kw">in</span> metadata):        <span class="co"># skip if already added</span></span>
 <span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="st">"skipped (already ingested)"</span></span>
 <span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> extract_text(pdf_path)                            <span class="co"># Chapter 1</span></span>
@@ -1554,7 +1554,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a>Read top to bottom, this is the daily loop in one function. The</span>
-<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a>idempotency check comes *first*, because an append-only index can't take</span>
+<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a>duplicate check comes *first*, because an append-only index can't take</span>
 <span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a>it back afterwards. The quality gate runs before anything gets indexed, so</span>
 <span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a>bad OCR is routed to review instead of silently polluting the index. Then</span>
 <span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a>the real work — chunk, embed, <span class="in">`index.add()`</span> — is exactly Chapter 8's</span>
@@ -1685,8 +1685,8 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a>**Challenge:** Handle a **corrected re-file**. A report is re-issued under</span>
 <span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a>a new filename with the same date and report number but revised text.</span>
-<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a>Naive idempotency (match on filename) would treat it as new and index it</span>
-<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a>alongside the stale version, so a query could retrieve both. Extend</span>
+<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a>A simple duplicate check on the filename alone would treat it as new and</span>
+<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a>index it alongside the stale version, so a query could retrieve both. Extend</span>
 <span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a><span class="in">`ingest_report`</span> to detect that a report with the same `(report number,</span>
 <span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a>date)` is already indexed and refuse — or, harder, to supersede it. Note</span>
 <span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a>what the append-only index makes hard about *replacing* a report's chunks,</span>
@@ -1703,8 +1703,8 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a>  index a full rebuild produces — incremental is not a lossy shortcut here.</span>
 <span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Not every signal appends. The dense index does; BM25's corpus statistics</span>
 <span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a>  are recomputed. Know which is which before you deploy.</span>
-<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An append-only index must be made idempotent at ingestion, because it</span>
-<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>  can't cleanly un-add a row after the fact.</span>
+<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An append-only index must catch duplicates at ingestion, because it</span>
+<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>  can't cleanly remove a row after the fact.</span>
 <span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The gap detector from Chapter 10 earns its keep by running continuously,</span>
 <span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>  turning "a hole in the historical archive" into "no report filed this</span>
 <span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>  morning."</span>
@@ -1721,7 +1721,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Ingested one new report by appending to a live index, no rebuild</span>
 <span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Confirmed incremental ingestion converges on the identical batch index</span>
 <span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why the dense index appends but BM25 recomputes</span>
-<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Made ingestion idempotent on an append-only index, and re-ran the gap check</span>
+<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Made sure a report can't be added to the index twice, and re-ran the gap check</span>
 <span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>

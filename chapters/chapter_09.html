@@ -697,7 +697,7 @@ div.csl-indent {
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single fused ranking: a list of <code>(doc_id, score)</code> pairs, sorted highest-scoring first.</p>
-<div id="74ca843e" class="cell" data-execution_count="1">
+<div id="dacc3d45" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/hybrid_search.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -715,7 +715,7 @@ div.csl-indent {
 <section id="turning-that-into-a-real-hybrid-search" class="level3" data-number="9.5.1">
 <h3 data-number="9.5.1" class="anchored" data-anchor-id="turning-that-into-a-real-hybrid-search"><span class="header-section-number">9.5.1</span> Turning that into a real hybrid search</h3>
 <p><code>reciprocal_rank_fusion</code> fuses ranked lists — but it needs two of them to fuse. Chapter 4’s semantic <code>search()</code> already returns one. The missing piece is a ranked <em>sparse</em> signal: Chapter 3’s <code>search()</code> returns an unordered set — a report either contains every query word or it doesn’t — which RRF has nothing to order. <code>code/chapter_09/sparse_ranking.py</code> closes that gap with <code>rank_bm25()</code>, a BM25 ranking over the same archive (with a plain term-frequency fallback if <code>rank-bm25</code> isn’t installed):</p>
-<div id="7d5e2c55" class="cell" data-execution_count="2">
+<div id="a78b8830" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_09/sparse_ranking.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rank_bm25 <span class="im">import</span> BM25Okapi</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
