@@ -3,6 +3,14 @@
 Per-release highlights for *Building Industrial RAG Systems from Daily
 Drilling Reports*. See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
+## v1.3.2
+
+### Changed
+
+- Uses the author's full name, **Djimra Stephane Soulanoudjingar**,
+  consistently — the book author (rendered on every page and the PDF title
+  page), the content-license attribution line, and the Chicago citation.
+
 ## v1.3.1
 
 A plain-language editorial pass, keeping the prose accessible to the

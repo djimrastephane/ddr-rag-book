@@ -9,6 +9,15 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.3.2] - 2026-07-09
+
+### Changed
+
+- Use the author's full name, **Djimra Stephane Soulanoudjingar**,
+  throughout: the book author (rendered on every page and the PDF title),
+  the content-license attribution line, and the Chicago citation. The
+  BibTeX entry and copyright line already used it.
+
 ## [1.3.1] - 2026-07-09
 
 ### Changed
