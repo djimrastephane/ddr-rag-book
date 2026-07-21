@@ -9,6 +9,45 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+### Added
+
+- A "Reader Contract" section (`book/index.qmd`, README) explaining Part I
+  (working prototype) vs. Part II (hardening against real failure modes),
+  the separate DDR_UTAH_FORGE companion pipeline's role, and what's out of
+  scope (authentication, monitoring, permissions, governance, support
+  operations). A matching boundary note was added under the preface's "Why
+  industrial" section, plus a compact project map of the sample archive,
+  full archive, companion app, and companion pipeline.
+- Windows-specific Tesseract/Poppler install guidance in Chapter 6, and
+  clearer core/Part II/OCR-only/app-only/notebook-only/testing-only labels
+  in `requirements.txt` and `environment.yml`.
+- Friendly validation in the book's own code: invalid chunk settings and
+  text missing Chapter 1's page markers now raise a clear `ValueError` in
+  Chapter 7's `token_chunking.py`; mismatched Reciprocal Rank Fusion
+  weights raise in Chapter 9's `hybrid_search.py`; a missing PDF path or a
+  nothing-to-save state now fail with a readable message instead of a
+  crash in Chapter 13's `ingest.py`. 9 new tests cover these paths (suite
+  now 56: 54 passing, 2 skipped without optional pytesseract/streamlit).
+
+### Changed
+
+- Softened the "Cross-well sequence detector" promise (README) to "a
+  single-well sequence check, with a path toward cross-well
+  intelligence," matching Chapter 12's own careful framing.
+- Chapter 5 is now consistently described as producing a working RAG
+  *prototype* with known limits, not a finished system (README,
+  `index.qmd`, `chapter_05.qmd`).
+- Fixed inconsistent heading levels across Chapters 4, 6, 7, 9, 10, and
+  the chapter template so every chapter follows H1 → H2 → H3 (`Step N`)
+  consistently; reordered Chapter 4's Field Notes to appear after its
+  Practical exercise, matching every other chapter's rhythm.
+- Shortened an overly technical inline OpenMP/libomp comment in Chapter
+  8's `build_faiss_index.py` — the full explanation already lives in the
+  chapter's own Production Reality section.
+- Clarified in a docstring that Chapter 5's `evidence_excerpts()` returns
+  a quick preview, not necessarily the passage that matched (no behavior
+  change).
+
 ## [1.3.2] - 2026-07-09
 
 ### Changed
