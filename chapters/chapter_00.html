@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0155a636e50d65345ad986fce4bcfbff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-76885749eb004bd3b4e745139b47bf15.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-0155a636e50d65345ad986fce4bcfbff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -789,6 +789,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>With your virtual environment active (you should still see <code>(.venv)</code> in your prompt), run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>What this does:</strong> reads <code>requirements.txt</code> — a plain list of every package this book needs, one per line — and installs all of them in one go, into your <code>.venv</code> toolbox only.</p>
+<p><code>requirements.txt</code> installs everything needed across the <em>entire</em> book in one pass: Part I’s core packages, Part II’s heavier retrieval and chunking dependencies, the notebook tooling, the OCR packages Chapter 6 uses, and the optional companion app’s Streamlit dependency. That’s deliberate — one install, no mid-book surprises — but it does mean this first install is heavier than Part I alone strictly requires. If you only want to work through Chapters 1–5 for now, the comments inside <code>requirements.txt</code> mark which lines belong to Part II, OCR, the app, or testing, so you can comment those out and install a lighter subset; just know you’ll need the rest before Chapter 6.</p>
 <p><strong>Expected output:</strong> a scrolling list of <code>Collecting ...</code> and <code>Successfully installed ...</code> lines. This can take a minute or two the first time; some packages (starting with Chapter 4’s) are large.</p>
 <p><strong>If it fails:</strong> see Section 0.11 below — the most common causes are being in the wrong folder, or forgetting to activate <code>.venv</code> first.</p>
 </section>
@@ -1678,110 +1679,121 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-274"><a href="#cb13-274" aria-hidden="true" tabindex="-1"></a>package this book needs, one per line — and installs all of them in one</span>
 <span id="cb13-275"><a href="#cb13-275" aria-hidden="true" tabindex="-1"></a>go, into your <span class="in">`.venv`</span> toolbox only.</span>
 <span id="cb13-276"><a href="#cb13-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-277"><a href="#cb13-277" aria-hidden="true" tabindex="-1"></a>**Expected output:** a scrolling list of <span class="in">`Collecting ...`</span> and</span>
-<span id="cb13-278"><a href="#cb13-278" aria-hidden="true" tabindex="-1"></a><span class="in">`Successfully installed ...`</span> lines. This can take a minute or two the</span>
-<span id="cb13-279"><a href="#cb13-279" aria-hidden="true" tabindex="-1"></a>first time; some packages (starting with Chapter 4's) are large.</span>
-<span id="cb13-280"><a href="#cb13-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-281"><a href="#cb13-281" aria-hidden="true" tabindex="-1"></a>**If it fails:** see Section 0.11 below — the most common causes are</span>
-<span id="cb13-282"><a href="#cb13-282" aria-hidden="true" tabindex="-1"></a>being in the wrong folder, or forgetting to activate <span class="in">`.venv`</span> first.</span>
-<span id="cb13-283"><a href="#cb13-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-284"><a href="#cb13-284" aria-hidden="true" tabindex="-1"></a><span class="fu">## 0.9 Running the first test</span></span>
-<span id="cb13-285"><a href="#cb13-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-286"><a href="#cb13-286" aria-hidden="true" tabindex="-1"></a>Before touching any real DDR, confirm the whole chain — Python, the</span>
-<span id="cb13-287"><a href="#cb13-287" aria-hidden="true" tabindex="-1"></a>virtual environment, the installed packages — actually works together.</span>
-<span id="cb13-288"><a href="#cb13-288" aria-hidden="true" tabindex="-1"></a>This book's repository already includes a one-line check at</span>
-<span id="cb13-289"><a href="#cb13-289" aria-hidden="true" tabindex="-1"></a><span class="in">`code/setup_check.py`</span>:</span>
-<span id="cb13-290"><a href="#cb13-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-291"><a href="#cb13-291" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
-<span id="cb13-292"><a href="#cb13-292" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"DDR RAG workshop is ready."</span>)</span>
-<span id="cb13-293"><a href="#cb13-293" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-277"><a href="#cb13-277" aria-hidden="true" tabindex="-1"></a><span class="in">`requirements.txt`</span> installs everything needed across the *entire* book in</span>
+<span id="cb13-278"><a href="#cb13-278" aria-hidden="true" tabindex="-1"></a>one pass: Part I's core packages, Part II's heavier retrieval and</span>
+<span id="cb13-279"><a href="#cb13-279" aria-hidden="true" tabindex="-1"></a>chunking dependencies, the notebook tooling, the OCR packages Chapter 6</span>
+<span id="cb13-280"><a href="#cb13-280" aria-hidden="true" tabindex="-1"></a>uses, and the optional companion app's Streamlit dependency. That's</span>
+<span id="cb13-281"><a href="#cb13-281" aria-hidden="true" tabindex="-1"></a>deliberate — one install, no mid-book surprises — but it does mean this</span>
+<span id="cb13-282"><a href="#cb13-282" aria-hidden="true" tabindex="-1"></a>first install is heavier than Part I alone strictly requires. If you only</span>
+<span id="cb13-283"><a href="#cb13-283" aria-hidden="true" tabindex="-1"></a>want to work through Chapters 1–5 for now, the comments inside</span>
+<span id="cb13-284"><a href="#cb13-284" aria-hidden="true" tabindex="-1"></a><span class="in">`requirements.txt`</span> mark which lines belong to Part II, OCR, the app, or</span>
+<span id="cb13-285"><a href="#cb13-285" aria-hidden="true" tabindex="-1"></a>testing, so you can comment those out and install a lighter subset; just</span>
+<span id="cb13-286"><a href="#cb13-286" aria-hidden="true" tabindex="-1"></a>know you'll need the rest before Chapter 6.</span>
+<span id="cb13-287"><a href="#cb13-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-288"><a href="#cb13-288" aria-hidden="true" tabindex="-1"></a>**Expected output:** a scrolling list of <span class="in">`Collecting ...`</span> and</span>
+<span id="cb13-289"><a href="#cb13-289" aria-hidden="true" tabindex="-1"></a><span class="in">`Successfully installed ...`</span> lines. This can take a minute or two the</span>
+<span id="cb13-290"><a href="#cb13-290" aria-hidden="true" tabindex="-1"></a>first time; some packages (starting with Chapter 4's) are large.</span>
+<span id="cb13-291"><a href="#cb13-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-292"><a href="#cb13-292" aria-hidden="true" tabindex="-1"></a>**If it fails:** see Section 0.11 below — the most common causes are</span>
+<span id="cb13-293"><a href="#cb13-293" aria-hidden="true" tabindex="-1"></a>being in the wrong folder, or forgetting to activate <span class="in">`.venv`</span> first.</span>
 <span id="cb13-294"><a href="#cb13-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-295"><a href="#cb13-295" aria-hidden="true" tabindex="-1"></a>Run it:</span>
+<span id="cb13-295"><a href="#cb13-295" aria-hidden="true" tabindex="-1"></a><span class="fu">## 0.9 Running the first test</span></span>
 <span id="cb13-296"><a href="#cb13-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-297"><a href="#cb13-297" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb13-298"><a href="#cb13-298" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/setup_check.py</span>
-<span id="cb13-299"><a href="#cb13-299" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-300"><a href="#cb13-300" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-301"><a href="#cb13-301" aria-hidden="true" tabindex="-1"></a>**Expected output:**</span>
-<span id="cb13-302"><a href="#cb13-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-303"><a href="#cb13-303" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-304"><a href="#cb13-304" aria-hidden="true" tabindex="-1"></a><span class="in">DDR RAG workshop is ready.</span></span>
-<span id="cb13-305"><a href="#cb13-305" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-306"><a href="#cb13-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-307"><a href="#cb13-307" aria-hidden="true" tabindex="-1"></a>If you see that exact line, everything from Sections 0.3 through 0.8</span>
-<span id="cb13-308"><a href="#cb13-308" aria-hidden="true" tabindex="-1"></a>worked. If you see an error instead, it names exactly what's still</span>
-<span id="cb13-309"><a href="#cb13-309" aria-hidden="true" tabindex="-1"></a>missing — jump to Section 0.11.</span>
-<span id="cb13-310"><a href="#cb13-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-311"><a href="#cb13-311" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Notebook users"}</span>
-<span id="cb13-312"><a href="#cb13-312" aria-hidden="true" tabindex="-1"></a>If you're working in Jupyter Notebook or another notebook environment</span>
-<span id="cb13-313"><a href="#cb13-313" aria-hidden="true" tabindex="-1"></a>instead of running files from the terminal, you don't need</span>
-<span id="cb13-314"><a href="#cb13-314" aria-hidden="true" tabindex="-1"></a><span class="in">`setup_check.py`</span> as a file at all — just open a new notebook cell, type</span>
-<span id="cb13-315"><a href="#cb13-315" aria-hidden="true" tabindex="-1"></a><span class="in">`print("DDR RAG workshop is ready.")`</span>, and run that cell directly. Every</span>
-<span id="cb13-316"><a href="#cb13-316" aria-hidden="true" tabindex="-1"></a>code example in this book can be run either way.</span>
-<span id="cb13-317"><a href="#cb13-317" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-318"><a href="#cb13-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-319"><a href="#cb13-319" aria-hidden="true" tabindex="-1"></a><span class="fu">## 0.10 Running the first book script</span></span>
-<span id="cb13-320"><a href="#cb13-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-321"><a href="#cb13-321" aria-hidden="true" tabindex="-1"></a>Now run the actual script Chapter 1 builds — this book's very first</span>
-<span id="cb13-322"><a href="#cb13-322" aria-hidden="true" tabindex="-1"></a>real, working tool:</span>
-<span id="cb13-323"><a href="#cb13-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-324"><a href="#cb13-324" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb13-325"><a href="#cb13-325" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</span>
-<span id="cb13-326"><a href="#cb13-326" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb13-327"><a href="#cb13-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-328"><a href="#cb13-328" aria-hidden="true" tabindex="-1"></a>**What this does:** opens one real Daily Drilling Report PDF (already</span>
-<span id="cb13-329"><a href="#cb13-329" aria-hidden="true" tabindex="-1"></a>included in the repository you downloaded in Section 0.6) and prints its</span>
-<span id="cb13-330"><a href="#cb13-330" aria-hidden="true" tabindex="-1"></a>full text straight to your terminal.</span>
+<span id="cb13-297"><a href="#cb13-297" aria-hidden="true" tabindex="-1"></a>Before touching any real DDR, confirm the whole chain — Python, the</span>
+<span id="cb13-298"><a href="#cb13-298" aria-hidden="true" tabindex="-1"></a>virtual environment, the installed packages — actually works together.</span>
+<span id="cb13-299"><a href="#cb13-299" aria-hidden="true" tabindex="-1"></a>This book's repository already includes a one-line check at</span>
+<span id="cb13-300"><a href="#cb13-300" aria-hidden="true" tabindex="-1"></a><span class="in">`code/setup_check.py`</span>:</span>
+<span id="cb13-301"><a href="#cb13-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-302"><a href="#cb13-302" aria-hidden="true" tabindex="-1"></a><span class="in">```python</span></span>
+<span id="cb13-303"><a href="#cb13-303" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"DDR RAG workshop is ready."</span>)</span>
+<span id="cb13-304"><a href="#cb13-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-305"><a href="#cb13-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-306"><a href="#cb13-306" aria-hidden="true" tabindex="-1"></a>Run it:</span>
+<span id="cb13-307"><a href="#cb13-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-308"><a href="#cb13-308" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb13-309"><a href="#cb13-309" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/setup_check.py</span>
+<span id="cb13-310"><a href="#cb13-310" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-311"><a href="#cb13-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-312"><a href="#cb13-312" aria-hidden="true" tabindex="-1"></a>**Expected output:**</span>
+<span id="cb13-313"><a href="#cb13-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-314"><a href="#cb13-314" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-315"><a href="#cb13-315" aria-hidden="true" tabindex="-1"></a><span class="in">DDR RAG workshop is ready.</span></span>
+<span id="cb13-316"><a href="#cb13-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb13-317"><a href="#cb13-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-318"><a href="#cb13-318" aria-hidden="true" tabindex="-1"></a>If you see that exact line, everything from Sections 0.3 through 0.8</span>
+<span id="cb13-319"><a href="#cb13-319" aria-hidden="true" tabindex="-1"></a>worked. If you see an error instead, it names exactly what's still</span>
+<span id="cb13-320"><a href="#cb13-320" aria-hidden="true" tabindex="-1"></a>missing — jump to Section 0.11.</span>
+<span id="cb13-321"><a href="#cb13-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-322"><a href="#cb13-322" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Notebook users"}</span>
+<span id="cb13-323"><a href="#cb13-323" aria-hidden="true" tabindex="-1"></a>If you're working in Jupyter Notebook or another notebook environment</span>
+<span id="cb13-324"><a href="#cb13-324" aria-hidden="true" tabindex="-1"></a>instead of running files from the terminal, you don't need</span>
+<span id="cb13-325"><a href="#cb13-325" aria-hidden="true" tabindex="-1"></a><span class="in">`setup_check.py`</span> as a file at all — just open a new notebook cell, type</span>
+<span id="cb13-326"><a href="#cb13-326" aria-hidden="true" tabindex="-1"></a><span class="in">`print("DDR RAG workshop is ready.")`</span>, and run that cell directly. Every</span>
+<span id="cb13-327"><a href="#cb13-327" aria-hidden="true" tabindex="-1"></a>code example in this book can be run either way.</span>
+<span id="cb13-328"><a href="#cb13-328" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-329"><a href="#cb13-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-330"><a href="#cb13-330" aria-hidden="true" tabindex="-1"></a><span class="fu">## 0.10 Running the first book script</span></span>
 <span id="cb13-331"><a href="#cb13-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-332"><a href="#cb13-332" aria-hidden="true" tabindex="-1"></a>**Expected output:** several dozen lines of real report text, starting</span>
-<span id="cb13-333"><a href="#cb13-333" aria-hidden="true" tabindex="-1"></a>with a header block (<span class="in">`RPT DATE:11/26/2020`</span>, `WELL NAME:FORGE 16A</span>
-<span id="cb13-334"><a href="#cb13-334" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">78</span><span class="co">]</span>-32`...) and ending with a time breakdown that includes the line</span>
-<span id="cb13-335"><a href="#cb13-335" aria-hidden="true" tabindex="-1"></a><span class="in">`During the slide lost tool face and became assembly became stuck`</span>.</span>
-<span id="cb13-336"><a href="#cb13-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-337"><a href="#cb13-337" aria-hidden="true" tabindex="-1"></a>**If it fails:**</span>
+<span id="cb13-332"><a href="#cb13-332" aria-hidden="true" tabindex="-1"></a>Now run the actual script Chapter 1 builds — this book's very first</span>
+<span id="cb13-333"><a href="#cb13-333" aria-hidden="true" tabindex="-1"></a>real, working tool:</span>
+<span id="cb13-334"><a href="#cb13-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-335"><a href="#cb13-335" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb13-336"><a href="#cb13-336" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf</span>
+<span id="cb13-337"><a href="#cb13-337" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb13-338"><a href="#cb13-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-339"><a href="#cb13-339" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`ModuleNotFoundError: No module named 'pdfplumber'`</span> — your virtual</span>
-<span id="cb13-340"><a href="#cb13-340" aria-hidden="true" tabindex="-1"></a>  environment isn't active, or Section 0.8 didn't complete. Re-run</span>
-<span id="cb13-341"><a href="#cb13-341" aria-hidden="true" tabindex="-1"></a>  Sections 0.7 and 0.8.</span>
-<span id="cb13-342"><a href="#cb13-342" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`No such file or directory`</span> — you're not inside the <span class="in">`ddr-rag-book`</span></span>
-<span id="cb13-343"><a href="#cb13-343" aria-hidden="true" tabindex="-1"></a>  folder, or the path is mistyped. Run <span class="in">`pwd`</span> (or <span class="in">`cd`</span> alone on Windows)</span>
-<span id="cb13-344"><a href="#cb13-344" aria-hidden="true" tabindex="-1"></a>  to check where you are.</span>
-<span id="cb13-345"><a href="#cb13-345" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-346"><a href="#cb13-346" aria-hidden="true" tabindex="-1"></a>If this printed real report text, Part 0 is complete — Chapter 1 explains</span>
-<span id="cb13-347"><a href="#cb13-347" aria-hidden="true" tabindex="-1"></a>exactly how this script works, line by line.</span>
-<span id="cb13-348"><a href="#cb13-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-349"><a href="#cb13-349" aria-hidden="true" tabindex="-1"></a><span class="fu">## 0.11 Troubleshooting</span></span>
-<span id="cb13-350"><a href="#cb13-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-351"><a href="#cb13-351" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symptom <span class="pp">|</span> Likely cause <span class="pp">|</span> What to do <span class="pp">|</span></span>
-<span id="cb13-352"><a href="#cb13-352" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb13-353"><a href="#cb13-353" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`python: command not found`</span> <span class="pp">|</span> Python isn't installed, or isn't on your system's PATH <span class="pp">|</span> Try <span class="in">`python3`</span> instead. If that also fails, reinstall Python from python.org, checking "Add to PATH" on Windows. <span class="pp">|</span></span>
-<span id="cb13-354"><a href="#cb13-354" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pip: command not found`</span> <span class="pp">|</span> Same as above, or your virtual environment isn't active <span class="pp">|</span> Confirm <span class="in">`(.venv)`</span> shows in your prompt (Section 0.7); if not installed at all, try <span class="in">`python -m pip`</span> instead of <span class="in">`pip`</span> directly. <span class="pp">|</span></span>
-<span id="cb13-355"><a href="#cb13-355" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Commands run, but nothing looks like it worked <span class="pp">|</span> You're in the wrong folder <span class="pp">|</span> Run <span class="in">`pwd`</span> (or <span class="in">`cd`</span> alone on Windows) and compare it to where you expect to be; <span class="in">`cd`</span> back into <span class="in">`ddr-rag-book`</span>. <span class="pp">|</span></span>
-<span id="cb13-356"><a href="#cb13-356" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`No such file or directory`</span> / <span class="in">`FileNotFoundError`</span> <span class="pp">|</span> Wrong folder, or a typo in the file path <span class="pp">|</span> Run <span class="in">`ls`</span> (or <span class="in">`dir`</span>) to see what's actually there; file and folder names are case-sensitive on Mac/Linux. <span class="pp">|</span></span>
-<span id="cb13-357"><a href="#cb13-357" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A package import fails (<span class="in">`ModuleNotFoundError`</span>) <span class="pp">|</span> Virtual environment isn't active, or Section 0.8 wasn't run <span class="pp">|</span> Re-activate <span class="in">`.venv`</span> (Section 0.7), then re-run <span class="in">`pip install -r requirements.txt`</span>. <span class="pp">|</span></span>
-<span id="cb13-358"><a href="#cb13-358" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Permission denied`</span> <span class="pp">|</span> Your user account doesn't have write access to that folder <span class="pp">|</span> Don't use <span class="in">`sudo`</span>/administrator install for this project — instead, work inside a folder you own, like your home directory or Documents. <span class="pp">|</span></span>
-<span id="cb13-359"><a href="#cb13-359" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Windows path errors (e.g. backslashes look wrong) <span class="pp">|</span> Windows uses <span class="in">`\`</span> in paths, this book's examples are written with <span class="in">`/`</span> <span class="pp">|</span> Both usually work in a modern Windows terminal, but if a command fails specifically because of slashes, replace <span class="in">`/`</span> with <span class="in">`\`</span> in that one command. <span class="pp">|</span></span>
-<span id="cb13-360"><a href="#cb13-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-361"><a href="#cb13-361" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Part 0"}</span>
-<span id="cb13-362"><a href="#cb13-362" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> <span class="in">`python --version`</span> (or <span class="in">`python3 --version`</span>) shows 3.11 or later</span>
-<span id="cb13-363"><a href="#cb13-363" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Your terminal prompt shows <span class="in">`(.venv)`</span></span>
-<span id="cb13-364"><a href="#cb13-364" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> <span class="in">`pip install -r requirements.txt`</span> finished without errors</span>
-<span id="cb13-365"><a href="#cb13-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> <span class="in">`python code/setup_check.py`</span> printed <span class="in">`DDR RAG workshop is ready.`</span></span>
-<span id="cb13-366"><a href="#cb13-366" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> <span class="in">`python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf`</span> printed real report text</span>
-<span id="cb13-367"><a href="#cb13-367" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-368"><a href="#cb13-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-369"><a href="#cb13-369" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb13-370"><a href="#cb13-370" aria-hidden="true" tabindex="-1"></a>**A working Python environment** — Python, an active virtual environment,</span>
-<span id="cb13-371"><a href="#cb13-371" aria-hidden="true" tabindex="-1"></a>every package this book needs, and a folder with the real Utah FORGE DDR</span>
-<span id="cb13-372"><a href="#cb13-372" aria-hidden="true" tabindex="-1"></a>archive already in it, ready to run the companion repository's tests and</span>
-<span id="cb13-373"><a href="#cb13-373" aria-hidden="true" tabindex="-1"></a>every chapter that follows.</span>
-<span id="cb13-374"><a href="#cb13-374" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb13-375"><a href="#cb13-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-376"><a href="#cb13-376" aria-hidden="true" tabindex="-1"></a>If all five checkpoint items are true, you have a working Python</span>
-<span id="cb13-377"><a href="#cb13-377" aria-hidden="true" tabindex="-1"></a>workshop, and Chapter 1 starts exactly where this section leaves off. If</span>
-<span id="cb13-378"><a href="#cb13-378" aria-hidden="true" tabindex="-1"></a>you'd like a step-by-step guide specific to the environment you chose in</span>
-<span id="cb13-379"><a href="#cb13-379" aria-hidden="true" tabindex="-1"></a>Section 0.2, see Appendices A1 (Jupyter Notebook), A2 (VS Code), A3</span>
-<span id="cb13-380"><a href="#cb13-380" aria-hidden="true" tabindex="-1"></a>(PyCharm Community), A4 (Positron), or A5 (Terminal only).</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb13-339"><a href="#cb13-339" aria-hidden="true" tabindex="-1"></a>**What this does:** opens one real Daily Drilling Report PDF (already</span>
+<span id="cb13-340"><a href="#cb13-340" aria-hidden="true" tabindex="-1"></a>included in the repository you downloaded in Section 0.6) and prints its</span>
+<span id="cb13-341"><a href="#cb13-341" aria-hidden="true" tabindex="-1"></a>full text straight to your terminal.</span>
+<span id="cb13-342"><a href="#cb13-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-343"><a href="#cb13-343" aria-hidden="true" tabindex="-1"></a>**Expected output:** several dozen lines of real report text, starting</span>
+<span id="cb13-344"><a href="#cb13-344" aria-hidden="true" tabindex="-1"></a>with a header block (<span class="in">`RPT DATE:11/26/2020`</span>, `WELL NAME:FORGE 16A</span>
+<span id="cb13-345"><a href="#cb13-345" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">78</span><span class="co">]</span>-32`...) and ending with a time breakdown that includes the line</span>
+<span id="cb13-346"><a href="#cb13-346" aria-hidden="true" tabindex="-1"></a><span class="in">`During the slide lost tool face and became assembly became stuck`</span>.</span>
+<span id="cb13-347"><a href="#cb13-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-348"><a href="#cb13-348" aria-hidden="true" tabindex="-1"></a>**If it fails:**</span>
+<span id="cb13-349"><a href="#cb13-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-350"><a href="#cb13-350" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`ModuleNotFoundError: No module named 'pdfplumber'`</span> — your virtual</span>
+<span id="cb13-351"><a href="#cb13-351" aria-hidden="true" tabindex="-1"></a>  environment isn't active, or Section 0.8 didn't complete. Re-run</span>
+<span id="cb13-352"><a href="#cb13-352" aria-hidden="true" tabindex="-1"></a>  Sections 0.7 and 0.8.</span>
+<span id="cb13-353"><a href="#cb13-353" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`No such file or directory`</span> — you're not inside the <span class="in">`ddr-rag-book`</span></span>
+<span id="cb13-354"><a href="#cb13-354" aria-hidden="true" tabindex="-1"></a>  folder, or the path is mistyped. Run <span class="in">`pwd`</span> (or <span class="in">`cd`</span> alone on Windows)</span>
+<span id="cb13-355"><a href="#cb13-355" aria-hidden="true" tabindex="-1"></a>  to check where you are.</span>
+<span id="cb13-356"><a href="#cb13-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-357"><a href="#cb13-357" aria-hidden="true" tabindex="-1"></a>If this printed real report text, Part 0 is complete — Chapter 1 explains</span>
+<span id="cb13-358"><a href="#cb13-358" aria-hidden="true" tabindex="-1"></a>exactly how this script works, line by line.</span>
+<span id="cb13-359"><a href="#cb13-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-360"><a href="#cb13-360" aria-hidden="true" tabindex="-1"></a><span class="fu">## 0.11 Troubleshooting</span></span>
+<span id="cb13-361"><a href="#cb13-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-362"><a href="#cb13-362" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symptom <span class="pp">|</span> Likely cause <span class="pp">|</span> What to do <span class="pp">|</span></span>
+<span id="cb13-363"><a href="#cb13-363" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb13-364"><a href="#cb13-364" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`python: command not found`</span> <span class="pp">|</span> Python isn't installed, or isn't on your system's PATH <span class="pp">|</span> Try <span class="in">`python3`</span> instead. If that also fails, reinstall Python from python.org, checking "Add to PATH" on Windows. <span class="pp">|</span></span>
+<span id="cb13-365"><a href="#cb13-365" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`pip: command not found`</span> <span class="pp">|</span> Same as above, or your virtual environment isn't active <span class="pp">|</span> Confirm <span class="in">`(.venv)`</span> shows in your prompt (Section 0.7); if not installed at all, try <span class="in">`python -m pip`</span> instead of <span class="in">`pip`</span> directly. <span class="pp">|</span></span>
+<span id="cb13-366"><a href="#cb13-366" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Commands run, but nothing looks like it worked <span class="pp">|</span> You're in the wrong folder <span class="pp">|</span> Run <span class="in">`pwd`</span> (or <span class="in">`cd`</span> alone on Windows) and compare it to where you expect to be; <span class="in">`cd`</span> back into <span class="in">`ddr-rag-book`</span>. <span class="pp">|</span></span>
+<span id="cb13-367"><a href="#cb13-367" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`No such file or directory`</span> / <span class="in">`FileNotFoundError`</span> <span class="pp">|</span> Wrong folder, or a typo in the file path <span class="pp">|</span> Run <span class="in">`ls`</span> (or <span class="in">`dir`</span>) to see what's actually there; file and folder names are case-sensitive on Mac/Linux. <span class="pp">|</span></span>
+<span id="cb13-368"><a href="#cb13-368" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A package import fails (<span class="in">`ModuleNotFoundError`</span>) <span class="pp">|</span> Virtual environment isn't active, or Section 0.8 wasn't run <span class="pp">|</span> Re-activate <span class="in">`.venv`</span> (Section 0.7), then re-run <span class="in">`pip install -r requirements.txt`</span>. <span class="pp">|</span></span>
+<span id="cb13-369"><a href="#cb13-369" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`Permission denied`</span> <span class="pp">|</span> Your user account doesn't have write access to that folder <span class="pp">|</span> Don't use <span class="in">`sudo`</span>/administrator install for this project — instead, work inside a folder you own, like your home directory or Documents. <span class="pp">|</span></span>
+<span id="cb13-370"><a href="#cb13-370" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Windows path errors (e.g. backslashes look wrong) <span class="pp">|</span> Windows uses <span class="in">`\`</span> in paths, this book's examples are written with <span class="in">`/`</span> <span class="pp">|</span> Both usually work in a modern Windows terminal, but if a command fails specifically because of slashes, replace <span class="in">`/`</span> with <span class="in">`\`</span> in that one command. <span class="pp">|</span></span>
+<span id="cb13-371"><a href="#cb13-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-372"><a href="#cb13-372" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Part 0"}</span>
+<span id="cb13-373"><a href="#cb13-373" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> <span class="in">`python --version`</span> (or <span class="in">`python3 --version`</span>) shows 3.11 or later</span>
+<span id="cb13-374"><a href="#cb13-374" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Your terminal prompt shows <span class="in">`(.venv)`</span></span>
+<span id="cb13-375"><a href="#cb13-375" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> <span class="in">`pip install -r requirements.txt`</span> finished without errors</span>
+<span id="cb13-376"><a href="#cb13-376" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> <span class="in">`python code/setup_check.py`</span> printed <span class="in">`DDR RAG workshop is ready.`</span></span>
+<span id="cb13-377"><a href="#cb13-377" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> <span class="in">`python code/chapter_01/read_ddr.py datasets/sample_ddrs/FORGE-16A-78-32_Drilling_038_2020-11-26.pdf`</span> printed real report text</span>
+<span id="cb13-378"><a href="#cb13-378" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-379"><a href="#cb13-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-380"><a href="#cb13-380" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb13-381"><a href="#cb13-381" aria-hidden="true" tabindex="-1"></a>**A working Python environment** — Python, an active virtual environment,</span>
+<span id="cb13-382"><a href="#cb13-382" aria-hidden="true" tabindex="-1"></a>every package this book needs, and a folder with the real Utah FORGE DDR</span>
+<span id="cb13-383"><a href="#cb13-383" aria-hidden="true" tabindex="-1"></a>archive already in it, ready to run the companion repository's tests and</span>
+<span id="cb13-384"><a href="#cb13-384" aria-hidden="true" tabindex="-1"></a>every chapter that follows.</span>
+<span id="cb13-385"><a href="#cb13-385" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb13-386"><a href="#cb13-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-387"><a href="#cb13-387" aria-hidden="true" tabindex="-1"></a>If all five checkpoint items are true, you have a working Python</span>
+<span id="cb13-388"><a href="#cb13-388" aria-hidden="true" tabindex="-1"></a>workshop, and Chapter 1 starts exactly where this section leaves off. If</span>
+<span id="cb13-389"><a href="#cb13-389" aria-hidden="true" tabindex="-1"></a>you'd like a step-by-step guide specific to the environment you chose in</span>
+<span id="cb13-390"><a href="#cb13-390" aria-hidden="true" tabindex="-1"></a>Section 0.2, see Appendices A1 (Jupyter Notebook), A2 (VS Code), A3</span>
+<span id="cb13-391"><a href="#cb13-391" aria-hidden="true" tabindex="-1"></a>(PyCharm Community), A4 (Positron), or A5 (Terminal only).</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0155a636e50d65345ad986fce4bcfbff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-76885749eb004bd3b4e745139b47bf15.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-0155a636e50d65345ad986fce4bcfbff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -678,7 +678,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A reusable prompt template with two blanks: the evidence, and the question.</p>
-<div id="1397d32c" class="cell" data-execution_count="1">
+<div id="ba895a88" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_05/first_rag.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>PROMPT_TEMPLATE <span class="op">=</span> <span class="st">"""Answer the question using ONLY the evidence below.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">If the evidence doesn't contain the answer, say so — do not guess.</span></span>
@@ -705,7 +705,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One complete prompt string, evidence labelled by source filename, ready to send to a model.</p>
-<div id="05ab0fb1" class="cell" data-execution_count="2">
+<div id="ccd1f7c2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> semantic_search <span class="im">import</span> embed_texts, load_chunks, search  <span class="co"># from Chapter 4</span></span>
@@ -736,7 +736,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A tuple: the generated answer text, and the list of report filenames that were actually retrieved and shown to the model.</p>
-<div id="4177b93e" class="cell" data-execution_count="3">
+<div id="01a5cb88" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> answer_question(question: <span class="bu">str</span>, model, filenames, texts, embeddings,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                     llm_call) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    retrieved <span class="op">=</span> search(model, question, filenames, embeddings, top_k<span class="op">=</span><span class="dv">3</span>)</span>
@@ -757,7 +757,7 @@ Evidence:
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve            <span class="co"># leave this running in its own terminal</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>qwen2.5:7b-instruct</code> is a small, capable default, but nothing here is tied to it — pass any model you’ve pulled to <code>ollama_llm_call(model=...)</code>. Pick whatever runs comfortably on your hardware: <code>llama3.1:8b</code> or <code>mistral</code> are similar in size, <code>qwen2.5:14b</code> is stronger if you have the memory for it, and swapping the one HTTP call for a hosted API’s would let you point at a cloud model instead. The retrieval and prompt work above doesn’t change either way — only which model reads the evidence.</p>
 <p><code>ollama_llm_call</code> talks to that local server over plain HTTP — standard library only, no extra package to install, and a clear message instead of a crash if Ollama isn’t running:</p>
-<div id="4b822405" class="cell" data-execution_count="4">
+<div id="c665b970" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.error</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
@@ -863,6 +863,19 @@ Sources:
 <li>If retrieval is wrong, generation cannot save you — always verify the evidence list before trusting the generated answer.</li>
 <li>A prompt that instructs “answer only from evidence, cite sources” is necessary but not sufficient for trustworthy answers. Part II builds the guardrails that make it sufficient.</li>
 </ul>
+<div class="callout callout-style-default callout-tip callout-titled" title="A habit worth starting now: keep a tiny answer key">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>A habit worth starting now: keep a tiny answer key
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before you start tuning retrieval settings in Part II — chunk sizes (Chapter 7), fusion weights (Chapter 9) — write down three questions you already know the answer to, like <em>“which report shows packers failing to set?”</em> → report #49, and note which report each one <em>should</em> return. That short list is the seed of Chapter 11’s evaluation set, and it turns “did that change actually help?” into something you can check, instead of a feeling.</p>
+</div>
+</div>
 </section>
 <section id="repository-files" class="level2" data-number="5.11">
 <h2 data-number="5.11" class="anchored" data-anchor-id="repository-files"><span class="header-section-number">5.11</span> Repository files</h2>
@@ -916,7 +929,7 @@ Sources:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong><code>first_rag.py</code></strong> — an Industrial RAG system: ask it a question in plain English, and it retrieves evidence, generates an answer with a local model, and hands back the source reports and excerpts that answer is traceable to. This is Part I’s capstone artifact.</p>
+<p><strong><code>first_rag.py</code></strong> — a working RAG <em>prototype</em>: ask it a question in plain English, and it retrieves evidence, generates an answer with a local model, and hands back the source reports and excerpts that answer is traceable to. This is Part I’s capstone artifact — and the known limits you just saw in this chapter (evidence width, fabricated page numbers) are exactly what Part II hardens.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Try it in the browser: the companion app">
@@ -1863,54 +1876,66 @@ Lewis, Patrick, Ethan Perez, Aleksandra Piktus, et al. 2020. <span>“Retrieval-
 <span id="cb10-436"><a href="#cb10-436" aria-hidden="true" tabindex="-1"></a>  necessary but not sufficient for trustworthy answers. Part II builds the</span>
 <span id="cb10-437"><a href="#cb10-437" aria-hidden="true" tabindex="-1"></a>  guardrails that make it sufficient.</span>
 <span id="cb10-438"><a href="#cb10-438" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-439"><a href="#cb10-439" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
-<span id="cb10-440"><a href="#cb10-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-441"><a href="#cb10-441" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb10-442"><a href="#cb10-442" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb10-443"><a href="#cb10-443" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_05/first_rag.py`</span> <span class="pp">|</span> Prompt assembly and evidence-tracked question answering <span class="pp">|</span></span>
-<span id="cb10-444"><a href="#cb10-444" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_05_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
-<span id="cb10-445"><a href="#cb10-445" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-446"><a href="#cb10-446" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 5"}</span>
-<span id="cb10-447"><a href="#cb10-447" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained RAG as two separate, inspectable steps: retrieve, then generate</span>
-<span id="cb10-448"><a href="#cb10-448" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Assembled retrieved evidence into a prompt that forces answers from that evidence only</span>
-<span id="cb10-449"><a href="#cb10-449" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Generated a real answer with a local model (Ollama), returned with its source reports and excerpts</span>
-<span id="cb10-450"><a href="#cb10-450" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Caught a real case where the cited report wasn't actually in the evidence</span>
-<span id="cb10-451"><a href="#cb10-451" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-452"><a href="#cb10-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-453"><a href="#cb10-453" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb10-454"><a href="#cb10-454" aria-hidden="true" tabindex="-1"></a>**`first_rag.py`** — an Industrial RAG system: ask it a question in plain</span>
-<span id="cb10-455"><a href="#cb10-455" aria-hidden="true" tabindex="-1"></a>English, and it retrieves evidence, generates an answer with a local</span>
-<span id="cb10-456"><a href="#cb10-456" aria-hidden="true" tabindex="-1"></a>model, and hands back the source reports and excerpts that answer is</span>
-<span id="cb10-457"><a href="#cb10-457" aria-hidden="true" tabindex="-1"></a>traceable to. This is Part I's capstone artifact.</span>
-<span id="cb10-458"><a href="#cb10-458" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-459"><a href="#cb10-459" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-460"><a href="#cb10-460" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Try it in the browser: the companion app"}</span>
-<span id="cb10-461"><a href="#cb10-461" aria-hidden="true" tabindex="-1"></a>The optional <span class="co">[</span><span class="ot">DDR RAG Companion App</span><span class="co">](../app/README.md)</span> (<span class="in">`book/app/`</span>) wraps</span>
-<span id="cb10-462"><a href="#cb10-462" aria-hidden="true" tabindex="-1"></a>this same retrieve-then-generate-then-cite flow in a small Streamlit</span>
-<span id="cb10-463"><a href="#cb10-463" aria-hidden="true" tabindex="-1"></a>screen. Run <span class="in">`streamlit run book/app/streamlit_app.py`</span>, pick a question,</span>
-<span id="cb10-464"><a href="#cb10-464" aria-hidden="true" tabindex="-1"></a>and see the evidence cards, the local-model answer, and a "Why this</span>
-<span id="cb10-465"><a href="#cb10-465" aria-hidden="true" tabindex="-1"></a>answer?" panel side by side. It reuses this chapter's code (plus Chapter</span>
-<span id="cb10-466"><a href="#cb10-466" aria-hidden="true" tabindex="-1"></a>9's hybrid retrieval) — nothing new to learn, just the payoff on one</span>
-<span id="cb10-467"><a href="#cb10-467" aria-hidden="true" tabindex="-1"></a>screen.</span>
-<span id="cb10-468"><a href="#cb10-468" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb10-469"><a href="#cb10-469" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-470"><a href="#cb10-470" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb10-439"><a href="#cb10-439" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="A habit worth starting now: keep a tiny answer key"}</span>
+<span id="cb10-440"><a href="#cb10-440" aria-hidden="true" tabindex="-1"></a>Before you start tuning retrieval settings in Part II — chunk sizes</span>
+<span id="cb10-441"><a href="#cb10-441" aria-hidden="true" tabindex="-1"></a>(Chapter 7), fusion weights (Chapter 9) — write down three questions you</span>
+<span id="cb10-442"><a href="#cb10-442" aria-hidden="true" tabindex="-1"></a>already know the answer to, like *"which report shows packers failing to</span>
+<span id="cb10-443"><a href="#cb10-443" aria-hidden="true" tabindex="-1"></a>set?"* → report #49, and note which report each one *should* return.</span>
+<span id="cb10-444"><a href="#cb10-444" aria-hidden="true" tabindex="-1"></a>That short list is the seed of Chapter 11's evaluation set, and it turns</span>
+<span id="cb10-445"><a href="#cb10-445" aria-hidden="true" tabindex="-1"></a>"did that change actually help?" into something you can check, instead of</span>
+<span id="cb10-446"><a href="#cb10-446" aria-hidden="true" tabindex="-1"></a>a feeling.</span>
+<span id="cb10-447"><a href="#cb10-447" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-448"><a href="#cb10-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-449"><a href="#cb10-449" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb10-450"><a href="#cb10-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-451"><a href="#cb10-451" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb10-452"><a href="#cb10-452" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb10-453"><a href="#cb10-453" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_05/first_rag.py`</span> <span class="pp">|</span> Prompt assembly and evidence-tracked question answering <span class="pp">|</span></span>
+<span id="cb10-454"><a href="#cb10-454" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_05_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
+<span id="cb10-455"><a href="#cb10-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-456"><a href="#cb10-456" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 5"}</span>
+<span id="cb10-457"><a href="#cb10-457" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained RAG as two separate, inspectable steps: retrieve, then generate</span>
+<span id="cb10-458"><a href="#cb10-458" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Assembled retrieved evidence into a prompt that forces answers from that evidence only</span>
+<span id="cb10-459"><a href="#cb10-459" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Generated a real answer with a local model (Ollama), returned with its source reports and excerpts</span>
+<span id="cb10-460"><a href="#cb10-460" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Caught a real case where the cited report wasn't actually in the evidence</span>
+<span id="cb10-461"><a href="#cb10-461" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-462"><a href="#cb10-462" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-463"><a href="#cb10-463" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb10-464"><a href="#cb10-464" aria-hidden="true" tabindex="-1"></a>**`first_rag.py`** — a working RAG *prototype*: ask it a question in plain</span>
+<span id="cb10-465"><a href="#cb10-465" aria-hidden="true" tabindex="-1"></a>English, and it retrieves evidence, generates an answer with a local</span>
+<span id="cb10-466"><a href="#cb10-466" aria-hidden="true" tabindex="-1"></a>model, and hands back the source reports and excerpts that answer is</span>
+<span id="cb10-467"><a href="#cb10-467" aria-hidden="true" tabindex="-1"></a>traceable to. This is Part I's capstone artifact — and the known limits</span>
+<span id="cb10-468"><a href="#cb10-468" aria-hidden="true" tabindex="-1"></a>you just saw in this chapter (evidence width, fabricated page numbers)</span>
+<span id="cb10-469"><a href="#cb10-469" aria-hidden="true" tabindex="-1"></a>are exactly what Part II hardens.</span>
+<span id="cb10-470"><a href="#cb10-470" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb10-471"><a href="#cb10-471" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-472"><a href="#cb10-472" aria-hidden="true" tabindex="-1"></a>You can ask an engineering question in plain English and get back a</span>
-<span id="cb10-473"><a href="#cb10-473" aria-hidden="true" tabindex="-1"></a>generated answer with an explicit, checkable list of exactly which</span>
-<span id="cb10-474"><a href="#cb10-474" aria-hidden="true" tabindex="-1"></a>reports it came from — not just ranked passages you'd still have to read</span>
-<span id="cb10-475"><a href="#cb10-475" aria-hidden="true" tabindex="-1"></a>and synthesise yourself.</span>
-<span id="cb10-476"><a href="#cb10-476" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-477"><a href="#cb10-477" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
-<span id="cb10-478"><a href="#cb10-478" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-479"><a href="#cb10-479" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 6:** What you've built in Part I works — on ten</span>
-<span id="cb10-480"><a href="#cb10-480" aria-hidden="true" tabindex="-1"></a>clean, digital, hand-picked reports out of the full 76-report Utah FORGE</span>
-<span id="cb10-481"><a href="#cb10-481" aria-hidden="true" tabindex="-1"></a>archive. Part II industrialises this system against the reality of a</span>
-<span id="cb10-482"><a href="#cb10-482" aria-hidden="true" tabindex="-1"></a>full archive: retrieval that has to be both fast and precise across</span>
-<span id="cb10-483"><a href="#cb10-483" aria-hidden="true" tabindex="-1"></a>every report, and answers that have to survive scrutiny from someone who</span>
-<span id="cb10-484"><a href="#cb10-484" aria-hidden="true" tabindex="-1"></a>wasn't in the room when they were generated. Chapter 6 starts with the</span>
-<span id="cb10-485"><a href="#cb10-485" aria-hidden="true" tabindex="-1"></a>first thing that breaks in a typical real-world archive: scanned reports</span>
-<span id="cb10-486"><a href="#cb10-486" aria-hidden="true" tabindex="-1"></a>with no extractable text at all.</span>
+<span id="cb10-472"><a href="#cb10-472" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Try it in the browser: the companion app"}</span>
+<span id="cb10-473"><a href="#cb10-473" aria-hidden="true" tabindex="-1"></a>The optional <span class="co">[</span><span class="ot">DDR RAG Companion App</span><span class="co">](../app/README.md)</span> (<span class="in">`book/app/`</span>) wraps</span>
+<span id="cb10-474"><a href="#cb10-474" aria-hidden="true" tabindex="-1"></a>this same retrieve-then-generate-then-cite flow in a small Streamlit</span>
+<span id="cb10-475"><a href="#cb10-475" aria-hidden="true" tabindex="-1"></a>screen. Run <span class="in">`streamlit run book/app/streamlit_app.py`</span>, pick a question,</span>
+<span id="cb10-476"><a href="#cb10-476" aria-hidden="true" tabindex="-1"></a>and see the evidence cards, the local-model answer, and a "Why this</span>
+<span id="cb10-477"><a href="#cb10-477" aria-hidden="true" tabindex="-1"></a>answer?" panel side by side. It reuses this chapter's code (plus Chapter</span>
+<span id="cb10-478"><a href="#cb10-478" aria-hidden="true" tabindex="-1"></a>9's hybrid retrieval) — nothing new to learn, just the payoff on one</span>
+<span id="cb10-479"><a href="#cb10-479" aria-hidden="true" tabindex="-1"></a>screen.</span>
+<span id="cb10-480"><a href="#cb10-480" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-481"><a href="#cb10-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-482"><a href="#cb10-482" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb10-483"><a href="#cb10-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-484"><a href="#cb10-484" aria-hidden="true" tabindex="-1"></a>You can ask an engineering question in plain English and get back a</span>
+<span id="cb10-485"><a href="#cb10-485" aria-hidden="true" tabindex="-1"></a>generated answer with an explicit, checkable list of exactly which</span>
+<span id="cb10-486"><a href="#cb10-486" aria-hidden="true" tabindex="-1"></a>reports it came from — not just ranked passages you'd still have to read</span>
+<span id="cb10-487"><a href="#cb10-487" aria-hidden="true" tabindex="-1"></a>and synthesise yourself.</span>
+<span id="cb10-488"><a href="#cb10-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-489"><a href="#cb10-489" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb10-490"><a href="#cb10-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-491"><a href="#cb10-491" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 6:** What you've built in Part I works — on ten</span>
+<span id="cb10-492"><a href="#cb10-492" aria-hidden="true" tabindex="-1"></a>clean, digital, hand-picked reports out of the full 76-report Utah FORGE</span>
+<span id="cb10-493"><a href="#cb10-493" aria-hidden="true" tabindex="-1"></a>archive. Part II industrialises this system against the reality of a</span>
+<span id="cb10-494"><a href="#cb10-494" aria-hidden="true" tabindex="-1"></a>full archive: retrieval that has to be both fast and precise across</span>
+<span id="cb10-495"><a href="#cb10-495" aria-hidden="true" tabindex="-1"></a>every report, and answers that have to survive scrutiny from someone who</span>
+<span id="cb10-496"><a href="#cb10-496" aria-hidden="true" tabindex="-1"></a>wasn't in the room when they were generated. Chapter 6 starts with the</span>
+<span id="cb10-497"><a href="#cb10-497" aria-hidden="true" tabindex="-1"></a>first thing that breaks in a typical real-world archive: scanned reports</span>
+<span id="cb10-498"><a href="#cb10-498" aria-hidden="true" tabindex="-1"></a>with no extractable text at all.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

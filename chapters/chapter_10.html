@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-0155a636e50d65345ad986fce4bcfbff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-76885749eb004bd3b4e745139b47bf15.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-0155a636e50d65345ad986fce4bcfbff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -541,7 +541,7 @@ div.csl-indent {
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">10.1</span> Learning objectives</a></li>
   <li><a href="#operational-problem" id="toc-operational-problem" class="nav-link" data-scroll-target="#operational-problem"><span class="header-section-number">10.2</span> Operational Problem</a></li>
-  <li><a href="#structured-facts-already-extracted" id="toc-structured-facts-already-extracted" class="nav-link" data-scroll-target="#structured-facts-already-extracted"><span class="header-section-number">10.3</span> Structured facts, already extracted</a></li>
+  <li><a href="#a-real-structured-facts-table" id="toc-a-real-structured-facts-table" class="nav-link" data-scroll-target="#a-real-structured-facts-table"><span class="header-section-number">10.3</span> A real, structured facts table</a></li>
   <li><a href="#a-real-honest-gap-in-this-archive" id="toc-a-real-honest-gap-in-this-archive" class="nav-link" data-scroll-target="#a-real-honest-gap-in-this-archive"><span class="header-section-number">10.4</span> A real, honest gap in this archive</a></li>
   <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation"><span class="header-section-number">10.5</span> Implementation</a>
   <ul class="collapse">
@@ -602,8 +602,8 @@ div.csl-indent {
 <h2 data-number="10.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">10.2</span> Operational Problem</h2>
 <p>Sean, the production engineer, asks a pointed question after seeing a generated number in a draft report: <em>“Can you actually prove that number, or did the model just make it sound right?”</em> Chapter 5 built a prompt that <em>asks</em> a language model to cite sources — necessary, but not sufficient. A model can still cite a plausible-sounding report number for a number it invented, especially for arithmetic questions (“how many hours of non-productive time in November?”) that language models are statistically bad at answering exactly, no matter how good the prompt is. Separately, this archive — like any real archive — has a genuine gap, and a system that answers confidently from what it <em>has</em>, without flagging what it’s <em>missing</em>, can quietly mislead an engineer who assumes silence means nothing happened.</p>
 </section>
-<section id="structured-facts-already-extracted" class="level2" data-number="10.3">
-<h2 data-number="10.3" class="anchored" data-anchor-id="structured-facts-already-extracted"><span class="header-section-number">10.3</span> Structured facts, already extracted</h2>
+<section id="a-real-structured-facts-table" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="a-real-structured-facts-table"><span class="header-section-number">10.3</span> A real, structured facts table</h2>
 <p>Language models can produce fluent, plausible claims that are simply false — a well-documented failure mode called hallucination <span class="citation" data-cites="ji2023hallucination">(<a href="../references.html#ref-ji2023hallucination" role="doc-biblioref">Ji et al. 2023</a>)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Hallucination">
 <div class="callout-header d-flex align-content-center">
@@ -669,7 +669,7 @@ no  -&gt; retrieve + generate (Ch.5)
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A plain-text “Evidence:” block listing each source, ready to show alongside a generated answer.</p>
-<div id="fe02721f" class="cell" data-execution_count="1">
+<div id="63664fc2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_10/traceable_answers.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -708,7 +708,7 @@ no  -&gt; retrieve + generate (Ch.5)
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(start, end)</code> date ranges with no report — empty if the archive is complete.</p>
-<div id="b6faf4cd" class="cell" data-execution_count="2">
+<div id="24c15aed" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_date_gaps(report_dates: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">str</span>]]:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return (start, end) date ranges with no report, given a sorted</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    list of ISO date strings covering a continuous daily-reporting period."""</span></span>
@@ -736,7 +736,7 @@ no  -&gt; retrieve + generate (Ch.5)
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>Citation</code> objects built entirely from the search results — real reports, real pages, real dates, in ranked order.</p>
-<div id="89dd4bc7" class="cell" data-execution_count="3">
+<div id="f4065c49" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Citation:</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    report: <span class="bu">str</span></span>
@@ -842,7 +842,7 @@ no  -&gt; retrieve + generate (Ch.5)
 </tr>
 <tr class="even">
 <td><code>DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv</code></td>
-<td>Real, computed gap-detection output (companion repo)</td>
+<td>Real, computed gap-detection output (companion repo — reported here, not reproduced without DDR_UTAH_FORGE)</td>
 </tr>
 </tbody>
 </table>
@@ -1423,7 +1423,7 @@ Ji, Ziwei, Nayeon Lee, Rita Frieske, et al. 2023. <span>“Survey of Hallucinati
 <span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>confidently from what it *has*, without flagging what it's *missing*, can</span>
 <span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>quietly mislead an engineer who assumes silence means nothing happened.</span>
 <span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## Structured facts, already extracted</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## A real, structured facts table</span></span>
 <span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>Language models can produce fluent, plausible claims that are simply</span>
 <span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>false — a well-documented failure mode called hallucination</span>
@@ -1796,7 +1796,7 @@ Ji, Ziwei, Nayeon Lee, Rita Frieske, et al. 2023. <span>“Survey of Hallucinati
 <span id="cb8-420"><a href="#cb8-420" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
 <span id="cb8-421"><a href="#cb8-421" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
 <span id="cb8-422"><a href="#cb8-422" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_10/traceable_answers.py`</span> <span class="pp">|</span> Citation formatting, real search-to-citation wiring, and date-gap detection <span class="pp">|</span></span>
-<span id="cb8-423"><a href="#cb8-423" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv`</span> <span class="pp">|</span> Real, computed gap-detection output (companion repo) <span class="pp">|</span></span>
+<span id="cb8-423"><a href="#cb8-423" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv`</span> <span class="pp">|</span> Real, computed gap-detection output (companion repo — reported here, not reproduced without DDR_UTAH_FORGE) <span class="pp">|</span></span>
 <span id="cb8-424"><a href="#cb8-424" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-425"><a href="#cb8-425" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 10"}</span>
 <span id="cb8-426"><a href="#cb8-426" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Distinguished questions to compute from data versus questions to generate an answer to</span>

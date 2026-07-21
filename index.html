@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-0155a636e50d65345ad986fce4bcfbff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-76885749eb004bd3b4e745139b47bf15.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-0155a636e50d65345ad986fce4bcfbff.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -524,6 +524,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#before-and-after" id="toc-before-and-after" class="nav-link" data-scroll-target="#before-and-after">Before and after</a></li>
   <li><a href="#what-this-becomes" id="toc-what-this-becomes" class="nav-link" data-scroll-target="#what-this-becomes">What this becomes</a></li>
+  <li><a href="#project-map" id="toc-project-map" class="nav-link" data-scroll-target="#project-map">Project map</a></li>
+  <li><a href="#reader-contract" id="toc-reader-contract" class="nav-link" data-scroll-target="#reader-contract">Reader contract</a></li>
   <li><a href="#who-this-book-is-for" id="toc-who-this-book-is-for" class="nav-link" data-scroll-target="#who-this-book-is-for">Who this book is for</a></li>
   <li><a href="#what-you-will-build" id="toc-what-you-will-build" class="nav-link" data-scroll-target="#what-you-will-build">What you will build</a></li>
   <li><a href="#management-view-why-this-matters" id="toc-management-view-why-this-matters" class="nav-link" data-scroll-target="#management-view-why-this-matters">Management view: why this matters</a></li>
@@ -583,7 +585,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="before-and-after" class="level2">
 <h2 class="anchored" data-anchor-id="before-and-after">Before and after</h2>
 <p>Today, when someone needs to know if something has happened before, the options are limited: open PDFs one at a time and hope you pick the right one, ask whoever’s been around the project longest and hope they remember, or rely on memory and risk repeating a mistake nobody wrote down clearly enough to find again.</p>
-<p>By Chapter 5, you’ll have built a working RAG system — retrieve, generate, cite — and run it against a real local model. By the end of the book, it answers cross-report questions like this one, pulling the cause from one report and the outcome from the next:</p>
+<p>By Chapter 5, you’ll have built a working RAG <em>prototype</em> — retrieve, generate, cite — and run it against a real local model. It has real limits you’ll see and measure, not just hear about: Part II spends eight chapters hardening it. By the end of the book, it answers cross-report questions like this one, pulling the cause from one report and the outcome from the next:</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Where this is headed: a cross-report answer from the finished system">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -607,7 +609,7 @@ Evidence:
   FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</code></pre>
 </div>
 </div>
-<p>Both claims in that answer are directly quoted from the real report text — nothing here is invented. Getting there takes the whole book: Chapter 5’s first system answers from a single best-matching report; stitching two reports together like this — the cause in #49, the outcome in #50 — needs the chunking (Chapter 7) and hybrid retrieval (Chapter 9) that Part II builds. The rest of this book is how you build that road, one working script at a time, starting with a single PDF.</p>
+<p>Both claims in that answer are directly quoted from the real report text — nothing here is invented. Getting there takes the whole book: Chapter 5’s first prototype answers from a single best-matching report; stitching two reports together like this — the cause in #49, the outcome in #50 — needs the chunking (Chapter 7) and hybrid retrieval (Chapter 9) that Part II builds. The rest of this book is how you build that road, one working script at a time, starting with a single PDF.</p>
 </section>
 <section id="what-this-becomes" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-becomes">What this becomes</h2>
@@ -619,6 +621,54 @@ Evidence:
 </figure>
 </div>
 <p>The companion pipeline scales the same idea to the whole 76-report archive. <a href="./appendix/appendix_a_environment_setup.html">Appendix A</a> shows how to set either one up and point it at your own reports.</p>
+</section>
+<section id="project-map" class="level2">
+<h2 class="anchored" data-anchor-id="project-map">Project map</h2>
+<p>A handful of things share the name “DDR” or “FORGE” in this project. Before you start, here’s how they fit together:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Piece</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ten-report sample archive</td>
+<td>Used for the main path through Chapters 1–5</td>
+</tr>
+<tr class="even">
+<td>76-report full Utah FORGE archive</td>
+<td>Used for scale exercises from Chapter 6 onward</td>
+</tr>
+<tr class="odd">
+<td>Companion app (<code>book/app/</code>)</td>
+<td>Optional UI over the sample archive, reusing this book’s own code</td>
+</tr>
+<tr class="even">
+<td>Companion pipeline (<code>DDR_UTAH_FORGE</code>)</td>
+<td>A separate, larger, production-style pipeline referenced for real numbers in Part II</td>
+</tr>
+<tr class="odd">
+<td>Your own DDR archive</td>
+<td>The adaptation path once you’ve finished the book</td>
+</tr>
+</tbody>
+</table>
+<p>The first three run entirely from this repository. The companion pipeline is optional and lives in its own repository — see <a href="./appendix/appendix_a_environment_setup.html#the-companion-pipeline-for-part-ii">Appendix A</a>.</p>
+</section>
+<section id="reader-contract" class="level2">
+<h2 class="anchored" data-anchor-id="reader-contract">Reader contract</h2>
+<ul>
+<li><strong>Part I</strong> (Chapters 1–5) builds a working prototype RAG system on the ten-report sample archive: retrieval, generation, and citation, all running.</li>
+<li><strong>Part II</strong> (Chapters 6–13) hardens that prototype against the failure modes a real archive throws at it: scanned reports, chunking, scale, hybrid retrieval, traceability, evaluation, and daily ingestion.</li>
+<li>Some of Part II’s field notes and validation numbers come from the separate <strong>DDR_UTAH_FORGE</strong> companion pipeline rather than from code you run yourself in this repository — each chapter says so at the point where it applies.</li>
+<li>This book teaches an inspectable industrial architecture and working components you built and understand — not a full enterprise deployment with authentication, monitoring, permissions, governance, or support operations. <a href="./preface.html#why-industrial">The preface</a> says more about where that line sits.</li>
+</ul>
 </section>
 <section id="who-this-book-is-for" class="level2">
 <h2 class="anchored" data-anchor-id="who-this-book-is-for">Who this book is for</h2>
@@ -668,11 +718,11 @@ Evidence:
 </tr>
 <tr class="even">
 <td>5</td>
-<td>Ask a question and get a cited, evidence-backed answer</td>
+<td>Ask a question and get a cited, evidence-backed answer — Part I’s working prototype, with known limits Part II closes</td>
 </tr>
 <tr class="odd">
 <td>6–13</td>
-<td>Scale the system to scanned reports, large archives, hybrid retrieval, reranking, full traceability, and daily ingestion of new reports</td>
+<td>Scale the prototype to scanned reports, large archives, hybrid retrieval, reranking, full traceability, and daily ingestion of new reports</td>
 </tr>
 </tbody>
 </table>
@@ -1263,176 +1313,212 @@ Evidence:
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>remember, or rely on memory and risk repeating a mistake nobody wrote</span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>down clearly enough to find again.</span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>By Chapter 5, you'll have built a working RAG system — retrieve, generate,</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>cite — and run it against a real local model. By the end of the book, it</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>answers cross-report questions like this one, pulling the cause from one</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>report and the outcome from the next:</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Where this is headed: a cross-report answer from the finished system"}</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="in">Question: What led to the fishing operation on report #50?</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="in">Answer: On report #49 (2020-12-07), the crew attempted multiple times</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="in">to set packers on BHA #32, but pressure readings showed the ball did</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="in">not seat and the packers failed to set. They tripped out with the</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="in">packer assembly and picked up a fishing BHA (#33) that same day. On</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="in">report #50 (2020-12-08), that fishing run milled up lost pieces of bit.</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="in">Evidence:</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="in">  FORGE-16A-78-32_Drilling_049_2020-12-07.pdf</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="in">  FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>Both claims in that answer are directly quoted from the real report</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>text — nothing here is invented. Getting there takes the whole book:</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>Chapter 5's first system answers from a single best-matching report;</span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>stitching two reports together like this — the cause in #49, the outcome</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>in #50 — needs the chunking (Chapter 7) and hybrid retrieval (Chapter 9)</span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>that Part II builds. The rest of this book is how you build that road,</span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>one working script at a time, starting with a single PDF.</span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a><span class="fu">## What this becomes</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>By Chapter 5, you'll have built a working RAG *prototype* — retrieve,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>generate, cite — and run it against a real local model. It has real limits</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>you'll see and measure, not just hear about: Part II spends eight chapters</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>hardening it. By the end of the book, it answers cross-report questions</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>like this one, pulling the cause from one report and the outcome from the</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>next:</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Where this is headed: a cross-report answer from the finished system"}</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="in">Question: What led to the fishing operation on report #50?</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="in">Answer: On report #49 (2020-12-07), the crew attempted multiple times</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="in">to set packers on BHA #32, but pressure readings showed the ball did</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="in">not seat and the packers failed to set. They tripped out with the</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="in">packer assembly and picked up a fishing BHA (#33) that same day. On</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="in">report #50 (2020-12-08), that fishing run milled up lost pieces of bit.</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="in">Evidence:</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="in">  FORGE-16A-78-32_Drilling_049_2020-12-07.pdf</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="in">  FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>Both claims in that answer are directly quoted from the real report</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>text — nothing here is invented. Getting there takes the whole book:</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>Chapter 5's first prototype answers from a single best-matching report;</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>stitching two reports together like this — the cause in #49, the outcome</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>in #50 — needs the chunking (Chapter 7) and hybrid retrieval (Chapter 9)</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>that Part II builds. The rest of this book is how you build that road,</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>one working script at a time, starting with a single PDF.</span>
 <span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>The scripts in this book are the engine. The book's optional companion app</span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>(<span class="in">`book/app/`</span>) puts the same flow on one screen — a question, a local-model</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>answer, and the evidence it's traceable to — over the sample archive:</span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a><span class="al">![The DDR RAG Companion App: a question, a local-model answer, and the source reports it's traceable to.](figures/app_screenshot.png)</span>{fig-alt="Screenshot of the DDR RAG Companion App showing a question, a cited generated answer, and retrieved evidence cards"}</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## What this becomes</span></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>The scripts in this book are the engine. The book's optional companion app</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>(<span class="in">`book/app/`</span>) puts the same flow on one screen — a question, a local-model</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>answer, and the evidence it's traceable to — over the sample archive:</span>
 <span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>The companion pipeline scales the same idea to the whole 76-report archive.</span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Appendix A</span><span class="co">](appendix/appendix_a_environment_setup.qmd)</span> shows how to set</span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>either one up and point it at your own reports.</span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Who this book is for</span></span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>You should read this book if you are a drilling engineer, completions</span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>engineer, intervention engineer, production engineer, petroleum data</span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>scientist, or part of a digital transformation team in energy, and you:</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a><span class="al">![The DDR RAG Companion App: a question, a local-model answer, and the source reports it's traceable to.](figures/app_screenshot.png)</span>{fig-alt="Screenshot of the DDR RAG Companion App showing a question, a cited generated answer, and retrieved evidence cards"}</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>The companion pipeline scales the same idea to the whole 76-report archive.</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Appendix A</span><span class="co">](appendix/appendix_a_environment_setup.qmd)</span> shows how to set</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>either one up and point it at your own reports.</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project map</span></span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>A handful of things share the name "DDR" or "FORGE" in this project. Before</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>you start, here's how they fit together:</span>
 <span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Have never written a line of Python in your life — or tried once and</span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>  gave up.</span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Have strong operational experience and are comfortable in Excel.</span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Have never built a RAG system, used a vector database, or worked with</span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>  embeddings.</span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Are curious about AI and automation, and are willing to type code</span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>  examples yourself rather than just read about them.</span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Want working tools, not a machine learning course.</span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>No prior programming or AI/ML background is assumed. Every concept —</span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>even one as basic as what a function is — is introduced only after</span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>you've hit the problem it solves, never before. The goal of this book</span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>isn't to turn you into a software engineer. It's to make you capable of</span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>building useful engineering tools.</span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## What you will build</span></span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Chapter <span class="pp">|</span> You will be able to... <span class="pp">|</span></span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0 <span class="pp">|</span> Set up a working Python environment, in whichever editor or notebook tool you prefer <span class="pp">|</span></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> Extract text from a DDR PDF <span class="pp">|</span></span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> Expand oilfield abbreviations (BHA, WOB, MWD...) automatically <span class="pp">|</span></span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> Keyword-search your entire DDR archive <span class="pp">|</span></span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> Search DDRs by meaning, not just exact words <span class="pp">|</span></span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> Ask a question and get a cited, evidence-backed answer <span class="pp">|</span></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 6–13 <span class="pp">|</span> Scale the system to scanned reports, large archives, hybrid retrieval, reranking, full traceability, and daily ingestion of new reports <span class="pp">|</span></span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="fu">## Management view: why this matters</span></span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>If you're deciding whether to fund or adopt work like this, here's the</span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>case in plain terms — and its limits.</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Piece <span class="pp">|</span> What it is <span class="pp">|</span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Ten-report sample archive <span class="pp">|</span> Used for the main path through Chapters 1–5 <span class="pp">|</span></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 76-report full Utah FORGE archive <span class="pp">|</span> Used for scale exercises from Chapter 6 onward <span class="pp">|</span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Companion app (<span class="in">`book/app/`</span>) <span class="pp">|</span> Optional UI over the sample archive, reusing this book's own code <span class="pp">|</span></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Companion pipeline (<span class="in">`DDR_UTAH_FORGE`</span>) <span class="pp">|</span> A separate, larger, production-style pipeline referenced for real numbers in Part II <span class="pp">|</span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Your own DDR archive <span class="pp">|</span> The adaptation path once you've finished the book <span class="pp">|</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>The first three run entirely from this repository. The companion pipeline is</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>optional and lives in its own repository — see [Appendix</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>A](appendix/appendix_a_environment_setup.qmd#the-companion-pipeline-for-part-ii).</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reader contract</span></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Part I** (Chapters 1–5) builds a working prototype RAG system on the</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>  ten-report sample archive: retrieval, generation, and citation, all</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>  running.</span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Part II** (Chapters 6–13) hardens that prototype against the failure</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>  modes a real archive throws at it: scanned reports, chunking, scale,</span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>  hybrid retrieval, traceability, evaluation, and daily ingestion.</span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Some of Part II's field notes and validation numbers come from the</span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>  separate **DDR_UTAH_FORGE** companion pipeline rather than from code you</span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>  run yourself in this repository — each chapter says so at the point</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>  where it applies.</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>This book teaches an inspectable industrial architecture and working</span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>  components you built and understand — not a full enterprise deployment</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>  with authentication, monitoring, permissions, governance, or support</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>  operations. <span class="co">[</span><span class="ot">The preface</span><span class="co">](preface.qmd#why-industrial)</span> says more about</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>  where that line sits.</span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="fu">## Who this book is for</span></span>
 <span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Search time.** Finding a prior stuck-pipe or fishing precedent goes</span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>  from opening reports one at a time to a single query — minutes to</span>
-<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>  seconds on the archives used here.</span>
-<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Offset and lessons-learned reuse.** The same index that answers one</span>
-<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>  question surfaces related events across every report, so a lesson</span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>  written once can be found again instead of re-learned.</span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Onboarding.** An engineer new to a well can ask what happened and get</span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>  cited reports back, rather than depending on catching whoever remembers.</span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Less reliance on tribal knowledge.** Answers come with the report and</span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>  page they came from, so the knowledge lives in the archive, not only in</span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>  one person's memory.</span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Auditability.** Every generated claim carries a citation an engineer</span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>  can open and check (Chapter 10) — the system shows its work.</span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Build vs. buy.** The core is a few hundred lines of standard Python.</span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>  The trade-off against a vendor product is control and inspectability</span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>  versus vendor support and maintenance.</span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Private deployment.** It runs locally against a local model (Chapter</span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>  5), so confidential DDRs need never leave your environment.</span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>You should read this book if you are a drilling engineer, completions</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>engineer, intervention engineer, production engineer, petroleum data</span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>scientist, or part of a digital transformation team in energy, and you:</span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Have never written a line of Python in your life — or tried once and</span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>  gave up.</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Have strong operational experience and are comfortable in Excel.</span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Have never built a RAG system, used a vector database, or worked with</span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>  embeddings.</span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Are curious about AI and automation, and are willing to type code</span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>  examples yourself rather than just read about them.</span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Want working tools, not a machine learning course.</span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>No prior programming or AI/ML background is assumed. Every concept —</span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>even one as basic as what a function is — is introduced only after</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>you've hit the problem it solves, never before. The goal of this book</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>isn't to turn you into a software engineer. It's to make you capable of</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>building useful engineering tools.</span>
 <span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>This supports an engineer's judgment and a reviewer's audit; it doesn't</span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>replace either. It makes no claim to reduce operational risk on its own —</span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>a faster way to find the right report is only as good as the decision</span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>someone makes with it.</span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a><span class="fu">## How this book works</span></span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>Every chapter solves one operational problem and ends with something you can</span>
-<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>run. There is no chapter you read passively — you will type code, run it</span>
-<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>against real DDR text, and see it work. Theory</span>
-<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>appears only when it explains *why* the code in front of you behaves the way</span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>it does.</span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>We follow one rule throughout: **engineering usefulness over AI novelty**.</span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>Retrieval matters more than generation. Traceability matters more than</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>eloquent prose. Engineers trust evidence, not predictions — so this system is</span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>built to show its work, every time.</span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a><span class="fu">### The visual language of this book</span></span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>A few recurring elements appear in every chapter, explained once here so</span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>they never need repeating:</span>
-<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Progress bar** — <span class="in">`███░░░░░░░░░░ 3 / 13`</span> at the top of every chapter,</span>
-<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>  showing exactly how far you are through the book.</span>
-<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Estimated time** and **difficulty badge** (🟢 Beginner, 🟠</span>
-<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>  Intermediate, 🔴 Advanced) — next to the progress bar, so you know the</span>
-<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>  commitment before you start.</span>
-<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CHECKPOINT** — a checklist near the end of each chapter, confirming</span>
-<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>  the specific skills you just gained.</span>
-<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**WHAT YOU BUILT** — a green box naming the concrete artifact (a</span>
-<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>  script, an index, a pipeline) you now have, distinct from the</span>
-<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>  conceptual "Key takeaways" earlier in the chapter.</span>
-<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Field notes** 🔧 — a real operational vignette: something an</span>
-<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>  experienced engineer would notice in the data that a tool alone would</span>
-<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>  miss. Wherever this book's own bundled code and data can reproduce the</span>
-<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a>  result, it has been checked directly; a handful draw on the companion</span>
-<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>  pipeline's own structured outputs (e.g. <span class="in">`ddr_facts.parquet`</span>, its BM25</span>
-<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>  index) and are reported rather than independently re-derived here.</span>
-<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a>You'll also meet four recurring engineers, each asking the question that</span>
-<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>opens a chapter's **Operational Problem**:</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a><span class="fu">## What you will build</span></span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Chapter <span class="pp">|</span> You will be able to... <span class="pp">|</span></span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0 <span class="pp">|</span> Set up a working Python environment, in whichever editor or notebook tool you prefer <span class="pp">|</span></span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 1 <span class="pp">|</span> Extract text from a DDR PDF <span class="pp">|</span></span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 2 <span class="pp">|</span> Expand oilfield abbreviations (BHA, WOB, MWD...) automatically <span class="pp">|</span></span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 3 <span class="pp">|</span> Keyword-search your entire DDR archive <span class="pp">|</span></span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 4 <span class="pp">|</span> Search DDRs by meaning, not just exact words <span class="pp">|</span></span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 5 <span class="pp">|</span> Ask a question and get a cited, evidence-backed answer — Part I's working prototype, with known limits Part II closes <span class="pp">|</span></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 6–13 <span class="pp">|</span> Scale the prototype to scanned reports, large archives, hybrid retrieval, reranking, full traceability, and daily ingestion of new reports <span class="pp">|</span></span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## Management view: why this matters</span></span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>If you're deciding whether to fund or adopt work like this, here's the</span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>case in plain terms — and its limits.</span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Search time.** Finding a prior stuck-pipe or fishing precedent goes</span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>  from opening reports one at a time to a single query — minutes to</span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>  seconds on the archives used here.</span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Offset and lessons-learned reuse.** The same index that answers one</span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>  question surfaces related events across every report, so a lesson</span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>  written once can be found again instead of re-learned.</span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Onboarding.** An engineer new to a well can ask what happened and get</span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>  cited reports back, rather than depending on catching whoever remembers.</span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Less reliance on tribal knowledge.** Answers come with the report and</span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>  page they came from, so the knowledge lives in the archive, not only in</span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>  one person's memory.</span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Auditability.** Every generated claim carries a citation an engineer</span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>  can open and check (Chapter 10) — the system shows its work.</span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Build vs. buy.** The core is a few hundred lines of standard Python.</span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>  The trade-off against a vendor product is control and inspectability</span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>  versus vendor support and maintenance.</span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Private deployment.** It runs locally against a local model (Chapter</span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>  5), so confidential DDRs need never leave your environment.</span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a>This supports an engineer's judgment and a reviewer's audit; it doesn't</span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>replace either. It makes no claim to reduce operational risk on its own —</span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>a faster way to find the right report is only as good as the decision</span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>someone makes with it.</span>
+<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a><span class="fu">## How this book works</span></span>
 <span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Name <span class="pp">|</span> Role <span class="pp">|</span></span>
-<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Oumy <span class="pp">|</span> Drilling Engineer <span class="pp">|</span></span>
-<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mike <span class="pp">|</span> Completions Engineer <span class="pp">|</span></span>
-<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sarah <span class="pp">|</span> Intervention Engineer <span class="pp">|</span></span>
-<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sean <span class="pp">|</span> Production Engineer <span class="pp">|</span></span>
-<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>They're a framing device, not a source of data: whichever question Oumy,</span>
-<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a>Mike, Sarah, or Sean asks, every report, number, and quote used to answer</span>
-<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a>it is the real, unaltered Utah FORGE archive described above — never</span>
-<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a>invented on their behalf.</span>
-<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a><span class="fu">## Companion repository</span></span>
-<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a>All code, sample datasets, and notebooks referenced in this book live in the</span>
-<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a>companion repository. Every chapter lists exactly which files you need</span>
-<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a>under **Repository files**.</span>
-<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a>If you've never installed Python or don't know which editor to use, start</span>
-<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a>with **Part 0 — Preparing Your Python Workshop**: it walks through</span>
-<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a>everything from scratch, works with any of five common setups (Jupyter</span>
-<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a>Notebook, VS Code, PyCharm Community, Positron, or a terminal alone), and</span>
-<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>ends with your first script actually running. If you already have Python</span>
-<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a>and a working setup, jump straight to Chapter 1 — Appendix A has the rest</span>
-<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>of the reference material (the sample dataset, rendering the book, the</span>
-<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a>companion pipeline) if you need it later.</span>
-<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a>Let's read our first DDR.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>Every chapter solves one operational problem and ends with something you can</span>
+<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a>run. There is no chapter you read passively — you will type code, run it</span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>against real DDR text, and see it work. Theory</span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>appears only when it explains *why* the code in front of you behaves the way</span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>it does.</span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>We follow one rule throughout: **engineering usefulness over AI novelty**.</span>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>Retrieval matters more than generation. Traceability matters more than</span>
+<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a>eloquent prose. Engineers trust evidence, not predictions — so this system is</span>
+<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a>built to show its work, every time.</span>
+<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a><span class="fu">### The visual language of this book</span></span>
+<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>A few recurring elements appear in every chapter, explained once here so</span>
+<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a>they never need repeating:</span>
+<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Progress bar** — <span class="in">`███░░░░░░░░░░ 3 / 13`</span> at the top of every chapter,</span>
+<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a>  showing exactly how far you are through the book.</span>
+<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Estimated time** and **difficulty badge** (🟢 Beginner, 🟠</span>
+<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a>  Intermediate, 🔴 Advanced) — next to the progress bar, so you know the</span>
+<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a>  commitment before you start.</span>
+<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CHECKPOINT** — a checklist near the end of each chapter, confirming</span>
+<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>  the specific skills you just gained.</span>
+<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**WHAT YOU BUILT** — a green box naming the concrete artifact (a</span>
+<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>  script, an index, a pipeline) you now have, distinct from the</span>
+<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a>  conceptual "Key takeaways" earlier in the chapter.</span>
+<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Field notes** 🔧 — a real operational vignette: something an</span>
+<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a>  experienced engineer would notice in the data that a tool alone would</span>
+<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a>  miss. Wherever this book's own bundled code and data can reproduce the</span>
+<span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a>  result, it has been checked directly; a handful draw on the companion</span>
+<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a>  pipeline's own structured outputs (e.g. <span class="in">`ddr_facts.parquet`</span>, its BM25</span>
+<span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a>  index) and are reported rather than independently re-derived here.</span>
+<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-213"><a href="#cb2-213" aria-hidden="true" tabindex="-1"></a>You'll also meet four recurring engineers, each asking the question that</span>
+<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a>opens a chapter's **Operational Problem**:</span>
+<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Name <span class="pp">|</span> Role <span class="pp">|</span></span>
+<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Oumy <span class="pp">|</span> Drilling Engineer <span class="pp">|</span></span>
+<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mike <span class="pp">|</span> Completions Engineer <span class="pp">|</span></span>
+<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sarah <span class="pp">|</span> Intervention Engineer <span class="pp">|</span></span>
+<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Sean <span class="pp">|</span> Production Engineer <span class="pp">|</span></span>
+<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a>They're a framing device, not a source of data: whichever question Oumy,</span>
+<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a>Mike, Sarah, or Sean asks, every report, number, and quote used to answer</span>
+<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a>it is the real, unaltered Utah FORGE archive described above — never</span>
+<span id="cb2-226"><a href="#cb2-226" aria-hidden="true" tabindex="-1"></a>invented on their behalf.</span>
+<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a><span class="fu">## Companion repository</span></span>
+<span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a>All code, sample datasets, and notebooks referenced in this book live in the</span>
+<span id="cb2-231"><a href="#cb2-231" aria-hidden="true" tabindex="-1"></a>companion repository. Every chapter lists exactly which files you need</span>
+<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a>under **Repository files**.</span>
+<span id="cb2-233"><a href="#cb2-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a>If you've never installed Python or don't know which editor to use, start</span>
+<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a>with **Part 0 — Preparing Your Python Workshop**: it walks through</span>
+<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a>everything from scratch, works with any of five common setups (Jupyter</span>
+<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a>Notebook, VS Code, PyCharm Community, Positron, or a terminal alone), and</span>
+<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a>ends with your first script actually running. If you already have Python</span>
+<span id="cb2-239"><a href="#cb2-239" aria-hidden="true" tabindex="-1"></a>and a working setup, jump straight to Chapter 1 — Appendix A has the rest</span>
+<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a>of the reference material (the sample dataset, rendering the book, the</span>
+<span id="cb2-241"><a href="#cb2-241" aria-hidden="true" tabindex="-1"></a>companion pipeline) if you need it later.</span>
+<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-243"><a href="#cb2-243" aria-hidden="true" tabindex="-1"></a>Let's read our first DDR.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
