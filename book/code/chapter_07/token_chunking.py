@@ -25,6 +25,21 @@ def chunk_text_by_tokens(text: str, chunk_tokens: int = 60,
     so a sentence that would otherwise be cut exactly at a chunk boundary
     has a chance to appear whole in at least one chunk.
     """
+    if chunk_tokens <= 0:
+        raise ValueError(
+            f"chunk_tokens must be a positive number of tokens, got {chunk_tokens}."
+        )
+    if overlap_tokens < 0:
+        raise ValueError(
+            f"overlap_tokens can't be negative, got {overlap_tokens}."
+        )
+    if overlap_tokens >= chunk_tokens:
+        raise ValueError(
+            f"overlap_tokens ({overlap_tokens}) must be smaller than chunk_tokens "
+            f"({chunk_tokens}) -- otherwise each step forward is zero or negative "
+            f"and the sliding window never makes progress through the text."
+        )
+
     enc = tiktoken.get_encoding("cl100k_base")
     tokens = enc.encode(text.strip())
     chunks, start = [], 0
@@ -62,9 +77,25 @@ def chunk_pages_by_tokens(pages_text: str, chunk_tokens: int = 60,
     downstream (Chapter 8's index, Chapter 10's Citation) can cite a page
     number without it. This does the same token-window chunking, per
     page, and returns each chunk paired with its real page number.
+
+    Expects text that already has Chapter 1's "--- Page N ---" markers --
+    i.e. extract_text()'s output, or a .txt file it wrote. Plain text
+    without those markers has no page to attach to a chunk, so this
+    raises instead of silently returning no chunks; use
+    chunk_text_by_tokens() directly for text that was never paginated.
     """
+    pages = split_pages(pages_text)
+    if not pages:
+        raise ValueError(
+            "No '--- Page N ---' markers found in this text, so it can't be "
+            "split into pages. chunk_pages_by_tokens() expects text from "
+            "Chapter 1's extract_text() (or a .txt file it wrote) -- for "
+            "plain text without page markers, use chunk_text_by_tokens() "
+            "instead."
+        )
+
     chunks_with_pages = []
-    for page_number, page_text in split_pages(pages_text):
+    for page_number, page_text in pages:
         for chunk in chunk_text_by_tokens(page_text, chunk_tokens, overlap_tokens):
             chunks_with_pages.append((page_number, chunk))
     return chunks_with_pages

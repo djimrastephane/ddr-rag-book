@@ -4,6 +4,8 @@ conftest.py adds every code/chapter_NN folder to sys.path (now through
 13), so `import ingest` resolves. The slow tests load the embedding model.
 """
 
+from pathlib import Path
+
 import pytest
 
 
@@ -18,6 +20,27 @@ def test_helpers_track_ingested_reports_and_dates():
     assert ingest.already_ingested(metadata, "a.pdf")
     assert not ingest.already_ingested(metadata, "c.pdf")
     assert ingest.ingested_dates(metadata) == ["2020-01-01", "2020-01-03"]
+
+
+def test_ingest_report_raises_a_readable_error_for_a_missing_pdf():
+    import ingest
+
+    missing = Path("datasets/sample_ddrs/does_not_exist_038.pdf")
+    with pytest.raises(FileNotFoundError, match="does not exist"):
+        ingest.ingest_report(missing, model=None, index=None, metadata=[])
+
+
+def test_require_index_raises_when_nothing_was_ingested():
+    import ingest
+
+    with pytest.raises(SystemExit, match="Nothing was ingested"):
+        ingest.require_index(None)
+
+
+def test_require_index_passes_when_an_index_already_exists():
+    import ingest
+
+    ingest.require_index(object())  # any non-None value means "don't raise"
 
 
 @pytest.fixture(scope="module")

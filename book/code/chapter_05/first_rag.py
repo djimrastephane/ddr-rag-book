@@ -103,9 +103,17 @@ def answer_question(question: str, model, filenames, texts, embeddings,
 
 def evidence_excerpts(evidence: list[str], filenames: list[str],
                       texts: list[str], width: int = 200) -> list[tuple[str, str]]:
-    """For each retrieved report, return (filename, short excerpt) -- the
-    same text the model was handed -- so a reader sees not just WHICH
-    reports backed the answer but a taste of what was actually in them."""
+    """For each retrieved report, return (filename, short excerpt) -- so a
+    reader sees not just WHICH reports backed the answer but a taste of
+    what was actually in them.
+
+    This is a quick preview, not necessarily the passage that made the
+    report relevant: it's just the first `width` characters of the
+    report's full text (whitespace-collapsed), which for a DDR is often
+    header fields (RPT DATE, WELL NAME, ...) rather than the narrative
+    line the model actually used. Chapter 10's page-cited excerpts show
+    the real matching passage instead.
+    """
     excerpts = []
     for name in evidence:
         text = " ".join(texts[filenames.index(name)].split())

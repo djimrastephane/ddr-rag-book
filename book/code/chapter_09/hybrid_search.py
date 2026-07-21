@@ -23,7 +23,20 @@ def reciprocal_rank_fusion(ranked_lists: list[list[str]], k: int = 20,
     rank 1 and rank 2 matters less. `weights` lets one retrieval method
     count for more than another in the fused result.
     """
-    weights = weights or [1.0] * len(ranked_lists)
+    if not ranked_lists:
+        return []
+
+    if weights is None:
+        weights = [1.0] * len(ranked_lists)
+    elif len(weights) != len(ranked_lists):
+        raise ValueError(
+            f"weights has {len(weights)} entries but ranked_lists has "
+            f"{len(ranked_lists)} -- pass exactly one weight per ranked list "
+            f"(or leave weights=None to weight every list equally). zip() "
+            f"would otherwise silently drop whichever lists don't have a "
+            f"matching weight."
+        )
+
     scores: dict[str, float] = defaultdict(float)
     for ranked_list, weight in zip(ranked_lists, weights):
         for rank, doc_id in enumerate(ranked_list, start=1):

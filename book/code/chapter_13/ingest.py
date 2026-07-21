@@ -75,6 +75,13 @@ def ingest_report(pdf_path: Path, model, index, metadata: list[dict]):
     Returns (index, chunks_added, status). A report already in the index
     is skipped; a report the quality gate rejects is not indexed.
     """
+    if not pdf_path.exists():
+        raise FileNotFoundError(
+            f"{pdf_path} does not exist -- check the path. It's usually "
+            f"relative to the book/ directory, e.g. "
+            f"datasets/sample_ddrs/<filename>.pdf."
+        )
+
     report = pdf_path.name
     if already_ingested(metadata, report):
         return index, 0, "skipped (already ingested)"
@@ -101,6 +108,23 @@ def ingested_dates(metadata: list[dict]) -> list[str]:
     return sorted({record["date"] for record in metadata if record.get("date")})
 
 
+def require_index(index) -> None:
+    """Friendly exit if there's nothing to save.
+
+    On a first run, `index` starts out None until the first report is
+    successfully ingested. If every incoming report was rejected,
+    skipped, or missing, `index` is still None here -- and save_index()
+    below has no index object to write, which would otherwise crash with
+    a confusing low-level error instead of explaining what happened.
+    """
+    if index is None:
+        raise SystemExit(
+            "Nothing was ingested, and no live index exists yet, so "
+            "there's nothing to save. Check the messages above for why "
+            "every report was skipped, rejected, or missing."
+        )
+
+
 if __name__ == "__main__":
     model = SentenceTransformer(MODEL_NAME, device="cpu")
     index, metadata = load_state()
@@ -110,6 +134,7 @@ if __name__ == "__main__":
         index, added, status = ingest_report(pdf, model, index, metadata)
         print(f"{pdf.name}: {status}" + (f" (+{added} chunks)" if added else ""))
 
+    require_index(index)
     save_state(index, metadata)
     reports = len({record["report"] for record in metadata})
     print(f"\nLive index: {index.ntotal} chunks across {reports} reports")
