@@ -67,6 +67,23 @@ Every chapter in Part II exists because a toy RAG system fails at one of
 these requirements. We fix them one at a time, in the order you would
 actually hit them in the field.
 
+**A boundary worth being explicit about:** "industrial" here means
+designed around real operational failure modes — the ones listed above —
+not a fully deployed enterprise product. Several things a production
+rollout would need are deliberately outside this book's scope:
+
+- user access control
+- production monitoring and alerting
+- enterprise security review
+- model governance
+- data retention policies
+- operational support and SLA processes
+
+Saying so plainly isn't hedging. A book that quietly skipped these while
+implying it covered everything would be less trustworthy, not more
+impressive — knowing exactly where the system you built ends is part of
+being able to judge what it would take to extend it.
+
 ## How to read this book
 
 This book borrows the practical-first, project-based spirit of *Python

@@ -120,6 +120,8 @@ count how many are True
 
 ## Implementation
 
+### Step 1: build a quality-gate function
+
 Build a simplified version of the same idea.
 
 **What problem are we solving?**
@@ -185,7 +187,7 @@ for detecting and correcting upside-down or sideways scans, and
 `src/rag_pdf/table_ocr_handoff.py` for the case where a *table* (not
 narrative text) needs OCR fallback.
 
-## Seeing it on a real scanned page
+### Step 2: see it on a real scanned page
 
 The gate scores text — but where does bad OCR text actually come from?
 This archive is entirely digital, so to see the whole problem end to end
@@ -199,9 +201,26 @@ Install the OCR tools (Chapter 6 only — nothing earlier needs them):
 ```bash
 pip install pytesseract pdf2image
 # plus the system tools they wrap:
-#   macOS:  brew install tesseract poppler
-#   Ubuntu: apt install tesseract-ocr poppler-utils
+#   macOS:   brew install tesseract poppler
+#   Ubuntu:  apt install tesseract-ocr poppler-utils
+#   Windows: install Tesseract (the UB-Mannheim build at
+#            github.com/UB-Mannheim/tesseract/wiki) and Poppler for
+#            Windows (github.com/oschwartz10612/poppler-windows/releases),
+#            then add both installs' bin/ folders to your PATH. Reopen
+#            your terminal afterward so the updated PATH takes effect.
 ```
+
+::: {.callout-note title="These are optional system tools, not Python packages"}
+Unlike everything else `pip install`s, Tesseract and Poppler are separate
+programs your operating system needs to already have — `pip` can't
+install them for you. If you'd rather not deal with system-level installs
+right now, that's fine: everything else in this chapter (the quality gate
+itself, and its Practical/Field Notes sections against the archive's
+existing digital text) runs without them. Only this specific round-trip —
+making a scanned image and OCR'ing it back — needs Tesseract and Poppler
+actually installed. Skip ahead to "Production Reality" and come back to
+this section once they're in place.
+:::
 
 Then run the round-trip — make the scanned page from report #38, try to
 extract it, OCR it, and gate both:
@@ -333,8 +352,8 @@ encounter the real noisy data it's meant to catch.
 |---|---|
 | `code/chapter_06/ocr_quality_gate.py` | Simplified OCR quality gate |
 | `code/chapter_06/make_scanned_example.py` | Make an image-only PDF from a real report, then OCR and gate it |
-| `DDR_UTAH_FORGE/src/rag_pdf/ocr_quality.py` | Production quality gate (companion repo) |
-| `DDR_UTAH_FORGE/src/rag_pdf/rotation_handler.py` | Scan rotation detection (companion repo) |
+| `DDR_UTAH_FORGE/src/rag_pdf/ocr_quality.py` | Production quality gate (companion repo — requires DDR_UTAH_FORGE) |
+| `DDR_UTAH_FORGE/src/rag_pdf/rotation_handler.py` | Scan rotation detection (companion repo — requires DDR_UTAH_FORGE) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 6"}
 - [x] Recognised when a DDR PDF needs OCR instead of direct extraction

@@ -38,7 +38,7 @@ Evidence:
   FORGE-16A-78-32_Drilling_050_2020-12-08.pdf
 ```
 
-That's the destination. By Chapter 5 you'll have a working RAG system — retrieve, generate, cite — running on a real local model; answering a *cross-report* question like this one, which stitches the cause in report #49 to the outcome in report #50, takes the chunking and hybrid retrieval Part II adds. Either way: a question, an answer, and the exact source reports backing it. No black box.
+That's the destination. By Chapter 5 you'll have a working RAG *prototype* — retrieve, generate, cite — running on a real local model; answering a *cross-report* question like this one, which stitches the cause in report #49 to the outcome in report #50, takes the chunking and hybrid retrieval Part II adds to harden that prototype. Either way: a question, an answer, and the exact source reports backing it. No black box.
 
 - Visit the [book website](https://ddr-rag-book-website.vercel.app)
 - Link to the [official source code repository](https://github.com/djimrastephane/ddr-rag-book)
@@ -53,6 +53,20 @@ git clone https://github.com/djimrastephane/ddr-rag-book.git
 ```
 
 Never used a terminal or Git before? That's exactly what **Start Here** and **Part 0** below are for — nothing past this point assumes you already know how.
+
+### Project Map
+
+Five things share the name "DDR" or "FORGE" in this project — worth telling apart before you start:
+
+| Piece | What it is | Where it's used |
+|---|---|---|
+| Ten-report sample archive | `datasets/sample_ddrs/`, committed in this repo | The main path through Chapters 1–5 |
+| 76-report full Utah FORGE archive | `datasets/forge_archive/`, committed in this repo | Scale exercises from Chapter 6 onward |
+| Companion app | `book/app/streamlit_app.py`, in this repo | Optional UI over the sample archive — reuses this book's own code |
+| Companion pipeline (`DDR_UTAH_FORGE`) | A separate, larger repository | Referenced for real numbers in Part II; not required to follow the book |
+| Your own DDR archive | Not included — it's yours | The adaptation path after you finish the book |
+
+Everything in the first three rows runs from this one repository. The fourth is optional and lives elsewhere — see **Companion Pipeline** below.
 
 ---
 
@@ -113,7 +127,7 @@ By the end of the book you will have built seven real, working artifacts — not
 - ✓ **Semantic search engine** — find reports by meaning, not just exact wording
 - ✓ **Industrial RAG system** — a complete RAG pipeline, end to end
 - ✓ **Traceable answer engine** — generate traceable, evidence-backed answers
-- ✓ **Cross-well sequence detector** — detect operational patterns across wells
+- ✓ **Sequence-detection building block** — a single-well sequence check, with a path toward cross-well intelligence
 - ✓ Evaluate retrieval quality with real numbers, not guesswork
 
 ## Who This Book Is For
@@ -140,6 +154,15 @@ This book is probably not for you if:
 - you already build production-scale RAG systems professionally
 
 None of that is a criticism — it just means your time is better spent elsewhere.
+
+## Reader Contract
+
+- **Part I** (Chapters 1–5) builds a working prototype RAG system against the ten-report sample archive.
+- **Part II** (Chapters 6–13) hardens that prototype against industrial failure modes: scanned reports, chunking, scale, hybrid retrieval, traceability, evaluation, and daily ingestion.
+- Some of Part II's field notes and validation numbers come from the separate **DDR_UTAH_FORGE** companion pipeline, not from this repository's own code — each chapter says so where it applies.
+- This book teaches an inspectable industrial architecture and working components — not a full enterprise deployment with authentication, monitoring, permissions, governance, or support operations.
+
+See [book/index.qmd](https://djimrastephane.github.io/ddr-rag-book/#reader-contract) for the fuller version of this contract.
 
 ## Expected Background
 

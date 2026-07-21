@@ -165,6 +165,8 @@ pure similarity.
 
 ## Implementation
 
+### Step 1: fuse two ranked lists by rank, not raw score
+
 **What problem are we solving?**
 
 Combine two independently-ranked lists of reports — one from BM25, one
@@ -212,7 +214,7 @@ item[1]` on the sort line is just Python's way of saying "order by the
 second thing in each pair" — here, the fused score rather than the report
 name.)
 
-### Turning that into a real hybrid search
+### Step 2: turn that into a real hybrid search
 
 `reciprocal_rank_fusion` fuses ranked lists — but it needs two of them to
 fuse. Chapter 4's semantic `search()` already returns one. The missing
@@ -366,9 +368,9 @@ solution is in `code/chapter_09/challenge/`.
 |---|---|
 | `code/chapter_09/sparse_ranking.py` | Ranked BM25 sparse retriever — the ranked signal RRF fuses |
 | `code/chapter_09/hybrid_search.py` | Reciprocal Rank Fusion, plus `hybrid_search()` end-to-end |
-| `DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py` | BM25 index, IDF formula, score fusion (companion repo) |
-| `DDR_UTAH_FORGE/src/rag_pdf/retrieval/canonical_hybrid.py` | Full hybrid retrieval pipeline (companion repo) |
-| `DDR_UTAH_FORGE/src/rag_pdf/services/search_service.py` | Cross-encoder rerank + fusion weights (companion repo) |
+| `DDR_UTAH_FORGE/src/rag_pdf/retrieval/hybrid_utils.py` | BM25 index, IDF formula, score fusion (companion repo — requires DDR_UTAH_FORGE) |
+| `DDR_UTAH_FORGE/src/rag_pdf/retrieval/canonical_hybrid.py` | Full hybrid retrieval pipeline (companion repo — requires DDR_UTAH_FORGE) |
+| `DDR_UTAH_FORGE/src/rag_pdf/services/search_service.py` | Cross-encoder rerank + fusion weights (companion repo — requires DDR_UTAH_FORGE) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 9"}
 - [x] Explained why semantic search alone underperforms on precise, entity-heavy queries

@@ -79,13 +79,15 @@ just loads the finished file — no re-embedding, no rebuilding.
 
 The companion pipeline, **DDR_UTAH_FORGE**, builds two tiers of index:
 
-- **Per-document index** (`scripts/build_index.py`) — one FAISS index per
-  DDR, used when a question is scoped to a specific report. All 76
-  reports already have this: chunks, embeddings, and a `faiss.index` file
-  sit in `data/processed/<doc_id>/` for every report in the archive.
-- **Global index** (`scripts/build_global_index.py`) — a single FAISS
-  index over every chunk across every report, used for cross-document
-  questions like "which reports involve fishing operations."
+- **Per-document index** (`scripts/build_index.py`, companion repo) — one
+  FAISS index per DDR, used when a question is scoped to a specific
+  report. All 76 reports already have this *in DDR_UTAH_FORGE*: chunks,
+  embeddings, and a `faiss.index` file sit in `data/processed/<doc_id>/`
+  inside that separate repository — not inside this book's own repo.
+- **Global index** (`scripts/build_global_index.py`, companion repo) — a
+  single FAISS index over every chunk across every report, used for
+  cross-document questions like "which reports involve fishing
+  operations."
 
 Running `build_global_index.py` against this archive's 76 pre-processed
 documents produces a real, verifiable result:
@@ -404,8 +406,8 @@ parameters. A reference solution is in `code/chapter_08/challenge/`.
 | `code/chapter_08/build_faiss_index.py` | FAISS `IndexFlatIP` build/save/load/search, plus chunk+metadata indexing |
 | `code/chapter_08/build_full_archive.py` | Reproduces the full 76-report archive from the public source |
 | `datasets/forge_archive/` | The full 76-report Utah FORGE archive |
-| `DDR_UTAH_FORGE/scripts/build_index.py` | Per-document index builder (companion repo) |
-| `DDR_UTAH_FORGE/scripts/build_global_index.py` | Campaign-wide global index builder (companion repo) |
+| `DDR_UTAH_FORGE/scripts/build_index.py` | Per-document index builder (companion repo — requires DDR_UTAH_FORGE) |
+| `DDR_UTAH_FORGE/scripts/build_global_index.py` | Campaign-wide global index builder (companion repo — requires DDR_UTAH_FORGE) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 8"}
 - [x] Explained why brute-force search stops scaling, in concrete terms of memory and speed

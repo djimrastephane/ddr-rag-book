@@ -319,9 +319,9 @@ solution is in `code/chapter_12/challenge/`.
 | File | Purpose |
 |---|---|
 | `code/chapter_12/torque_trend_check.py` | Day-over-day trend check on a structured header field |
-| `DDR_UTAH_FORGE/src/ddr_rag/causality_analyzer.py` | Windowed leading-indicator detection (companion repo) |
-| `DDR_UTAH_FORGE/src/ddr_rag/npt_classifier.py` | Utah-FORGE-adapted NPT classification (companion repo) |
-| `DDR_UTAH_FORGE/data/fields/UtahForge/wells/` | Multi-well data structure, ready for expansion (companion repo) |
+| `DDR_UTAH_FORGE/src/ddr_rag/causality_analyzer.py` | Windowed leading-indicator detection (companion repo — requires DDR_UTAH_FORGE) |
+| `DDR_UTAH_FORGE/src/ddr_rag/npt_classifier.py` | Utah-FORGE-adapted NPT classification (companion repo — requires DDR_UTAH_FORGE) |
+| `DDR_UTAH_FORGE/data/fields/UtahForge/wells/` | Multi-well data structure, ready for expansion (companion repo — requires DDR_UTAH_FORGE) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 12"}
 - [x] Combined a structured numeric trend with narrative text into one checkable story

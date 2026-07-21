@@ -122,6 +122,8 @@ chunk 3:                         [t9  t10 t11 t12]
 
 ## Implementation
 
+### Step 1: split text into token-sized chunks with overlap
+
 **What problem are we solving?**
 
 Split a report's text into pieces small enough to embed precisely,

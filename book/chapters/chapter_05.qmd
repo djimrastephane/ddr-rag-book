@@ -428,6 +428,16 @@ reference solution is in `code/chapter_05/challenge/`.
   necessary but not sufficient for trustworthy answers. Part II builds the
   guardrails that make it sufficient.
 
+::: {.callout-tip title="A habit worth starting now: keep a tiny answer key"}
+Before you start tuning retrieval settings in Part II — chunk sizes
+(Chapter 7), fusion weights (Chapter 9) — write down three questions you
+already know the answer to, like *"which report shows packers failing to
+set?"* → report #49, and note which report each one *should* return.
+That short list is the seed of Chapter 11's evaluation set, and it turns
+"did that change actually help?" into something you can check, instead of
+a feeling.
+:::
+
 ## Repository files
 
 | File | Purpose |
@@ -443,10 +453,12 @@ reference solution is in `code/chapter_05/challenge/`.
 :::
 
 ::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
-**`first_rag.py`** — an Industrial RAG system: ask it a question in plain
+**`first_rag.py`** — a working RAG *prototype*: ask it a question in plain
 English, and it retrieves evidence, generates an answer with a local
 model, and hands back the source reports and excerpts that answer is
-traceable to. This is Part I's capstone artifact.
+traceable to. This is Part I's capstone artifact — and the known limits
+you just saw in this chapter (evidence width, fabricated page numbers)
+are exactly what Part II hardens.
 :::
 
 ::: {.callout-note title="Try it in the browser: the companion app"}

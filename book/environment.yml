@@ -3,26 +3,34 @@ channels:
   - conda-forge
 dependencies:
   - python=3.11
+  # [CORE - Part I/II]
   - numpy=1.26.*
-  # pandas, pyarrow: not imported by this book's own code/chapter_XX
-  # scripts -- included for readers who want to experiment with the
-  # companion pipeline's real ddr_facts.parquet structures directly.
+  # [PART II - companion-pipeline experimentation, optional] pandas,
+  # pyarrow: not imported by this book's own code/chapter_XX scripts --
+  # included for readers who want to experiment with the companion
+  # pipeline's real ddr_facts.parquet structures directly.
   - pandas=2.2.*
   - pyarrow=24.*
+  # [NOTEBOOK-ONLY]
   - jupyter=1.0.*
   - ipykernel=6.29.*
+  # [TESTING-ONLY]
   - pytest=9.1.*
   - pip
   - pip:
+      # [CORE - Part I]
       - pdfplumber==0.11.4
+      # [CORE - Part I/II]
       - sentence-transformers==3.1.1
       - faiss-cpu==1.8.0.post1
+      - tiktoken==0.7.0
+      # [PART II - companion-pipeline experimentation, optional]
       # rank-bm25: not imported by this book's own code/chapter_XX
       # scripts -- included for readers who want to experiment with the
       # companion pipeline's real BM25 index directly.
       - rank-bm25==0.2.2
-      - tiktoken==0.7.0
-      # OCR (Chapter 6 only) -- also needs the tesseract and poppler
-      # system tools (conda-forge provides both, or install via brew/apt).
+      # [OCR-ONLY - Chapter 6] Also needs the tesseract and poppler
+      # system tools (conda-forge provides both, or install via
+      # brew/apt/choco -- see Chapter 6 for Windows-specific guidance).
       - pytesseract==0.3.13
       - pdf2image==1.17.0

@@ -274,6 +274,17 @@ pip install -r requirements.txt
 package this book needs, one per line — and installs all of them in one
 go, into your `.venv` toolbox only.
 
+`requirements.txt` installs everything needed across the *entire* book in
+one pass: Part I's core packages, Part II's heavier retrieval and
+chunking dependencies, the notebook tooling, the OCR packages Chapter 6
+uses, and the optional companion app's Streamlit dependency. That's
+deliberate — one install, no mid-book surprises — but it does mean this
+first install is heavier than Part I alone strictly requires. If you only
+want to work through Chapters 1–5 for now, the comments inside
+`requirements.txt` mark which lines belong to Part II, OCR, the app, or
+testing, so you can comment those out and install a lighter subset; just
+know you'll need the rest before Chapter 6.
+
 **Expected output:** a scrolling list of `Collecting ...` and
 `Successfully installed ...` lines. This can take a minute or two the
 first time; some packages (starting with Chapter 4's) are large.

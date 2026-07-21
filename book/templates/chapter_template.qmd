@@ -35,9 +35,12 @@ Required structural elements (do not skip any of these):
 2. "## Operational Problem" as the first section after Learning objectives,
    written in the language of a drilling morning call (a question someone
    would actually ask out loud), never "today we will learn X."
-3. Before EVERY code block: "## What problem are we solving?", "## Inputs",
-   "## Expected Output".
-4. After EVERY code block: "## What just happened?" in plain English.
+3. Before EVERY code block: bold-labeled lines **What problem are we
+   solving?**, **Inputs**, **Expected Output** — bold text, not headings,
+   so they stay peers of the surrounding step's prose rather than
+   competing with the chapter's real H2/H3 structure.
+4. After EVERY code block: a bold **What just happened?** label, in plain
+   English — same rule, bold text, not a heading.
 5. An "Engineering Translation" callout for every new programming or AI
    concept introduced (dictionary -> equipment lookup table, function ->
    standard operating procedure, loop -> repeat for every report, object ->
@@ -202,15 +205,15 @@ logical block is involved. For EACH code block, follow this exact pattern: -->
 
 ### Step 1: <what this step accomplishes>
 
-## What problem are we solving?
+**What problem are we solving?**
 
 <!-- One or two sentences: what does this specific block of code solve? -->
 
-## Inputs
+**Inputs**
 
 <!-- Bullet list: what does this code need to run? -->
 
-## Expected Output
+**Expected Output**
 
 <!-- What should the reader see when they run this? Show a concrete example. -->
 
@@ -220,7 +223,7 @@ logical block is involved. For EACH code block, follow this exact pattern: -->
 print("Hello, DDR")
 ```
 
-## What just happened?
+**What just happened?**
 
 <!-- Plain-English explanation, no unnecessary jargon. Bad: "This creates
 an inverted index." Good: "We built a lookup table that remembers which

@@ -1,33 +1,39 @@
-# Core PDF and text processing (Chapter 1-2)
+# [CORE - Part I] PDF and text processing (Chapter 1-2)
 pdfplumber==0.11.4
 
-# Search and retrieval (Chapter 3-4, 8)
+# [CORE - Part I/II] Search and retrieval (Chapter 3-4, 8)
 numpy==1.26.4
 sentence-transformers==3.1.1
 faiss-cpu==1.8.0.post1
 tiktoken==0.7.0
 
-# rank-bm25, pandas, pyarrow: not imported by this book's own
-# code/chapter_XX scripts -- included for readers who want to
-# experiment with the companion pipeline's real BM25 index and
-# ddr_facts.parquet structures directly.
+# [PART II - companion-pipeline experimentation, optional] rank-bm25,
+# pandas, pyarrow: not imported by this book's own code/chapter_XX
+# scripts -- included for readers who want to experiment with the
+# companion pipeline's real BM25 index and ddr_facts.parquet structures
+# directly. Safe to skip for a Part I-only install.
 rank-bm25==0.2.2
 pandas==2.2.2
 pyarrow==24.0.0
 
-# OCR (Chapter 6 only) -- also needs the system tools these wrap:
-#   macOS:  brew install tesseract poppler
-#   Ubuntu: apt install tesseract-ocr poppler-utils
+# [OCR-ONLY - Chapter 6] Also needs the system tools these wrap:
+#   macOS:   brew install tesseract poppler
+#   Ubuntu:  apt install tesseract-ocr poppler-utils
+#   Windows: install Tesseract (UB-Mannheim build) and Poppler for
+#            Windows, then add both to PATH -- see Chapter 6 for details.
+# Skip this block entirely until you're ready for Chapter 6; nothing
+# earlier needs it.
 pytesseract==0.3.13
 pdf2image==1.17.0
 
-# Companion app (book/app/streamlit_app.py) -- optional, only needed to run
-# the interactive DDR RAG Companion App. Ollama is a separate local install.
+# [APP-ONLY, optional] Companion app (book/app/streamlit_app.py) -- only
+# needed to run the interactive DDR RAG Companion App. Ollama is a
+# separate local install.
 streamlit==1.59.0
 
-# Notebooks and book authoring
+# [NOTEBOOK-ONLY] Notebooks and book authoring
 jupyter==1.0.0
 ipykernel==6.29.5
 
-# Testing (companion exercises)
+# [TESTING-ONLY] Companion exercises
 pytest==9.1.1

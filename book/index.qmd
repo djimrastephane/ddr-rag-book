@@ -35,10 +35,12 @@ one, ask whoever's been around the project longest and hope they
 remember, or rely on memory and risk repeating a mistake nobody wrote
 down clearly enough to find again.
 
-By Chapter 5, you'll have built a working RAG system — retrieve, generate,
-cite — and run it against a real local model. By the end of the book, it
-answers cross-report questions like this one, pulling the cause from one
-report and the outcome from the next:
+By Chapter 5, you'll have built a working RAG *prototype* — retrieve,
+generate, cite — and run it against a real local model. It has real limits
+you'll see and measure, not just hear about: Part II spends eight chapters
+hardening it. By the end of the book, it answers cross-report questions
+like this one, pulling the cause from one report and the outcome from the
+next:
 
 ::: {.callout-note title="Where this is headed: a cross-report answer from the finished system"}
 ```
@@ -58,7 +60,7 @@ Evidence:
 
 Both claims in that answer are directly quoted from the real report
 text — nothing here is invented. Getting there takes the whole book:
-Chapter 5's first system answers from a single best-matching report;
+Chapter 5's first prototype answers from a single best-matching report;
 stitching two reports together like this — the cause in #49, the outcome
 in #50 — needs the chunking (Chapter 7) and hybrid retrieval (Chapter 9)
 that Part II builds. The rest of this book is how you build that road,
@@ -76,6 +78,40 @@ The companion pipeline scales the same idea to the whole 76-report archive.
 [Appendix A](appendix/appendix_a_environment_setup.qmd) shows how to set
 either one up and point it at your own reports.
 
+## Project map
+
+A handful of things share the name "DDR" or "FORGE" in this project. Before
+you start, here's how they fit together:
+
+| Piece | What it is |
+|---|---|
+| Ten-report sample archive | Used for the main path through Chapters 1–5 |
+| 76-report full Utah FORGE archive | Used for scale exercises from Chapter 6 onward |
+| Companion app (`book/app/`) | Optional UI over the sample archive, reusing this book's own code |
+| Companion pipeline (`DDR_UTAH_FORGE`) | A separate, larger, production-style pipeline referenced for real numbers in Part II |
+| Your own DDR archive | The adaptation path once you've finished the book |
+
+The first three run entirely from this repository. The companion pipeline is
+optional and lives in its own repository — see [Appendix
+A](appendix/appendix_a_environment_setup.qmd#the-companion-pipeline-for-part-ii).
+
+## Reader contract
+
+- **Part I** (Chapters 1–5) builds a working prototype RAG system on the
+  ten-report sample archive: retrieval, generation, and citation, all
+  running.
+- **Part II** (Chapters 6–13) hardens that prototype against the failure
+  modes a real archive throws at it: scanned reports, chunking, scale,
+  hybrid retrieval, traceability, evaluation, and daily ingestion.
+- Some of Part II's field notes and validation numbers come from the
+  separate **DDR_UTAH_FORGE** companion pipeline rather than from code you
+  run yourself in this repository — each chapter says so at the point
+  where it applies.
+- This book teaches an inspectable industrial architecture and working
+  components you built and understand — not a full enterprise deployment
+  with authentication, monitoring, permissions, governance, or support
+  operations. [The preface](preface.qmd#why-industrial) says more about
+  where that line sits.
 
 ## Who this book is for
 
@@ -107,8 +143,8 @@ building useful engineering tools.
 | 2 | Expand oilfield abbreviations (BHA, WOB, MWD...) automatically |
 | 3 | Keyword-search your entire DDR archive |
 | 4 | Search DDRs by meaning, not just exact words |
-| 5 | Ask a question and get a cited, evidence-backed answer |
-| 6–13 | Scale the system to scanned reports, large archives, hybrid retrieval, reranking, full traceability, and daily ingestion of new reports |
+| 5 | Ask a question and get a cited, evidence-backed answer — Part I's working prototype, with known limits Part II closes |
+| 6–13 | Scale the prototype to scanned reports, large archives, hybrid retrieval, reranking, full traceability, and daily ingestion of new reports |
 
 ## Management view: why this matters
 

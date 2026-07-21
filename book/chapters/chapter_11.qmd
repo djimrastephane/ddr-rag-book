@@ -359,7 +359,7 @@ before this system sees a real, full-scale archive.
 | File | Purpose |
 |---|---|
 | `code/chapter_11/eval_metrics.py` | `recall@k`, MRR, `NDCG@k` implementations |
-| `DDR_UTAH_FORGE/scripts/run_eval.py` | Evaluation harness (companion repo) — ready to point at a Utah FORGE question set once you build one |
+| `DDR_UTAH_FORGE/scripts/run_eval.py` | Evaluation harness (companion repo — requires DDR_UTAH_FORGE) — ready to point at a Utah FORGE question set once you build one |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 11"}
 - [x] Built a hand-labeled evaluation set with known correct answers

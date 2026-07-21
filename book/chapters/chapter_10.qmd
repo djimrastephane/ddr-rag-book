@@ -41,7 +41,7 @@ like any real archive — has a genuine gap, and a system that answers
 confidently from what it *has*, without flagging what it's *missing*, can
 quietly mislead an engineer who assumes silence means nothing happened.
 
-## Structured facts, already extracted
+## A real, structured facts table
 
 Language models can produce fluent, plausible claims that are simply
 false — a well-documented failure mode called hallucination
@@ -414,7 +414,7 @@ A reference solution is in `code/chapter_10/challenge/`.
 | File | Purpose |
 |---|---|
 | `code/chapter_10/traceable_answers.py` | Citation formatting, real search-to-citation wiring, and date-gap detection |
-| `DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv` | Real, computed gap-detection output (companion repo) |
+| `DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv` | Real, computed gap-detection output (companion repo — reported here, not reproduced without DDR_UTAH_FORGE) |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 10"}
 - [x] Distinguished questions to compute from data versus questions to generate an answer to

@@ -275,6 +275,17 @@ sees:
   sense, and comparing scores across different queries or models is not
   valid.
 
+## Practical exercise
+
+🟢 **Beginner**
+
+**Try it yourself:** Embed all ten sample DDRs and run
+`search(model, "stuck pipe", filenames, embeddings, top_k=10)`.
+
+**You'll know it worked when:** `FORGE-16A-78-32_Drilling_039_2020-11-27.txt`
+appears somewhere in your ranked results — unlike Chapter 3, where it
+didn't appear at all — even if it isn't near the top.
+
 ## Field notes
 
 ::: {.callout-warning title="🔧 Field notes: why whole-document embeddings are noisy"}
@@ -362,17 +373,6 @@ here on, rather than adding a whole pipeline stage the semantic path
 barely uses. Keyword search keeps using the expanded text; embeddings use
 the raw. Neither choice is arbitrary, and now you've measured why.
 :::
-
-## Practical exercise
-
-🟢 **Beginner**
-
-**Try it yourself:** Embed all ten sample DDRs and run
-`search(model, "stuck pipe", filenames, embeddings, top_k=10)`.
-
-**You'll know it worked when:** `FORGE-16A-78-32_Drilling_039_2020-11-27.txt`
-appears somewhere in your ranked results — unlike Chapter 3, where it
-didn't appear at all — even if it isn't near the top.
 
 ## Challenge exercise
 
