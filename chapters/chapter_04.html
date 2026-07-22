@@ -664,6 +664,19 @@ Semantic search, whole-report embeddings (this chapter): report #39
 <h2 data-number="4.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">4.5</span> Implementation</h2>
 <section id="step-1-load-every-reports-text" class="level3" data-number="4.5.1">
 <h3 data-number="4.5.1" class="anchored" data-anchor-id="step-1-load-every-reports-text"><span class="header-section-number">4.5.1</span> Step 1: load every report’s text</h3>
+<div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Chunk">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Engineering Translation: Chunk
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>chunk</strong> is a piece of text searched as one unit. For now, each whole report is one chunk — <code>load_chunks()</code> below loads one chunk per report. This chapter’s own Field Notes show why that’s too coarse; Chapter 7 splits reports into much smaller chunks to fix it.</p>
+</div>
+</div>
 <p><strong>What problem are we solving?</strong></p>
 <p>Get every report’s text into memory, alongside its filename, so we know which score belongs to which report later.</p>
 <p><strong>Inputs</strong></p>
@@ -672,7 +685,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>Two matching lists: report filenames, and each report’s full text.</p>
-<div id="4d4c9728" class="cell" data-execution_count="1">
+<div id="f04b0d90" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -711,7 +724,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One 384-number vector per report, all packed into a single array.</p>
-<div id="013b16ee" class="cell" data-execution_count="2">
+<div id="5fabd9a6" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -735,7 +748,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(filename, score)</code> pairs, highest similarity first.</p>
-<div id="8eb273e7" class="cell" data-execution_count="3">
+<div id="f209fdca" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(model: SentenceTransformer, query: <span class="bu">str</span>, filenames: <span class="bu">list</span>[<span class="bu">str</span>],</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>           embeddings: np.ndarray, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    query_vec <span class="op">=</span> model.encode([query], normalize_embeddings<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>]</span>
@@ -1519,341 +1532,348 @@ Reimers, Nils, and Iryna Gurevych. 2019. <span>“Sentence-<span>BERT</span>: Se
 <span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: load every report's text</span></span>
 <span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>Get every report's text into memory, alongside its filename, so we know</span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>which score belongs to which report later.</span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Chunk"}</span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>A **chunk** is a piece of text searched as one unit. For now, each whole</span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>report is one chunk — <span class="in">`load_chunks()`</span> below loads one chunk per report.</span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>This chapter's own Field Notes show why that's too coarse; Chapter 7</span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>splits reports into much smaller chunks to fix it.</span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A folder of cleaned report text, e.g. <span class="in">`datasets/ddr_text/`</span>.</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>Two matching lists: report filenames, and each report's full text.</span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
-<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>Get every report's text into memory, alongside its filename, so we know</span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>which score belongs to which report later.</span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A folder of cleaned report text, e.g. <span class="in">`datasets/ddr_text/`</span>.</span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>Two matching lists: report filenames, and each report's full text.</span>
 <span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_chunks(text_dir: Path) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">str</span>], <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
-<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>    filenames, texts <span class="op">=</span> [], []</span>
-<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(text_dir.glob(<span class="st">"*.txt"</span>)):</span>
-<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a>        filenames.append(path.name)</span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a>        texts.append(path.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>))</span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filenames, texts</span>
-<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a>Nothing about meaning yet — this just reads every text file into memory</span>
-<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>and keeps a matching list of filenames, so that whatever score we</span>
-<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a>calculate next can be traced back to the report it came from.</span>
-<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>Note the folder: <span class="in">`datasets/ddr_text/`</span>, Chapter 1's raw extraction — *not*</span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>Chapter 2's <span class="in">`datasets/ddr_text_expanded/`</span>. That's deliberate, and the</span>
-<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>Field Notes at the end of this chapter measure exactly why.</span>
-<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Type hints"}</span>
-<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>The <span class="in">`-&gt; tuple[list[str], list[str]]`</span> after the function name looks</span>
-<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>cryptic but is only a label: it says this function hands back a pair of</span>
-<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>lists of text strings — the filenames, and the report texts. Python</span>
-<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>doesn't enforce it; it's a note for the next reader and your editor, the</span>
-<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>same way a valve tag states what flows through without changing the</span>
-<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a>valve. You'll see these <span class="in">`: Path`</span> and <span class="in">`-&gt; str`</span> annotations throughout the</span>
-<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>book — you can read straight past them without losing the thread.</span>
-<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: convert text into vectors</span></span>
-<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
-<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>Turn each report's text into a numeric representation of its meaning, so</span>
-<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>that "similar meaning" can be measured with arithmetic instead of exact</span>
-<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>word matching.</span>
-<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
-<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`MODEL_NAME = "all-MiniLM-L6-v2"`</span>, a pre-trained embedding model.</span>
-<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The list of report texts from Step 1.</span>
-<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
+<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_chunks(text_dir: Path) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">str</span>], <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
+<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a>    filenames, texts <span class="op">=</span> [], []</span>
+<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(text_dir.glob(<span class="st">"*.txt"</span>)):</span>
+<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a>        filenames.append(path.name)</span>
+<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>        texts.append(path.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>))</span>
+<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filenames, texts</span>
+<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a>Nothing about meaning yet — this just reads every text file into memory</span>
+<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>and keeps a matching list of filenames, so that whatever score we</span>
+<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>calculate next can be traced back to the report it came from.</span>
+<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>Note the folder: <span class="in">`datasets/ddr_text/`</span>, Chapter 1's raw extraction — *not*</span>
+<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>Chapter 2's <span class="in">`datasets/ddr_text_expanded/`</span>. That's deliberate, and the</span>
+<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>Field Notes at the end of this chapter measure exactly why.</span>
+<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Type hints"}</span>
+<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>The <span class="in">`-&gt; tuple[list[str], list[str]]`</span> after the function name looks</span>
+<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>cryptic but is only a label: it says this function hands back a pair of</span>
+<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a>lists of text strings — the filenames, and the report texts. Python</span>
+<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a>doesn't enforce it; it's a note for the next reader and your editor, the</span>
+<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>same way a valve tag states what flows through without changing the</span>
+<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a>valve. You'll see these <span class="in">`: Path`</span> and <span class="in">`-&gt; str`</span> annotations throughout the</span>
+<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>book — you can read straight past them without losing the thread.</span>
+<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: convert text into vectors</span></span>
+<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
+<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a>Turn each report's text into a numeric representation of its meaning, so</span>
+<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>that "similar meaning" can be measured with arithmetic instead of exact</span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>word matching.</span>
 <span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>One 384-number vector per report, all packed into a single array.</span>
+<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
+<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`MODEL_NAME = "all-MiniLM-L6-v2"`</span>, a pre-trained embedding model.</span>
+<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The list of report texts from Step 1.</span>
+<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a>One 384-number vector per report, all packed into a single array.</span>
 <span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a>MODEL_NAME <span class="op">=</span> <span class="st">"all-MiniLM-L6-v2"</span></span>
-<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> embed_texts(model: SentenceTransformer, texts: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> np.ndarray:</span>
-<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>    embeddings <span class="op">=</span> model.encode(texts, normalize_embeddings<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.asarray(embeddings)</span>
-<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
 <span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a>MODEL_NAME <span class="op">=</span> <span class="st">"all-MiniLM-L6-v2"</span></span>
 <span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a>The model read each report and produced its "GPS coordinates for</span>
-<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>meaning" — one vector per report. <span class="in">`normalize_embeddings=True`</span> scales</span>
-<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>every vector to the same length, so later we can compare direction only,</span>
-<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>which is exactly what cosine similarity needs.</span>
+<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> embed_texts(model: SentenceTransformer, texts: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>    embeddings <span class="op">=</span> model.encode(texts, normalize_embeddings<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.asarray(embeddings)</span>
+<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: rank reports against a query</span></span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
-<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>Given a query like "stuck pipe," find which reports are closest in</span>
-<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>meaning — not which reports contain those exact words.</span>
+<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a>The model read each report and produced its "GPS coordinates for</span>
+<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a>meaning" — one vector per report. <span class="in">`normalize_embeddings=True`</span> scales</span>
+<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>every vector to the same length, so later we can compare direction only,</span>
+<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>which is exactly what cosine similarity needs.</span>
 <span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
+<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: rank reports against a query</span></span>
 <span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The query string.</span>
-<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The array of report vectors from Step 2.</span>
-<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
+<span id="cb8-204"><a href="#cb8-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-205"><a href="#cb8-205" aria-hidden="true" tabindex="-1"></a>Given a query like "stuck pipe," find which reports are closest in</span>
+<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a>meaning — not which reports contain those exact words.</span>
 <span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>A ranked list of <span class="in">`(filename, score)`</span> pairs, highest similarity first.</span>
+<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(model: SentenceTransformer, query: <span class="bu">str</span>, filenames: <span class="bu">list</span>[<span class="bu">str</span>],</span>
-<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>           embeddings: np.ndarray, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]:</span>
-<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>    query_vec <span class="op">=</span> model.encode([query], normalize_embeddings<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> embeddings <span class="op">@</span> query_vec  <span class="co"># cosine similarity, since vectors are normalized</span></span>
-<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>    top_indices <span class="op">=</span> np.argsort(<span class="op">-</span>scores)[:top_k]</span>
-<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [(filenames[i], <span class="bu">float</span>(scores[i])) <span class="cf">for</span> i <span class="kw">in</span> top_indices]</span>
-<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>The query got turned into its own vector, then compared against every</span>
-<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>report's vector at once. Because every vector was normalized to the same</span>
-<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>length in Step 2, one matrix multiplication (<span class="in">`embeddings @ query_vec`</span>)</span>
-<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>gives back the cosine similarity for every report simultaneously —</span>
-<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>that's the "arithmetic" that replaces exact word matching.</span>
-<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Sorting and list comprehensions"}</span>
-<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a>Two lines of shorthand do the ranking. <span class="in">`np.argsort(-scores)[:top_k]`</span></span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a>returns the *positions* that would put the scores in order — the minus</span>
-<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>sign flips it to highest-first — and <span class="in">`[:top_k]`</span> keeps just the first few.</span>
-<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>Then <span class="in">`[(filenames[i], float(scores[i])) for i in top_indices]`</span> is a *list</span>
-<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>comprehension*: read it left to right as "for each position <span class="in">`i`</span> in the</span>
-<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a>top list, pair its filename with its score." It's a compact way to build</span>
-<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a>a list without writing out a full loop, and it's a pattern you'll meet</span>
-<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>often from here on.</span>
-<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>Run this against all ten sample reports with <span class="in">`query="stuck pipe"`</span> and</span>
-<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a><span class="in">`top_k=10`</span> (the whole ranking, not just the top few), and you get the</span>
-<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a>real numbers behind the callout above:</span>
-<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a><span class="in">1. 0.2416  Completion_003_2021-01-06</span></span>
-<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a><span class="in">2. 0.1978  Drilling_038_2020-11-26   &lt;- the actual stuck-pipe day</span></span>
-<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a><span class="in">3. 0.1713  Drilling_049_2020-12-07</span></span>
-<span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a><span class="in">4. 0.1657  Drilling_003_2020-10-22</span></span>
-<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a><span class="in">5. 0.1498  Drilling_039_2020-11-27   &lt;- tight hole / high torque, findable now</span></span>
-<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a><span class="in">6. 0.1406  Drilling_048_2020-12-06</span></span>
-<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a><span class="in">7. 0.1342  Drilling_019_2020-11-07</span></span>
-<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a><span class="in">8. 0.1326  Drilling_037_2020-11-25</span></span>
-<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a><span class="in">9. 0.1319  Drilling_050_2020-12-08</span></span>
-<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a><span class="in">10. 0.1169 Drilling_036_2020-11-24</span></span>
-<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a>Report #39 went from *absent* (Chapter 3) to *rank 5 of 10* — a real</span>
-<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a>improvement, worth having. But it's not a clean win: the scores are</span>
-<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a>bunched close together (0.12–0.24), and a busy engineer scanning only the</span>
-<span id="cb8-261"><a href="#cb8-261" aria-hidden="true" tabindex="-1"></a>top 2 or 3 results would still miss it.</span>
-<span id="cb8-262"><a href="#cb8-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
+<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The query string.</span>
+<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The array of report vectors from Step 2.</span>
+<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>A ranked list of <span class="in">`(filename, score)`</span> pairs, highest similarity first.</span>
+<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(model: SentenceTransformer, query: <span class="bu">str</span>, filenames: <span class="bu">list</span>[<span class="bu">str</span>],</span>
+<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>           embeddings: np.ndarray, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]:</span>
+<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>    query_vec <span class="op">=</span> model.encode([query], normalize_embeddings<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>]</span>
+<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> embeddings <span class="op">@</span> query_vec  <span class="co"># cosine similarity, since vectors are normalized</span></span>
+<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>    top_indices <span class="op">=</span> np.argsort(<span class="op">-</span>scores)[:top_k]</span>
+<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [(filenames[i], <span class="bu">float</span>(scores[i])) <span class="cf">for</span> i <span class="kw">in</span> top_indices]</span>
+<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a>The query got turned into its own vector, then compared against every</span>
+<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a>report's vector at once. Because every vector was normalized to the same</span>
+<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>length in Step 2, one matrix multiplication (<span class="in">`embeddings @ query_vec`</span>)</span>
+<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>gives back the cosine similarity for every report simultaneously —</span>
+<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>that's the "arithmetic" that replaces exact word matching.</span>
+<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Sorting and list comprehensions"}</span>
+<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>Two lines of shorthand do the ranking. <span class="in">`np.argsort(-scores)[:top_k]`</span></span>
+<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>returns the *positions* that would put the scores in order — the minus</span>
+<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a>sign flips it to highest-first — and <span class="in">`[:top_k]`</span> keeps just the first few.</span>
+<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>Then <span class="in">`[(filenames[i], float(scores[i])) for i in top_indices]`</span> is a *list</span>
+<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a>comprehension*: read it left to right as "for each position <span class="in">`i`</span> in the</span>
+<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a>top list, pair its filename with its score." It's a compact way to build</span>
+<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a>a list without writing out a full loop, and it's a pattern you'll meet</span>
+<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a>often from here on.</span>
+<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a>Run this against all ten sample reports with <span class="in">`query="stuck pipe"`</span> and</span>
+<span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a><span class="in">`top_k=10`</span> (the whole ranking, not just the top few), and you get the</span>
+<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a>real numbers behind the callout above:</span>
+<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a><span class="in">1. 0.2416  Completion_003_2021-01-06</span></span>
+<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a><span class="in">2. 0.1978  Drilling_038_2020-11-26   &lt;- the actual stuck-pipe day</span></span>
+<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a><span class="in">3. 0.1713  Drilling_049_2020-12-07</span></span>
+<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a><span class="in">4. 0.1657  Drilling_003_2020-10-22</span></span>
+<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a><span class="in">5. 0.1498  Drilling_039_2020-11-27   &lt;- tight hole / high torque, findable now</span></span>
+<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a><span class="in">6. 0.1406  Drilling_048_2020-12-06</span></span>
+<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a><span class="in">7. 0.1342  Drilling_019_2020-11-07</span></span>
+<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a><span class="in">8. 0.1326  Drilling_037_2020-11-25</span></span>
+<span id="cb8-261"><a href="#cb8-261" aria-hidden="true" tabindex="-1"></a><span class="in">9. 0.1319  Drilling_050_2020-12-08</span></span>
+<span id="cb8-262"><a href="#cb8-262" aria-hidden="true" tabindex="-1"></a><span class="in">10. 0.1169 Drilling_036_2020-11-24</span></span>
+<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-264"><a href="#cb8-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-265"><a href="#cb8-265" aria-hidden="true" tabindex="-1"></a>This chapter runs the embedding model locally, on a laptop CPU, against</span>
-<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a>ten short reports. Real deployments hit constraints this setup never</span>
-<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a>sees:</span>
-<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>some teams call a hosted embedding API instead of running a model</span>
-<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a>  locally — which means sending report text, possibly confidential well</span>
-<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a>  data, to a third party. That's a data-governance conversation, not just</span>
-<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>  a technical choice, and it's worth having before it's a surprise.</span>
-<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>embeddings from two different model versions aren't comparable — if you</span>
-<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a>  re-embed your archive with a newer model, old and new vectors can't be</span>
-<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a>  compared against each other, and everything needs re-embedding together.</span>
-<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>embedding a full multi-well archive (thousands of reports, not ten)</span>
-<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a>  takes real time and, for hosted APIs, real money — a cost that scales</span>
-<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a>  with archive size, not query volume.</span>
-<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>a similarity score like 0.24 is only meaningful *relative to other</span>
-<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a>  scores in the same search* — it is not "24% similar" in any absolute</span>
-<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a>  sense, and comparing scores across different queries or models is not</span>
-<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>  valid.</span>
-<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
-<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
-<span id="cb8-287"><a href="#cb8-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-288"><a href="#cb8-288" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Embed all ten sample DDRs and run</span>
-<span id="cb8-289"><a href="#cb8-289" aria-hidden="true" tabindex="-1"></a><span class="in">`search(model, "stuck pipe", filenames, embeddings, top_k=10)`</span>.</span>
+<span id="cb8-265"><a href="#cb8-265" aria-hidden="true" tabindex="-1"></a>Report #39 went from *absent* (Chapter 3) to *rank 5 of 10* — a real</span>
+<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a>improvement, worth having. But it's not a clean win: the scores are</span>
+<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a>bunched close together (0.12–0.24), and a busy engineer scanning only the</span>
+<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a>top 2 or 3 results would still miss it.</span>
+<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
+<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>This chapter runs the embedding model locally, on a laptop CPU, against</span>
+<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a>ten short reports. Real deployments hit constraints this setup never</span>
+<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a>sees:</span>
+<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>some teams call a hosted embedding API instead of running a model</span>
+<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a>  locally — which means sending report text, possibly confidential well</span>
+<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a>  data, to a third party. That's a data-governance conversation, not just</span>
+<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a>  a technical choice, and it's worth having before it's a surprise.</span>
+<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>embeddings from two different model versions aren't comparable — if you</span>
+<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a>  re-embed your archive with a newer model, old and new vectors can't be</span>
+<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>  compared against each other, and everything needs re-embedding together.</span>
+<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>embedding a full multi-well archive (thousands of reports, not ten)</span>
+<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a>  takes real time and, for hosted APIs, real money — a cost that scales</span>
+<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a>  with archive size, not query volume.</span>
+<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>a similarity score like 0.24 is only meaningful *relative to other</span>
+<span id="cb8-287"><a href="#cb8-287" aria-hidden="true" tabindex="-1"></a>  scores in the same search* — it is not "24% similar" in any absolute</span>
+<span id="cb8-288"><a href="#cb8-288" aria-hidden="true" tabindex="-1"></a>  sense, and comparing scores across different queries or models is not</span>
+<span id="cb8-289"><a href="#cb8-289" aria-hidden="true" tabindex="-1"></a>  valid.</span>
 <span id="cb8-290"><a href="#cb8-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-291"><a href="#cb8-291" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** <span class="in">`FORGE-16A-78-32_Drilling_039_2020-11-27.txt`</span></span>
-<span id="cb8-292"><a href="#cb8-292" aria-hidden="true" tabindex="-1"></a>appears somewhere in your ranked results — unlike Chapter 3, where it</span>
-<span id="cb8-293"><a href="#cb8-293" aria-hidden="true" tabindex="-1"></a>didn't appear at all — even if it isn't near the top.</span>
+<span id="cb8-291"><a href="#cb8-291" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
+<span id="cb8-292"><a href="#cb8-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-293"><a href="#cb8-293" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
 <span id="cb8-294"><a href="#cb8-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-295"><a href="#cb8-295" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
-<span id="cb8-296"><a href="#cb8-296" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-297"><a href="#cb8-297" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: why whole-document embeddings are noisy"}</span>
-<span id="cb8-298"><a href="#cb8-298" aria-hidden="true" tabindex="-1"></a>**Query:** <span class="in">`"stuck pipe"`</span>, same as above.</span>
-<span id="cb8-299"><a href="#cb8-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-300"><a href="#cb8-300" aria-hidden="true" tabindex="-1"></a>**Result:** report #39 ranks 5th of 10 when you embed each *entire</span>
-<span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a>report* as one vector — an improvement over keyword search's zero, but</span>
-<span id="cb8-302"><a href="#cb8-302" aria-hidden="true" tabindex="-1"></a>not a clean fix.</span>
+<span id="cb8-295"><a href="#cb8-295" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Embed all ten sample DDRs and run</span>
+<span id="cb8-296"><a href="#cb8-296" aria-hidden="true" tabindex="-1"></a><span class="in">`search(model, "stuck pipe", filenames, embeddings, top_k=10)`</span>.</span>
+<span id="cb8-297"><a href="#cb8-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-298"><a href="#cb8-298" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** <span class="in">`FORGE-16A-78-32_Drilling_039_2020-11-27.txt`</span></span>
+<span id="cb8-299"><a href="#cb8-299" aria-hidden="true" tabindex="-1"></a>appears somewhere in your ranked results — unlike Chapter 3, where it</span>
+<span id="cb8-300"><a href="#cb8-300" aria-hidden="true" tabindex="-1"></a>didn't appear at all — even if it isn't near the top.</span>
+<span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-302"><a href="#cb8-302" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
 <span id="cb8-303"><a href="#cb8-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a>**Why:** each report is one page, but that page holds seven distinct data</span>
-<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a>tables (casing, mud, drill bits, pumps, BHA, survey data, consumables)</span>
-<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a>plus the narrative time breakdown. Embedding the whole thing blends a</span>
-<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>handful of sentences of relevant narrative with a few hundred words of</span>
-<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>numeric table content. The relevant signal — "Work tight hole... high</span>
-<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>torque... pull out of hole" — is a small fraction of what actually goes</span>
-<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>into the vector.</span>
-<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>Isolate just the narrative lines instead of the whole report, and the</span>
-<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>picture changes — though not as cleanly as you might hope:</span>
-<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a><span class="in">0.6244  report #38 — "Pipe free"</span></span>
-<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a><span class="in">0.3359  report #38 — "During the slide lost tool face and became</span></span>
-<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a><span class="in">                       assembly became stuck"</span></span>
-<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a><span class="in">0.2402  report #39 — "Due to high torque decision to pull out of hole"</span></span>
-<span id="cb8-320"><a href="#cb8-320" aria-hidden="true" tabindex="-1"></a><span class="in">0.2331  report #39 — "Hole drag from 6,050' to 5,901' no issues"</span></span>
-<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a><span class="in">0.2206  report #49 — "Attempted multiple times to set packers"</span></span>
-<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a><span class="in">0.2043  report #36 — "Trip out of hole with BHA #17 core assembly."</span></span>
-<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a><span class="in">        (genuinely unrelated coring operation)</span></span>
-<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a><span class="in">0.2008  report #39 — "Work tight hole at 6,526'."</span></span>
-<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a>The two lines that directly describe the stuck-pipe event itself separate</span>
-<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>clearly from everything else (0.62 and 0.34 vs. everything else under</span>
-<span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a>0.25) — something whole-document embedding couldn't show at all. But</span>
-<span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a>below that, there's no clean cutoff: report #39's own `"hole drag...no</span>
-<span id="cb8-331"><a href="#cb8-331" aria-hidden="true" tabindex="-1"></a>issues"` line — a routine trip note, not part of the incident — scores</span>
-<span id="cb8-332"><a href="#cb8-332" aria-hidden="true" tabindex="-1"></a>almost as high as its <span class="in">`"high torque"`</span> line (0.23 vs. 0.24), while report</span>
-<span id="cb8-333"><a href="#cb8-333" aria-hidden="true" tabindex="-1"></a>#36's genuinely unrelated coring line (0.20) lands in the same narrow</span>
-<span id="cb8-334"><a href="#cb8-334" aria-hidden="true" tabindex="-1"></a>band as report #39's own <span class="in">`"tight hole"`</span> line (0.20), the actual precursor</span>
-<span id="cb8-335"><a href="#cb8-335" aria-hidden="true" tabindex="-1"></a>to the stuck-pipe event. Shared drilling vocabulary ("hole," "trip,"</span>
-<span id="cb8-336"><a href="#cb8-336" aria-hidden="true" tabindex="-1"></a>"torque") pulls topically-similar-but-irrelevant lines close to</span>
-<span id="cb8-337"><a href="#cb8-337" aria-hidden="true" tabindex="-1"></a>genuinely relevant ones once you're past the two standout lines.</span>
-<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-339"><a href="#cb8-339" aria-hidden="true" tabindex="-1"></a>**Lesson:** semantic search doesn't fail because the *technique* is wrong</span>
-<span id="cb8-340"><a href="#cb8-340" aria-hidden="true" tabindex="-1"></a>— it fails here because the *unit of retrieval* is too coarse. Line-level</span>
-<span id="cb8-341"><a href="#cb8-341" aria-hidden="true" tabindex="-1"></a>granularity narrows the field dramatically, but it doesn't hand you a</span>
-<span id="cb8-342"><a href="#cb8-342" aria-hidden="true" tabindex="-1"></a>clean similarity threshold to filter on — the middle of the ranked list</span>
-<span id="cb8-343"><a href="#cb8-343" aria-hidden="true" tabindex="-1"></a>still mixes relevant and irrelevant lines together. This is exactly the</span>
-<span id="cb8-344"><a href="#cb8-344" aria-hidden="true" tabindex="-1"></a>problem Chapter 7's chunking (and later, reranking) works on, and it's</span>
-<span id="cb8-345"><a href="#cb8-345" aria-hidden="true" tabindex="-1"></a>worth remembering the next time a semantic search "isn't working": check</span>
-<span id="cb8-346"><a href="#cb8-346" aria-hidden="true" tabindex="-1"></a>what's actually inside each embedded vector before blaming the model —</span>
-<span id="cb8-347"><a href="#cb8-347" aria-hidden="true" tabindex="-1"></a>but don't expect a single score cutoff to solve it either.</span>
-<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-349"><a href="#cb8-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-350"><a href="#cb8-350" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: does expanding abbreviations actually help semantic search?"}</span>
-<span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a>**Action:** embed the ten reports twice — once from Chapter 1's raw text</span>
-<span id="cb8-352"><a href="#cb8-352" aria-hidden="true" tabindex="-1"></a>(<span class="in">`datasets/ddr_text/`</span>), once from Chapter 2's expanded text</span>
-<span id="cb8-353"><a href="#cb8-353" aria-hidden="true" tabindex="-1"></a>(<span class="in">`datasets/ddr_text_expanded/`</span>) — and compare the same two queries at</span>
-<span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a><span class="in">`top_k=3`</span>.</span>
-<span id="cb8-355"><a href="#cb8-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-356"><a href="#cb8-356" aria-hidden="true" tabindex="-1"></a>**Result:**</span>
-<span id="cb8-357"><a href="#cb8-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-358"><a href="#cb8-358" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-359"><a href="#cb8-359" aria-hidden="true" tabindex="-1"></a><span class="in">Query "bottom hole assembly":</span></span>
-<span id="cb8-360"><a href="#cb8-360" aria-hidden="true" tabindex="-1"></a><span class="in">  raw text:      report #38 ranks 2nd  (0.302)</span></span>
-<span id="cb8-361"><a href="#cb8-361" aria-hidden="true" tabindex="-1"></a><span class="in">  expanded text: report #38 ranks 1st  (0.372)   &lt;- BHA now reads in full</span></span>
+<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: why whole-document embeddings are noisy"}</span>
+<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a>**Query:** <span class="in">`"stuck pipe"`</span>, same as above.</span>
+<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>**Result:** report #39 ranks 5th of 10 when you embed each *entire</span>
+<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>report* as one vector — an improvement over keyword search's zero, but</span>
+<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a>not a clean fix.</span>
+<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a>**Why:** each report is one page, but that page holds seven distinct data</span>
+<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a>tables (casing, mud, drill bits, pumps, BHA, survey data, consumables)</span>
+<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>plus the narrative time breakdown. Embedding the whole thing blends a</span>
+<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a>handful of sentences of relevant narrative with a few hundred words of</span>
+<span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a>numeric table content. The relevant signal — "Work tight hole... high</span>
+<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a>torque... pull out of hole" — is a small fraction of what actually goes</span>
+<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a>into the vector.</span>
+<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a>Isolate just the narrative lines instead of the whole report, and the</span>
+<span id="cb8-320"><a href="#cb8-320" aria-hidden="true" tabindex="-1"></a>picture changes — though not as cleanly as you might hope:</span>
+<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a><span class="in">0.6244  report #38 — "Pipe free"</span></span>
+<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a><span class="in">0.3359  report #38 — "During the slide lost tool face and became</span></span>
+<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a><span class="in">                       assembly became stuck"</span></span>
+<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a><span class="in">0.2402  report #39 — "Due to high torque decision to pull out of hole"</span></span>
+<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a><span class="in">0.2331  report #39 — "Hole drag from 6,050' to 5,901' no issues"</span></span>
+<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a><span class="in">0.2206  report #49 — "Attempted multiple times to set packers"</span></span>
+<span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a><span class="in">0.2043  report #36 — "Trip out of hole with BHA #17 core assembly."</span></span>
+<span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a><span class="in">        (genuinely unrelated coring operation)</span></span>
+<span id="cb8-331"><a href="#cb8-331" aria-hidden="true" tabindex="-1"></a><span class="in">0.2008  report #39 — "Work tight hole at 6,526'."</span></span>
+<span id="cb8-332"><a href="#cb8-332" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-333"><a href="#cb8-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-334"><a href="#cb8-334" aria-hidden="true" tabindex="-1"></a>The two lines that directly describe the stuck-pipe event itself separate</span>
+<span id="cb8-335"><a href="#cb8-335" aria-hidden="true" tabindex="-1"></a>clearly from everything else (0.62 and 0.34 vs. everything else under</span>
+<span id="cb8-336"><a href="#cb8-336" aria-hidden="true" tabindex="-1"></a>0.25) — something whole-document embedding couldn't show at all. But</span>
+<span id="cb8-337"><a href="#cb8-337" aria-hidden="true" tabindex="-1"></a>below that, there's no clean cutoff: report #39's own `"hole drag...no</span>
+<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a>issues"` line — a routine trip note, not part of the incident — scores</span>
+<span id="cb8-339"><a href="#cb8-339" aria-hidden="true" tabindex="-1"></a>almost as high as its <span class="in">`"high torque"`</span> line (0.23 vs. 0.24), while report</span>
+<span id="cb8-340"><a href="#cb8-340" aria-hidden="true" tabindex="-1"></a>#36's genuinely unrelated coring line (0.20) lands in the same narrow</span>
+<span id="cb8-341"><a href="#cb8-341" aria-hidden="true" tabindex="-1"></a>band as report #39's own <span class="in">`"tight hole"`</span> line (0.20), the actual precursor</span>
+<span id="cb8-342"><a href="#cb8-342" aria-hidden="true" tabindex="-1"></a>to the stuck-pipe event. Shared drilling vocabulary ("hole," "trip,"</span>
+<span id="cb8-343"><a href="#cb8-343" aria-hidden="true" tabindex="-1"></a>"torque") pulls topically-similar-but-irrelevant lines close to</span>
+<span id="cb8-344"><a href="#cb8-344" aria-hidden="true" tabindex="-1"></a>genuinely relevant ones once you're past the two standout lines.</span>
+<span id="cb8-345"><a href="#cb8-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-346"><a href="#cb8-346" aria-hidden="true" tabindex="-1"></a>**Lesson:** semantic search doesn't fail because the *technique* is wrong</span>
+<span id="cb8-347"><a href="#cb8-347" aria-hidden="true" tabindex="-1"></a>— it fails here because the *unit of retrieval* is too coarse. Line-level</span>
+<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a>granularity narrows the field dramatically, but it doesn't hand you a</span>
+<span id="cb8-349"><a href="#cb8-349" aria-hidden="true" tabindex="-1"></a>clean similarity threshold to filter on — the middle of the ranked list</span>
+<span id="cb8-350"><a href="#cb8-350" aria-hidden="true" tabindex="-1"></a>still mixes relevant and irrelevant lines together. This is exactly the</span>
+<span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a>problem Chapter 7's chunking (and later, reranking) works on, and it's</span>
+<span id="cb8-352"><a href="#cb8-352" aria-hidden="true" tabindex="-1"></a>worth remembering the next time a semantic search "isn't working": check</span>
+<span id="cb8-353"><a href="#cb8-353" aria-hidden="true" tabindex="-1"></a>what's actually inside each embedded vector before blaming the model —</span>
+<span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a>but don't expect a single score cutoff to solve it either.</span>
+<span id="cb8-355"><a href="#cb8-355" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-356"><a href="#cb8-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-357"><a href="#cb8-357" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: does expanding abbreviations actually help semantic search?"}</span>
+<span id="cb8-358"><a href="#cb8-358" aria-hidden="true" tabindex="-1"></a>**Action:** embed the ten reports twice — once from Chapter 1's raw text</span>
+<span id="cb8-359"><a href="#cb8-359" aria-hidden="true" tabindex="-1"></a>(<span class="in">`datasets/ddr_text/`</span>), once from Chapter 2's expanded text</span>
+<span id="cb8-360"><a href="#cb8-360" aria-hidden="true" tabindex="-1"></a>(<span class="in">`datasets/ddr_text_expanded/`</span>) — and compare the same two queries at</span>
+<span id="cb8-361"><a href="#cb8-361" aria-hidden="true" tabindex="-1"></a><span class="in">`top_k=3`</span>.</span>
 <span id="cb8-362"><a href="#cb8-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-363"><a href="#cb8-363" aria-hidden="true" tabindex="-1"></a><span class="in">Query "stuck pipe":</span></span>
-<span id="cb8-364"><a href="#cb8-364" aria-hidden="true" tabindex="-1"></a><span class="in">  raw text:      report #38 ranks 2nd</span></span>
-<span id="cb8-365"><a href="#cb8-365" aria-hidden="true" tabindex="-1"></a><span class="in">  expanded text: report #38 ranks 2nd            &lt;- essentially unchanged</span></span>
-<span id="cb8-366"><a href="#cb8-366" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-367"><a href="#cb8-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-368"><a href="#cb8-368" aria-hidden="true" tabindex="-1"></a>**Why:** expansion only helps a query whose wording matches a term you</span>
-<span id="cb8-369"><a href="#cb8-369" aria-hidden="true" tabindex="-1"></a>actually expanded. <span class="in">`"bottom hole assembly"`</span> improves because the reports</span>
-<span id="cb8-370"><a href="#cb8-370" aria-hidden="true" tabindex="-1"></a>now literally contain that phrase instead of only <span class="in">`BHA`</span> — so report #38</span>
-<span id="cb8-371"><a href="#cb8-371" aria-hidden="true" tabindex="-1"></a>climbs from 2nd to 1st. <span class="in">`"stuck pipe"`</span> doesn't move, because "stuck" was</span>
-<span id="cb8-372"><a href="#cb8-372" aria-hidden="true" tabindex="-1"></a>never an abbreviation to begin with.</span>
-<span id="cb8-373"><a href="#cb8-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-374"><a href="#cb8-374" aria-hidden="true" tabindex="-1"></a>**Lesson:** expansion earns its keep for keyword search (Chapter 3, which</span>
-<span id="cb8-375"><a href="#cb8-375" aria-hidden="true" tabindex="-1"></a>matches literal words), but its benefit to *semantic* search is real yet</span>
-<span id="cb8-376"><a href="#cb8-376" aria-hidden="true" tabindex="-1"></a>narrow — confined to queries that happen to use a term you expanded. That</span>
-<span id="cb8-377"><a href="#cb8-377" aria-hidden="true" tabindex="-1"></a>narrowness is why this book feeds the raw text to the embedding model from</span>
-<span id="cb8-378"><a href="#cb8-378" aria-hidden="true" tabindex="-1"></a>here on, rather than adding a whole pipeline stage the semantic path</span>
-<span id="cb8-379"><a href="#cb8-379" aria-hidden="true" tabindex="-1"></a>barely uses. Keyword search keeps using the expanded text; embeddings use</span>
-<span id="cb8-380"><a href="#cb8-380" aria-hidden="true" tabindex="-1"></a>the raw. Neither choice is arbitrary, and now you've measured why.</span>
-<span id="cb8-381"><a href="#cb8-381" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-382"><a href="#cb8-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-383"><a href="#cb8-383" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
-<span id="cb8-384"><a href="#cb8-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-385"><a href="#cb8-385" aria-hidden="true" tabindex="-1"></a>🟠 **Intermediate**</span>
-<span id="cb8-386"><a href="#cb8-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-387"><a href="#cb8-387" aria-hidden="true" tabindex="-1"></a>**Challenge:** Reproduce the Field Notes line-level result yourself.</span>
-<span id="cb8-388"><a href="#cb8-388" aria-hidden="true" tabindex="-1"></a>Manually pull three lines of text, verbatim from the source reports —</span>
-<span id="cb8-389"><a href="#cb8-389" aria-hidden="true" tabindex="-1"></a>report #39's <span class="in">`"Due to high torque decision to pull out of hole"`</span>, report</span>
-<span id="cb8-390"><a href="#cb8-390" aria-hidden="true" tabindex="-1"></a>#39's <span class="in">`"Hole drag from 6,050' to 5,901' no issues"`</span>, and report #36's</span>
-<span id="cb8-391"><a href="#cb8-391" aria-hidden="true" tabindex="-1"></a><span class="in">`"Trip out of hole with BHA #17 core assembly."`</span> (a genuinely unrelated</span>
-<span id="cb8-392"><a href="#cb8-392" aria-hidden="true" tabindex="-1"></a>line) — embed just those three strings, and confirm the high-torque line</span>
-<span id="cb8-393"><a href="#cb8-393" aria-hidden="true" tabindex="-1"></a>scores highest against <span class="in">`"stuck pipe"`</span>, report #39's own hole-drag line</span>
-<span id="cb8-394"><a href="#cb8-394" aria-hidden="true" tabindex="-1"></a>scores close behind it, and the genuinely unrelated line trails both by</span>
-<span id="cb8-395"><a href="#cb8-395" aria-hidden="true" tabindex="-1"></a>a real margin. A reference solution is in <span class="in">`code/chapter_04/challenge/`</span>.</span>
-<span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
-<span id="cb8-398"><a href="#cb8-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-399"><a href="#cb8-399" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Embeddings represent meaning as geometry: similar meaning, nearby</span>
-<span id="cb8-400"><a href="#cb8-400" aria-hidden="true" tabindex="-1"></a>  vectors.</span>
-<span id="cb8-401"><a href="#cb8-401" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cosine similarity is the standard comparison because it isolates</span>
-<span id="cb8-402"><a href="#cb8-402" aria-hidden="true" tabindex="-1"></a>  direction (meaning) from magnitude.</span>
-<span id="cb8-403"><a href="#cb8-403" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Semantic search over whole documents is a real improvement on keyword</span>
-<span id="cb8-404"><a href="#cb8-404" aria-hidden="true" tabindex="-1"></a>  search — report #39 goes from unfindable to rank 5 of 10 — but "an</span>
-<span id="cb8-405"><a href="#cb8-405" aria-hidden="true" tabindex="-1"></a>  improvement" and "solved" are different claims. Don't oversell it.</span>
-<span id="cb8-406"><a href="#cb8-406" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Granularity is often the actual lever, not the embedding model. The</span>
-<span id="cb8-407"><a href="#cb8-407" aria-hidden="true" tabindex="-1"></a>  same query, same model, same text — just isolated to individual</span>
-<span id="cb8-408"><a href="#cb8-408" aria-hidden="true" tabindex="-1"></a>  narrative lines instead of a whole noisy report — turns a middling</span>
-<span id="cb8-409"><a href="#cb8-409" aria-hidden="true" tabindex="-1"></a>  rank-5 result into a clear, checkable win.</span>
-<span id="cb8-410"><a href="#cb8-410" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Brute-force cosine search (a matrix multiply) is entirely adequate at</span>
-<span id="cb8-411"><a href="#cb8-411" aria-hidden="true" tabindex="-1"></a>  ten documents. It stops being adequate well before you reach the full</span>
-<span id="cb8-412"><a href="#cb8-412" aria-hidden="true" tabindex="-1"></a>  76-report archive's scale — that's Chapter 8's problem to solve.</span>
-<span id="cb8-413"><a href="#cb8-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-414"><a href="#cb8-414" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
-<span id="cb8-415"><a href="#cb8-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-416"><a href="#cb8-416" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb8-417"><a href="#cb8-417" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb8-418"><a href="#cb8-418" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_04/semantic_search.py`</span> <span class="pp">|</span> Embedding generation and brute-force cosine search <span class="pp">|</span></span>
-<span id="cb8-419"><a href="#cb8-419" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_04_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
+<span id="cb8-363"><a href="#cb8-363" aria-hidden="true" tabindex="-1"></a>**Result:**</span>
+<span id="cb8-364"><a href="#cb8-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-365"><a href="#cb8-365" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-366"><a href="#cb8-366" aria-hidden="true" tabindex="-1"></a><span class="in">Query "bottom hole assembly":</span></span>
+<span id="cb8-367"><a href="#cb8-367" aria-hidden="true" tabindex="-1"></a><span class="in">  raw text:      report #38 ranks 2nd  (0.302)</span></span>
+<span id="cb8-368"><a href="#cb8-368" aria-hidden="true" tabindex="-1"></a><span class="in">  expanded text: report #38 ranks 1st  (0.372)   &lt;- BHA now reads in full</span></span>
+<span id="cb8-369"><a href="#cb8-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-370"><a href="#cb8-370" aria-hidden="true" tabindex="-1"></a><span class="in">Query "stuck pipe":</span></span>
+<span id="cb8-371"><a href="#cb8-371" aria-hidden="true" tabindex="-1"></a><span class="in">  raw text:      report #38 ranks 2nd</span></span>
+<span id="cb8-372"><a href="#cb8-372" aria-hidden="true" tabindex="-1"></a><span class="in">  expanded text: report #38 ranks 2nd            &lt;- essentially unchanged</span></span>
+<span id="cb8-373"><a href="#cb8-373" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-374"><a href="#cb8-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-375"><a href="#cb8-375" aria-hidden="true" tabindex="-1"></a>**Why:** expansion only helps a query whose wording matches a term you</span>
+<span id="cb8-376"><a href="#cb8-376" aria-hidden="true" tabindex="-1"></a>actually expanded. <span class="in">`"bottom hole assembly"`</span> improves because the reports</span>
+<span id="cb8-377"><a href="#cb8-377" aria-hidden="true" tabindex="-1"></a>now literally contain that phrase instead of only <span class="in">`BHA`</span> — so report #38</span>
+<span id="cb8-378"><a href="#cb8-378" aria-hidden="true" tabindex="-1"></a>climbs from 2nd to 1st. <span class="in">`"stuck pipe"`</span> doesn't move, because "stuck" was</span>
+<span id="cb8-379"><a href="#cb8-379" aria-hidden="true" tabindex="-1"></a>never an abbreviation to begin with.</span>
+<span id="cb8-380"><a href="#cb8-380" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-381"><a href="#cb8-381" aria-hidden="true" tabindex="-1"></a>**Lesson:** expansion earns its keep for keyword search (Chapter 3, which</span>
+<span id="cb8-382"><a href="#cb8-382" aria-hidden="true" tabindex="-1"></a>matches literal words), but its benefit to *semantic* search is real yet</span>
+<span id="cb8-383"><a href="#cb8-383" aria-hidden="true" tabindex="-1"></a>narrow — confined to queries that happen to use a term you expanded. That</span>
+<span id="cb8-384"><a href="#cb8-384" aria-hidden="true" tabindex="-1"></a>narrowness is why this book feeds the raw text to the embedding model from</span>
+<span id="cb8-385"><a href="#cb8-385" aria-hidden="true" tabindex="-1"></a>here on, rather than adding a whole pipeline stage the semantic path</span>
+<span id="cb8-386"><a href="#cb8-386" aria-hidden="true" tabindex="-1"></a>barely uses. Keyword search keeps using the expanded text; embeddings use</span>
+<span id="cb8-387"><a href="#cb8-387" aria-hidden="true" tabindex="-1"></a>the raw. Neither choice is arbitrary, and now you've measured why.</span>
+<span id="cb8-388"><a href="#cb8-388" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-389"><a href="#cb8-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-390"><a href="#cb8-390" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
+<span id="cb8-391"><a href="#cb8-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-392"><a href="#cb8-392" aria-hidden="true" tabindex="-1"></a>🟠 **Intermediate**</span>
+<span id="cb8-393"><a href="#cb8-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-394"><a href="#cb8-394" aria-hidden="true" tabindex="-1"></a>**Challenge:** Reproduce the Field Notes line-level result yourself.</span>
+<span id="cb8-395"><a href="#cb8-395" aria-hidden="true" tabindex="-1"></a>Manually pull three lines of text, verbatim from the source reports —</span>
+<span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a>report #39's <span class="in">`"Due to high torque decision to pull out of hole"`</span>, report</span>
+<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a>#39's <span class="in">`"Hole drag from 6,050' to 5,901' no issues"`</span>, and report #36's</span>
+<span id="cb8-398"><a href="#cb8-398" aria-hidden="true" tabindex="-1"></a><span class="in">`"Trip out of hole with BHA #17 core assembly."`</span> (a genuinely unrelated</span>
+<span id="cb8-399"><a href="#cb8-399" aria-hidden="true" tabindex="-1"></a>line) — embed just those three strings, and confirm the high-torque line</span>
+<span id="cb8-400"><a href="#cb8-400" aria-hidden="true" tabindex="-1"></a>scores highest against <span class="in">`"stuck pipe"`</span>, report #39's own hole-drag line</span>
+<span id="cb8-401"><a href="#cb8-401" aria-hidden="true" tabindex="-1"></a>scores close behind it, and the genuinely unrelated line trails both by</span>
+<span id="cb8-402"><a href="#cb8-402" aria-hidden="true" tabindex="-1"></a>a real margin. A reference solution is in <span class="in">`code/chapter_04/challenge/`</span>.</span>
+<span id="cb8-403"><a href="#cb8-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-404"><a href="#cb8-404" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb8-405"><a href="#cb8-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-406"><a href="#cb8-406" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Embeddings represent meaning as geometry: similar meaning, nearby</span>
+<span id="cb8-407"><a href="#cb8-407" aria-hidden="true" tabindex="-1"></a>  vectors.</span>
+<span id="cb8-408"><a href="#cb8-408" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cosine similarity is the standard comparison because it isolates</span>
+<span id="cb8-409"><a href="#cb8-409" aria-hidden="true" tabindex="-1"></a>  direction (meaning) from magnitude.</span>
+<span id="cb8-410"><a href="#cb8-410" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Semantic search over whole documents is a real improvement on keyword</span>
+<span id="cb8-411"><a href="#cb8-411" aria-hidden="true" tabindex="-1"></a>  search — report #39 goes from unfindable to rank 5 of 10 — but "an</span>
+<span id="cb8-412"><a href="#cb8-412" aria-hidden="true" tabindex="-1"></a>  improvement" and "solved" are different claims. Don't oversell it.</span>
+<span id="cb8-413"><a href="#cb8-413" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Granularity is often the actual lever, not the embedding model. The</span>
+<span id="cb8-414"><a href="#cb8-414" aria-hidden="true" tabindex="-1"></a>  same query, same model, same text — just isolated to individual</span>
+<span id="cb8-415"><a href="#cb8-415" aria-hidden="true" tabindex="-1"></a>  narrative lines instead of a whole noisy report — turns a middling</span>
+<span id="cb8-416"><a href="#cb8-416" aria-hidden="true" tabindex="-1"></a>  rank-5 result into a clear, checkable win.</span>
+<span id="cb8-417"><a href="#cb8-417" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Brute-force cosine search (a matrix multiply) is entirely adequate at</span>
+<span id="cb8-418"><a href="#cb8-418" aria-hidden="true" tabindex="-1"></a>  ten documents. It stops being adequate well before you reach the full</span>
+<span id="cb8-419"><a href="#cb8-419" aria-hidden="true" tabindex="-1"></a>  76-report archive's scale — that's Chapter 8's problem to solve.</span>
 <span id="cb8-420"><a href="#cb8-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-421"><a href="#cb8-421" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 4"}</span>
-<span id="cb8-422"><a href="#cb8-422" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained what a text embedding is without needing the underlying math</span>
-<span id="cb8-423"><a href="#cb8-423" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Generated embeddings for a folder of DDR text</span>
-<span id="cb8-424"><a href="#cb8-424" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Ranked reports by semantic similarity to a query using cosine similarity</span>
-<span id="cb8-425"><a href="#cb8-425" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Diagnosed granularity, not the model, as the real bottleneck</span>
-<span id="cb8-426"><a href="#cb8-426" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-421"><a href="#cb8-421" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb8-422"><a href="#cb8-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-423"><a href="#cb8-423" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb8-424"><a href="#cb8-424" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb8-425"><a href="#cb8-425" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_04/semantic_search.py`</span> <span class="pp">|</span> Embedding generation and brute-force cosine search <span class="pp">|</span></span>
+<span id="cb8-426"><a href="#cb8-426" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`notebooks/chapter_04_explore.ipynb`</span> <span class="pp">|</span> Interactive companion notebook <span class="pp">|</span></span>
 <span id="cb8-427"><a href="#cb8-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-428"><a href="#cb8-428" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb8-429"><a href="#cb8-429" aria-hidden="true" tabindex="-1"></a>**`semantic_search.py`** — a brute-force semantic search engine: embed a</span>
-<span id="cb8-430"><a href="#cb8-430" aria-hidden="true" tabindex="-1"></a>folder of reports once, then rank any query against them by meaning, not</span>
-<span id="cb8-431"><a href="#cb8-431" aria-hidden="true" tabindex="-1"></a>spelling.</span>
-<span id="cb8-432"><a href="#cb8-432" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-433"><a href="#cb8-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-434"><a href="#cb8-434" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
-<span id="cb8-435"><a href="#cb8-435" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-436"><a href="#cb8-436" aria-hidden="true" tabindex="-1"></a>You can retrieve relevant report passages by meaning instead of exact</span>
-<span id="cb8-437"><a href="#cb8-437" aria-hidden="true" tabindex="-1"></a>wording — finding report #39's continued-risk language even though it</span>
-<span id="cb8-438"><a href="#cb8-438" aria-hidden="true" tabindex="-1"></a>never says "stuck" — and you know precisely why the result isn't perfect</span>
-<span id="cb8-439"><a href="#cb8-439" aria-hidden="true" tabindex="-1"></a>yet: granularity, not the model, is the real bottleneck.</span>
+<span id="cb8-428"><a href="#cb8-428" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 4"}</span>
+<span id="cb8-429"><a href="#cb8-429" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained what a text embedding is without needing the underlying math</span>
+<span id="cb8-430"><a href="#cb8-430" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Generated embeddings for a folder of DDR text</span>
+<span id="cb8-431"><a href="#cb8-431" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Ranked reports by semantic similarity to a query using cosine similarity</span>
+<span id="cb8-432"><a href="#cb8-432" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Diagnosed granularity, not the model, as the real bottleneck</span>
+<span id="cb8-433"><a href="#cb8-433" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-434"><a href="#cb8-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-435"><a href="#cb8-435" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb8-436"><a href="#cb8-436" aria-hidden="true" tabindex="-1"></a>**`semantic_search.py`** — a brute-force semantic search engine: embed a</span>
+<span id="cb8-437"><a href="#cb8-437" aria-hidden="true" tabindex="-1"></a>folder of reports once, then rank any query against them by meaning, not</span>
+<span id="cb8-438"><a href="#cb8-438" aria-hidden="true" tabindex="-1"></a>spelling.</span>
+<span id="cb8-439"><a href="#cb8-439" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-440"><a href="#cb8-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-441"><a href="#cb8-441" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb8-441"><a href="#cb8-441" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
 <span id="cb8-442"><a href="#cb8-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-443"><a href="#cb8-443" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 5:** You can now retrieve relevant passages by</span>
-<span id="cb8-444"><a href="#cb8-444" aria-hidden="true" tabindex="-1"></a>meaning, and you've learned the honest limits of doing it at</span>
-<span id="cb8-445"><a href="#cb8-445" aria-hidden="true" tabindex="-1"></a>whole-document granularity. Chapter 5 turns retrieval into an answer:</span>
-<span id="cb8-446"><a href="#cb8-446" aria-hidden="true" tabindex="-1"></a>given a question, retrieve the right evidence, and generate a response</span>
-<span id="cb8-447"><a href="#cb8-447" aria-hidden="true" tabindex="-1"></a>that cites exactly where each claim came from. Chapter 7 comes back to</span>
-<span id="cb8-448"><a href="#cb8-448" aria-hidden="true" tabindex="-1"></a>fix the granularity problem directly.</span>
+<span id="cb8-443"><a href="#cb8-443" aria-hidden="true" tabindex="-1"></a>You can retrieve relevant report passages by meaning instead of exact</span>
+<span id="cb8-444"><a href="#cb8-444" aria-hidden="true" tabindex="-1"></a>wording — finding report #39's continued-risk language even though it</span>
+<span id="cb8-445"><a href="#cb8-445" aria-hidden="true" tabindex="-1"></a>never says "stuck" — and you know precisely why the result isn't perfect</span>
+<span id="cb8-446"><a href="#cb8-446" aria-hidden="true" tabindex="-1"></a>yet: granularity, not the model, is the real bottleneck.</span>
+<span id="cb8-447"><a href="#cb8-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-448"><a href="#cb8-448" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb8-449"><a href="#cb8-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-450"><a href="#cb8-450" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 5:** You can now retrieve relevant passages by</span>
+<span id="cb8-451"><a href="#cb8-451" aria-hidden="true" tabindex="-1"></a>meaning, and you've learned the honest limits of doing it at</span>
+<span id="cb8-452"><a href="#cb8-452" aria-hidden="true" tabindex="-1"></a>whole-document granularity. Chapter 5 turns retrieval into an answer:</span>
+<span id="cb8-453"><a href="#cb8-453" aria-hidden="true" tabindex="-1"></a>given a question, retrieve the right evidence, and generate a response</span>
+<span id="cb8-454"><a href="#cb8-454" aria-hidden="true" tabindex="-1"></a>that cites exactly where each claim came from. Chapter 7 comes back to</span>
+<span id="cb8-455"><a href="#cb8-455" aria-hidden="true" tabindex="-1"></a>fix the granularity problem directly.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
