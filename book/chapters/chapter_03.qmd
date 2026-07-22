@@ -67,6 +67,15 @@ Tokenization matters here: "losses" and "LOSSES" should be the same
 token, and punctuation shouldn't create spurious tokens (`6,507'` should
 not prevent `6507` or nearby words from matching cleanly).
 
+::: {.callout-tip title="Engineering Translation: Token"}
+In this chapter, a **token** just means one search word — the plain
+result of lowercasing and stripping punctuation, like `stuck` or `6507`
+below. Chapter 7 reuses the same word for something narrower: a language
+model's sub-word pieces, which don't always line up with whole words.
+Same word, two related but different meanings — worth remembering when
+you get there.
+:::
+
 ```
 documents                              inverted index
 ------------------------------         --------------------------

@@ -105,6 +105,13 @@ comfortably in memory.
 
 ### Step 1: load every report's text
 
+::: {.callout-tip title="Engineering Translation: Chunk"}
+A **chunk** is a piece of text searched as one unit. For now, each whole
+report is one chunk — `load_chunks()` below loads one chunk per report.
+This chapter's own Field Notes show why that's too coarse; Chapter 7
+splits reports into much smaller chunks to fix it.
+:::
+
 **What problem are we solving?**
 
 Get every report's text into memory, alongside its filename, so we know

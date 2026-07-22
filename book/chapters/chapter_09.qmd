@@ -43,6 +43,15 @@ systems combine both.
 
 ## Theory
 
+::: {.callout-tip title="Engineering Translation: Hybrid retrieval"}
+**Hybrid retrieval** just means running more than one search method on
+the same query and combining their results, instead of betting everything
+on a single technique. Here, that's BM25 (below — an exact-match method,
+Chapter 3's keyword search made more careful) plus dense embeddings
+(Chapter 4's semantic search): two different ways of finding relevant
+reports, fused into one ranking.
+:::
+
 **BM25** [@robertson2009bm25] scores a document by term frequency,
 adjusted by how rare each term is across the whole archive (inverse
 document frequency, IDF) and normalised for document length. It's decades old,

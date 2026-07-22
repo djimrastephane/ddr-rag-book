@@ -71,6 +71,16 @@ answer *using only that evidence*. The model is not answering from what it
 memorised during training — it's answering from the specific passages you
 retrieved, which is what makes citation possible at all.
 
+::: {.callout-tip title="Engineering Translation: Embedding model vs. language model"}
+Chapter 4's **embedding model** and this chapter's **language model** are
+easy to blur together — both get called "the model" — but they do
+different jobs. The embedding model turns text into GPS-coordinates-for-
+meaning so you can *retrieve* the right reports (Chapter 4). The language
+model *writes*: given those retrieved reports as evidence, it produces
+the answer's actual sentences. One retrieves, the other writes — two
+different models, chained together, is what RAG means in practice.
+:::
+
 ::: {.callout-tip title="Engineering Translation: LLM"}
 An **LLM** (large language model) is like a very well-read new hire: it
 has absorbed an enormous amount of general drilling and engineering

@@ -47,6 +47,13 @@ A **vector database** (or vector index library, like FAISS
 [@johnson2017faiss]) organises embeddings so that similarity search
 doesn't require comparing the query against every single vector.
 
+"Index" is a word this book reuses on purpose, and it means something
+different each time: Chapter 3's inverted index maps a *word* to the
+reports that contain it; this chapter's FAISS index maps a *vector* to
+its nearest neighbours. Both let you skip scanning every document — that
+shared idea is why both get called an index — but they store fundamentally
+different things and answer different kinds of queries.
+
 ::: {.callout-tip title="Engineering Translation: FAISS index"}
 Think of Chapter 4's brute-force search as walking every aisle of a
 warehouse to find a part. A **FAISS index** is that same warehouse with
