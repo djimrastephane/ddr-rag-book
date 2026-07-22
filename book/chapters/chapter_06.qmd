@@ -67,6 +67,15 @@ OCR → gate round-trip on it, no hypotheticals.
 
 ## Theory
 
+::: {.callout-tip title="Engineering Translation: OCR"}
+**OCR** (Optical Character Recognition) is software that looks at a
+*picture* of text — a scanned page, a photo of a logbook — and reads the
+letters and numbers off it, the same way a person would, turning that
+picture into text a computer can search. It's the step that recovers
+text from exactly the kind of PDF Chapter 1's `extract_text()` returns
+nothing for.
+:::
+
 Getting OCR to run is the easy part — `pytesseract`, cloud OCR APIs, and
 PDF-rendering libraries all do a competent job of turning a page image
 into text. The hard part, and the one that actually determines whether

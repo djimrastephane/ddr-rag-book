@@ -99,9 +99,9 @@ them the specific job's DDRs and a clear brief, instead of just asking
 
 The critical design decision is the prompt: instruct the model explicitly
 to answer only from the provided context, and to cite which source each
-part of the answer came from. This doesn't make hallucination impossible —
-Chapter 10 covers stronger mitigations — but it is the foundation
-everything else builds on.
+part of the answer came from. This doesn't make hallucination — a model
+confidently stating something false — impossible; Chapter 10 covers
+stronger mitigations. But it is the foundation everything else builds on.
 
 Here's the complete pipeline you've actually built, chapter by chapter —
 every arrow below is real, working code you've already written:
