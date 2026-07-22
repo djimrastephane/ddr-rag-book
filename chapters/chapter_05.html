@@ -672,7 +672,7 @@ Evidence:
 <p>A <strong>prompt</strong> is the instructions-plus-evidence packet you hand that new hire before asking them to write anything — the equivalent of handing them the specific job’s DDRs and a clear brief, instead of just asking “what usually happens in a fishing job?” and hoping they don’t improvise.</p>
 </div>
 </div>
-<p>The critical design decision is the prompt: instruct the model explicitly to answer only from the provided context, and to cite which source each part of the answer came from. This doesn’t make hallucination impossible — Chapter 10 covers stronger mitigations — but it is the foundation everything else builds on.</p>
+<p>The critical design decision is the prompt: instruct the model explicitly to answer only from the provided context, and to cite which source each part of the answer came from. This doesn’t make hallucination — a model confidently stating something false — impossible; Chapter 10 covers stronger mitigations. But it is the foundation everything else builds on.</p>
 <p>Here’s the complete pipeline you’ve actually built, chapter by chapter — every arrow below is real, working code you’ve already written:</p>
 <div class="pipeline-diagram">
 <p><img src="../figures/diagrams/theory_ch05_pipeline_light.svg" class="diagram-light img-fluid" width="280"> <img src="../figures/diagrams/theory_ch05_pipeline_dark.svg" class="diagram-dark img-fluid" width="280"></p>
@@ -691,7 +691,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A reusable prompt template with two blanks: the evidence, and the question.</p>
-<div id="2e0e6f51" class="cell" data-execution_count="1">
+<div id="d8342f6a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_05/first_rag.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>PROMPT_TEMPLATE <span class="op">=</span> <span class="st">"""Answer the question using ONLY the evidence below.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">If the evidence doesn't contain the answer, say so — do not guess.</span></span>
@@ -718,7 +718,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One complete prompt string, evidence labelled by source filename, ready to send to a model.</p>
-<div id="7cc29b7e" class="cell" data-execution_count="2">
+<div id="d6e2d8fb" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> semantic_search <span class="im">import</span> embed_texts, load_chunks, search  <span class="co"># from Chapter 4</span></span>
@@ -749,7 +749,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A tuple: the generated answer text, and the list of report filenames that were actually retrieved and shown to the model.</p>
-<div id="230f3a18" class="cell" data-execution_count="3">
+<div id="75e3bb32" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> answer_question(question: <span class="bu">str</span>, model, filenames, texts, embeddings,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                     llm_call) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    retrieved <span class="op">=</span> search(model, question, filenames, embeddings, top_k<span class="op">=</span><span class="dv">3</span>)</span>
@@ -770,7 +770,7 @@ Evidence:
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ollama</span> serve            <span class="co"># leave this running in its own terminal</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>qwen2.5:7b-instruct</code> is a small, capable default, but nothing here is tied to it — pass any model you’ve pulled to <code>ollama_llm_call(model=...)</code>. Pick whatever runs comfortably on your hardware: <code>llama3.1:8b</code> or <code>mistral</code> are similar in size, <code>qwen2.5:14b</code> is stronger if you have the memory for it, and swapping the one HTTP call for a hosted API’s would let you point at a cloud model instead. The retrieval and prompt work above doesn’t change either way — only which model reads the evidence.</p>
 <p><code>ollama_llm_call</code> talks to that local server over plain HTTP — standard library only, no extra package to install, and a clear message instead of a crash if Ollama isn’t running:</p>
-<div id="00b686de" class="cell" data-execution_count="4">
+<div id="af1c7904" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.error</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
@@ -1560,9 +1560,9 @@ Lewis, Patrick, Ethan Perez, Aleksandra Piktus, et al. 2020. <span>“Retrieval-
 <span id="cb10-99"><a href="#cb10-99" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-100"><a href="#cb10-100" aria-hidden="true" tabindex="-1"></a>The critical design decision is the prompt: instruct the model explicitly</span>
 <span id="cb10-101"><a href="#cb10-101" aria-hidden="true" tabindex="-1"></a>to answer only from the provided context, and to cite which source each</span>
-<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>part of the answer came from. This doesn't make hallucination impossible —</span>
-<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>Chapter 10 covers stronger mitigations — but it is the foundation</span>
-<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>everything else builds on.</span>
+<span id="cb10-102"><a href="#cb10-102" aria-hidden="true" tabindex="-1"></a>part of the answer came from. This doesn't make hallucination — a model</span>
+<span id="cb10-103"><a href="#cb10-103" aria-hidden="true" tabindex="-1"></a>confidently stating something false — impossible; Chapter 10 covers</span>
+<span id="cb10-104"><a href="#cb10-104" aria-hidden="true" tabindex="-1"></a>stronger mitigations. But it is the foundation everything else builds on.</span>
 <span id="cb10-105"><a href="#cb10-105" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-106"><a href="#cb10-106" aria-hidden="true" tabindex="-1"></a>Here's the complete pipeline you've actually built, chapter by chapter —</span>
 <span id="cb10-107"><a href="#cb10-107" aria-hidden="true" tabindex="-1"></a>every arrow below is real, working code you've already written:</span>
