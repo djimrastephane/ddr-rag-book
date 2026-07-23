@@ -44,8 +44,9 @@ for real, against the same archive you've used throughout this book.
 ## Building your own question set
 
 Rather than presenting borrowed results, build a small evaluation set
-against the ten-report Part I sample, where you already know the ground
-truth from having read the reports yourself in Chapters 1–5:
+against the ten-report Part I sample, where you already know the correct
+answer for each question (the **ground truth**) from having read the
+reports yourself in Chapters 1–5:
 
 ::: {.callout-note title="A starter evaluation set for the Part I sample"}
 ```
