@@ -311,11 +311,12 @@ SOP says "repeat for each joint" instead of listing every joint by hand.
 
 Note the `or ""`. If a page has no extractable text — a scanned page mixed
 into an otherwise digital report, for example — `extract_text()` returns
-`None`, and every downstream step in this book expects a string, not
-`None`. This is a safety check, the code equivalent of confirming a valve
-position before proceeding instead of assuming it: assume real data is
-messier than the happy path, and this pattern shows up throughout the
-book.
+`None` — Python's way of marking "nothing here," not the same thing as an
+empty string — and every downstream step in this book expects a string,
+not `None`. This is a safety check, the code equivalent of confirming a
+valve position before proceeding instead of assuming it: assume real
+data is messier than the happy path, and this pattern shows up throughout
+the book.
 
 ### Step 3: make it a script you can run from the command line
 
