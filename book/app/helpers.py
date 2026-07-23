@@ -39,12 +39,20 @@ OLLAMA_DOWN_MESSAGE = (
 )
 
 _REPORT_DATE = re.compile(r"_(\d{4}-\d{2}-\d{2})\.")
+_REPORT_NUMBER = re.compile(r"_(?:Drilling|Completion)_(\d+)_")
 
 
 def report_date(filename: str) -> str | None:
     """Read the report date straight off the filename (WellEz's own naming
     convention), the same way Chapter 8 does. Returns None if absent."""
     match = _REPORT_DATE.search(filename)
+    return match.group(1) if match else None
+
+
+def report_number(filename: str) -> str | None:
+    """Read the report number straight off the filename
+    (e.g. '..._Drilling_050_...' -> '050'). Returns None if absent."""
+    match = _REPORT_NUMBER.search(filename)
     return match.group(1) if match else None
 
 
@@ -176,8 +184,11 @@ def run_query(question: str, model, text_dir=TEXT_DIR,
             "filename": filename,
             "score": float(score),
             "date": report_date(filename),
+            "report_number": report_number(filename),
             "snippet": best_snippet(text, question),
             "why": why_it_matters(text, question),
+            "terms": matched_terms(text, question),
+            "full_text": text,
         })
 
     answer = None
