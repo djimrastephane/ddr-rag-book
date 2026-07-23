@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-0a97d93da9593b0fd742f1d48c4e3dfc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -633,6 +633,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td><code>read_ddr.py</code> reports no text extracted</td>
 <td>Confirm you’re pointing at a file in <code>datasets/sample_ddrs/</code> or <code>datasets/forge_archive/</code> — both are committed directly, so this shouldn’t happen unless the path is wrong.</td>
+</tr>
+<tr class="odd">
+<td><code>ollama: command not found</code> (Chapter 5+)</td>
+<td>Close and reopen your terminal after installing Ollama — the installer updates your PATH, which a terminal window already open won’t see until it restarts.</td>
+</tr>
+<tr class="even">
+<td><code>[Ollama not reachable...]</code> in a generated answer</td>
+<td>Confirm <code>ollama serve</code> is running in its own terminal window, and that you actually <code>ollama pull</code>ed the model name you’re passing to <code>ollama_llm_call</code>.</td>
 </tr>
 </tbody>
 </table>
@@ -1247,7 +1255,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`quarto render`</span> fails on a code cell <span class="pp">|</span> Activate <span class="in">`.venv`</span> before rendering — Quarto uses whichever Python is on <span class="in">`PATH`</span>. Confirm with <span class="in">`which python`</span> and <span class="in">`python -c "import pdfplumber"`</span>. <span class="pp">|</span></span>
 <span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ModuleNotFoundError: sentence_transformers`</span> (Chapter 4+) <span class="pp">|</span> Re-run <span class="in">`pip install -r requirements.txt`</span>; this is a heavier dependency and sometimes needs a separate <span class="in">`pip install torch`</span> first on some platforms. <span class="pp">|</span></span>
 <span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> FAISS import error on Apple Silicon (Chapter 8+) <span class="pp">|</span> Ensure you installed <span class="in">`faiss-cpu`</span>, not <span class="in">`faiss-gpu`</span> — the latter has no macOS wheel. <span class="pp">|</span></span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`read_ddr.py`</span> reports no text extracted <span class="pp">|</span> Confirm you're pointing at a file in <span class="in">`datasets/sample_ddrs/`</span> or <span class="in">`datasets/forge_archive/`</span> — both are committed directly, so this shouldn't happen unless the path is wrong. <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`read_ddr.py`</span> reports no text extracted <span class="pp">|</span> Confirm you're pointing at a file in <span class="in">`datasets/sample_ddrs/`</span> or <span class="in">`datasets/forge_archive/`</span> — both are committed directly, so this shouldn't happen unless the path is wrong. <span class="pp">|</span></span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`ollama: command not found`</span> (Chapter 5+) <span class="pp">|</span> Close and reopen your terminal after installing Ollama — the installer updates your PATH, which a terminal window already open won't see until it restarts. <span class="pp">|</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`[Ollama not reachable...]`</span> in a generated answer <span class="pp">|</span> Confirm <span class="in">`ollama serve`</span> is running in its own terminal window, and that you actually <span class="in">`ollama pull`</span>ed the model name you're passing to <span class="in">`ollama_llm_call`</span>. <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
