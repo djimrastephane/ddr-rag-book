@@ -107,8 +107,11 @@ Run against the real 76-report archive, this pipeline's chunking produces
 just how much structured content (header, seven data tables, and a
 narrative time breakdown) each single-page DDR actually contains.
 
-Token-based chunking with overlap looks like this — each chunk shares a
-few tokens with its neighbour, so no boundary loses context entirely:
+Token-based chunking with overlap looks like this, using report #38's
+own sentence from the naive-split example above (shown here as whole
+words for readability — the real tokens `tiktoken` produces are
+sub-word pieces, not words) — each chunk shares a few words with its
+neighbour, so no boundary loses context entirely:
 
 ::: {.content-visible when-format="html"}
 ::: {.pipeline-diagram}

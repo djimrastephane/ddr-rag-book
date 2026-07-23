@@ -209,37 +209,65 @@ THEORY_DIAGRAMS = {
 
 # Third category: one-off diagrams whose shape isn't a chain -- hand-built
 # TikZ, not the label-list generator above. Chapter 7's chunk overlap is a
-# token strip with three overlapping ranges below it, which `build_tex`
-# has no way to express (it only stacks boxes vertically with an arrow
-# between each).
+# word strip with three overlapping ranges below it, which `build_tex` has
+# no way to express (it only stacks boxes vertically with an arrow between
+# each). The words are report #38's real sentence from the naive-split
+# example earlier in the chapter -- "Trips During the slide lost tool face
+# and became assembly became stuck" -- shown as whole words for
+# readability (tiktoken's real tokens are sub-word pieces, not words).
+#
+# Colors use real alpha (`fill opacity=`), not TikZ's `!12` (which bakes
+# in an opaque tint mixed with white at generation time). Real alpha lets
+# the page's own background show through, so the same fill value looks
+# right on both light and dark themes without a separate dark variant --
+# unlike the black text/braces below, which still need the light->dark
+# regex swap in render_tex() since they have no such transparency.
 CHUNK_OVERLAP_TEX = r"""
 \documentclass[tikz,border=3pt]{standalone}
 \usepackage[T1]{fontenc}
 \usepackage{tikz}
-\usetikzlibrary{calc, decorations.pathreplacing}
+\usetikzlibrary{calc, positioning, decorations.pathreplacing}
 \begin{document}
 \begin{tikzpicture}[font=\sffamily]
-  \def\dx{9mm}
-  \foreach \i in {1,...,12} {
-    \node[font=\scriptsize] (t\i) at (\i*\dx, 0) {t\the\numexpr\i\relax};
-  }
+  \def\gap{3mm}
+  \node[font=\scriptsize] (w1) {Trips};
+  \node[font=\scriptsize, right=\gap of w1] (w2) {During};
+  \node[font=\scriptsize, right=\gap of w2] (w3) {the};
+  \node[font=\scriptsize, right=\gap of w3] (w4) {slide};
+  \node[font=\scriptsize, right=\gap of w4] (w5) {lost};
+  \node[font=\scriptsize, right=\gap of w5] (w6) {tool};
+  \node[font=\scriptsize, right=\gap of w6] (w7) {face};
+  \node[font=\scriptsize, right=\gap of w7] (w8) {and};
+  \node[font=\scriptsize, right=\gap of w8] (w9) {became};
+  \node[font=\scriptsize, right=\gap of w9] (w10) {assembly};
+  \node[font=\scriptsize, right=\gap of w10] (w11) {became};
+  \node[font=\scriptsize, right=\gap of w11] (w12) {stuck};
+
+  % Chunk colors: teal, amber, plum -- mid-tone so they read on white paper
+  % and a near-black screen alike.
+  \definecolor{chunkTeal}{HTML}{2F9E8F}
+  \definecolor{chunkAmber}{HTML}{B8792E}
+  \definecolor{chunkPlum}{HTML}{7D5BA6}
 
   % Row geometry: row N box spans y=[top_N, bottom_N]; the 8mm gap between
-  % rows holds the overlap brace + label for the columns those two chunks share.
-  \draw[thick, rounded corners=2pt] ($(t1)+(-4mm,-6mm)$) rectangle ($(t6)+(4mm,-13mm)$);
-  \draw[thick, rounded corners=2pt] ($(t5)+(-4mm,-21mm)$) rectangle ($(t10)+(4mm,-28mm)$);
-  \draw[thick, rounded corners=2pt] ($(t9)+(-4mm,-36mm)$) rectangle ($(t12)+(4mm,-43mm)$);
+  % rows holds the overlap brace + label for the words those two chunks share.
+  \draw[thick, rounded corners=2pt, draw=chunkTeal, fill=chunkTeal, fill opacity=0.15]
+    ($(w1)+(-2.5mm,-6mm)$) rectangle ($(w6)+(2.5mm,-13mm)$);
+  \draw[thick, rounded corners=2pt, draw=chunkAmber, fill=chunkAmber, fill opacity=0.15]
+    ($(w5)+(-2.5mm,-21mm)$) rectangle ($(w10)+(2.5mm,-28mm)$);
+  \draw[thick, rounded corners=2pt, draw=chunkPlum, fill=chunkPlum, fill opacity=0.15]
+    ($(w9)+(-2.5mm,-36mm)$) rectangle ($(w12)+(2.5mm,-43mm)$);
 
-  \node[font=\small, anchor=east] at ($(t1)+(-6mm,-9.5mm)$) {Chunk 1};
-  \node[font=\small, anchor=east] at ($(t1)+(-6mm,-24.5mm)$) {Chunk 2};
-  \node[font=\small, anchor=east] at ($(t1)+(-6mm,-39.5mm)$) {Chunk 3};
+  \node[font=\small, anchor=east, chunkTeal] at ($(w1)+(-4.5mm,-9.5mm)$) {Chunk 1};
+  \node[font=\small, anchor=east, chunkAmber] at ($(w1)+(-4.5mm,-24.5mm)$) {Chunk 2};
+  \node[font=\small, anchor=east, chunkPlum] at ($(w1)+(-4.5mm,-39.5mm)$) {Chunk 3};
 
   \draw[decorate, decoration={brace, amplitude=3pt, mirror, raise=1pt}]
-    ($(t5)+(-4mm,-14mm)$) -- ($(t6)+(4mm,-14mm)$)
+    ($(w5)+(-2.5mm,-14mm)$) -- ($(w6)+(2.5mm,-14mm)$)
     node[midway, font=\tiny, yshift=-5.5mm] {overlap};
 
   \draw[decorate, decoration={brace, amplitude=3pt, mirror, raise=1pt}]
-    ($(t9)+(-4mm,-29mm)$) -- ($(t10)+(4mm,-29mm)$)
+    ($(w9)+(-2.5mm,-29mm)$) -- ($(w10)+(2.5mm,-29mm)$)
     node[midway, font=\tiny, yshift=-5.5mm] {overlap};
 \end{tikzpicture}
 \end{document}
