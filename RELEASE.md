@@ -3,6 +3,71 @@
 Per-release highlights for *Building Industrial RAG Systems from Daily
 Drilling Reports*. See [CHANGELOG.md](CHANGELOG.md) for the full history.
 
+## v1.4.0
+
+A reader-trust pass: an explicit contract with the reader up front, a
+full first-use jargon audit across every chapter, and proper setup
+coverage for the one dependency that had none.
+
+### Added
+
+- **A "Reader Contract" section** (`book/index.qmd`, README) explaining
+  Part I (working prototype) vs. Part II (hardening against real
+  failure modes), the separate DDR_UTAH_FORGE companion pipeline's role,
+  and what's deliberately out of scope (authentication, monitoring,
+  permissions, governance, support operations). A matching boundary
+  note under the preface's "Why industrial" section, plus a compact
+  project map of the sample archive, full archive, companion app, and
+  companion pipeline.
+- **A first-use jargon audit across all 13 chapters** — "Engineering
+  Translation" callouts or light inline glosses for terms used before
+  they were defined: `token` (Chapter 3, flagging its different sense
+  for Chapter 7), `chunk` (Chapter 4), the embedding-model-vs-language-
+  model distinction and `hallucination` (Chapter 5), `OCR` and `false
+  positive` (Chapter 6), `None` (Chapter 1), `API`/`hardcoded`/
+  `deterministic` (Chapters 4–5), the reused meaning of `index`
+  (Chapter 8), `hybrid retrieval`/`NaN`/`lexical` (Chapter 9),
+  `shadowing`/`ISO date strings`/`boilerplate` (Chapter 10), `ground
+  truth` (Chapter 11), and `NLP` (Chapter 2). Also corrected a
+  misattributed formula name — the classic BM25 IDF weighting is
+  Robertson–Spärck Jones, not "Robertson-Sparse-Selection."
+- **A proper Ollama install/verify walkthrough** in Chapter 5:
+  platform-specific install steps, an `ollama --version` check with
+  expected output, and a download-size/RAM callout — plus two new
+  Ollama troubleshooting rows in Appendix A and a README note that any
+  pulled model works, not just the documented default.
+- Windows-specific Tesseract/Poppler install guidance in Chapter 6, and
+  clearer dependency labels (core/Part II/OCR-only/app-only/notebook-
+  only/testing-only) in `requirements.txt` and `environment.yml`.
+- Friendly validation in the book's own code: invalid chunk settings and
+  missing page markers now raise clear errors in Chapter 7's
+  `token_chunking.py`; mismatched fusion weights raise in Chapter 9's
+  `hybrid_search.py`; a missing PDF path or nothing-to-save state fails
+  with a readable message in Chapter 13's `ingest.py`. 9 new tests
+  (suite now 56: 54 passing, 2 skipped without optional
+  pytesseract/streamlit).
+
+### Changed
+
+- Softened the "Cross-well sequence detector" promise to "a single-well
+  sequence check, with a path toward cross-well intelligence," matching
+  Chapter 12's own careful framing.
+- Chapter 5 is now consistently described as producing a working RAG
+  *prototype* with known limits, not a finished system.
+- Fixed inconsistent heading levels across Chapters 4, 6, 7, 9, 10, and
+  the chapter template so every chapter follows H1 → H2 → H3 (`Step N`)
+  consistently; reordered Chapter 4's Field Notes to match every other
+  chapter's rhythm.
+- Fixed two callout-placement regressions the jargon audit introduced:
+  Chapter 5's Theory had stacked into three consecutive callout boxes
+  with no prose between them; Chapter 4's "Chunk" and "API" callouts
+  each interrupted an established structural pattern.
+- Shortened an overly technical inline OpenMP/libomp comment in Chapter
+  8 — the full explanation already lives in the chapter's own
+  Production Reality section.
+- README hardware requirements now flag Ollama's extra ~5 GB disk / RAM
+  footprint.
+
 ## v1.3.2
 
 ### Changed

@@ -9,6 +9,8 @@ structural changes, or corrections), not API compatibility.
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-07-23
+
 ### Added
 
 - A "Reader Contract" section (`book/index.qmd`, README) explaining Part I
