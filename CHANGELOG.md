@@ -28,6 +28,25 @@ structural changes, or corrections), not API compatibility.
   nothing-to-save state now fail with a readable message instead of a
   crash in Chapter 13's `ingest.py`. 9 new tests cover these paths (suite
   now 56: 54 passing, 2 skipped without optional pytesseract/streamlit).
+- A first-use jargon audit across all 13 chapters: added "Engineering
+  Translation" callouts or light inline glosses for terms used before
+  they were defined, including `token` (Chapter 3, flagging its
+  different sense for Chapter 7), `chunk` (Chapter 4), the
+  embedding-model-vs-language-model distinction and `hallucination`
+  (Chapter 5), `OCR` and `false positive` (Chapter 6), `None` (Chapter
+  1), `API`/`hardcoded`/`deterministic` (Chapters 4–5), the reused
+  meaning of `index` (Chapter 8), `hybrid retrieval`/`NaN`/`lexical`
+  (Chapter 9), `shadowing`/`ISO date strings`/`boilerplate` (Chapter
+  10), `ground truth` (Chapter 11), and `NLP` (Chapter 2). Also
+  corrected a misattributed formula name — the classic BM25 IDF
+  weighting is Robertson–Spärck Jones, not "Robertson-Sparse-Selection"
+  (Chapter 9).
+- A proper Ollama install/verify walkthrough in Chapter 5:
+  platform-specific install steps, an `ollama --version` check with
+  expected output, and a download-size/RAM callout. Two new
+  Ollama-specific rows in Appendix A's troubleshooting table, and a
+  README note that any pulled Ollama model works, not just the
+  documented default.
 
 ### Changed
 
@@ -47,6 +66,13 @@ structural changes, or corrections), not API compatibility.
 - Clarified in a docstring that Chapter 5's `evidence_excerpts()` returns
   a quick preview, not necessarily the passage that matched (no behavior
   change).
+- Fixed two callout-placement regressions introduced by the jargon audit
+  itself: Chapter 5's Theory section had stacked into three consecutive
+  callout boxes with no prose between them (merged one into flowing
+  prose); Chapter 4's "Chunk" and "API" callouts each interrupted an
+  established structural pattern (moved both to natural break points).
+- README hardware requirements now flag Ollama's extra ~5 GB disk / RAM
+  footprint.
 
 ## [1.3.2] - 2026-07-09
 
