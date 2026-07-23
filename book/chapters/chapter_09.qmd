@@ -128,7 +128,7 @@ report's score go *negative*. Here's the code:
 self.idf[term] = math.log(1.0 + ((self.n_docs - df + 0.5) / (df + 0.5)))
 ```
 
-Compare this to the classic Robertson-Sparse-Selection IDF,
+Compare this to the classic Robertson–Spärck Jones IDF,
 `log((N - df + 0.5) / (df + 0.5))` *without* the `1.0 +`. For a term that
 appears in almost every document (`df` close to `n_docs`), the classic
 formula's ratio drops below 1 and the log goes **negative** — which then
@@ -153,7 +153,9 @@ if hi <= lo:
 Min-max normalization rescales scores into `[0, 1]` by subtracting the
 minimum and dividing by the range. If every candidate in a batch scores
 identically, `hi - lo` is zero — a division that, left unguarded, would
-raise or produce `NaN`. The guard above catches that case explicitly and
+raise an error or produce `NaN` (a special "not a number" placeholder
+floating-point math uses for undefined results like 0/0). The guard
+above catches that case explicitly and
 returns a neutral value (0.0 for everyone) instead, so a tie in *this*
 signal doesn't crash the pipeline or corrupt the fused score — the other
 signal in the fusion is still free to discriminate between the tied
@@ -251,9 +253,10 @@ With both ranked signals in hand, `hybrid_search()` in
 sparse ranking, Chapter 4's dense ranking, fused with the weights above.
 That's the function the practical exercise below calls.
 
-One consistency note, tying back to Chapter 4: BM25 is a lexical method,
-so by that chapter's Field Note it belongs on the *expanded* text, while
-the dense signal uses the raw. This exercise runs both over the same raw
+One consistency note, tying back to Chapter 4: BM25 is a lexical method
+— it matches literal words, same as Chapter 3's keyword search — so by
+that chapter's Field Note it belongs on the *expanded* text, while the
+dense signal uses the raw. This exercise runs both over the same raw
 sample archive for simplicity, and for its queries that's harmless — the
 report you're checking for tops the BM25 ranking either way (report #49
 for `"packers fishing"`, report #38 for `"stuck pipe"`). Where it *would*
