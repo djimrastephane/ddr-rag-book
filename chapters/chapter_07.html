@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-0a97d93da9593b0fd742f1d48c4e3dfc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -643,7 +643,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 <p>Run against the real 76-report archive, this pipeline’s chunking produces <strong>1,428 chunks</strong> — an average of about 19 chunks per report, reflecting just how much structured content (header, seven data tables, and a narrative time breakdown) each single-page DDR actually contains.</p>
 <p>Token-based chunking with overlap looks like this, using report #38’s own sentence from the naive-split example above (shown here as whole words for readability — the real tokens <code>tiktoken</code> produces are sub-word pieces, not words) — each chunk shares a few words with its neighbour, so no boundary loses context entirely:</p>
 <div class="pipeline-diagram">
-<p><img src="../figures/diagrams/theory_ch07_chunkoverlap_light.svg" class="diagram-light img-fluid" width="380"> <img src="../figures/diagrams/theory_ch07_chunkoverlap_dark.svg" class="diagram-dark img-fluid" width="380"></p>
+<p><img src="../figures/diagrams/theory_ch07_chunkoverlap_light.svg" class="diagram-light img-fluid" width="640"> <img src="../figures/diagrams/theory_ch07_chunkoverlap_dark.svg" class="diagram-dark img-fluid" width="640"></p>
 </div>
 </section>
 <section id="implementation" class="level2" data-number="7.5">
@@ -660,7 +660,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of text chunks, each roughly <code>chunk_tokens</code> tokens long, each overlapping the next by <code>overlap_tokens</code> tokens.</p>
-<div id="48e6570b" class="cell" data-execution_count="1">
+<div id="356110df" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_07/token_chunking.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tiktoken</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -691,7 +691,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(page_number, chunk_text)</code> pairs — the same chunks as before, each now labelled with the real page it came from.</p>
-<div id="0e064325" class="cell" data-execution_count="2">
+<div id="f2522470" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>PAGE_MARKER <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"--- Page </span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs"> ---</span><span class="ch">\n</span><span class="op">?</span><span class="vs">"</span>)</span>
@@ -1438,13 +1438,13 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 <span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
 <span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>::: {.pipeline-diagram}</span>
-<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch07_chunkoverlap_light.svg)</span>{.diagram-light width="380"}</span>
-<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch07_chunkoverlap_dark.svg)</span>{.diagram-dark width="380"}</span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch07_chunkoverlap_light.svg)</span>{.diagram-light width="640"}</span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch07_chunkoverlap_dark.svg)</span>{.diagram-dark width="640"}</span>
 <span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="pdf"}</span>
-<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch07_chunkoverlap.pdf)</span>{width="380" fig-align="center"}</span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch07_chunkoverlap.pdf)</span>{width="640" fig-align="center"}</span>
 <span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation</span></span>
