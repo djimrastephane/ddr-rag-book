@@ -208,67 +208,79 @@ THEORY_DIAGRAMS = {
 }
 
 # Third category: one-off diagrams whose shape isn't a chain -- hand-built
-# TikZ, not the label-list generator above. Chapter 7's chunk overlap is a
-# word strip with three overlapping ranges below it, which `build_tex` has
-# no way to express (it only stacks boxes vertically with an arrow between
-# each). The words are report #38's real sentence from the naive-split
-# example earlier in the chapter -- "Trips During the slide lost tool face
-# and became assembly became stuck" -- shown as whole words for
-# readability (tiktoken's real tokens are sub-word pieces, not words).
+# TikZ, not the label-list generator above. Chapter 7's chunk overlap
+# leads with the real sentence (report #38's, from the naive-split
+# example earlier in the chapter) at a large, dominant font size -- the
+# words shared between neighbouring chunks are bold and gold-highlighted
+# directly in that sentence, which is what actually answers "why does
+# overlap help" at a glance. The three chunk boxes are secondary: compact
+# stacked bars underneath, in a staircase that reads left-to-right as one
+# window sliding across the sentence, not three disconnected diagrams.
+# Whole words stand in for tiktoken's real sub-word tokens (readability).
 #
 # Colors use real alpha (`fill opacity=`), not TikZ's `!12` (which bakes
 # in an opaque tint mixed with white at generation time). Real alpha lets
 # the page's own background show through, so the same fill value looks
 # right on both light and dark themes without a separate dark variant --
-# unlike the black text/braces below, which still need the light->dark
-# regex swap in render_tex() since they have no such transparency.
+# unlike the black sentence text below, which still needs the light->dark
+# regex swap in render_tex() since it has no such transparency.
 CHUNK_OVERLAP_TEX = r"""
-\documentclass[tikz,border=3pt]{standalone}
+\documentclass[tikz,border=4pt]{standalone}
 \usepackage[T1]{fontenc}
 \usepackage{tikz}
-\usetikzlibrary{calc, positioning, decorations.pathreplacing}
+\usetikzlibrary{calc, positioning, backgrounds}
 \begin{document}
 \begin{tikzpicture}[font=\sffamily]
-  \def\gap{3mm}
-  \node[font=\scriptsize] (w1) {Trips};
-  \node[font=\scriptsize, right=\gap of w1] (w2) {During};
-  \node[font=\scriptsize, right=\gap of w2] (w3) {the};
-  \node[font=\scriptsize, right=\gap of w3] (w4) {slide};
-  \node[font=\scriptsize, right=\gap of w4] (w5) {lost};
-  \node[font=\scriptsize, right=\gap of w5] (w6) {tool};
-  \node[font=\scriptsize, right=\gap of w6] (w7) {face};
-  \node[font=\scriptsize, right=\gap of w7] (w8) {and};
-  \node[font=\scriptsize, right=\gap of w8] (w9) {became};
-  \node[font=\scriptsize, right=\gap of w9] (w10) {assembly};
-  \node[font=\scriptsize, right=\gap of w10] (w11) {became};
-  \node[font=\scriptsize, right=\gap of w11] (w12) {stuck};
-
-  % Chunk colors: teal, amber, plum -- mid-tone so they read on white paper
-  % and a near-black screen alike.
   \definecolor{chunkTeal}{HTML}{2F9E8F}
-  \definecolor{chunkAmber}{HTML}{B8792E}
+  \definecolor{chunkBlue}{HTML}{3B6E9E}
   \definecolor{chunkPlum}{HTML}{7D5BA6}
+  \definecolor{sharedGold}{HTML}{B8860B}
 
-  % Row geometry: row N box spans y=[top_N, bottom_N]; the 8mm gap between
-  % rows holds the overlap brace + label for the words those two chunks share.
-  \draw[thick, rounded corners=2pt, draw=chunkTeal, fill=chunkTeal, fill opacity=0.15]
-    ($(w1)+(-2.5mm,-6mm)$) rectangle ($(w6)+(2.5mm,-13mm)$);
-  \draw[thick, rounded corners=2pt, draw=chunkAmber, fill=chunkAmber, fill opacity=0.15]
-    ($(w5)+(-2.5mm,-21mm)$) rectangle ($(w10)+(2.5mm,-28mm)$);
-  \draw[thick, rounded corners=2pt, draw=chunkPlum, fill=chunkPlum, fill opacity=0.15]
-    ($(w9)+(-2.5mm,-36mm)$) rectangle ($(w12)+(2.5mm,-43mm)$);
+  % The sentence itself, at \large -- the dominant element on the page.
+  % Words 5-6 and 9-10 are bold: they're the ones repeated across a chunk
+  % boundary, so bold marks them before the reader even reaches the gold
+  % highlight or the chunk bars below.
+  \def\gap{3mm}
+  \node[font=\large] (w1) {Trips};
+  \node[font=\large, right=\gap of w1] (w2) {During};
+  \node[font=\large, right=\gap of w2] (w3) {the};
+  \node[font=\large, right=\gap of w3] (w4) {slide};
+  \node[font=\large\bfseries, right=\gap of w4] (w5) {lost};
+  \node[font=\large\bfseries, right=\gap of w5] (w6) {tool};
+  \node[font=\large, right=\gap of w6] (w7) {face};
+  \node[font=\large, right=\gap of w7] (w8) {and};
+  \node[font=\large\bfseries, right=\gap of w8] (w9) {became};
+  \node[font=\large\bfseries, right=\gap of w9] (w10) {assembly};
+  \node[font=\large, right=\gap of w10] (w11) {became};
+  \node[font=\large, right=\gap of w11] (w12) {stuck};
 
-  \node[font=\small, anchor=east, chunkTeal] at ($(w1)+(-4.5mm,-9.5mm)$) {Chunk 1};
-  \node[font=\small, anchor=east, chunkAmber] at ($(w1)+(-4.5mm,-24.5mm)$) {Chunk 2};
-  \node[font=\small, anchor=east, chunkPlum] at ($(w1)+(-4.5mm,-39.5mm)$) {Chunk 3};
+  % Gold highlight behind the shared words, drawn on the background layer
+  % so it sits behind the (already-placed) text instead of covering it.
+  \begin{pgfonlayer}{background}
+    \draw[fill=sharedGold, fill opacity=0.28, draw=none, rounded corners=2pt]
+      ($(w5)+(-1.6mm,-1.8mm)$) rectangle ($(w6)+(1.6mm,3.4mm)$);
+    \draw[fill=sharedGold, fill opacity=0.28, draw=none, rounded corners=2pt]
+      ($(w9)+(-1.6mm,-1.8mm)$) rectangle ($(w10)+(1.6mm,3.4mm)$);
+  \end{pgfonlayer}
 
-  \draw[decorate, decoration={brace, amplitude=3pt, mirror, raise=1pt}]
-    ($(w5)+(-2.5mm,-14mm)$) -- ($(w6)+(2.5mm,-14mm)$)
-    node[midway, font=\tiny, yshift=-5.5mm] {overlap};
+  % Chunk bars: compact (5mm tall, 1.5mm apart) and staircased left-to-
+  % right under the one shared sentence, reading as a sliding window
+  % rather than three separate figures.
+  \draw[thick, rounded corners=2pt, draw=chunkTeal, fill=chunkTeal, fill opacity=0.12]
+    ($(w1)+(-2mm,-8mm)$) rectangle ($(w6)+(2mm,-13mm)$);
+  \draw[thick, rounded corners=2pt, draw=chunkBlue, fill=chunkBlue, fill opacity=0.12]
+    ($(w5)+(-2mm,-14.5mm)$) rectangle ($(w10)+(2mm,-19.5mm)$);
+  \draw[thick, rounded corners=2pt, draw=chunkPlum, fill=chunkPlum, fill opacity=0.12]
+    ($(w9)+(-2mm,-21mm)$) rectangle ($(w12)+(2mm,-26mm)$);
 
-  \draw[decorate, decoration={brace, amplitude=3pt, mirror, raise=1pt}]
-    ($(w9)+(-2.5mm,-29mm)$) -- ($(w10)+(2.5mm,-29mm)$)
-    node[midway, font=\tiny, yshift=-5.5mm] {overlap};
+  \node[font=\footnotesize, anchor=east, chunkTeal] at ($(w1)+(-3.2mm,-10.5mm)$) {Chunk 1};
+  \node[font=\footnotesize, anchor=east, chunkBlue] at ($(w1)+(-3.2mm,-17mm)$) {Chunk 2};
+  \node[font=\footnotesize, anchor=east, chunkPlum] at ($(w1)+(-3.2mm,-23.5mm)$) {Chunk 3};
+
+  % One legend line explaining the gold highlight -- not repeated per
+  % overlap the way the old brace-and-"overlap"-label version was.
+  \node[font=\footnotesize, text=sharedGold!70!black] at ($(w1)+(0mm,-30mm)$) [anchor=west]
+    {\textbullet\ gold highlight = words shared between neighbouring chunks};
 \end{tikzpicture}
 \end{document}
 """

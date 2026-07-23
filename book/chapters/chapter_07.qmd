@@ -107,11 +107,12 @@ Run against the real 76-report archive, this pipeline's chunking produces
 just how much structured content (header, seven data tables, and a
 narrative time breakdown) each single-page DDR actually contains.
 
-Token-based chunking with overlap looks like this, using report #38's
-own sentence from the naive-split example above (shown here as whole
-words for readability — the real tokens `tiktoken` produces are
-sub-word pieces, not words) — each chunk shares a few words with its
-neighbour, so no boundary loses context entirely:
+Without overlap, a phrase can land exactly on a chunk boundary and get
+split between two chunks — neither of which then retrieves the complete
+idea. Overlap repeats a few words at each boundary so the full phrase
+survives inside at least one chunk. It's the same phrase from report #38 that the naive split cut in half
+above — the words in **bold** below are what overlap repeats, so this
+time the phrase survives whole in at least one chunk.
 
 ::: {.content-visible when-format="html"}
 ::: {.pipeline-diagram}
@@ -123,6 +124,10 @@ neighbour, so no boundary loses context entirely:
 ::: {.content-visible when-format="pdf"}
 ![](../figures/diagrams/theory_ch07_chunkoverlap.pdf){width="640" fig-align="center"}
 :::
+
+*Chunk size: 6 words · Overlap: 2 words. Shown as whole words for
+readability — the real tokens `tiktoken` produces are sub-word pieces,
+not words.*
 
 ## Implementation
 
