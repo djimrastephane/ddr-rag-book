@@ -318,6 +318,16 @@ valve position before proceeding instead of assuming it: assume real
 data is messier than the happy path, and this pattern shows up throughout
 the book.
 
+::: {.callout-note title="If this page were scanned instead"}
+None of Part I's ten reports are scanned — but if one were,
+`page.extract_text()` wouldn't raise an error or hand back garbled
+characters. It would simply return `None`, because there's no character
+data on the page to read, only a picture of one. That's exactly the case
+the `or ""` above guards against. Chapter 6 covers scanned reports
+properly: detecting them automatically and recovering their text with
+OCR.
+:::
+
 ### Step 3: make it a script you can run from the command line
 
 **What problem are we solving?**
@@ -352,7 +362,18 @@ printed" or "whole folder, saved" without touching the code itself.
 
 Try the first command now. You should see the full report text, including
 the line: `During the slide lost tool face and became assembly became
-stuck` — real language from a real rig report, not a paraphrase.
+stuck` — real language from a real rig report, not a paraphrase. You no
+longer need to open that PDF and copy this line out by hand — and every
+capability the rest of this book adds, from search to cited answers,
+starts from this one extraction step.
+
+::: {.callout-tip title="Peek ahead"}
+Right now, you've extracted text from one report. By Chapter 5 you'll
+ask this archive natural-language questions and get cited answers back.
+By Chapter 13, the system will pick up a brand-new report on its own,
+without anyone re-running this script by hand. Every one of those later
+chapters still starts here.
+:::
 
 ## Production Reality
 
