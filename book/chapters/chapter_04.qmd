@@ -267,6 +267,15 @@ This chapter runs the embedding model locally, on a laptop CPU, against
 ten short reports. Real deployments hit constraints this setup never
 sees:
 
+::: {.callout-tip title="Engineering Translation: API"}
+An **API** (Application Programming Interface) is how one piece of
+software asks another to do something over the network — here, sending
+your text to a company's server and getting embeddings back, instead of
+running the model yourself. "Hosted API" and "local model" are the two
+options this book keeps contrasting from here on: one runs on someone
+else's computer, the other runs on yours.
+:::
+
 - some teams call a hosted embedding API instead of running a model
   locally — which means sending report text, possibly confidential well
   data, to a third party. That's a data-governance conversation, not just

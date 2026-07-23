@@ -246,8 +246,9 @@ alongside the exact evidence list it was built from — so you (or an
 engineer reviewing the answer) can always check the citation against the
 real reports, rather than taking the model's word for it.
 
-`llm_call` is intentionally a plain function argument, not a hardcoded
-API client: plug in a local model, an API-based model, or — while you're
+`llm_call` is intentionally a plain function argument, not **hardcoded**
+(wired permanently to one specific service): plug in a local model, an
+API-based model, or — while you're
 first testing the retrieval and prompt logic — a stub that just echoes the
 evidence back, so you can verify the pipeline end to end before spending a
 single API call.
@@ -324,9 +325,10 @@ Sources:
 That's a real RAG answer: a plain-English cause, grounded in report #49's
 own words, with the source report named and an excerpt you can open and
 check. **Your exact wording will differ** — LLM output isn't
-deterministic (the Production Reality note below says why) — but the
-grounded fact, the ball that didn't seat, comes back every time, because
-it's sitting in the evidence the model was handed.
+**deterministic**: the same prompt can produce a differently worded
+answer each time you run it (the Production Reality note below says
+why) — but the grounded fact, the ball that didn't seat, comes back
+every time, because it's sitting in the evidence the model was handed.
 
 Two honest limits are already visible in that single run:
 
