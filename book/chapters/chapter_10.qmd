@@ -177,8 +177,9 @@ retrieving the nearest available report.
 
 **Inputs**
 
-- A list of report dates, as ISO date strings, covering a period that
-  should have one report per day.
+- A list of report dates, as ISO date strings (the plain `YYYY-MM-DD`
+  format the examples below use), covering a period that should have one
+  report per day.
 
 **Expected Output**
 
@@ -262,10 +263,12 @@ separate "figure out the source" step: the metadata was attached back
 when the chunk was indexed, so reading it is all citing requires. The
 field is named `report_date`, not `date` — `date` is already the name of
 the standard library class this file imports below for `find_date_gaps`,
-and shadowing it would be its own quiet bug waiting to happen.
+and reusing that name (**shadowing** it) would be its own quiet bug
+waiting to happen.
 
 The `seen_report_pages` set is doing real work, not defensive
-boilerplate. A long page gets split into several chunks by Chapter 7's
+boilerplate (generic safety-net code that never actually fires). A long
+page gets split into several chunks by Chapter 7's
 chunker, and more than one of those chunks can land in the same top-k
 result — so without this check, one report page can show up in the
 Evidence list two, three, or four times, drowning out how many
