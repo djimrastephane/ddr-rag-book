@@ -105,13 +105,6 @@ comfortably in memory.
 
 ### Step 1: load every report's text
 
-::: {.callout-tip title="Engineering Translation: Chunk"}
-A **chunk** is a piece of text searched as one unit. For now, each whole
-report is one chunk — `load_chunks()` below loads one chunk per report.
-This chapter's own Field Notes show why that's too coarse; Chapter 7
-splits reports into much smaller chunks to fix it.
-:::
-
 **What problem are we solving?**
 
 Get every report's text into memory, alongside its filename, so we know
@@ -147,6 +140,13 @@ calculate next can be traced back to the report it came from.
 Note the folder: `datasets/ddr_text/`, Chapter 1's raw extraction — *not*
 Chapter 2's `datasets/ddr_text_expanded/`. That's deliberate, and the
 Field Notes at the end of this chapter measure exactly why.
+
+::: {.callout-tip title="Engineering Translation: Chunk"}
+A **chunk** is a piece of text searched as one unit. For now, each whole
+report is one chunk — `load_chunks()` above loads one chunk per report.
+This chapter's own Field Notes show why that's too coarse; Chapter 7
+splits reports into much smaller chunks to fix it.
+:::
 
 ::: {.callout-tip title="Engineering Translation: Type hints"}
 The `-> tuple[list[str], list[str]]` after the function name looks
@@ -263,10 +263,6 @@ top 2 or 3 results would still miss it.
 
 ## Production Reality
 
-This chapter runs the embedding model locally, on a laptop CPU, against
-ten short reports. Real deployments hit constraints this setup never
-sees:
-
 ::: {.callout-tip title="Engineering Translation: API"}
 An **API** (Application Programming Interface) is how one piece of
 software asks another to do something over the network — here, sending
@@ -275,6 +271,10 @@ running the model yourself. "Hosted API" and "local model" are the two
 options this book keeps contrasting from here on: one runs on someone
 else's computer, the other runs on yours.
 :::
+
+This chapter runs the embedding model locally, on a laptop CPU, against
+ten short reports. Real deployments hit constraints this setup never
+sees:
 
 - some teams call a hosted embedding API instead of running a model
   locally — which means sending report text, possibly confidential well
