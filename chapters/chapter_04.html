@@ -664,19 +664,6 @@ Semantic search, whole-report embeddings (this chapter): report #39
 <h2 data-number="4.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">4.5</span> Implementation</h2>
 <section id="step-1-load-every-reports-text" class="level3" data-number="4.5.1">
 <h3 data-number="4.5.1" class="anchored" data-anchor-id="step-1-load-every-reports-text"><span class="header-section-number">4.5.1</span> Step 1: load every report’s text</h3>
-<div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Chunk">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Engineering Translation: Chunk
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>A <strong>chunk</strong> is a piece of text searched as one unit. For now, each whole report is one chunk — <code>load_chunks()</code> below loads one chunk per report. This chapter’s own Field Notes show why that’s too coarse; Chapter 7 splits reports into much smaller chunks to fix it.</p>
-</div>
-</div>
 <p><strong>What problem are we solving?</strong></p>
 <p>Get every report’s text into memory, alongside its filename, so we know which score belongs to which report later.</p>
 <p><strong>Inputs</strong></p>
@@ -685,7 +672,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>Two matching lists: report filenames, and each report’s full text.</p>
-<div id="b9bb3e3f" class="cell" data-execution_count="1">
+<div id="1d37ab10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -699,6 +686,19 @@ Semantic search, whole-report embeddings (this chapter): report #39
 <p><strong>What just happened?</strong></p>
 <p>Nothing about meaning yet — this just reads every text file into memory and keeps a matching list of filenames, so that whatever score we calculate next can be traced back to the report it came from.</p>
 <p>Note the folder: <code>datasets/ddr_text/</code>, Chapter 1’s raw extraction — <em>not</em> Chapter 2’s <code>datasets/ddr_text_expanded/</code>. That’s deliberate, and the Field Notes at the end of this chapter measure exactly why.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Chunk">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Engineering Translation: Chunk
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>chunk</strong> is a piece of text searched as one unit. For now, each whole report is one chunk — <code>load_chunks()</code> above loads one chunk per report. This chapter’s own Field Notes show why that’s too coarse; Chapter 7 splits reports into much smaller chunks to fix it.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Type hints">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -724,7 +724,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One 384-number vector per report, all packed into a single array.</p>
-<div id="f131f3af" class="cell" data-execution_count="2">
+<div id="fbb9614b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -748,7 +748,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(filename, score)</code> pairs, highest similarity first.</p>
-<div id="bdc49def" class="cell" data-execution_count="3">
+<div id="b8beea68" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(model: SentenceTransformer, query: <span class="bu">str</span>, filenames: <span class="bu">list</span>[<span class="bu">str</span>],</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>           embeddings: np.ndarray, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    query_vec <span class="op">=</span> model.encode([query], normalize_embeddings<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>]</span>
@@ -787,7 +787,6 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </section>
 <section id="production-reality" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="production-reality"><span class="header-section-number">4.6</span> Production Reality</h2>
-<p>This chapter runs the embedding model locally, on a laptop CPU, against ten short reports. Real deployments hit constraints this setup never sees:</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: API">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -801,6 +800,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 <p>An <strong>API</strong> (Application Programming Interface) is how one piece of software asks another to do something over the network — here, sending your text to a company’s server and getting embeddings back, instead of running the model yourself. “Hosted API” and “local model” are the two options this book keeps contrasting from here on: one runs on someone else’s computer, the other runs on yours.</p>
 </div>
 </div>
+<p>This chapter runs the embedding model locally, on a laptop CPU, against ten short reports. Real deployments hit constraints this setup never sees:</p>
 <ul>
 <li>some teams call a hosted embedding API instead of running a model locally — which means sending report text, possibly confidential well data, to a third party. That’s a data-governance conversation, not just a technical choice, and it’s worth having before it’s a surprise.</li>
 <li>embeddings from two different model versions aren’t comparable — if you re-embed your archive with a newer model, old and new vectors can’t be compared against each other, and everything needs re-embedding together.</li>
@@ -1545,48 +1545,48 @@ Reimers, Nils, and Iryna Gurevych. 2019. <span>“Sentence-<span>BERT</span>: Se
 <span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: load every report's text</span></span>
 <span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Chunk"}</span>
-<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>A **chunk** is a piece of text searched as one unit. For now, each whole</span>
-<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>report is one chunk — <span class="in">`load_chunks()`</span> below loads one chunk per report.</span>
-<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>This chapter's own Field Notes show why that's too coarse; Chapter 7</span>
-<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a>splits reports into much smaller chunks to fix it.</span>
-<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>Get every report's text into memory, alongside its filename, so we know</span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>which score belongs to which report later.</span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A folder of cleaned report text, e.g. <span class="in">`datasets/ddr_text/`</span>.</span>
 <span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>Get every report's text into memory, alongside its filename, so we know</span>
-<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>which score belongs to which report later.</span>
-<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
-<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A folder of cleaned report text, e.g. <span class="in">`datasets/ddr_text/`</span>.</span>
-<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
-<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>Two matching lists: report filenames, and each report's full text.</span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>Two matching lists: report filenames, and each report's full text.</span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
+<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
-<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_chunks(text_dir: Path) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">str</span>], <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
-<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a>    filenames, texts <span class="op">=</span> [], []</span>
-<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(text_dir.glob(<span class="st">"*.txt"</span>)):</span>
-<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a>        filenames.append(path.name)</span>
-<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>        texts.append(path.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>))</span>
-<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filenames, texts</span>
-<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a>Nothing about meaning yet — this just reads every text file into memory</span>
-<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>and keeps a matching list of filenames, so that whatever score we</span>
-<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>calculate next can be traced back to the report it came from.</span>
-<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>Note the folder: <span class="in">`datasets/ddr_text/`</span>, Chapter 1's raw extraction — *not*</span>
-<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>Chapter 2's <span class="in">`datasets/ddr_text_expanded/`</span>. That's deliberate, and the</span>
-<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>Field Notes at the end of this chapter measure exactly why.</span>
+<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_chunks(text_dir: Path) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">str</span>], <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
+<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>    filenames, texts <span class="op">=</span> [], []</span>
+<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(text_dir.glob(<span class="st">"*.txt"</span>)):</span>
+<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a>        filenames.append(path.name)</span>
+<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a>        texts.append(path.read_text(encoding<span class="op">=</span><span class="st">"utf-8"</span>))</span>
+<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filenames, texts</span>
+<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a>Nothing about meaning yet — this just reads every text file into memory</span>
+<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>and keeps a matching list of filenames, so that whatever score we</span>
+<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a>calculate next can be traced back to the report it came from.</span>
+<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>Note the folder: <span class="in">`datasets/ddr_text/`</span>, Chapter 1's raw extraction — *not*</span>
+<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>Chapter 2's <span class="in">`datasets/ddr_text_expanded/`</span>. That's deliberate, and the</span>
+<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>Field Notes at the end of this chapter measure exactly why.</span>
+<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Chunk"}</span>
+<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>A **chunk** is a piece of text searched as one unit. For now, each whole</span>
+<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>report is one chunk — <span class="in">`load_chunks()`</span> above loads one chunk per report.</span>
+<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>This chapter's own Field Notes show why that's too coarse; Chapter 7</span>
+<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>splits reports into much smaller chunks to fix it.</span>
+<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Type hints"}</span>
 <span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>The <span class="in">`-&gt; tuple[list[str], list[str]]`</span> after the function name looks</span>
@@ -1703,18 +1703,18 @@ Reimers, Nils, and Iryna Gurevych. 2019. <span>“Sentence-<span>BERT</span>: Se
 <span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
 <span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>This chapter runs the embedding model locally, on a laptop CPU, against</span>
-<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a>ten short reports. Real deployments hit constraints this setup never</span>
-<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a>sees:</span>
-<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: API"}</span>
-<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a>An **API** (Application Programming Interface) is how one piece of</span>
-<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a>software asks another to do something over the network — here, sending</span>
-<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a>your text to a company's server and getting embeddings back, instead of</span>
-<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a>running the model yourself. "Hosted API" and "local model" are the two</span>
-<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a>options this book keeps contrasting from here on: one runs on someone</span>
-<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>else's computer, the other runs on yours.</span>
-<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: API"}</span>
+<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a>An **API** (Application Programming Interface) is how one piece of</span>
+<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a>software asks another to do something over the network — here, sending</span>
+<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a>your text to a company's server and getting embeddings back, instead of</span>
+<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a>running the model yourself. "Hosted API" and "local model" are the two</span>
+<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a>options this book keeps contrasting from here on: one runs on someone</span>
+<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a>else's computer, the other runs on yours.</span>
+<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a>This chapter runs the embedding model locally, on a laptop CPU, against</span>
+<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>ten short reports. Real deployments hit constraints this setup never</span>
+<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a>sees:</span>
 <span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>some teams call a hosted embedding API instead of running a model</span>
 <span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a>  locally — which means sending report text, possibly confidential well</span>
