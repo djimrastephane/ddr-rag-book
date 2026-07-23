@@ -19,7 +19,8 @@ Progress `██░░░░░░░░░░░` **2 / 13** &nbsp;·&nbsp; **E
 
 By the end of this chapter, you will be able to:
 
-- Explain why oilfield shorthand breaks naive text search and NLP.
+- Explain why oilfield shorthand breaks naive text search and NLP
+  (natural language processing) tools alike.
 - Build a dictionary-based abbreviation expander that respects word
   boundaries so it doesn't corrupt unrelated text.
 - Apply the expander across every `.txt` file produced in Chapter 1.
