@@ -461,7 +461,7 @@
     "href": "chapters/chapter_02.html#learning-objectives",
     "title": "2  Cleaning Operational Text",
     "section": "",
-    "text": "Explain why oilfield shorthand breaks naive text search and NLP.\nBuild a dictionary-based abbreviation expander that respects word boundaries so it doesn’t corrupt unrelated text.\nApply the expander across every .txt file produced in Chapter 1.",
+    "text": "Explain why oilfield shorthand breaks naive text search and NLP (natural language processing) tools alike.\nBuild a dictionary-based abbreviation expander that respects word boundaries so it doesn’t corrupt unrelated text.\nApply the expander across every .txt file produced in Chapter 1.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
