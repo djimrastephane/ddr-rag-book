@@ -110,7 +110,8 @@ function checks four independent flags — `low_text_density`,
 `high_symbol_ratio`, `repeated_garbage`, `low_line_count` — and rejects a
 page only once **two or more** flags fire, so no single noisy-but-legitimate
 page (e.g. a short report with a lot of numeric data) gets discarded on
-one false positive.
+one **false positive** — a check wrongly flagging something that was
+actually fine.
 
 ```
 extracted text
