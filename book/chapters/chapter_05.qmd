@@ -251,14 +251,43 @@ single API call.
 
 The stub proved the plumbing. Now generate for real — locally, so no
 report text ever leaves your machine. [Ollama](https://ollama.com) runs a
-small open model on your own hardware. Install it, pull a model, and start
-the server:
+small open model on your own hardware.
+
+**Install Ollama** (one-time setup):
+
+- **macOS / Windows:** download the installer from
+  [ollama.com/download](https://ollama.com/download) and run it like any
+  other application.
+- **Linux:** `curl -fsSL https://ollama.com/install.sh | sh`
+
+Confirm it installed:
 
 ```bash
-# install Ollama from https://ollama.com, then:
+ollama --version
+```
+
+**Expected output:** something like `ollama version 0.x.x`. If the
+command isn't recognised, close and reopen your terminal — installers
+update your system PATH, which a terminal window already open won't see
+until it restarts.
+
+**Pull a model and start the server:**
+
+```bash
 ollama pull qwen2.5:7b-instruct
 ollama serve            # leave this running in its own terminal
 ```
+
+::: {.callout-note title="What this downloads, and how big it is"}
+`ollama pull qwen2.5:7b-instruct` downloads roughly 4–5 GB — a few
+minutes on a typical connection, longer on a slow one. That's on top of
+this book's stated 5 GB minimum free disk space, so budget closer to
+10 GB total if you're running near the minimum. Running the model
+comfortably also wants RAM headroom beyond your browser, editor, and
+everything else already open — 16 GB total is noticeably more
+comfortable than the book's 8 GB minimum once a local model joins the
+mix.
+:::
 
 `qwen2.5:7b-instruct` is a small, capable default, but nothing here is
 tied to it — pass any model you've pulled to `ollama_llm_call(model=...)`.

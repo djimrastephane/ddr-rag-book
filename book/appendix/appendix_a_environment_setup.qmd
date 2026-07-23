@@ -122,3 +122,5 @@ rendering the book or running Part II's heavier packages:
 | `ModuleNotFoundError: sentence_transformers` (Chapter 4+) | Re-run `pip install -r requirements.txt`; this is a heavier dependency and sometimes needs a separate `pip install torch` first on some platforms. |
 | FAISS import error on Apple Silicon (Chapter 8+) | Ensure you installed `faiss-cpu`, not `faiss-gpu` — the latter has no macOS wheel. |
 | `read_ddr.py` reports no text extracted | Confirm you're pointing at a file in `datasets/sample_ddrs/` or `datasets/forge_archive/` — both are committed directly, so this shouldn't happen unless the path is wrong. |
+| `ollama: command not found` (Chapter 5+) | Close and reopen your terminal after installing Ollama — the installer updates your PATH, which a terminal window already open won't see until it restarts. |
+| `[Ollama not reachable...]` in a generated answer | Confirm `ollama serve` is running in its own terminal window, and that you actually `ollama pull`ed the model name you're passing to `ollama_llm_call`. |

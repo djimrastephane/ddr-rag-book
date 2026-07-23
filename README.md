@@ -207,12 +207,14 @@ There's no need to do this in one sitting — most readers spread it across seve
 **Minimum:**
 
 - 8 GB RAM
-- 5 GB free disk space
+- 5 GB free disk space, plus another ~5 GB if you pull a local Ollama
+  model for Chapter 5 (optional — see Chapter 5 for exact sizing)
 - a modern CPU (nothing from the last ~6 years should struggle)
 
 **Recommended:**
 
-- 16 GB RAM, which makes Part II's heavier chapters more comfortable
+- 16 GB RAM, which makes Part II's heavier chapters more comfortable and
+  gives a local Ollama model room to run alongside everything else
 
 **No GPU required. No cloud account required. No paid API required.** Everything in this book runs locally on an ordinary laptop. The embedding model used from Chapter 4 onward (`all-MiniLM-L6-v2`) and the vector index in Chapter 8 (`faiss-cpu`) are both deliberately chosen to be small and fast on CPU. Chapter 5's `llm_call` argument is provider-agnostic — you *can* plug in a hosted API if you want one, but nothing about following this book requires it.
 
@@ -321,6 +323,7 @@ streamlit run book/app/streamlit_app.py
 
 - **Ollama is optional for retrieval** — without it you still see the matched reports, scores, and evidence excerpts.
 - **Ollama is required for generated answers** — if it isn't running, the app says so and shows the retrieved evidence anyway.
+- **Already have Ollama with other models pulled?** You don't need `qwen2.5:7b-instruct` specifically — any pulled model works, just change the model name in the app's sidebar.
 - The app runs on the **ten-report public sample archive**. It is an educational companion, not a production system — always verify answers against the original report before using them for engineering decisions.
 
 See [`book/app/README.md`](book/app/README.md) for details.
