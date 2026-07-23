@@ -560,7 +560,7 @@
     "href": "chapters/chapter_02.html#challenge-exercise",
     "title": "2  Cleaning Operational Text",
     "section": "2.10 Challenge exercise",
-    "text": "2.10 Challenge exercise\n🟠 Intermediate\nChallenge: Extend ABBREVIATIONS using Appendix B, and handle the mud-table abbreviations (FV, WL, PV, YP, CL) — notice how short these are, and think carefully about whether blindly expanding a two-letter token like PV is actually safe against this archive’s real text, or whether it needs a narrower match context. A reference solution is in code/chapter_02/challenge/.",
+    "text": "2.10 Challenge exercise\n🟠 Intermediate\nChallenge: Extend ABBREVIATIONS using Appendix B, and handle the mud-table abbreviations (FV, WL, PV, YP, CL) — notice how short these are, and think carefully about whether blindly expanding a two-letter abbreviation like PV is actually safe against this archive’s real text, or whether it needs a narrower match context. A reference solution is in code/chapter_02/challenge/.",
     "crumbs": [
       "Part I — Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Cleaning Operational Text</span>"
