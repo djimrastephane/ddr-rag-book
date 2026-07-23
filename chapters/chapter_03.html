@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-0a97d93da9593b0fd742f1d48c4e3dfc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -655,7 +655,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <p><strong>Expected Output</strong></p>
 <p>A list of lowercase words with punctuation stripped out, for example:</p>
 <pre><code>["mud", "fluids", "seepage", "losses", "in", "six", "hours", "9", "bbls"]</code></pre>
-<div id="3ea76c63" class="cell" data-execution_count="1">
+<div id="a0643380" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_03/keyword_search.py</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -678,7 +678,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 <pre><code>{"losses": {"FORGE-...-32_Drilling_019_2020-11-07.txt"},
  "stuck":  {"FORGE-...-32_Drilling_038_2020-11-26.txt"},
  ...}</code></pre>
-<div id="9f0a7250" class="cell" data-execution_count="2">
+<div id="52715838" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> defaultdict</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -704,7 +704,7 @@ query "stuck" -&gt; look up "stuck" -&gt; {report_038}   (one dict lookup,
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The set of filenames containing every word in the query, for example <code>{"FORGE-...-32_Drilling_038_2020-11-26.txt"}</code> for the query <code>"stuck"</code>.</p>
-<div id="0ba2f599" class="cell" data-execution_count="3">
+<div id="30f38ebc" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(index: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">set</span>[<span class="bu">str</span>]], query: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">set</span>[<span class="bu">str</span>]:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    query_tokens <span class="op">=</span> tokenize(query)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> query_tokens:</span>
