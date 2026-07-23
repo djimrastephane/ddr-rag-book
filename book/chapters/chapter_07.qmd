@@ -115,13 +115,13 @@ neighbour, so no boundary loses context entirely:
 
 ::: {.content-visible when-format="html"}
 ::: {.pipeline-diagram}
-![](../figures/diagrams/theory_ch07_chunkoverlap_light.svg){.diagram-light width="380"}
-![](../figures/diagrams/theory_ch07_chunkoverlap_dark.svg){.diagram-dark width="380"}
+![](../figures/diagrams/theory_ch07_chunkoverlap_light.svg){.diagram-light width="640"}
+![](../figures/diagrams/theory_ch07_chunkoverlap_dark.svg){.diagram-dark width="640"}
 :::
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/theory_ch07_chunkoverlap.pdf){width="380" fig-align="center"}
+![](../figures/diagrams/theory_ch07_chunkoverlap.pdf){width="640" fig-align="center"}
 :::
 
 ## Implementation
