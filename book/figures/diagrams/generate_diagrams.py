@@ -85,9 +85,15 @@ def build_tex(labels: list, width_mm: int) -> str:
     return TEX_TEMPLATE.format(width=width_mm, nodes="\n".join(nodes), arrows="\n".join(arrows))
 
 
-def generate(name: str, labels: list[str], width_mm: int, workdir: Path):
+def render_tex(name: str, tex_source: str, workdir: Path):
+    """Compile a standalone TikZ .tex to PDF, then derive the book's usual
+    trio: a light SVG (as-is), a dark SVG (black -> light-gray, since every
+    diagram here is monochrome lines/text on a transparent background), and
+    a native PDF for the LaTeX build (sidesteps needing rsvg-convert on the
+    GitHub Actions runner, which the SVG->PDF path would otherwise require).
+    """
     tex_path = workdir / f"{name}.tex"
-    tex_path.write_text(build_tex(labels, width_mm))
+    tex_path.write_text(tex_source)
 
     r = subprocess.run(["pdflatex", "-interaction=nonstopmode", str(tex_path)],
                         cwd=workdir, capture_output=True, text=True)
@@ -108,11 +114,11 @@ def generate(name: str, labels: list[str], width_mm: int, workdir: Path):
 
     (FIGURES_DIR / f"{name}_light.svg").write_text(svg_text)
     (FIGURES_DIR / f"{name}_dark.svg").write_text(dark_text)
-    # PDF output embeds the .pdf directly (not the SVG) -- Quarto's LaTeX
-    # pipeline needs rsvg-convert to rasterize an SVG for PDF, which isn't
-    # installed on the GitHub Actions runner. A native PDF image needs no
-    # conversion at all, so this sidesteps that dependency entirely.
     (FIGURES_DIR / f"{name}.pdf").write_bytes(pdf_path.read_bytes())
+
+
+def generate(name: str, labels: list[str], width_mm: int, workdir: Path):
+    render_tex(name, build_tex(labels, width_mm), workdir)
     print(f"OK: {name} ({len(labels)} boxes, width={width_mm}mm)")
 
 
@@ -201,6 +207,44 @@ THEORY_DIAGRAMS = {
     ], 62),
 }
 
+# Third category: one-off diagrams whose shape isn't a chain -- hand-built
+# TikZ, not the label-list generator above. Chapter 7's chunk overlap is a
+# token strip with three overlapping ranges below it, which `build_tex`
+# has no way to express (it only stacks boxes vertically with an arrow
+# between each).
+CHUNK_OVERLAP_TEX = r"""
+\documentclass[tikz,border=3pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{calc, decorations.pathreplacing}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily]
+  \def\dx{9mm}
+  \foreach \i in {1,...,12} {
+    \node[font=\scriptsize] (t\i) at (\i*\dx, 0) {t\the\numexpr\i\relax};
+  }
+
+  % Row geometry: row N box spans y=[top_N, bottom_N]; the 8mm gap between
+  % rows holds the overlap brace + label for the columns those two chunks share.
+  \draw[thick, rounded corners=2pt] ($(t1)+(-4mm,-6mm)$) rectangle ($(t6)+(4mm,-13mm)$);
+  \draw[thick, rounded corners=2pt] ($(t5)+(-4mm,-21mm)$) rectangle ($(t10)+(4mm,-28mm)$);
+  \draw[thick, rounded corners=2pt] ($(t9)+(-4mm,-36mm)$) rectangle ($(t12)+(4mm,-43mm)$);
+
+  \node[font=\small, anchor=east] at ($(t1)+(-6mm,-9.5mm)$) {Chunk 1};
+  \node[font=\small, anchor=east] at ($(t1)+(-6mm,-24.5mm)$) {Chunk 2};
+  \node[font=\small, anchor=east] at ($(t1)+(-6mm,-39.5mm)$) {Chunk 3};
+
+  \draw[decorate, decoration={brace, amplitude=3pt, mirror, raise=1pt}]
+    ($(t5)+(-4mm,-14mm)$) -- ($(t6)+(4mm,-14mm)$)
+    node[midway, font=\tiny, yshift=-5.5mm] {overlap};
+
+  \draw[decorate, decoration={brace, amplitude=3pt, mirror, raise=1pt}]
+    ($(t9)+(-4mm,-29mm)$) -- ($(t10)+(4mm,-29mm)$)
+    node[midway, font=\tiny, yshift=-5.5mm] {overlap};
+\end{tikzpicture}
+\end{document}
+"""
+
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmp:
         workdir = Path(tmp)
@@ -208,3 +252,5 @@ if __name__ == "__main__":
             generate(name, labels, width, workdir)
         for name, (labels, width) in THEORY_DIAGRAMS.items():
             generate(name, labels, width, workdir)
+        render_tex("theory_ch07_chunkoverlap", CHUNK_OVERLAP_TEX, workdir)
+        print("OK: theory_ch07_chunkoverlap (token strip, 3 overlapping chunks)")

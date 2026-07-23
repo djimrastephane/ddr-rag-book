@@ -110,15 +110,16 @@ narrative time breakdown) each single-page DDR actually contains.
 Token-based chunking with overlap looks like this — each chunk shares a
 few tokens with its neighbour, so no boundary loses context entirely:
 
-```
-tokens:   t1  t2  t3  t4  t5  t6  t7  t8  t9  t10 t11 t12
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch07_chunkoverlap_light.svg){.diagram-light width="380"}
+![](../figures/diagrams/theory_ch07_chunkoverlap_dark.svg){.diagram-dark width="380"}
+:::
+:::
 
-chunk 1: [t1  t2  t3  t4  t5  t6]
-chunk 2:             [t5  t6  t7  t8  t9  t10]
-chunk 3:                         [t9  t10 t11 t12]
-                       ^^^^^^         ^^^^^^
-                       overlap        overlap
-```
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch07_chunkoverlap.pdf){width="380" fig-align="center"}
+:::
 
 ## Implementation
 
