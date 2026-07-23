@@ -289,8 +289,9 @@ matter.
 **Challenge:** Extend `ABBREVIATIONS` using [Appendix
 B](../appendix/appendix_b_oilfield_glossary.qmd), and handle the mud-table
 abbreviations (`FV`, `WL`, `PV`, `YP`, `CL`) — notice how short these are,
-and think carefully about whether blindly expanding a two-letter token
-like `PV` is actually safe against this archive's real text, or whether
+and think carefully about whether blindly expanding a two-letter
+abbreviation like `PV` is actually safe against this archive's real
+text, or whether
 it needs a narrower match context. A reference solution is in
 `code/chapter_02/challenge/`.
 
