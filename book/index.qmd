@@ -72,7 +72,7 @@ The scripts in this book are the engine. The book's optional companion app
 (`book/app/`) puts the same flow on one screen — a question, a local-model
 answer, and the evidence it's traceable to — over the sample archive:
 
-![The DDR RAG Companion App: a question, a local-model answer, and the source reports it's traceable to.](figures/app_screenshot.png){fig-alt="Screenshot of the DDR RAG Companion App showing a question, a cited generated answer, and retrieved evidence cards"}
+![Ask the Reports, the book's companion app: a question, a local-model answer, and the source reports it's traceable to.](figures/app_screenshot.png){fig-alt="Screenshot of the companion app Ask the Reports showing a question, a cited generated answer, and supporting evidence cards"}
 
 The companion pipeline scales the same idea to the whole 76-report archive.
 [Appendix A](appendix/appendix_a_environment_setup.qmd) shows how to set

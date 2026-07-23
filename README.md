@@ -311,9 +311,9 @@ The companion pipeline wraps the same retrieval, citation, and gap-detection log
 
 ## Companion App
 
-An **optional**, educational companion — you don't need it to follow the book. This small Streamlit app shows the book's payoff end to end — ask one engineering question against the sample DDR archive and see **retrieval → local-model answer → citations → the original evidence**. It reuses the book's own code (Chapters 4, 5, and 9); it does not reimplement the pipeline.
+An **optional**, educational companion — you don't need it to follow the book. **Ask the Reports** shows the book's payoff end to end — ask one engineering question against the sample DDR archive and see **retrieval → local-model answer → citations → the original evidence**. It reuses the book's own code (Chapters 4, 5, and 9); it does not reimplement the pipeline.
 
-![The DDR RAG Companion App — a question, a local-model answer, and the source reports it's traceable to.](book/figures/app_screenshot.png)
+![Ask the Reports, the book's companion app — a question, a local-model answer, and the source reports it's traceable to.](book/figures/app_screenshot.png)
 
 ```bash
 pip install -r book/requirements.txt      # includes Streamlit
@@ -321,7 +321,7 @@ ollama pull qwen2.5:7b-instruct           # for generated answers (optional)
 streamlit run book/app/streamlit_app.py
 ```
 
-- **Ollama is optional for retrieval** — without it you still see the matched reports, scores, and evidence excerpts.
+- **Ollama is optional for retrieval** — without it you still see the matched reports, their match strength, and evidence excerpts.
 - **Ollama is required for generated answers** — if it isn't running, the app says so and shows the retrieved evidence anyway.
 - **Already have Ollama with other models pulled?** You don't need `qwen2.5:7b-instruct` specifically — any pulled model works, just change the model name in the app's sidebar.
 - The app runs on the **ten-report public sample archive**. It is an educational companion, not a production system — always verify answers against the original report before using them for engineering decisions.

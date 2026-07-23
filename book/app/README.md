@@ -1,9 +1,9 @@
-# DDR RAG Companion App
+# Ask the Reports
 
-A small Streamlit app that shows the book's final payoff end to end: ask
-one engineering question against the sample Daily Drilling Report archive
-and see **retrieval → local-model answer → citations → the original
-evidence**. Evidence first, answer second.
+The book's companion app: a small Streamlit app that shows the final
+payoff end to end. Ask one engineering question against the sample Daily
+Drilling Report archive and see **retrieval → local-model answer →
+citations → the original evidence**. Evidence first, answer second.
 
 This is an educational companion, not a production system. It runs on the
 ten-report public sample archive that ships with the book.
@@ -24,7 +24,7 @@ your own) in the sidebar and press **Ask**.
 ## Ollama is optional
 
 - **Retrieval always works** without Ollama — you'll see the matched
-  reports, scores, and evidence excerpts.
+  reports, their match strength, and evidence excerpts.
 - **Generated answers require Ollama.** If it isn't running, the app says
   so plainly and shows the retrieved evidence anyway:
   *"Ollama is not running. Retrieval still works. Start Ollama to generate
