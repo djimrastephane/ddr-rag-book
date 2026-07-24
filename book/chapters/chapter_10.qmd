@@ -84,20 +84,19 @@ logging?"* has an exact answer sitting in this table —
 `duration_hr = 5.0` — computed once during extraction, not re-derived by
 a language model each time it's asked. Generation is reserved for what
 it's actually good at — narrative synthesis across multiple passages —
-and even then, every claim carries its source.
+and even then, every claim carries its source. Here's how a question
+gets routed between the two:
 
-```
-question
-   ↓
-answerable from structured data?
-   ↓
-yes -> query ddr_facts.parquet
-    -> exact, re-derivable answer
-   ↓
-no  -> retrieve + generate (Ch.5)
-    -> answer + citations
-       (verify before trusting)
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch10_routing_light.svg){.diagram-light width="420"}
+![](../figures/diagrams/theory_ch10_routing_dark.svg){.diagram-dark width="420"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch10_routing.pdf){width="420" fig-align="center"}
+:::
 
 ## A real, honest gap in this archive
 

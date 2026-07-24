@@ -470,6 +470,94 @@ DAILY_LOOP_TEX = r"""
 \end{document}
 """
 
+# Chapter 10's routing decision is a single fork, not a sequential
+# pipeline -- unlike Chapter 13's daily loop, "yes" and "no" here are two
+# equally valid outcomes (compute an exact answer vs. generate a cited
+# one), neither an error/exit path. So this gets a symmetric two-column
+# branch instead of Chapter 13's phase-band treatment: same box style,
+# same hand-drawn icon technique, same title+subtitle convention, same
+# black-at-opacity trick for dark-mode safety, but no exitColor (nothing
+# here is an exception) and no phase bands (nothing here is a sequence
+# of phases). Labels favor engineering language over the raw filename in
+# the old ASCII version ("Look up the structured facts table", not
+# "query ddr_facts.parquet") the same way Chapter 13's relabeling did.
+ROUTING_TEX = r"""
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily,
+  box/.style={rectangle, rounded corners=2pt, draw, thick, text width=42mm,
+    minimum height=9mm, font=\sffamily\small, align=center},
+  arr/.style={-{Stealth[length=2.2mm]}, thick},
+  lbl/.style={font=\scriptsize\itshape}
+]
+
+% -- Title -------------------------------------------------------------
+\node[font=\sffamily\Large\bfseries, align=center] (title)
+  {Routing a Question:\\Compute or Generate?};
+\node[font=\sffamily\normalsize\itshape, align=center, text width=90mm,
+  below=3mm of title] (subtitle)
+  {``If it's in the structured data, compute it -- don't generate it.''};
+\draw[thin] ($(subtitle.south west)+(0,-1.2mm)$) -- ($(subtitle.south east)+(0,-1.2mm)$);
+
+% -- Main chain ----------------------------------------------------------
+\node[box, below=13mm of subtitle] (q) {A question arrives};
+\node[box, below=9mm of q] (decision) {Answerable from\\structured data?};
+
+\node[box, below left=16mm and 4mm of decision] (lookup)
+  {Look up the structured\\facts table\\{\scriptsize\ttfamily ddr\_facts.parquet}};
+\node[box, below right=16mm and 4mm of decision] (generate)
+  {Retrieve relevant passages\\and generate an answer\\{\scriptsize\itshape Chapter 5}};
+
+\node[box, below=8mm of lookup] (exact) {Exact, re-derivable answer};
+\node[box, below=8mm of generate] (cited)
+  {Answer with citations\\{\scriptsize\itshape verify before trusting}};
+
+% -- Arrows --------------------------------------------------------------
+\draw[arr] (q) -- (decision);
+\draw[arr] (decision) -- node[lbl, above, sloped] {yes} (lookup);
+\draw[arr] (decision) -- node[lbl, above, sloped] {no} (generate);
+\draw[arr] (lookup) -- (exact);
+\draw[arr] (generate) -- (cited);
+
+% -- Icons: small monochrome pictograms, 9mm left of each box's west ----
+% edge, same hand-drawn-path technique as Chapter 13's figure.
+\begin{scope}[shift={($(q.west)+(-9mm,0)$)}, thin]
+  \draw (0mm,1.6mm) circle (1.6mm);
+  \node[font=\tiny] at (0mm,1.6mm) {?};
+\end{scope}
+\begin{scope}[shift={($(decision.west)+(-9mm,0)$)}, thin]
+  \draw (-0.4mm,0.4mm) circle (1.3mm);
+  \draw (0.5mm,-0.5mm) -- (1.6mm,-1.6mm);
+\end{scope}
+\begin{scope}[shift={($(lookup.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,0.2mm) rectangle (-0.2mm,1.6mm);
+  \draw (0.2mm,0.2mm) rectangle (1.6mm,1.6mm);
+  \draw (-1.6mm,-1.6mm) rectangle (-0.2mm,-0.2mm);
+  \draw (0.2mm,-1.6mm) rectangle (1.6mm,-0.2mm);
+\end{scope}
+\begin{scope}[shift={($(generate.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,-1mm) rectangle (1.6mm,1.4mm);
+  \draw (-0.6mm,-1.6mm) -- (0mm,-1mm) -- (0.6mm,-1.6mm) -- cycle;
+  \draw (-1mm,0.6mm) -- (1mm,0.6mm);
+  \draw (-1mm,-0.1mm) -- (0.4mm,-0.1mm);
+\end{scope}
+\begin{scope}[shift={($(exact.west)+(-9mm,0)$)}, thick]
+  \draw (-1.4mm,0mm) -- (-0.3mm,-1.3mm) -- (1.6mm,1.6mm);
+\end{scope}
+\begin{scope}[shift={($(cited.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,-1.6mm) rectangle (1.6mm,1.6mm);
+  \draw (-1mm,0.9mm) -- (1mm,0.9mm);
+  \draw (-1mm,0mm) -- (1mm,0mm);
+  \draw (0.3mm,-1.3mm) -- (1mm,-1.3mm) -- (1mm,-0.7mm);
+\end{scope}
+\end{tikzpicture}
+\end{document}
+"""
+
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmp:
         workdir = Path(tmp)
@@ -481,3 +569,5 @@ if __name__ == "__main__":
         print("OK: theory_ch07_chunkoverlap (token strip, 3 overlapping chunks)")
         render_tex("theory_ch13_dailyloop", DAILY_LOOP_TEX, workdir)
         print("OK: theory_ch13_dailyloop (4-phase flowchart, icons, 2 exit paths)")
+        render_tex("theory_ch10_routing", ROUTING_TEX, workdir)
+        print("OK: theory_ch10_routing (two-column decision branch, icons)")
