@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-0a97d93da9593b0fd742f1d48c4e3dfc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -624,9 +624,9 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </div>
 <p><strong>BM25 is not append-only, and pretending otherwise is a bug.</strong> Chapter 9’s sparse signal scores a term by its rarity across the whole archive (inverse document frequency) and normalizes for average document length. Both of those depend on <em>every</em> report. Add one report and every term’s IDF shifts a little and the average length moves — so the correct BM25 score for a document you indexed last week is now slightly different. You can’t append to BM25; you recompute its whole-archive statistics. That’s cheap at this book’s scale and a real cost at millions of documents, and it’s the honest asymmetry at the heart of incremental retrieval: <strong>the dense signal appends, the sparse signal recomputes.</strong></p>
 <p><strong>An append-only index has to catch duplicates at the door.</strong> Because you can’t easily un-add a row, the moment to stop a report being indexed twice is <em>before</em> you add it — not after. This archive already makes the point: its raw form has duplicate filename variants of the same report (Chapter 8’s <code>build_full_archive.py</code> deduplicates them). Ingest report #38 twice and it contributes its chunks twice, silently inflating how much “evidence” a query appears to have. So ingestion checks first: is this report already in the index? If so, skip it.</p>
-<p>Here’s the daily loop, end to end — every box is a tool you already built. The duplicate check runs first, before extraction, for the same reason <code>ingest_report</code> puts it first in code: there’s no point extracting text from a report you’re about to discard.</p>
+<p>Here’s the daily loop, end to end, grouped into the four phases the system moves through. Notice the duplicate check runs first, before extraction, for the same reason <code>ingest_report</code> puts it first in code: there’s no point extracting text from a report you’re about to discard.</p>
 <div class="pipeline-diagram">
-<p><img src="../figures/diagrams/theory_ch13_dailyloop_light.svg" class="diagram-light img-fluid" width="320"> <img src="../figures/diagrams/theory_ch13_dailyloop_dark.svg" class="diagram-dark img-fluid" width="320"></p>
+<p><img src="../figures/diagrams/theory_ch13_dailyloop_light.svg" class="diagram-light img-fluid" width="420"> <img src="../figures/diagrams/theory_ch13_dailyloop_dark.svg" class="diagram-dark img-fluid" width="420"></p>
 </div>
 </section>
 <section id="implementation" class="level2" data-number="13.5">
@@ -642,7 +642,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The loaded index and metadata list — or empty state (<code>None</code>, <code>[]</code>) on the very first run.</p>
-<div id="d9d01016" class="cell" data-execution_count="1">
+<div id="5e4a70ec" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -665,7 +665,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The updated index, the number of chunks added (0 if skipped or rejected), and a status string.</p>
-<div id="bd817b77" class="cell" data-execution_count="2">
+<div id="b82a15a3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
@@ -703,7 +703,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The current list of reporting gaps — ideally empty.</p>
-<div id="f78d7bbe" class="cell" data-execution_count="3">
+<div id="b5eb5fda" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1442,20 +1442,20 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>"evidence" a query appears to have. So ingestion checks first: is this</span>
 <span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>report already in the index? If so, skip it.</span>
 <span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>Here's the daily loop, end to end — every box is a tool you already built.</span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>The duplicate check runs first, before extraction, for the same reason</span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="in">`ingest_report`</span> puts it first in code: there's no point extracting text</span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>from a report you're about to discard.</span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>Here's the daily loop, end to end, grouped into the four phases the</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>system moves through. Notice the duplicate check runs first, before</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>extraction, for the same reason <span class="in">`ingest_report`</span> puts it first in code:</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>there's no point extracting text from a report you're about to discard.</span>
 <span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
 <span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>::: {.pipeline-diagram}</span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop_light.svg)</span>{.diagram-light width="320"}</span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop_dark.svg)</span>{.diagram-dark width="320"}</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop_light.svg)</span>{.diagram-light width="420"}</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop_dark.svg)</span>{.diagram-dark width="420"}</span>
 <span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="pdf"}</span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop.pdf)</span>{width="320" fig-align="center"}</span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop.pdf)</span>{width="420" fig-align="center"}</span>
 <span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation</span></span>
