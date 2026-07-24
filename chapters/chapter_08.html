@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-0a97d93da9593b0fd742f1d48c4e3dfc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -677,7 +677,7 @@ Global FAISS index
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A <code>faiss.index</code> file on disk, plus the same in-memory index object ready to query immediately.</p>
-<div id="0ace380e" class="cell" data-execution_count="1">
+<div id="20b0a505" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_08/build_faiss_index.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -708,7 +708,7 @@ Global FAISS index
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(chunk_index, similarity_score)</code> pairs — the same shape of result Chapter 4’s brute-force <code>search</code> returned.</p>
-<div id="c1d38fd0" class="cell" data-execution_count="2">
+<div id="963f6d46" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_index(path: Path) <span class="op">-&gt;</span> faiss.Index:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> faiss.read_index(<span class="bu">str</span>(path))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -731,7 +731,7 @@ Global FAISS index
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A FAISS index with one row per chunk, and a parallel <code>metadata</code> list — <code>metadata[i]</code> is a <code>{"report": ..., "page": ..., "date": ...}</code> dict describing exactly what <code>embeddings[i]</code> is.</p>
-<div id="69727a39" class="cell" data-execution_count="3">
+<div id="d6d2b2a4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>REPORT_DATE <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"_</span><span class="kw">(</span><span class="dv">\d</span><span class="op">{4}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="kw">)</span><span class="ch">\.</span><span class="vs">"</span>)</span>

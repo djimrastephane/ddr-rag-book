@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-de63f62b328812d8e578a4d74e282472.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-04b3fb33f2a973da1159f90c12b2b682.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-e10d541d56eb9122d05640a0c0a0767f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-0a97d93da9593b0fd742f1d48c4e3dfc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-443442d23ad5d910c6c1806379795bf9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -624,16 +624,10 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </div>
 <p><strong>BM25 is not append-only, and pretending otherwise is a bug.</strong> Chapter 9’s sparse signal scores a term by its rarity across the whole archive (inverse document frequency) and normalizes for average document length. Both of those depend on <em>every</em> report. Add one report and every term’s IDF shifts a little and the average length moves — so the correct BM25 score for a document you indexed last week is now slightly different. You can’t append to BM25; you recompute its whole-archive statistics. That’s cheap at this book’s scale and a real cost at millions of documents, and it’s the honest asymmetry at the heart of incremental retrieval: <strong>the dense signal appends, the sparse signal recomputes.</strong></p>
 <p><strong>An append-only index has to catch duplicates at the door.</strong> Because you can’t easily un-add a row, the moment to stop a report being indexed twice is <em>before</em> you add it — not after. This archive already makes the point: its raw form has duplicate filename variants of the same report (Chapter 8’s <code>build_full_archive.py</code> deduplicates them). Ingest report #38 twice and it contributes its chunks twice, silently inflating how much “evidence” a query appears to have. So ingestion checks first: is this report already in the index? If so, skip it.</p>
-<p>Here’s the daily loop, end to end — every box is a tool you already built:</p>
-<pre><code>        a new report PDF arrives
-                  │
-      extract text (Ch 1)  ──►  quality gate (Ch 6)  ──► reject → review queue
-                  │                     │ pass
-                  │            already added? (skip duplicates) ──► yes → skip
-                  │                     │ no
-        page-aware chunk (Ch 7)  ──►  embed (Ch 4)  ──►  index.add() (Ch 8)
-                  │
-        re-run the gap check (Ch 10)  ──►  "no report filed yesterday?"</code></pre>
+<p>Here’s the daily loop, end to end — every box is a tool you already built. The duplicate check runs first, before extraction, for the same reason <code>ingest_report</code> puts it first in code: there’s no point extracting text from a report you’re about to discard.</p>
+<div class="pipeline-diagram">
+<p><img src="../figures/diagrams/theory_ch13_dailyloop_light.svg" class="diagram-light img-fluid" width="320"> <img src="../figures/diagrams/theory_ch13_dailyloop_dark.svg" class="diagram-dark img-fluid" width="320"></p>
+</div>
 </section>
 <section id="implementation" class="level2" data-number="13.5">
 <h2 data-number="13.5" class="anchored" data-anchor-id="implementation"><span class="header-section-number">13.5</span> Implementation</h2>
@@ -648,15 +642,15 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The loaded index and metadata list — or empty state (<code>None</code>, <code>[]</code>) on the very first run.</p>
-<div id="54a7f7c9" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_state(index_path, meta_path):</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> index_path.exists() <span class="kw">and</span> meta_path.exists():</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> load_index(index_path), json.loads(meta_path.read_text())</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span>, []</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="d9d01016" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_state(index_path, meta_path):</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> index_path.exists() <span class="kw">and</span> meta_path.exists():</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> load_index(index_path), json.loads(meta_path.read_text())</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span>, []</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
 <p>Nothing clever — the index and its metadata are read back from disk exactly as Chapter 8 saved them. The metadata list is what lets a bare FAISS row number turn back into a report and page for a citation; it has to travel with the index, so it’s persisted alongside it.</p>
@@ -671,30 +665,30 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The updated index, the number of chunks added (0 if skipped or rejected), and a status string.</p>
-<div id="ba016e52" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    report <span class="op">=</span> pdf_path.name</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(m[<span class="st">"report"</span>] <span class="op">==</span> report <span class="cf">for</span> m <span class="kw">in</span> metadata):        <span class="co"># skip if already added</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="st">"skipped (already ingested)"</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> extract_text(pdf_path)                            <span class="co"># Chapter 1</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    gate <span class="op">=</span> evaluate_ocr_quality(text)                        <span class="co"># Chapter 6</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> gate[<span class="st">"reject_ocr"</span>]:</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="ss">f"rejected by quality gate: </span><span class="sc">{</span>gate[<span class="st">'flags'</span>]<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    pairs <span class="op">=</span> chunk_pages_by_tokens(text, <span class="dv">60</span>, <span class="dv">15</span>)              <span class="co"># Chapter 7</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    vectors <span class="op">=</span> embed_texts(model, [c <span class="cf">for</span> _p, c <span class="kw">in</span> pairs]).astype(<span class="st">"float32"</span>)  <span class="co"># Chapter 4</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> index <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> faiss.IndexFlatIP(vectors.shape[<span class="dv">1</span>])</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    index.add(vectors)                                       <span class="co"># &lt;- append, not rebuild</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    date <span class="op">=</span> report_date(report)                               <span class="co"># Chapter 8</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> page, _chunk <span class="kw">in</span> pairs:</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        metadata.append({<span class="st">"report"</span>: report, <span class="st">"page"</span>: page, <span class="st">"date"</span>: date})</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index, <span class="bu">len</span>(pairs), <span class="st">"ingested"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="bd817b77" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    report <span class="op">=</span> pdf_path.name</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(m[<span class="st">"report"</span>] <span class="op">==</span> report <span class="cf">for</span> m <span class="kw">in</span> metadata):        <span class="co"># skip if already added</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="st">"skipped (already ingested)"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> extract_text(pdf_path)                            <span class="co"># Chapter 1</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    gate <span class="op">=</span> evaluate_ocr_quality(text)                        <span class="co"># Chapter 6</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> gate[<span class="st">"reject_ocr"</span>]:</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="ss">f"rejected by quality gate: </span><span class="sc">{</span>gate[<span class="st">'flags'</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    pairs <span class="op">=</span> chunk_pages_by_tokens(text, <span class="dv">60</span>, <span class="dv">15</span>)              <span class="co"># Chapter 7</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    vectors <span class="op">=</span> embed_texts(model, [c <span class="cf">for</span> _p, c <span class="kw">in</span> pairs]).astype(<span class="st">"float32"</span>)  <span class="co"># Chapter 4</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> index <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> faiss.IndexFlatIP(vectors.shape[<span class="dv">1</span>])</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    index.add(vectors)                                       <span class="co"># &lt;- append, not rebuild</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    date <span class="op">=</span> report_date(report)                               <span class="co"># Chapter 8</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> page, _chunk <span class="kw">in</span> pairs:</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        metadata.append({<span class="st">"report"</span>: report, <span class="st">"page"</span>: page, <span class="st">"date"</span>: date})</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index, <span class="bu">len</span>(pairs), <span class="st">"ingested"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
 <p>Read top to bottom, this is the daily loop in one function. The duplicate check comes <em>first</em>, because an append-only index can’t take it back afterwards. The quality gate runs before anything gets indexed, so bad OCR is routed to review instead of silently polluting the index. Then the real work — chunk, embed, <code>index.add()</code> — is exactly Chapter 8’s build, applied to one report instead of the whole folder, and the parallel metadata records are appended in the same order the vectors were, so <code>metadata[i]</code> still describes row <code>i</code>.</p>
@@ -709,12 +703,12 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The current list of reporting gaps — ideally empty.</p>
-<div id="0391a978" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># after ingesting today's reports:</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>gaps <span class="op">=</span> find_date_gaps(ingested_dates(metadata))             <span class="co"># Chapter 10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="f78d7bbe" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># after ingesting today's reports:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>gaps <span class="op">=</span> find_date_gaps(ingested_dates(metadata))             <span class="co"># Chapter 10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
 <p>The same gap detector from Chapter 10, now pointed at the live set of dates. Run once at setup, it tells you about holes in the historical archive; run after every ingestion, it tells you the morning a report <em>didn’t</em> arrive — which, for a daily-reporting well, is exactly the silence worth surfacing before someone assumes nothing happened.</p>
@@ -1343,424 +1337,426 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Daily Ingestion: Keeping the System Live {#sec-chapter-13}</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>::: {.pipeline-diagram}</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/pipeline_ch13_light.svg)</span>{.diagram-light width="180"}</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/pipeline_ch13_dark.svg)</span>{.diagram-dark width="180"}</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="pdf"}</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/pipeline_ch13.pdf)</span>{width="180" fig-align="center"}</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>::: {.chapter-status}</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`█████████████`</span> **13 / 13** &amp;nbsp;·&amp;nbsp; **Estimated time:** 45–60 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🔴 Advanced</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain why a Daily Drilling Report system's real operating mode is</span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  incremental, not batch — and what breaks if you rebuild from scratch</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  every night.</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ingest a single new report into a live, persisted index by *appending*</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  to it, without re-embedding everything that came before.</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain why the dense index appends cleanly but the BM25 signal does</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  not, and make sure a report never gets added to the index twice.</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>Sean, the production engineer, asks the question every previous chapter</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>quietly assumed away: *"Report #77 lands tomorrow morning, and I need to</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>ask about it on the call. Do we rebuild the whole index every night just</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>to add one page?"*</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>Everything so far has been **batch**: point the pipeline at a fixed folder</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>of reports, extract, chunk, embed, and index all of them in one pass. That</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>is exactly right for learning, and fine for a frozen archive. But these</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>are *Daily* Drilling Reports. In a real deployment the archive is never</span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>frozen — one new report arrives every day, sometimes several, and the</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>system has to absorb each one and be ready to answer questions about it</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>within minutes. Rebuilding the entire index from scratch to add a single</span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>report works at ten documents and is absurd at ten thousand. The job of</span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>this chapter is to add one report to a live system the way the field</span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>actually does it: incrementally.</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Example: a new report arrives</span></span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Ingesting one report into a live index"}</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="in">Live index before:   296 chunks across 9 reports</span></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="in">New report arrives:   FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</span></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="in">  extract -&gt; quality gate -&gt; chunk -&gt; embed -&gt; append</span></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="in">Live index after:     333 chunks across 10 reports   (+37, no rebuild)</span></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>That final number is not a coincidence. **333 chunks is exactly what</span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>Chapter 8's one-shot build produces over all ten reports.** Incremental</span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>ingestion and a full rebuild converge on the identical index — appending</span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>just gets there one report at a time, without re-embedding the nine that</span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>were already there.</span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory</span></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>Two facts about the index you built in Chapter 8 make incremental</span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>ingestion possible — and one makes half of it harder than it looks.</span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>**The dense index is append-only, and that's a feature.** FAISS's</span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a><span class="in">`IndexFlatIP`</span> stores one row per chunk, and <span class="in">`index.add(new_vectors)`</span> bolts</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>new rows onto the end. Because Chapter 4's embeddings are normalized and</span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>each chunk's vector is computed independently of every other, the vectors</span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>you add today are identical to the vectors a full rebuild would produce</span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>for the same chunks. Order doesn't matter; nothing already in the index</span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>needs to change. Appending is exact.</span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Append-only index"}</span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>An **append-only** index is a bound logbook, not a whiteboard: you add</span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>tomorrow's entry to the next blank line without rewriting yesterday's.</span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>That makes adding cheap and safe — but it also means you can't quietly</span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>erase a line, which is why getting each entry right *before* you write it</span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>matters (more on that below).</span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>**BM25 is not append-only, and pretending otherwise is a bug.** Chapter</span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>9's sparse signal scores a term by its rarity across the whole archive</span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>(inverse document frequency) and normalizes for average document length.</span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>Both of those depend on *every* report. Add one report and every term's</span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>IDF shifts a little and the average length moves — so the correct BM25</span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>score for a document you indexed last week is now slightly different. You</span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>can't append to BM25; you recompute its whole-archive statistics. That's cheap at</span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>this book's scale and a real cost at millions of documents, and it's the</span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>honest asymmetry at the heart of incremental retrieval: **the dense</span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>signal appends, the sparse signal recomputes.**</span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>**An append-only index has to catch duplicates at the door.** Because you</span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>can't easily un-add a row, the moment to stop a report being indexed</span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>twice is *before* you add it — not after. This archive already makes the</span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>point: its raw form has duplicate filename variants of the same report</span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>(Chapter 8's <span class="in">`build_full_archive.py`</span> deduplicates them). Ingest report #38</span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>twice and it contributes its chunks twice, silently inflating how much</span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>"evidence" a query appears to have. So ingestion checks first: is this</span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>report already in the index? If so, skip it.</span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>Here's the daily loop, end to end — every box is a tool you already built:</span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a><span class="in">        a new report PDF arrives</span></span>
-<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="in">                  │</span></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="in">      extract text (Ch 1)  ──►  quality gate (Ch 6)  ──► reject → review queue</span></span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a><span class="in">                  │                     │ pass</span></span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="in">                  │            already added? (skip duplicates) ──► yes → skip</span></span>
-<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a><span class="in">                  │                     │ no</span></span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="in">        page-aware chunk (Ch 7)  ──►  embed (Ch 4)  ──►  index.add() (Ch 8)</span></span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="in">                  │</span></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a><span class="in">        re-run the gap check (Ch 10)  ──►  "no report filed yesterday?"</span></span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation</span></span>
-<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>The whole pipeline is orchestration over code you've already written and</span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>tested. It lives in <span class="in">`code/chapter_13/ingest.py`</span>.</span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: load the live index, or start one</span></span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>An incremental system has *state*: the index and its per-chunk metadata</span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>persist between runs, because the whole point is not to rebuild them.</span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>Loading yesterday's index is the first thing every ingestion run does.</span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A saved FAISS index file, and a JSON file holding the parallel list of</span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>  <span class="in">`{report, page, date}`</span> metadata records (Chapter 8's structure).</span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>The loaded index and metadata list — or empty state (<span class="in">`None`</span>, <span class="in">`[]`</span>) on the</span>
-<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>very first run.</span>
-<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
-<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
-<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-151"><a href="#cb6-151" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_state(index_path, meta_path):</span>
-<span id="cb6-152"><a href="#cb6-152" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> index_path.exists() <span class="kw">and</span> meta_path.exists():</span>
-<span id="cb6-153"><a href="#cb6-153" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> load_index(index_path), json.loads(meta_path.read_text())</span>
-<span id="cb6-154"><a href="#cb6-154" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span>, []</span>
-<span id="cb6-155"><a href="#cb6-155" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-156"><a href="#cb6-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-157"><a href="#cb6-157" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb6-158"><a href="#cb6-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-159"><a href="#cb6-159" aria-hidden="true" tabindex="-1"></a>Nothing clever — the index and its metadata are read back from disk</span>
-<span id="cb6-160"><a href="#cb6-160" aria-hidden="true" tabindex="-1"></a>exactly as Chapter 8 saved them. The metadata list is what lets a bare</span>
-<span id="cb6-161"><a href="#cb6-161" aria-hidden="true" tabindex="-1"></a>FAISS row number turn back into a report and page for a citation; it has</span>
-<span id="cb6-162"><a href="#cb6-162" aria-hidden="true" tabindex="-1"></a>to travel with the index, so it's persisted alongside it.</span>
-<span id="cb6-163"><a href="#cb6-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-164"><a href="#cb6-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: ingest one report — and never the same one twice</span></span>
-<span id="cb6-165"><a href="#cb6-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-166"><a href="#cb6-166" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
-<span id="cb6-167"><a href="#cb6-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-168"><a href="#cb6-168" aria-hidden="true" tabindex="-1"></a>Take one new report PDF and fold it into the live index — running it</span>
-<span id="cb6-169"><a href="#cb6-169" aria-hidden="true" tabindex="-1"></a>through the same extraction, quality gate, and chunker the batch pipeline</span>
-<span id="cb6-170"><a href="#cb6-170" aria-hidden="true" tabindex="-1"></a>used — then *append* its vectors instead of rebuilding. And do it safely:</span>
-<span id="cb6-171"><a href="#cb6-171" aria-hidden="true" tabindex="-1"></a>skip a report already indexed, and never index text the quality gate</span>
-<span id="cb6-172"><a href="#cb6-172" aria-hidden="true" tabindex="-1"></a>rejects.</span>
-<span id="cb6-173"><a href="#cb6-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-174"><a href="#cb6-174" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
-<span id="cb6-175"><a href="#cb6-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-176"><a href="#cb6-176" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A report PDF, the embedding model, the current index, and the metadata</span>
-<span id="cb6-177"><a href="#cb6-177" aria-hidden="true" tabindex="-1"></a>  list.</span>
-<span id="cb6-178"><a href="#cb6-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-179"><a href="#cb6-179" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
-<span id="cb6-180"><a href="#cb6-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-181"><a href="#cb6-181" aria-hidden="true" tabindex="-1"></a>The updated index, the number of chunks added (0 if skipped or rejected),</span>
-<span id="cb6-182"><a href="#cb6-182" aria-hidden="true" tabindex="-1"></a>and a status string.</span>
-<span id="cb6-183"><a href="#cb6-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-186"><a href="#cb6-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb6-187"><a href="#cb6-187" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb6-188"><a href="#cb6-188" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
-<span id="cb6-189"><a href="#cb6-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-190"><a href="#cb6-190" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
-<span id="cb6-191"><a href="#cb6-191" aria-hidden="true" tabindex="-1"></a>    report <span class="op">=</span> pdf_path.name</span>
-<span id="cb6-192"><a href="#cb6-192" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(m[<span class="st">"report"</span>] <span class="op">==</span> report <span class="cf">for</span> m <span class="kw">in</span> metadata):        <span class="co"># skip if already added</span></span>
-<span id="cb6-193"><a href="#cb6-193" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="st">"skipped (already ingested)"</span></span>
-<span id="cb6-194"><a href="#cb6-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-195"><a href="#cb6-195" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> extract_text(pdf_path)                            <span class="co"># Chapter 1</span></span>
-<span id="cb6-196"><a href="#cb6-196" aria-hidden="true" tabindex="-1"></a>    gate <span class="op">=</span> evaluate_ocr_quality(text)                        <span class="co"># Chapter 6</span></span>
-<span id="cb6-197"><a href="#cb6-197" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> gate[<span class="st">"reject_ocr"</span>]:</span>
-<span id="cb6-198"><a href="#cb6-198" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="ss">f"rejected by quality gate: </span><span class="sc">{</span>gate[<span class="st">'flags'</span>]<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb6-199"><a href="#cb6-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-200"><a href="#cb6-200" aria-hidden="true" tabindex="-1"></a>    pairs <span class="op">=</span> chunk_pages_by_tokens(text, <span class="dv">60</span>, <span class="dv">15</span>)              <span class="co"># Chapter 7</span></span>
-<span id="cb6-201"><a href="#cb6-201" aria-hidden="true" tabindex="-1"></a>    vectors <span class="op">=</span> embed_texts(model, [c <span class="cf">for</span> _p, c <span class="kw">in</span> pairs]).astype(<span class="st">"float32"</span>)  <span class="co"># Chapter 4</span></span>
-<span id="cb6-202"><a href="#cb6-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-203"><a href="#cb6-203" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> index <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb6-204"><a href="#cb6-204" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> faiss.IndexFlatIP(vectors.shape[<span class="dv">1</span>])</span>
-<span id="cb6-205"><a href="#cb6-205" aria-hidden="true" tabindex="-1"></a>    index.add(vectors)                                       <span class="co"># &lt;- append, not rebuild</span></span>
-<span id="cb6-206"><a href="#cb6-206" aria-hidden="true" tabindex="-1"></a>    date <span class="op">=</span> report_date(report)                               <span class="co"># Chapter 8</span></span>
-<span id="cb6-207"><a href="#cb6-207" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> page, _chunk <span class="kw">in</span> pairs:</span>
-<span id="cb6-208"><a href="#cb6-208" aria-hidden="true" tabindex="-1"></a>        metadata.append({<span class="st">"report"</span>: report, <span class="st">"page"</span>: page, <span class="st">"date"</span>: date})</span>
-<span id="cb6-209"><a href="#cb6-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-210"><a href="#cb6-210" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index, <span class="bu">len</span>(pairs), <span class="st">"ingested"</span></span>
-<span id="cb6-211"><a href="#cb6-211" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-212"><a href="#cb6-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-213"><a href="#cb6-213" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb6-214"><a href="#cb6-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-215"><a href="#cb6-215" aria-hidden="true" tabindex="-1"></a>Read top to bottom, this is the daily loop in one function. The</span>
-<span id="cb6-216"><a href="#cb6-216" aria-hidden="true" tabindex="-1"></a>duplicate check comes *first*, because an append-only index can't take</span>
-<span id="cb6-217"><a href="#cb6-217" aria-hidden="true" tabindex="-1"></a>it back afterwards. The quality gate runs before anything gets indexed, so</span>
-<span id="cb6-218"><a href="#cb6-218" aria-hidden="true" tabindex="-1"></a>bad OCR is routed to review instead of silently polluting the index. Then</span>
-<span id="cb6-219"><a href="#cb6-219" aria-hidden="true" tabindex="-1"></a>the real work — chunk, embed, <span class="in">`index.add()`</span> — is exactly Chapter 8's</span>
-<span id="cb6-220"><a href="#cb6-220" aria-hidden="true" tabindex="-1"></a>build, applied to one report instead of the whole folder, and the parallel</span>
-<span id="cb6-221"><a href="#cb6-221" aria-hidden="true" tabindex="-1"></a>metadata records are appended in the same order the vectors were, so</span>
-<span id="cb6-222"><a href="#cb6-222" aria-hidden="true" tabindex="-1"></a><span class="in">`metadata[i]`</span> still describes row <span class="in">`i`</span>.</span>
-<span id="cb6-223"><a href="#cb6-223" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-224"><a href="#cb6-224" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: re-check the archive for gaps</span></span>
-<span id="cb6-225"><a href="#cb6-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-226"><a href="#cb6-226" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
-<span id="cb6-227"><a href="#cb6-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-228"><a href="#cb6-228" aria-hidden="true" tabindex="-1"></a>A live archive can grow a hole — a day with no report filed. Chapter 10</span>
-<span id="cb6-229"><a href="#cb6-229" aria-hidden="true" tabindex="-1"></a>built the detector; ingestion is what makes it *continuous*, re-running it</span>
-<span id="cb6-230"><a href="#cb6-230" aria-hidden="true" tabindex="-1"></a>every time the archive changes instead of once at setup.</span>
-<span id="cb6-231"><a href="#cb6-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-232"><a href="#cb6-232" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
-<span id="cb6-233"><a href="#cb6-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-234"><a href="#cb6-234" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The distinct report dates now in the index.</span>
-<span id="cb6-235"><a href="#cb6-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-236"><a href="#cb6-236" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
-<span id="cb6-237"><a href="#cb6-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-238"><a href="#cb6-238" aria-hidden="true" tabindex="-1"></a>The current list of reporting gaps — ideally empty.</span>
-<span id="cb6-239"><a href="#cb6-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-242"><a href="#cb6-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb6-243"><a href="#cb6-243" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb6-244"><a href="#cb6-244" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
-<span id="cb6-245"><a href="#cb6-245" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
-<span id="cb6-246"><a href="#cb6-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-247"><a href="#cb6-247" aria-hidden="true" tabindex="-1"></a><span class="co"># after ingesting today's reports:</span></span>
-<span id="cb6-248"><a href="#cb6-248" aria-hidden="true" tabindex="-1"></a>gaps <span class="op">=</span> find_date_gaps(ingested_dates(metadata))             <span class="co"># Chapter 10</span></span>
-<span id="cb6-249"><a href="#cb6-249" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-250"><a href="#cb6-250" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-251"><a href="#cb6-251" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb6-252"><a href="#cb6-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-253"><a href="#cb6-253" aria-hidden="true" tabindex="-1"></a>The same gap detector from Chapter 10, now pointed at the live set of</span>
-<span id="cb6-254"><a href="#cb6-254" aria-hidden="true" tabindex="-1"></a>dates. Run once at setup, it tells you about holes in the historical</span>
-<span id="cb6-255"><a href="#cb6-255" aria-hidden="true" tabindex="-1"></a>archive; run after every ingestion, it tells you the morning a report</span>
-<span id="cb6-256"><a href="#cb6-256" aria-hidden="true" tabindex="-1"></a>*didn't* arrive — which, for a daily-reporting well, is exactly the</span>
-<span id="cb6-257"><a href="#cb6-257" aria-hidden="true" tabindex="-1"></a>silence worth surfacing before someone assumes nothing happened.</span>
-<span id="cb6-258"><a href="#cb6-258" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-259"><a href="#cb6-259" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
-<span id="cb6-260"><a href="#cb6-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-261"><a href="#cb6-261" aria-hidden="true" tabindex="-1"></a>This chapter ingests one report on demand from the command line. A</span>
-<span id="cb6-262"><a href="#cb6-262" aria-hidden="true" tabindex="-1"></a>deployed system has to decide the rest:</span>
-<span id="cb6-263"><a href="#cb6-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-264"><a href="#cb6-264" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**What triggers ingestion?** A nightly <span class="in">`cron`</span> job that sweeps a drop</span>
-<span id="cb6-265"><a href="#cb6-265" aria-hidden="true" tabindex="-1"></a>  folder is the simplest; an event (a file landing in cloud storage) is</span>
-<span id="cb6-266"><a href="#cb6-266" aria-hidden="true" tabindex="-1"></a>  more responsive. Either way, ingestion has to be something that *runs on</span>
-<span id="cb6-267"><a href="#cb6-267" aria-hidden="true" tabindex="-1"></a>  its own*, not a script someone remembers to invoke.</span>
-<span id="cb6-268"><a href="#cb6-268" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reports don't always arrive in order.** A scanned backfill or a</span>
-<span id="cb6-269"><a href="#cb6-269" aria-hidden="true" tabindex="-1"></a>  corrected re-file can show up after later reports are already indexed.</span>
-<span id="cb6-270"><a href="#cb6-270" aria-hidden="true" tabindex="-1"></a>  Appending still works — the index doesn't care about order — but your</span>
-<span id="cb6-271"><a href="#cb6-271" aria-hidden="true" tabindex="-1"></a>  gap check and any date-range logic must handle a report that fills a</span>
-<span id="cb6-272"><a href="#cb6-272" aria-hidden="true" tabindex="-1"></a>  hole after the fact.</span>
-<span id="cb6-273"><a href="#cb6-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Re-embedding is a whole-archive event.** The day you switch embedding</span>
-<span id="cb6-274"><a href="#cb6-274" aria-hidden="true" tabindex="-1"></a>  models (Chapter 4's warning), old and new vectors aren't comparable, so</span>
-<span id="cb6-275"><a href="#cb6-275" aria-hidden="true" tabindex="-1"></a>  the append-only shortcut doesn't apply — you rebuild everything once,</span>
-<span id="cb6-276"><a href="#cb6-276" aria-hidden="true" tabindex="-1"></a>  together. Incremental ingestion buys you every day *except* that one.</span>
-<span id="cb6-277"><a href="#cb6-277" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Provenance matters more as the archive grows.** Which model version</span>
-<span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a>  embedded each chunk, when it was ingested, and from which source file —</span>
-<span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a>  that metadata is cheap to record at ingestion and expensive to</span>
-<span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a>  reconstruct later.</span>
-<span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**BM25 recomputation is scheduled, not skipped.** The dense index</span>
-<span id="cb6-282"><a href="#cb6-282" aria-hidden="true" tabindex="-1"></a>  appends per report; the sparse statistics are recomputed on a cadence</span>
-<span id="cb6-283"><a href="#cb6-283" aria-hidden="true" tabindex="-1"></a>  (say, nightly) that trades a little staleness for not rebuilding on</span>
-<span id="cb6-284"><a href="#cb6-284" aria-hidden="true" tabindex="-1"></a>  every single arrival.</span>
-<span id="cb6-285"><a href="#cb6-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-286"><a href="#cb6-286" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
-<span id="cb6-287"><a href="#cb6-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-288"><a href="#cb6-288" aria-hidden="true" tabindex="-1"></a>🟠 **Intermediate**</span>
-<span id="cb6-289"><a href="#cb6-289" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-290"><a href="#cb6-290" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Build the live index from nine of the ten sample</span>
-<span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a>reports (leave out <span class="in">`FORGE-16A-78-32_Drilling_050_2020-12-08.pdf`</span>), note the</span>
-<span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a>chunk count, then ingest report #50 and confirm two things: the index grew</span>
-<span id="cb6-293"><a href="#cb6-293" aria-hidden="true" tabindex="-1"></a>by report #50's chunks *without* rebuilding, and a query like `"fishing</span>
-<span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a>milled up lost pieces of bit"` now retrieves report #50.</span>
-<span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-296"><a href="#cb6-296" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** the index goes from 296 to 333 chunks,</span>
-<span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a>report #50 appears in the top results for that query, and ingesting it a</span>
-<span id="cb6-298"><a href="#cb6-298" aria-hidden="true" tabindex="-1"></a>second time reports <span class="in">`skipped (already ingested)`</span> with the count unchanged.</span>
-<span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-300"><a href="#cb6-300" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
-<span id="cb6-301"><a href="#cb6-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-302"><a href="#cb6-302" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: incremental converges on the identical batch index"}</span>
-<span id="cb6-303"><a href="#cb6-303" aria-hidden="true" tabindex="-1"></a>**Action:** build the index from the first nine sample reports, then</span>
-<span id="cb6-304"><a href="#cb6-304" aria-hidden="true" tabindex="-1"></a>ingest the tenth, and compare the result to Chapter 8's one-shot build</span>
-<span id="cb6-305"><a href="#cb6-305" aria-hidden="true" tabindex="-1"></a>over all ten.</span>
-<span id="cb6-306"><a href="#cb6-306" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-307"><a href="#cb6-307" aria-hidden="true" tabindex="-1"></a>**Result:** nine reports give 296 chunks; ingesting report #50 adds 37,</span>
-<span id="cb6-308"><a href="#cb6-308" aria-hidden="true" tabindex="-1"></a>for **333** — the exact total Chapter 8's <span class="in">`build_chunk_metadata_index`</span></span>
-<span id="cb6-309"><a href="#cb6-309" aria-hidden="true" tabindex="-1"></a>produces in a single batch pass over all ten reports.</span>
-<span id="cb6-310"><a href="#cb6-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-311"><a href="#cb6-311" aria-hidden="true" tabindex="-1"></a>**Why:** each chunk's embedding is computed independently and the vectors</span>
-<span id="cb6-312"><a href="#cb6-312" aria-hidden="true" tabindex="-1"></a>are normalized, so the row you append today is bit-for-bit the row a</span>
-<span id="cb6-313"><a href="#cb6-313" aria-hidden="true" tabindex="-1"></a>rebuild would have produced. <span class="in">`IndexFlatIP`</span> is an exact index; append and</span>
-<span id="cb6-314"><a href="#cb6-314" aria-hidden="true" tabindex="-1"></a>rebuild are two paths to the same place.</span>
-<span id="cb6-315"><a href="#cb6-315" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-316"><a href="#cb6-316" aria-hidden="true" tabindex="-1"></a>**Lesson:** incremental ingestion isn't an *approximation* of the batch</span>
-<span id="cb6-317"><a href="#cb6-317" aria-hidden="true" tabindex="-1"></a>system to be traded off against accuracy — for an exact flat index it</span>
-<span id="cb6-318"><a href="#cb6-318" aria-hidden="true" tabindex="-1"></a>produces the same index, one report at a time. That's what makes it safe</span>
-<span id="cb6-319"><a href="#cb6-319" aria-hidden="true" tabindex="-1"></a>to run every day instead of rebuilding every night.</span>
-<span id="cb6-320"><a href="#cb6-320" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: the dense signal appends, the sparse signal recomputes"}</span>
-<span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a>**Action:** think about what has to change in the index when one report</span>
-<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a>arrives — for the dense (FAISS) signal, and for the BM25 sparse signal</span>
-<span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a>from Chapter 9.</span>
-<span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a>**Result:** the dense side needs one <span class="in">`index.add()`</span> — nothing already</span>
-<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>stored changes. The BM25 side has no equivalent: adding a report shifts</span>
-<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a>every term's inverse document frequency and the archive's average document</span>
-<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>length, so the correct score for a report indexed last week is now</span>
-<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a>different. There's nothing to append to; the statistics are recomputed.</span>
-<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>**Why:** a dense embedding is a property of a chunk *alone*. A BM25 score</span>
-<span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a>is a property of a chunk *relative to the whole archive*. Anything defined</span>
-<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>relative to the whole archive moves when the archive moves.</span>
-<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a>**Lesson:** "incremental" isn't one property of a retrieval system — it's</span>
-<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a>per-signal. The most useful thing you can know before you deploy is which</span>
-<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a>parts of your index append and which parts recompute, because that</span>
-<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a>decides what you can do per-arrival and what you have to schedule.</span>
-<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
-<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a>🔴 **Advanced**</span>
-<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a>**Challenge:** Handle a **corrected re-file**. A report is re-issued under</span>
-<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a>a new filename with the same date and report number but revised text.</span>
-<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a>A simple duplicate check on the filename alone would treat it as new and</span>
-<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a>index it alongside the stale version, so a query could retrieve both. Extend</span>
-<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a><span class="in">`ingest_report`</span> to detect that a report with the same `(report number,</span>
-<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a>date)` is already indexed and refuse — or, harder, to supersede it. Note</span>
-<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a>what the append-only index makes hard about *replacing* a report's chunks,</span>
-<span id="cb6-354"><a href="#cb6-354" aria-hidden="true" tabindex="-1"></a>and how you'd work around it (hint: a "tombstone" flag in the metadata, or</span>
-<span id="cb6-355"><a href="#cb6-355" aria-hidden="true" tabindex="-1"></a>a periodic compaction rebuild). A reference solution is in</span>
-<span id="cb6-356"><a href="#cb6-356" aria-hidden="true" tabindex="-1"></a><span class="in">`code/chapter_13/challenge/`</span>.</span>
-<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
-<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-360"><a href="#cb6-360" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A Daily Drilling Report system's real operating mode is incremental:</span>
-<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a>  one report arrives, gets folded in, and is queryable within minutes —</span>
-<span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a>  rebuilding the whole index per arrival doesn't scale past a toy archive.</span>
-<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An exact flat index is append-only, and appending converges on the same</span>
-<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a>  index a full rebuild produces — incremental is not a lossy shortcut here.</span>
-<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Not every signal appends. The dense index does; BM25's whole-archive</span>
-<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a>  statistics are recomputed. Know which is which before you deploy.</span>
-<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An append-only index must catch duplicates at ingestion, because it</span>
-<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>  can't cleanly remove a row after the fact.</span>
-<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The gap detector from Chapter 10 earns its keep by running continuously,</span>
-<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>  turning "a hole in the historical archive" into "no report filed this</span>
-<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a>  morning."</span>
-<span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-373"><a href="#cb6-373" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
-<span id="cb6-374"><a href="#cb6-374" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-375"><a href="#cb6-375" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb6-376"><a href="#cb6-376" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb6-377"><a href="#cb6-377" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_13/ingest.py`</span> <span class="pp">|</span> Incremental single-report ingestion: extract → gate → chunk → embed → append, plus the gap re-check <span class="pp">|</span></span>
-<span id="cb6-378"><a href="#cb6-378" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/scripts/build_index.py`</span> <span class="pp">|</span> The companion pipeline's per-document build, run at scale as reports arrive (companion repo) <span class="pp">|</span></span>
-<span id="cb6-379"><a href="#cb6-379" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-380"><a href="#cb6-380" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 13"}</span>
-<span id="cb6-381"><a href="#cb6-381" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why a daily-report system is incremental, not batch</span>
-<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Ingested one new report by appending to a live index, no rebuild</span>
-<span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Confirmed incremental ingestion converges on the identical batch index</span>
-<span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why the dense index appends but BM25 recomputes</span>
-<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Made sure a report can't be added to the index twice, and re-ran the gap check</span>
-<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb6-389"><a href="#cb6-389" aria-hidden="true" tabindex="-1"></a>**`ingest.py`** — a daily ingestion loop: hand it one new report PDF and</span>
-<span id="cb6-390"><a href="#cb6-390" aria-hidden="true" tabindex="-1"></a>it extracts, quality-gates, chunks, embeds, and *appends* it to a live,</span>
-<span id="cb6-391"><a href="#cb6-391" aria-hidden="true" tabindex="-1"></a>persisted index, then re-checks the archive for gaps — turning the</span>
-<span id="cb6-392"><a href="#cb6-392" aria-hidden="true" tabindex="-1"></a>one-shot system from Chapters 1–12 into one that stays live as the well</span>
-<span id="cb6-393"><a href="#cb6-393" aria-hidden="true" tabindex="-1"></a>keeps reporting.</span>
-<span id="cb6-394"><a href="#cb6-394" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-395"><a href="#cb6-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-396"><a href="#cb6-396" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
-<span id="cb6-397"><a href="#cb6-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-398"><a href="#cb6-398" aria-hidden="true" tabindex="-1"></a>You can keep the system current without rebuilding it: as each new Daily</span>
-<span id="cb6-399"><a href="#cb6-399" aria-hidden="true" tabindex="-1"></a>Drilling Report arrives, fold it into the live index in seconds, know that</span>
-<span id="cb6-400"><a href="#cb6-400" aria-hidden="true" tabindex="-1"></a>the result is identical to a full rebuild, and be told the moment a report</span>
-<span id="cb6-401"><a href="#cb6-401" aria-hidden="true" tabindex="-1"></a>*doesn't* arrive — the difference between a system you build once and a</span>
-<span id="cb6-402"><a href="#cb6-402" aria-hidden="true" tabindex="-1"></a>system you can actually run.</span>
-<span id="cb6-403"><a href="#cb6-403" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-404"><a href="#cb6-404" aria-hidden="true" tabindex="-1"></a><span class="fu">## The complete, living system</span></span>
-<span id="cb6-405"><a href="#cb6-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-406"><a href="#cb6-406" aria-hidden="true" tabindex="-1"></a>Thirteen chapters ago, this was a single PDF and a five-line function.</span>
-<span id="cb6-407"><a href="#cb6-407" aria-hidden="true" tabindex="-1"></a>Now it reads an archive, gates bad scans, chunks and embeds what's left,</span>
-<span id="cb6-408"><a href="#cb6-408" aria-hidden="true" tabindex="-1"></a>retrieves by meaning and by exact term, answers with citations you can</span>
-<span id="cb6-409"><a href="#cb6-409" aria-hidden="true" tabindex="-1"></a>check, evaluates itself honestly — and keeps all of that current as new</span>
-<span id="cb6-410"><a href="#cb6-410" aria-hidden="true" tabindex="-1"></a>reports arrive, one day at a time. Every stage exists because a simpler</span>
-<span id="cb6-411"><a href="#cb6-411" aria-hidden="true" tabindex="-1"></a>version failed at something real: a scanned page with no text, a chunk</span>
-<span id="cb6-412"><a href="#cb6-412" aria-hidden="true" tabindex="-1"></a>that split a sentence, a query that missed the right report, a</span>
-<span id="cb6-413"><a href="#cb6-413" aria-hidden="true" tabindex="-1"></a>hallucinated number, an index that went stale the morning after it was</span>
-<span id="cb6-414"><a href="#cb6-414" aria-hidden="true" tabindex="-1"></a>built.</span>
-<span id="cb6-415"><a href="#cb6-415" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-416"><a href="#cb6-416" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where to go from here</span></span>
-<span id="cb6-417"><a href="#cb6-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-418"><a href="#cb6-418" aria-hidden="true" tabindex="-1"></a>You've built, chapter by chapter, a working RAG system grounded entirely</span>
-<span id="cb6-419"><a href="#cb6-419" aria-hidden="true" tabindex="-1"></a>in real, public Daily Drilling Reports — from extracting one PDF through</span>
-<span id="cb6-420"><a href="#cb6-420" aria-hidden="true" tabindex="-1"></a>keeping a live index current as the well keeps reporting.</span>
-<span id="cb6-421"><a href="#cb6-421" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Appendix A</span><span class="co">](../appendix/appendix_a_environment_setup.qmd)</span> shows how to set</span>
-<span id="cb6-422"><a href="#cb6-422" aria-hidden="true" tabindex="-1"></a>up the full companion pipeline and point it at your own archive, whether</span>
-<span id="cb6-423"><a href="#cb6-423" aria-hidden="true" tabindex="-1"></a>that's more Utah FORGE data as it becomes available, or a different well</span>
-<span id="cb6-424"><a href="#cb6-424" aria-hidden="true" tabindex="-1"></a>entirely.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Daily Ingestion: Keeping the System Live {#sec-chapter-13}</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>::: {.pipeline-diagram}</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/pipeline_ch13_light.svg)</span>{.diagram-light width="180"}</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/pipeline_ch13_dark.svg)</span>{.diagram-dark width="180"}</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="pdf"}</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/pipeline_ch13.pdf)</span>{width="180" fig-align="center"}</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>::: {.chapter-status}</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>Progress <span class="in">`█████████████`</span> **13 / 13** &amp;nbsp;·&amp;nbsp; **Estimated time:** 45–60 min &amp;nbsp;·&amp;nbsp; **Difficulty:** 🔴 Advanced</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning objectives</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain why a Daily Drilling Report system's real operating mode is</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  incremental, not batch — and what breaks if you rebuild from scratch</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  every night.</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ingest a single new report into a live, persisted index by *appending*</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  to it, without re-embedding everything that came before.</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain why the dense index appends cleanly but the BM25 signal does</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  not, and make sure a report never gets added to the index twice.</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>Sean, the production engineer, asks the question every previous chapter</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>quietly assumed away: *"Report #77 lands tomorrow morning, and I need to</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>ask about it on the call. Do we rebuild the whole index every night just</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>to add one page?"*</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>Everything so far has been **batch**: point the pipeline at a fixed folder</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>of reports, extract, chunk, embed, and index all of them in one pass. That</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>is exactly right for learning, and fine for a frozen archive. But these</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>are *Daily* Drilling Reports. In a real deployment the archive is never</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>frozen — one new report arrives every day, sometimes several, and the</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>system has to absorb each one and be ready to answer questions about it</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>within minutes. Rebuilding the entire index from scratch to add a single</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>report works at ten documents and is absurd at ten thousand. The job of</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>this chapter is to add one report to a live system the way the field</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>actually does it: incrementally.</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Example: a new report arrives</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>::: {.callout-note title="Ingesting one report into a live index"}</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="in">Live index before:   296 chunks across 9 reports</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="in">New report arrives:   FORGE-16A-78-32_Drilling_050_2020-12-08.pdf</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="in">  extract -&gt; quality gate -&gt; chunk -&gt; embed -&gt; append</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="in">Live index after:     333 chunks across 10 reports   (+37, no rebuild)</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>That final number is not a coincidence. **333 chunks is exactly what</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>Chapter 8's one-shot build produces over all ten reports.** Incremental</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>ingestion and a full rebuild converge on the identical index — appending</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>just gets there one report at a time, without re-embedding the nine that</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>were already there.</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>Two facts about the index you built in Chapter 8 make incremental</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>ingestion possible — and one makes half of it harder than it looks.</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>**The dense index is append-only, and that's a feature.** FAISS's</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="in">`IndexFlatIP`</span> stores one row per chunk, and <span class="in">`index.add(new_vectors)`</span> bolts</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>new rows onto the end. Because Chapter 4's embeddings are normalized and</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>each chunk's vector is computed independently of every other, the vectors</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>you add today are identical to the vectors a full rebuild would produce</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>for the same chunks. Order doesn't matter; nothing already in the index</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>needs to change. Appending is exact.</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Append-only index"}</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>An **append-only** index is a bound logbook, not a whiteboard: you add</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>tomorrow's entry to the next blank line without rewriting yesterday's.</span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>That makes adding cheap and safe — but it also means you can't quietly</span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>erase a line, which is why getting each entry right *before* you write it</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>matters (more on that below).</span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>**BM25 is not append-only, and pretending otherwise is a bug.** Chapter</span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>9's sparse signal scores a term by its rarity across the whole archive</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>(inverse document frequency) and normalizes for average document length.</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>Both of those depend on *every* report. Add one report and every term's</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>IDF shifts a little and the average length moves — so the correct BM25</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>score for a document you indexed last week is now slightly different. You</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>can't append to BM25; you recompute its whole-archive statistics. That's cheap at</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>this book's scale and a real cost at millions of documents, and it's the</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>honest asymmetry at the heart of incremental retrieval: **the dense</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>signal appends, the sparse signal recomputes.**</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>**An append-only index has to catch duplicates at the door.** Because you</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>can't easily un-add a row, the moment to stop a report being indexed</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>twice is *before* you add it — not after. This archive already makes the</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>point: its raw form has duplicate filename variants of the same report</span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>(Chapter 8's <span class="in">`build_full_archive.py`</span> deduplicates them). Ingest report #38</span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>twice and it contributes its chunks twice, silently inflating how much</span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>"evidence" a query appears to have. So ingestion checks first: is this</span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a>report already in the index? If so, skip it.</span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a>Here's the daily loop, end to end — every box is a tool you already built.</span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a>The duplicate check runs first, before extraction, for the same reason</span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a><span class="in">`ingest_report`</span> puts it first in code: there's no point extracting text</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a>from a report you're about to discard.</span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="html"}</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>::: {.pipeline-diagram}</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop_light.svg)</span>{.diagram-light width="320"}</span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop_dark.svg)</span>{.diagram-dark width="320"}</span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>::: {.content-visible when-format="pdf"}</span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a><span class="al">![](../figures/diagrams/theory_ch13_dailyloop.pdf)</span>{width="320" fig-align="center"}</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation</span></span>
+<span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>The whole pipeline is orchestration over code you've already written and</span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>tested. It lives in <span class="in">`code/chapter_13/ingest.py`</span>.</span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 1: load the live index, or start one</span></span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>An incremental system has *state*: the index and its per-chunk metadata</span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>persist between runs, because the whole point is not to rebuild them.</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>Loading yesterday's index is the first thing every ingestion run does.</span>
+<span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A saved FAISS index file, and a JSON file holding the parallel list of</span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>  <span class="in">`{report, page, date}`</span> metadata records (Chapter 8's structure).</span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>The loaded index and metadata list — or empty state (<span class="in">`None`</span>, <span class="in">`[]`</span>) on the</span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>very first run.</span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_state(index_path, meta_path):</span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> index_path.exists() <span class="kw">and</span> meta_path.exists():</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> load_index(index_path), json.loads(meta_path.read_text())</span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">None</span>, []</span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>Nothing clever — the index and its metadata are read back from disk</span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>exactly as Chapter 8 saved them. The metadata list is what lets a bare</span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>FAISS row number turn back into a report and page for a citation; it has</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>to travel with the index, so it's persisted alongside it.</span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: ingest one report — and never the same one twice</span></span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>Take one new report PDF and fold it into the live index — running it</span>
+<span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a>through the same extraction, quality gate, and chunker the batch pipeline</span>
+<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a>used — then *append* its vectors instead of rebuilding. And do it safely:</span>
+<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a>skip a report already indexed, and never index text the quality gate</span>
+<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a>rejects.</span>
+<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
+<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A report PDF, the embedding model, the current index, and the metadata</span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a>  list.</span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a>The updated index, the number of chunks added (0 if skipped or rejected),</span>
+<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a>and a status string.</span>
+<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
+<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-192"><a href="#cb5-192" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a>    report <span class="op">=</span> pdf_path.name</span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(m[<span class="st">"report"</span>] <span class="op">==</span> report <span class="cf">for</span> m <span class="kw">in</span> metadata):        <span class="co"># skip if already added</span></span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="st">"skipped (already ingested)"</span></span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a>    text <span class="op">=</span> extract_text(pdf_path)                            <span class="co"># Chapter 1</span></span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>    gate <span class="op">=</span> evaluate_ocr_quality(text)                        <span class="co"># Chapter 6</span></span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> gate[<span class="st">"reject_ocr"</span>]:</span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> index, <span class="dv">0</span>, <span class="ss">f"rejected by quality gate: </span><span class="sc">{</span>gate[<span class="st">'flags'</span>]<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a>    pairs <span class="op">=</span> chunk_pages_by_tokens(text, <span class="dv">60</span>, <span class="dv">15</span>)              <span class="co"># Chapter 7</span></span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a>    vectors <span class="op">=</span> embed_texts(model, [c <span class="cf">for</span> _p, c <span class="kw">in</span> pairs]).astype(<span class="st">"float32"</span>)  <span class="co"># Chapter 4</span></span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> index <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb5-206"><a href="#cb5-206" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> faiss.IndexFlatIP(vectors.shape[<span class="dv">1</span>])</span>
+<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a>    index.add(vectors)                                       <span class="co"># &lt;- append, not rebuild</span></span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a>    date <span class="op">=</span> report_date(report)                               <span class="co"># Chapter 8</span></span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> page, _chunk <span class="kw">in</span> pairs:</span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a>        metadata.append({<span class="st">"report"</span>: report, <span class="st">"page"</span>: page, <span class="st">"date"</span>: date})</span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> index, <span class="bu">len</span>(pairs), <span class="st">"ingested"</span></span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>Read top to bottom, this is the daily loop in one function. The</span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a>duplicate check comes *first*, because an append-only index can't take</span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a>it back afterwards. The quality gate runs before anything gets indexed, so</span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a>bad OCR is routed to review instead of silently polluting the index. Then</span>
+<span id="cb5-221"><a href="#cb5-221" aria-hidden="true" tabindex="-1"></a>the real work — chunk, embed, <span class="in">`index.add()`</span> — is exactly Chapter 8's</span>
+<span id="cb5-222"><a href="#cb5-222" aria-hidden="true" tabindex="-1"></a>build, applied to one report instead of the whole folder, and the parallel</span>
+<span id="cb5-223"><a href="#cb5-223" aria-hidden="true" tabindex="-1"></a>metadata records are appended in the same order the vectors were, so</span>
+<span id="cb5-224"><a href="#cb5-224" aria-hidden="true" tabindex="-1"></a><span class="in">`metadata[i]`</span> still describes row <span class="in">`i`</span>.</span>
+<span id="cb5-225"><a href="#cb5-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-226"><a href="#cb5-226" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: re-check the archive for gaps</span></span>
+<span id="cb5-227"><a href="#cb5-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-228"><a href="#cb5-228" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
+<span id="cb5-229"><a href="#cb5-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-230"><a href="#cb5-230" aria-hidden="true" tabindex="-1"></a>A live archive can grow a hole — a day with no report filed. Chapter 10</span>
+<span id="cb5-231"><a href="#cb5-231" aria-hidden="true" tabindex="-1"></a>built the detector; ingestion is what makes it *continuous*, re-running it</span>
+<span id="cb5-232"><a href="#cb5-232" aria-hidden="true" tabindex="-1"></a>every time the archive changes instead of once at setup.</span>
+<span id="cb5-233"><a href="#cb5-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-234"><a href="#cb5-234" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
+<span id="cb5-235"><a href="#cb5-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-236"><a href="#cb5-236" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The distinct report dates now in the index.</span>
+<span id="cb5-237"><a href="#cb5-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-238"><a href="#cb5-238" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb5-239"><a href="#cb5-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-240"><a href="#cb5-240" aria-hidden="true" tabindex="-1"></a>The current list of reporting gaps — ideally empty.</span>
+<span id="cb5-241"><a href="#cb5-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-244"><a href="#cb5-244" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-245"><a href="#cb5-245" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-246"><a href="#cb5-246" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
+<span id="cb5-247"><a href="#cb5-247" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
+<span id="cb5-248"><a href="#cb5-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-249"><a href="#cb5-249" aria-hidden="true" tabindex="-1"></a><span class="co"># after ingesting today's reports:</span></span>
+<span id="cb5-250"><a href="#cb5-250" aria-hidden="true" tabindex="-1"></a>gaps <span class="op">=</span> find_date_gaps(ingested_dates(metadata))             <span class="co"># Chapter 10</span></span>
+<span id="cb5-251"><a href="#cb5-251" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-252"><a href="#cb5-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-253"><a href="#cb5-253" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb5-254"><a href="#cb5-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-255"><a href="#cb5-255" aria-hidden="true" tabindex="-1"></a>The same gap detector from Chapter 10, now pointed at the live set of</span>
+<span id="cb5-256"><a href="#cb5-256" aria-hidden="true" tabindex="-1"></a>dates. Run once at setup, it tells you about holes in the historical</span>
+<span id="cb5-257"><a href="#cb5-257" aria-hidden="true" tabindex="-1"></a>archive; run after every ingestion, it tells you the morning a report</span>
+<span id="cb5-258"><a href="#cb5-258" aria-hidden="true" tabindex="-1"></a>*didn't* arrive — which, for a daily-reporting well, is exactly the</span>
+<span id="cb5-259"><a href="#cb5-259" aria-hidden="true" tabindex="-1"></a>silence worth surfacing before someone assumes nothing happened.</span>
+<span id="cb5-260"><a href="#cb5-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-261"><a href="#cb5-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
+<span id="cb5-262"><a href="#cb5-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-263"><a href="#cb5-263" aria-hidden="true" tabindex="-1"></a>This chapter ingests one report on demand from the command line. A</span>
+<span id="cb5-264"><a href="#cb5-264" aria-hidden="true" tabindex="-1"></a>deployed system has to decide the rest:</span>
+<span id="cb5-265"><a href="#cb5-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-266"><a href="#cb5-266" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**What triggers ingestion?** A nightly <span class="in">`cron`</span> job that sweeps a drop</span>
+<span id="cb5-267"><a href="#cb5-267" aria-hidden="true" tabindex="-1"></a>  folder is the simplest; an event (a file landing in cloud storage) is</span>
+<span id="cb5-268"><a href="#cb5-268" aria-hidden="true" tabindex="-1"></a>  more responsive. Either way, ingestion has to be something that *runs on</span>
+<span id="cb5-269"><a href="#cb5-269" aria-hidden="true" tabindex="-1"></a>  its own*, not a script someone remembers to invoke.</span>
+<span id="cb5-270"><a href="#cb5-270" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reports don't always arrive in order.** A scanned backfill or a</span>
+<span id="cb5-271"><a href="#cb5-271" aria-hidden="true" tabindex="-1"></a>  corrected re-file can show up after later reports are already indexed.</span>
+<span id="cb5-272"><a href="#cb5-272" aria-hidden="true" tabindex="-1"></a>  Appending still works — the index doesn't care about order — but your</span>
+<span id="cb5-273"><a href="#cb5-273" aria-hidden="true" tabindex="-1"></a>  gap check and any date-range logic must handle a report that fills a</span>
+<span id="cb5-274"><a href="#cb5-274" aria-hidden="true" tabindex="-1"></a>  hole after the fact.</span>
+<span id="cb5-275"><a href="#cb5-275" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Re-embedding is a whole-archive event.** The day you switch embedding</span>
+<span id="cb5-276"><a href="#cb5-276" aria-hidden="true" tabindex="-1"></a>  models (Chapter 4's warning), old and new vectors aren't comparable, so</span>
+<span id="cb5-277"><a href="#cb5-277" aria-hidden="true" tabindex="-1"></a>  the append-only shortcut doesn't apply — you rebuild everything once,</span>
+<span id="cb5-278"><a href="#cb5-278" aria-hidden="true" tabindex="-1"></a>  together. Incremental ingestion buys you every day *except* that one.</span>
+<span id="cb5-279"><a href="#cb5-279" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Provenance matters more as the archive grows.** Which model version</span>
+<span id="cb5-280"><a href="#cb5-280" aria-hidden="true" tabindex="-1"></a>  embedded each chunk, when it was ingested, and from which source file —</span>
+<span id="cb5-281"><a href="#cb5-281" aria-hidden="true" tabindex="-1"></a>  that metadata is cheap to record at ingestion and expensive to</span>
+<span id="cb5-282"><a href="#cb5-282" aria-hidden="true" tabindex="-1"></a>  reconstruct later.</span>
+<span id="cb5-283"><a href="#cb5-283" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**BM25 recomputation is scheduled, not skipped.** The dense index</span>
+<span id="cb5-284"><a href="#cb5-284" aria-hidden="true" tabindex="-1"></a>  appends per report; the sparse statistics are recomputed on a cadence</span>
+<span id="cb5-285"><a href="#cb5-285" aria-hidden="true" tabindex="-1"></a>  (say, nightly) that trades a little staleness for not rebuilding on</span>
+<span id="cb5-286"><a href="#cb5-286" aria-hidden="true" tabindex="-1"></a>  every single arrival.</span>
+<span id="cb5-287"><a href="#cb5-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-288"><a href="#cb5-288" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
+<span id="cb5-289"><a href="#cb5-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-290"><a href="#cb5-290" aria-hidden="true" tabindex="-1"></a>🟠 **Intermediate**</span>
+<span id="cb5-291"><a href="#cb5-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-292"><a href="#cb5-292" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Build the live index from nine of the ten sample</span>
+<span id="cb5-293"><a href="#cb5-293" aria-hidden="true" tabindex="-1"></a>reports (leave out <span class="in">`FORGE-16A-78-32_Drilling_050_2020-12-08.pdf`</span>), note the</span>
+<span id="cb5-294"><a href="#cb5-294" aria-hidden="true" tabindex="-1"></a>chunk count, then ingest report #50 and confirm two things: the index grew</span>
+<span id="cb5-295"><a href="#cb5-295" aria-hidden="true" tabindex="-1"></a>by report #50's chunks *without* rebuilding, and a query like `"fishing</span>
+<span id="cb5-296"><a href="#cb5-296" aria-hidden="true" tabindex="-1"></a>milled up lost pieces of bit"` now retrieves report #50.</span>
+<span id="cb5-297"><a href="#cb5-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-298"><a href="#cb5-298" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** the index goes from 296 to 333 chunks,</span>
+<span id="cb5-299"><a href="#cb5-299" aria-hidden="true" tabindex="-1"></a>report #50 appears in the top results for that query, and ingesting it a</span>
+<span id="cb5-300"><a href="#cb5-300" aria-hidden="true" tabindex="-1"></a>second time reports <span class="in">`skipped (already ingested)`</span> with the count unchanged.</span>
+<span id="cb5-301"><a href="#cb5-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-302"><a href="#cb5-302" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
+<span id="cb5-303"><a href="#cb5-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-304"><a href="#cb5-304" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: incremental converges on the identical batch index"}</span>
+<span id="cb5-305"><a href="#cb5-305" aria-hidden="true" tabindex="-1"></a>**Action:** build the index from the first nine sample reports, then</span>
+<span id="cb5-306"><a href="#cb5-306" aria-hidden="true" tabindex="-1"></a>ingest the tenth, and compare the result to Chapter 8's one-shot build</span>
+<span id="cb5-307"><a href="#cb5-307" aria-hidden="true" tabindex="-1"></a>over all ten.</span>
+<span id="cb5-308"><a href="#cb5-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-309"><a href="#cb5-309" aria-hidden="true" tabindex="-1"></a>**Result:** nine reports give 296 chunks; ingesting report #50 adds 37,</span>
+<span id="cb5-310"><a href="#cb5-310" aria-hidden="true" tabindex="-1"></a>for **333** — the exact total Chapter 8's <span class="in">`build_chunk_metadata_index`</span></span>
+<span id="cb5-311"><a href="#cb5-311" aria-hidden="true" tabindex="-1"></a>produces in a single batch pass over all ten reports.</span>
+<span id="cb5-312"><a href="#cb5-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-313"><a href="#cb5-313" aria-hidden="true" tabindex="-1"></a>**Why:** each chunk's embedding is computed independently and the vectors</span>
+<span id="cb5-314"><a href="#cb5-314" aria-hidden="true" tabindex="-1"></a>are normalized, so the row you append today is bit-for-bit the row a</span>
+<span id="cb5-315"><a href="#cb5-315" aria-hidden="true" tabindex="-1"></a>rebuild would have produced. <span class="in">`IndexFlatIP`</span> is an exact index; append and</span>
+<span id="cb5-316"><a href="#cb5-316" aria-hidden="true" tabindex="-1"></a>rebuild are two paths to the same place.</span>
+<span id="cb5-317"><a href="#cb5-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-318"><a href="#cb5-318" aria-hidden="true" tabindex="-1"></a>**Lesson:** incremental ingestion isn't an *approximation* of the batch</span>
+<span id="cb5-319"><a href="#cb5-319" aria-hidden="true" tabindex="-1"></a>system to be traded off against accuracy — for an exact flat index it</span>
+<span id="cb5-320"><a href="#cb5-320" aria-hidden="true" tabindex="-1"></a>produces the same index, one report at a time. That's what makes it safe</span>
+<span id="cb5-321"><a href="#cb5-321" aria-hidden="true" tabindex="-1"></a>to run every day instead of rebuilding every night.</span>
+<span id="cb5-322"><a href="#cb5-322" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-323"><a href="#cb5-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-324"><a href="#cb5-324" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: the dense signal appends, the sparse signal recomputes"}</span>
+<span id="cb5-325"><a href="#cb5-325" aria-hidden="true" tabindex="-1"></a>**Action:** think about what has to change in the index when one report</span>
+<span id="cb5-326"><a href="#cb5-326" aria-hidden="true" tabindex="-1"></a>arrives — for the dense (FAISS) signal, and for the BM25 sparse signal</span>
+<span id="cb5-327"><a href="#cb5-327" aria-hidden="true" tabindex="-1"></a>from Chapter 9.</span>
+<span id="cb5-328"><a href="#cb5-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-329"><a href="#cb5-329" aria-hidden="true" tabindex="-1"></a>**Result:** the dense side needs one <span class="in">`index.add()`</span> — nothing already</span>
+<span id="cb5-330"><a href="#cb5-330" aria-hidden="true" tabindex="-1"></a>stored changes. The BM25 side has no equivalent: adding a report shifts</span>
+<span id="cb5-331"><a href="#cb5-331" aria-hidden="true" tabindex="-1"></a>every term's inverse document frequency and the archive's average document</span>
+<span id="cb5-332"><a href="#cb5-332" aria-hidden="true" tabindex="-1"></a>length, so the correct score for a report indexed last week is now</span>
+<span id="cb5-333"><a href="#cb5-333" aria-hidden="true" tabindex="-1"></a>different. There's nothing to append to; the statistics are recomputed.</span>
+<span id="cb5-334"><a href="#cb5-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-335"><a href="#cb5-335" aria-hidden="true" tabindex="-1"></a>**Why:** a dense embedding is a property of a chunk *alone*. A BM25 score</span>
+<span id="cb5-336"><a href="#cb5-336" aria-hidden="true" tabindex="-1"></a>is a property of a chunk *relative to the whole archive*. Anything defined</span>
+<span id="cb5-337"><a href="#cb5-337" aria-hidden="true" tabindex="-1"></a>relative to the whole archive moves when the archive moves.</span>
+<span id="cb5-338"><a href="#cb5-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-339"><a href="#cb5-339" aria-hidden="true" tabindex="-1"></a>**Lesson:** "incremental" isn't one property of a retrieval system — it's</span>
+<span id="cb5-340"><a href="#cb5-340" aria-hidden="true" tabindex="-1"></a>per-signal. The most useful thing you can know before you deploy is which</span>
+<span id="cb5-341"><a href="#cb5-341" aria-hidden="true" tabindex="-1"></a>parts of your index append and which parts recompute, because that</span>
+<span id="cb5-342"><a href="#cb5-342" aria-hidden="true" tabindex="-1"></a>decides what you can do per-arrival and what you have to schedule.</span>
+<span id="cb5-343"><a href="#cb5-343" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-344"><a href="#cb5-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-345"><a href="#cb5-345" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
+<span id="cb5-346"><a href="#cb5-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-347"><a href="#cb5-347" aria-hidden="true" tabindex="-1"></a>🔴 **Advanced**</span>
+<span id="cb5-348"><a href="#cb5-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-349"><a href="#cb5-349" aria-hidden="true" tabindex="-1"></a>**Challenge:** Handle a **corrected re-file**. A report is re-issued under</span>
+<span id="cb5-350"><a href="#cb5-350" aria-hidden="true" tabindex="-1"></a>a new filename with the same date and report number but revised text.</span>
+<span id="cb5-351"><a href="#cb5-351" aria-hidden="true" tabindex="-1"></a>A simple duplicate check on the filename alone would treat it as new and</span>
+<span id="cb5-352"><a href="#cb5-352" aria-hidden="true" tabindex="-1"></a>index it alongside the stale version, so a query could retrieve both. Extend</span>
+<span id="cb5-353"><a href="#cb5-353" aria-hidden="true" tabindex="-1"></a><span class="in">`ingest_report`</span> to detect that a report with the same `(report number,</span>
+<span id="cb5-354"><a href="#cb5-354" aria-hidden="true" tabindex="-1"></a>date)` is already indexed and refuse — or, harder, to supersede it. Note</span>
+<span id="cb5-355"><a href="#cb5-355" aria-hidden="true" tabindex="-1"></a>what the append-only index makes hard about *replacing* a report's chunks,</span>
+<span id="cb5-356"><a href="#cb5-356" aria-hidden="true" tabindex="-1"></a>and how you'd work around it (hint: a "tombstone" flag in the metadata, or</span>
+<span id="cb5-357"><a href="#cb5-357" aria-hidden="true" tabindex="-1"></a>a periodic compaction rebuild). A reference solution is in</span>
+<span id="cb5-358"><a href="#cb5-358" aria-hidden="true" tabindex="-1"></a><span class="in">`code/chapter_13/challenge/`</span>.</span>
+<span id="cb5-359"><a href="#cb5-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-360"><a href="#cb5-360" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb5-361"><a href="#cb5-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-362"><a href="#cb5-362" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A Daily Drilling Report system's real operating mode is incremental:</span>
+<span id="cb5-363"><a href="#cb5-363" aria-hidden="true" tabindex="-1"></a>  one report arrives, gets folded in, and is queryable within minutes —</span>
+<span id="cb5-364"><a href="#cb5-364" aria-hidden="true" tabindex="-1"></a>  rebuilding the whole index per arrival doesn't scale past a toy archive.</span>
+<span id="cb5-365"><a href="#cb5-365" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An exact flat index is append-only, and appending converges on the same</span>
+<span id="cb5-366"><a href="#cb5-366" aria-hidden="true" tabindex="-1"></a>  index a full rebuild produces — incremental is not a lossy shortcut here.</span>
+<span id="cb5-367"><a href="#cb5-367" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Not every signal appends. The dense index does; BM25's whole-archive</span>
+<span id="cb5-368"><a href="#cb5-368" aria-hidden="true" tabindex="-1"></a>  statistics are recomputed. Know which is which before you deploy.</span>
+<span id="cb5-369"><a href="#cb5-369" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An append-only index must catch duplicates at ingestion, because it</span>
+<span id="cb5-370"><a href="#cb5-370" aria-hidden="true" tabindex="-1"></a>  can't cleanly remove a row after the fact.</span>
+<span id="cb5-371"><a href="#cb5-371" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The gap detector from Chapter 10 earns its keep by running continuously,</span>
+<span id="cb5-372"><a href="#cb5-372" aria-hidden="true" tabindex="-1"></a>  turning "a hole in the historical archive" into "no report filed this</span>
+<span id="cb5-373"><a href="#cb5-373" aria-hidden="true" tabindex="-1"></a>  morning."</span>
+<span id="cb5-374"><a href="#cb5-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-375"><a href="#cb5-375" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb5-376"><a href="#cb5-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-377"><a href="#cb5-377" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb5-378"><a href="#cb5-378" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb5-379"><a href="#cb5-379" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_13/ingest.py`</span> <span class="pp">|</span> Incremental single-report ingestion: extract → gate → chunk → embed → append, plus the gap re-check <span class="pp">|</span></span>
+<span id="cb5-380"><a href="#cb5-380" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/scripts/build_index.py`</span> <span class="pp">|</span> The companion pipeline's per-document build, run at scale as reports arrive (companion repo) <span class="pp">|</span></span>
+<span id="cb5-381"><a href="#cb5-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-382"><a href="#cb5-382" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 13"}</span>
+<span id="cb5-383"><a href="#cb5-383" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why a daily-report system is incremental, not batch</span>
+<span id="cb5-384"><a href="#cb5-384" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Ingested one new report by appending to a live index, no rebuild</span>
+<span id="cb5-385"><a href="#cb5-385" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Confirmed incremental ingestion converges on the identical batch index</span>
+<span id="cb5-386"><a href="#cb5-386" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Explained why the dense index appends but BM25 recomputes</span>
+<span id="cb5-387"><a href="#cb5-387" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Made sure a report can't be added to the index twice, and re-ran the gap check</span>
+<span id="cb5-388"><a href="#cb5-388" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-389"><a href="#cb5-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-390"><a href="#cb5-390" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb5-391"><a href="#cb5-391" aria-hidden="true" tabindex="-1"></a>**`ingest.py`** — a daily ingestion loop: hand it one new report PDF and</span>
+<span id="cb5-392"><a href="#cb5-392" aria-hidden="true" tabindex="-1"></a>it extracts, quality-gates, chunks, embeds, and *appends* it to a live,</span>
+<span id="cb5-393"><a href="#cb5-393" aria-hidden="true" tabindex="-1"></a>persisted index, then re-checks the archive for gaps — turning the</span>
+<span id="cb5-394"><a href="#cb5-394" aria-hidden="true" tabindex="-1"></a>one-shot system from Chapters 1–12 into one that stays live as the well</span>
+<span id="cb5-395"><a href="#cb5-395" aria-hidden="true" tabindex="-1"></a>keeps reporting.</span>
+<span id="cb5-396"><a href="#cb5-396" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-397"><a href="#cb5-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-398"><a href="#cb5-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb5-399"><a href="#cb5-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-400"><a href="#cb5-400" aria-hidden="true" tabindex="-1"></a>You can keep the system current without rebuilding it: as each new Daily</span>
+<span id="cb5-401"><a href="#cb5-401" aria-hidden="true" tabindex="-1"></a>Drilling Report arrives, fold it into the live index in seconds, know that</span>
+<span id="cb5-402"><a href="#cb5-402" aria-hidden="true" tabindex="-1"></a>the result is identical to a full rebuild, and be told the moment a report</span>
+<span id="cb5-403"><a href="#cb5-403" aria-hidden="true" tabindex="-1"></a>*doesn't* arrive — the difference between a system you build once and a</span>
+<span id="cb5-404"><a href="#cb5-404" aria-hidden="true" tabindex="-1"></a>system you can actually run.</span>
+<span id="cb5-405"><a href="#cb5-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-406"><a href="#cb5-406" aria-hidden="true" tabindex="-1"></a><span class="fu">## The complete, living system</span></span>
+<span id="cb5-407"><a href="#cb5-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-408"><a href="#cb5-408" aria-hidden="true" tabindex="-1"></a>Thirteen chapters ago, this was a single PDF and a five-line function.</span>
+<span id="cb5-409"><a href="#cb5-409" aria-hidden="true" tabindex="-1"></a>Now it reads an archive, gates bad scans, chunks and embeds what's left,</span>
+<span id="cb5-410"><a href="#cb5-410" aria-hidden="true" tabindex="-1"></a>retrieves by meaning and by exact term, answers with citations you can</span>
+<span id="cb5-411"><a href="#cb5-411" aria-hidden="true" tabindex="-1"></a>check, evaluates itself honestly — and keeps all of that current as new</span>
+<span id="cb5-412"><a href="#cb5-412" aria-hidden="true" tabindex="-1"></a>reports arrive, one day at a time. Every stage exists because a simpler</span>
+<span id="cb5-413"><a href="#cb5-413" aria-hidden="true" tabindex="-1"></a>version failed at something real: a scanned page with no text, a chunk</span>
+<span id="cb5-414"><a href="#cb5-414" aria-hidden="true" tabindex="-1"></a>that split a sentence, a query that missed the right report, a</span>
+<span id="cb5-415"><a href="#cb5-415" aria-hidden="true" tabindex="-1"></a>hallucinated number, an index that went stale the morning after it was</span>
+<span id="cb5-416"><a href="#cb5-416" aria-hidden="true" tabindex="-1"></a>built.</span>
+<span id="cb5-417"><a href="#cb5-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-418"><a href="#cb5-418" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where to go from here</span></span>
+<span id="cb5-419"><a href="#cb5-419" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-420"><a href="#cb5-420" aria-hidden="true" tabindex="-1"></a>You've built, chapter by chapter, a working RAG system grounded entirely</span>
+<span id="cb5-421"><a href="#cb5-421" aria-hidden="true" tabindex="-1"></a>in real, public Daily Drilling Reports — from extracting one PDF through</span>
+<span id="cb5-422"><a href="#cb5-422" aria-hidden="true" tabindex="-1"></a>keeping a live index current as the well keeps reporting.</span>
+<span id="cb5-423"><a href="#cb5-423" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Appendix A</span><span class="co">](../appendix/appendix_a_environment_setup.qmd)</span> shows how to set</span>
+<span id="cb5-424"><a href="#cb5-424" aria-hidden="true" tabindex="-1"></a>up the full companion pipeline and point it at your own archive, whether</span>
+<span id="cb5-425"><a href="#cb5-425" aria-hidden="true" tabindex="-1"></a>that's more Utah FORGE data as it becomes available, or a different well</span>
+<span id="cb5-426"><a href="#cb5-426" aria-hidden="true" tabindex="-1"></a>entirely.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
