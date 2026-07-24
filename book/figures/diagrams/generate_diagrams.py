@@ -285,44 +285,79 @@ CHUNK_OVERLAP_TEX = r"""
 \end{document}
 """
 
-# Chapter 13's daily loop is a branching flowchart, not a straight chain --
-# the duplicate check and the quality gate each have an "exit" path (skip /
-# reject) that peels off the main column. Order matters here: it follows
-# ingest_report() in code/chapter_13/ingest.py exactly (duplicate check
-# before extraction, since there's no reason to extract text from a report
-# you're about to discard), not the old ASCII figure's extract-then-dedupe
-# order, which the code and the surrounding prose both contradicted.
+# Chapter 13's daily loop is a branching flowchart grouped into the four
+# phases a drilling/completions engineer actually cares about (Incoming
+# Report, Document Processing, AI Processing, Monitoring) rather than one
+# undifferentiated vertical chain. Labels favor engineering language over
+# Python identifiers (e.g. "Add report to searchable index", not
+# "index.add()") -- the reader should recognize what the system is doing,
+# not which function got called. Step order still follows
+# ingest_report() in code/chapter_13/ingest.py exactly: the duplicate
+# check runs before extraction, since there's no reason to extract text
+# from a report about to be discarded.
+#
+# Every fill/stroke below is literal black at partial opacity (fill
+# opacity=, draw opacity=, text opacity=), never a hardcoded gray hex.
+# That's deliberate: render_tex()'s dark-mode pass only knows how to find
+# and swap literal rgb(0%, 0%, 0%) to a light gray. Black-at-low-opacity
+# survives that swap intact (opacity is a separate SVG attribute), so the
+# phase bands and muted header text automatically land on the right side
+# of light-vs-dark contrast in both variants without a second color to
+# maintain. exitColor (the skip/reject accent) is the one exception,
+# carried over unchanged from the previous version of this figure.
 DAILY_LOOP_TEX = r"""
-\documentclass[tikz,border=4pt]{standalone}
+\documentclass[tikz,border=6pt]{standalone}
 \usepackage[T1]{fontenc}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning}
+\usetikzlibrary{arrows.meta, positioning, calc, backgrounds, fit}
 \begin{document}
 \begin{tikzpicture}[
   font=\sffamily,
-  box/.style={rectangle, rounded corners=2pt, draw, thick, text width=40mm,
+  box/.style={rectangle, rounded corners=2pt, draw, thick, text width=44mm,
     minimum height=9mm, font=\sffamily\small, align=center},
   exitbox/.style={rectangle, rounded corners=2pt, draw=exitColor, thick,
-    text width=27mm, minimum height=9mm, font=\sffamily\small,
+    text width=28mm, minimum height=9mm, font=\sffamily\small,
     align=center, text=exitColor},
   arr/.style={-{Stealth[length=2.2mm]}, thick},
   exitarr/.style={-{Stealth[length=2.2mm]}, thick, exitColor},
-  lbl/.style={font=\scriptsize\itshape}
+  lbl/.style={font=\scriptsize\itshape},
+  phaselabel/.style={font=\scriptsize\sffamily, anchor=north west, align=left}
 ]
 \definecolor{exitColor}{HTML}{B8562F}
 
-\node[box] (arrive) {a new report PDF arrives};
-\node[box, below=8mm of arrive] (dup) {already indexed?\\{\scriptsize\itshape duplicate check, by filename}};
-\node[exitbox, right=12mm of dup] (skip) {yes $\to$ skip};
-\node[box, below=8mm of dup] (extract) {extract text\\{\scriptsize\itshape Chapter 1}};
-\node[box, below=8mm of extract] (gate) {quality gate\\{\scriptsize\itshape Chapter 6}};
-\node[exitbox, right=12mm of gate] (reject) {fail $\to$ reject,\\review queue};
-\node[box, below=8mm of gate] (chunk) {page-aware chunk\\{\scriptsize\itshape Chapter 7}};
-\node[box, below=8mm of chunk] (embed) {embed\\{\scriptsize\itshape Chapter 4}};
-\node[box, below=8mm of embed] (index) {index.add()\\{\scriptsize\itshape Chapter 8}};
-\node[box, below=8mm of index] (gap) {re-run the gap check\\{\scriptsize\itshape Chapter 10}};
-\node[box, below=8mm of gap] (question) {``no report filed yesterday?''};
+% -- Title -----------------------------------------------------------
+\node[font=\sffamily\Large\bfseries, align=center] (title)
+  {The Complete Daily DDR\\Processing Pipeline};
+\node[font=\sffamily\normalsize\itshape, align=center, below=3mm of title] (subtitle)
+  {``Every box is a tool you already built.''};
+\draw[thin] ($(subtitle.south west)+(0,-1.2mm)$) -- ($(subtitle.south east)+(0,-1.2mm)$);
 
+% -- Phase 1: Incoming Report -----------------------------------------
+\node[box, below=13mm of subtitle] (arrive) {A new report PDF arrives};
+\node[box, below=8mm of arrive] (dup)
+  {Report already processed?\\{\scriptsize\itshape duplicate check, by filename}};
+\node[exitbox, right=12mm of dup] (skip) {Already processed\\$\to$ skip};
+
+% -- Phase 2: Document Processing -------------------------------------
+\node[box, below=16mm of dup] (extract) {Extract text\\{\scriptsize\itshape Chapter 1}};
+\node[box, below=8mm of extract] (gate)
+  {Quality gate (OCR check)\\{\scriptsize\itshape Chapter 6}};
+\node[exitbox, right=12mm of gate] (reject) {Fails gate $\to$\\reject, review queue};
+\node[box, below=8mm of gate] (chunk) {Page-aware chunking\\{\scriptsize\itshape Chapter 7}};
+
+% -- Phase 3: AI Processing --------------------------------------------
+\node[box, below=16mm of chunk] (embed)
+  {Convert text into\\AI-searchable vectors\\{\scriptsize\itshape (Embeddings) -- Chapter 4}};
+\node[box, below=8mm of embed] (index)
+  {Add report to\\searchable index\\{\scriptsize\itshape Chapter 8}};
+
+% -- Phase 4: Monitoring ------------------------------------------------
+\node[box, below=16mm of index] (gapcheck)
+  {Daily archive health check\\{\scriptsize\itshape Chapter 10}};
+\node[box, below=8mm of gapcheck] (missing) {Missing daily report?};
+\node[box, below=8mm of missing] (alertbox) {Generate alert};
+
+% -- Arrows -------------------------------------------------------------
 \draw[arr] (arrive) -- (dup);
 \draw[arr] (dup) -- node[lbl, left] {no} (extract);
 \draw[exitarr] (dup) -- (skip);
@@ -331,8 +366,106 @@ DAILY_LOOP_TEX = r"""
 \draw[exitarr] (gate) -- (reject);
 \draw[arr] (chunk) -- (embed);
 \draw[arr] (embed) -- (index);
-\draw[arr] (index) -- (gap);
-\draw[arr] (gap) -- (question);
+\draw[arr] (index) -- (gapcheck);
+\draw[arr] (gapcheck) -- (missing);
+\draw[arr] (missing) -- (alertbox);
+
+% -- Icons: small monochrome pictograms, 9mm left of each main box's ----
+% west edge. Hand-drawn with plain paths (no icon font/package) so they
+% stay vector and print-safe, and so the black-at-opacity dark-mode trick
+% above applies to them too where relevant.
+\begin{scope}[shift={($(arrive.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,-2mm) rectangle (1.6mm,2mm);
+  \draw (-0.9mm,1mm) -- (0.9mm,1mm);
+  \draw (-0.9mm,0mm) -- (0.9mm,0mm);
+  \draw (-0.9mm,-1mm) -- (0.4mm,-1mm);
+\end{scope}
+\begin{scope}[shift={($(dup.west)+(-9mm,0)$)}, thick]
+  \draw (-1.4mm,0mm) -- (-0.3mm,-1.3mm) -- (1.6mm,1.6mm);
+\end{scope}
+\begin{scope}[shift={($(extract.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,1.2mm) -- (1.6mm,1.2mm);
+  \draw (-1.6mm,0mm) -- (1.6mm,0mm);
+  \draw (-1.6mm,-1.2mm) -- (0.7mm,-1.2mm);
+\end{scope}
+\begin{scope}[shift={($(gate.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,1.6mm) -- (1.6mm,1.6mm) -- (0.4mm,-0.3mm) -- (0.4mm,-1.7mm)
+        -- (-0.4mm,-1.7mm) -- (-0.4mm,-0.3mm) -- cycle;
+\end{scope}
+\begin{scope}[shift={($(chunk.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,0.2mm) rectangle (-0.2mm,1.6mm);
+  \draw (0.2mm,0.2mm) rectangle (1.6mm,1.6mm);
+  \draw (-1.6mm,-1.6mm) rectangle (-0.2mm,-0.2mm);
+  \draw (0.2mm,-1.6mm) rectangle (1.6mm,-0.2mm);
+\end{scope}
+\begin{scope}[shift={($(embed.west)+(-9mm,0)$)}, thin]
+  \draw (-1.4mm,-1mm) -- (1.4mm,-1mm) -- (0mm,1.4mm) -- cycle;
+  \fill (-1.4mm,-1mm) circle (0.35mm);
+  \fill (1.4mm,-1mm) circle (0.35mm);
+  \fill (0mm,1.4mm) circle (0.35mm);
+\end{scope}
+\begin{scope}[shift={($(index.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,0.9mm) rectangle (1.6mm,1.7mm);
+  \draw (-1.6mm,-0.4mm) rectangle (1.6mm,0.4mm);
+  \draw (-1.6mm,-1.7mm) rectangle (1.6mm,-0.9mm);
+\end{scope}
+\begin{scope}[shift={($(gapcheck.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,-1.6mm) rectangle (-0.7mm,-0.4mm);
+  \draw (-0.3mm,-1.6mm) rectangle (0.6mm,0.6mm);
+  \draw (1mm,-1.6mm) rectangle (1.9mm,1.6mm);
+\end{scope}
+\begin{scope}[shift={($(missing.west)+(-9mm,0)$)}, thin]
+  \draw (0mm,1.7mm) -- (-1.6mm,-1.3mm) -- (1.6mm,-1.3mm) -- cycle;
+  \draw[thick] (0mm,0.9mm) -- (0mm,-0.1mm);
+  \fill (0mm,-0.7mm) circle (0.25mm);
+\end{scope}
+\begin{scope}[shift={($(alertbox.west)+(-9mm,0)$)}, thin]
+  \draw (-1mm,-1.7mm) -- (-1mm,1.7mm);
+  \draw[fill=exitColor, fill opacity=0.25, draw=exitColor]
+    (-1mm,1.7mm) -- (1.6mm,0.9mm) -- (-1mm,0.1mm) -- cycle;
+\end{scope}
+
+% -- Phase background bands, drawn behind everything else --------------
+% Each band is fit around its boxes plus a coordinate placed at that
+% box's icon position, so the tint extends far enough left to enclose
+% the icon column too, not just the text boxes.
+\begin{pgfonlayer}{background}
+  \coordinate (ia) at ($(arrive.west)+(-9mm,0)$);
+  \coordinate (id) at ($(dup.west)+(-9mm,0)$);
+  \coordinate (h1) at ($(arrive.north)+(0,5mm)$);
+  \node[fit=(arrive)(dup)(skip)(ia)(id)(h1), inner sep=4mm, rounded corners=3pt,
+    fill=black, fill opacity=0.05, draw=black, draw opacity=0.3, thin] (band1) {};
+  \node[phaselabel] at ($(band1.north west)+(2mm,-2.5mm)$)
+    {{\bfseries 1}~~\textsc{Incoming Report}};
+
+  \coordinate (ie) at ($(extract.west)+(-9mm,0)$);
+  \coordinate (ig) at ($(gate.west)+(-9mm,0)$);
+  \coordinate (ic) at ($(chunk.west)+(-9mm,0)$);
+  \coordinate (h2) at ($(extract.north)+(0,5mm)$);
+  \node[fit=(extract)(gate)(reject)(chunk)(ie)(ig)(ic)(h2), inner sep=4mm,
+    rounded corners=3pt, fill=black, fill opacity=0.05, draw=black,
+    draw opacity=0.3, thin] (band2) {};
+  \node[phaselabel] at ($(band2.north west)+(2mm,-2.5mm)$)
+    {{\bfseries 2}~~\textsc{Document Processing}};
+
+  \coordinate (iem) at ($(embed.west)+(-9mm,0)$);
+  \coordinate (ii) at ($(index.west)+(-9mm,0)$);
+  \coordinate (h3) at ($(embed.north)+(0,5mm)$);
+  \node[fit=(embed)(index)(iem)(ii)(h3), inner sep=4mm, rounded corners=3pt,
+    fill=black, fill opacity=0.05, draw=black, draw opacity=0.3, thin] (band3) {};
+  \node[phaselabel] at ($(band3.north west)+(2mm,-2.5mm)$)
+    {{\bfseries 3}~~\textsc{AI Processing}};
+
+  \coordinate (igc) at ($(gapcheck.west)+(-9mm,0)$);
+  \coordinate (im) at ($(missing.west)+(-9mm,0)$);
+  \coordinate (ial) at ($(alertbox.west)+(-9mm,0)$);
+  \coordinate (h4) at ($(gapcheck.north)+(0,5mm)$);
+  \node[fit=(gapcheck)(missing)(alertbox)(igc)(im)(ial)(h4), inner sep=4mm,
+    rounded corners=3pt, fill=black, fill opacity=0.05, draw=black,
+    draw opacity=0.3, thin] (band4) {};
+  \node[phaselabel] at ($(band4.north west)+(2mm,-2.5mm)$)
+    {{\bfseries 4}~~\textsc{Monitoring}};
+\end{pgfonlayer}
 \end{tikzpicture}
 \end{document}
 """
@@ -347,4 +480,4 @@ if __name__ == "__main__":
         render_tex("theory_ch07_chunkoverlap", CHUNK_OVERLAP_TEX, workdir)
         print("OK: theory_ch07_chunkoverlap (token strip, 3 overlapping chunks)")
         render_tex("theory_ch13_dailyloop", DAILY_LOOP_TEX, workdir)
-        print("OK: theory_ch13_dailyloop (branching flowchart, 2 exit paths)")
+        print("OK: theory_ch13_dailyloop (4-phase flowchart, icons, 2 exit paths)")

@@ -103,20 +103,20 @@ twice and it contributes its chunks twice, silently inflating how much
 "evidence" a query appears to have. So ingestion checks first: is this
 report already in the index? If so, skip it.
 
-Here's the daily loop, end to end — every box is a tool you already built.
-The duplicate check runs first, before extraction, for the same reason
-`ingest_report` puts it first in code: there's no point extracting text
-from a report you're about to discard.
+Here's the daily loop, end to end, grouped into the four phases the
+system moves through. Notice the duplicate check runs first, before
+extraction, for the same reason `ingest_report` puts it first in code:
+there's no point extracting text from a report you're about to discard.
 
 ::: {.content-visible when-format="html"}
 ::: {.pipeline-diagram}
-![](../figures/diagrams/theory_ch13_dailyloop_light.svg){.diagram-light width="320"}
-![](../figures/diagrams/theory_ch13_dailyloop_dark.svg){.diagram-dark width="320"}
+![](../figures/diagrams/theory_ch13_dailyloop_light.svg){.diagram-light width="420"}
+![](../figures/diagrams/theory_ch13_dailyloop_dark.svg){.diagram-dark width="420"}
 :::
 :::
 
 ::: {.content-visible when-format="pdf"}
-![](../figures/diagrams/theory_ch13_dailyloop.pdf){width="320" fig-align="center"}
+![](../figures/diagrams/theory_ch13_dailyloop.pdf){width="420" fig-align="center"}
 :::
 
 ## Implementation
