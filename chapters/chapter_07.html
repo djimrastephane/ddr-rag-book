@@ -661,7 +661,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of text chunks, each roughly <code>chunk_tokens</code> tokens long, each overlapping the next by <code>overlap_tokens</code> tokens.</p>
-<div id="1dca3fd3" class="cell" data-execution_count="1">
+<div id="b6a63717" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_07/token_chunking.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tiktoken</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -692,7 +692,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(page_number, chunk_text)</code> pairs — the same chunks as before, each now labelled with the real page it came from.</p>
-<div id="84565fba" class="cell" data-execution_count="2">
+<div id="13a03f52" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>PAGE_MARKER <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"--- Page </span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs"> ---</span><span class="ch">\n</span><span class="op">?</span><span class="vs">"</span>)</span>

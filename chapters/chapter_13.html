@@ -642,7 +642,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The loaded index and metadata list — or empty state (<code>None</code>, <code>[]</code>) on the very first run.</p>
-<div id="98e7046f" class="cell" data-execution_count="1">
+<div id="e9144bd3" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -665,7 +665,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The updated index, the number of chunks added (0 if skipped or rejected), and a status string.</p>
-<div id="dfc8733a" class="cell" data-execution_count="2">
+<div id="03309459" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingest_report(pdf_path, model, index, metadata):</span>
@@ -703,7 +703,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The current list of reporting gaps — ideally empty.</p>
-<div id="9e159e25" class="cell" data-execution_count="3">
+<div id="44c5b537" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
