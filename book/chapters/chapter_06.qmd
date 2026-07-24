@@ -111,22 +111,18 @@ function checks four independent flags — `low_text_density`,
 page only once **two or more** flags fire, so no single noisy-but-legitimate
 page (e.g. a short report with a lot of numeric data) gets discarded on
 one **false positive** — a check wrongly flagging something that was
-actually fine.
+actually fine. Here's that decision end to end:
 
-```
-extracted text
-   ↓
-compute four flags
-(low_text_density, high_symbol_ratio,
- repeated_garbage, low_line_count)
-   ↓
-count how many are True
-   ↓
-2 or more active?
-   ↓
-  yes -> reject, flag for review
-  no  -> accept into index
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch06_qualitygate_light.svg){.diagram-light width="420"}
+![](../figures/diagrams/theory_ch06_qualitygate_dark.svg){.diagram-dark width="420"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch06_qualitygate.pdf){width="420" fig-align="center"}
+:::
 
 ## Implementation
 

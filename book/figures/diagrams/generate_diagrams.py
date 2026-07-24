@@ -558,6 +558,159 @@ ROUTING_TEX = r"""
 \end{document}
 """
 
+# Chapter 6's quality gate is the same shape as one node inside Chapter
+# 13's daily loop (in fact it's that node's internals) -- a main chain
+# ending in a decision with one normal continuation (accept) and one
+# exception exit (reject). So it reuses exitColor/exitbox exactly the
+# way Chapter 13 did for its own quality-gate node, instead of Chapter
+# 10's symmetric two-column treatment (where neither branch was an
+# exception). The subtitle quotes the chapter's own mud-check analogy
+# rather than inventing new copy.
+QUALITY_GATE_TEX = r"""
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily,
+  box/.style={rectangle, rounded corners=2pt, draw, thick, text width=46mm,
+    minimum height=9mm, font=\sffamily\small, align=center},
+  exitbox/.style={rectangle, rounded corners=2pt, draw=exitColor, thick,
+    text width=32mm, minimum height=9mm, font=\sffamily\small,
+    align=center, text=exitColor},
+  arr/.style={-{Stealth[length=2.2mm]}, thick},
+  exitarr/.style={-{Stealth[length=2.2mm]}, thick, exitColor},
+  lbl/.style={font=\scriptsize\itshape}
+]
+\definecolor{exitColor}{HTML}{B8562F}
+
+% -- Title -------------------------------------------------------------
+\node[font=\sffamily\Large\bfseries, align=center] (title)
+  {The OCR Quality Gate:\\Trust or Reject?};
+\node[font=\sffamily\normalsize\itshape, align=center, text width=100mm,
+  below=3mm of title] (subtitle)
+  {``A mud check before you commit to pumping downhole.''};
+\draw[thin] ($(subtitle.south west)+(0,-1.2mm)$) -- ($(subtitle.south east)+(0,-1.2mm)$);
+
+% -- Main chain ----------------------------------------------------------
+\node[box, below=13mm of subtitle] (arrive) {Extracted text arrives};
+\node[box, below=9mm of arrive] (flags)
+  {Check four quality flags\\{\scriptsize\itshape low text density, high symbol ratio,
+  repeated garbage, low line count}};
+\node[box, below=9mm of flags] (count) {Count how many flags fired};
+\node[box, below=9mm of count] (decision) {Two or more active?};
+\node[exitbox, right=14mm of decision] (reject) {Reject $\to$\\flag for review};
+\node[box, below=9mm of decision] (accept) {Accept into the index};
+
+% -- Arrows --------------------------------------------------------------
+\draw[arr] (arrive) -- (flags);
+\draw[arr] (flags) -- (count);
+\draw[arr] (count) -- (decision);
+\draw[arr] (decision) -- node[lbl, left] {no} (accept);
+\draw[exitarr] (decision) -- node[lbl, above] {yes} (reject);
+
+% -- Icons ----------------------------------------------------------------
+\begin{scope}[shift={($(arrive.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,-2mm) rectangle (1.6mm,2mm);
+  \draw (-0.9mm,1mm) -- (0.9mm,1mm);
+  \draw (-0.9mm,0mm) -- (0.9mm,0mm);
+  \draw (-0.9mm,-1mm) -- (0.4mm,-1mm);
+\end{scope}
+\begin{scope}[shift={($(flags.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,1mm) rectangle (-0.6mm,2mm);
+  \draw (-1.6mm,-0.5mm) rectangle (-0.6mm,0.5mm);
+  \draw (-1.6mm,-2mm) rectangle (-0.6mm,-1mm);
+  \draw (-0.2mm,1.5mm) -- (1.6mm,1.5mm);
+  \draw (-0.2mm,0mm) -- (1.6mm,0mm);
+  \draw (-0.2mm,-1.5mm) -- (1.6mm,-1.5mm);
+\end{scope}
+\begin{scope}[shift={($(count.west)+(-9mm,0)$)}, thick]
+  \draw (-1.6mm,-1.6mm) -- (-1.6mm,1.6mm);
+  \draw (-0.6mm,-1.6mm) -- (-0.6mm,1.6mm);
+  \draw (0.4mm,-1.6mm) -- (0.4mm,1.6mm);
+  \draw (1.4mm,-1.6mm) -- (1.4mm,1.6mm);
+\end{scope}
+\begin{scope}[shift={($(decision.west)+(-9mm,0)$)}, thin]
+  \draw (0mm,1.8mm) -- (1.8mm,0mm) -- (0mm,-1.8mm) -- (-1.8mm,0mm) -- cycle;
+\end{scope}
+\begin{scope}[shift={($(accept.west)+(-9mm,0)$)}, thick]
+  \draw (-1.4mm,0mm) -- (-0.3mm,-1.3mm) -- (1.6mm,1.6mm);
+\end{scope}
+\end{tikzpicture}
+\end{document}
+"""
+
+# Chapter 8's two indexes aren't sequential the way the old ASCII art's
+# single column of downward arrows implied (global index appearing to
+# depend on / follow the per-doc index). They're both built independently
+# from the same chunks+embeddings step, per the chapter's own prose ("the
+# two tiers branch from the same per-document work, then serve different
+# questions") -- so this is a fan-out fork, not a decision. It borrows
+# Chapter 10's two-column shape but drops the yes/no arrow labels, since
+# nothing here is being decided between; both branches happen.
+DUAL_INDEX_TEX = r"""
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily,
+  box/.style={rectangle, rounded corners=2pt, draw, thick, text width=44mm,
+    minimum height=9mm, font=\sffamily\small, align=center},
+  arr/.style={-{Stealth[length=2.2mm]}, thick}
+]
+
+% -- Title -------------------------------------------------------------
+\node[font=\sffamily\Large\bfseries, align=center] (title)
+  {One Pipeline,\\Two Search Indexes};
+\node[font=\sffamily\normalsize\itshape, align=center, text width=110mm,
+  below=3mm of title] (subtitle)
+  {``The two tiers branch from the same per-document work,\\then serve different questions.''};
+\draw[thin] ($(subtitle.south west)+(0,-1.2mm)$) -- ($(subtitle.south east)+(0,-1.2mm)$);
+
+% -- Shared chain --------------------------------------------------------
+\node[box, below=13mm of subtitle] (pdfs) {76 DDR PDFs};
+\node[box, below=9mm of pdfs] (chunk)
+  {Chunk + embed\\each report\\{\scriptsize\itshape same per-report work}};
+
+\node[box, below left=16mm and 6mm of chunk] (perdoc)
+  {Per-document\\FAISS index\\{\scriptsize\itshape one per report}\\{\scriptsize\itshape search THIS report}};
+\node[box, below right=16mm and 6mm of chunk] (global)
+  {Global\\FAISS index\\{\scriptsize\itshape 1{,}428 chunks, all reports}\\{\scriptsize\itshape search ACROSS reports}};
+
+% -- Arrows ----------------------------------------------------------------
+\draw[arr] (pdfs) -- (chunk);
+\draw[arr] (chunk) -- (perdoc);
+\draw[arr] (chunk) -- (global);
+
+% -- Icons -------------------------------------------------------------
+\begin{scope}[shift={($(pdfs.west)+(-9mm,0)$)}, thin]
+  \draw (-1.2mm,-2.2mm) rectangle (2mm,1.8mm);
+  \draw (-2mm,-1.8mm) rectangle (1.2mm,2.2mm);
+\end{scope}
+\begin{scope}[shift={($(chunk.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,0.2mm) rectangle (-0.2mm,1.6mm);
+  \draw (0.2mm,0.2mm) rectangle (1.6mm,1.6mm);
+  \draw (-1.6mm,-1.6mm) rectangle (-0.2mm,-0.2mm);
+  \draw (0.2mm,-1.6mm) rectangle (1.6mm,-0.2mm);
+\end{scope}
+\begin{scope}[shift={($(perdoc.west)+(-9mm,0)$)}, thin]
+  \draw (-1.6mm,0.9mm) rectangle (1.6mm,1.7mm);
+  \draw (-1.6mm,-0.4mm) rectangle (1.6mm,0.4mm);
+  \draw (-1.6mm,-1.7mm) rectangle (1.6mm,-0.9mm);
+\end{scope}
+\begin{scope}[shift={($(global.west)+(-9mm,0)$)}, thin]
+  \draw (-2mm,-2mm) rectangle (2mm,2mm);
+  \draw (-1.4mm,0.7mm) rectangle (1.4mm,1.4mm);
+  \draw (-1.4mm,-0.35mm) rectangle (1.4mm,0.35mm);
+  \draw (-1.4mm,-1.4mm) rectangle (1.4mm,-0.7mm);
+\end{scope}
+\end{tikzpicture}
+\end{document}
+"""
+
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmp:
         workdir = Path(tmp)
@@ -571,3 +724,7 @@ if __name__ == "__main__":
         print("OK: theory_ch13_dailyloop (4-phase flowchart, icons, 2 exit paths)")
         render_tex("theory_ch10_routing", ROUTING_TEX, workdir)
         print("OK: theory_ch10_routing (two-column decision branch, icons)")
+        render_tex("theory_ch06_qualitygate", QUALITY_GATE_TEX, workdir)
+        print("OK: theory_ch06_qualitygate (main chain + 1 exit path, icons)")
+        render_tex("theory_ch08_dualindex", DUAL_INDEX_TEX, workdir)
+        print("OK: theory_ch08_dualindex (fan-out fork, icons)")

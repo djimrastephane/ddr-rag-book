@@ -114,22 +114,16 @@ indexed and queried.
 The two tiers branch from the same per-document work, then serve
 different questions:
 
-```
-76 DDR PDFs
-   ↓
-chunks + embeddings
-(per report)
-   ↓
-built into two indexes:
-   ↓
-Per-doc FAISS index
-(one per report)
--> search THIS report
-   ↓
-Global FAISS index
-(1,428 chunks, all reports)
--> search ACROSS reports
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch08_dualindex_light.svg){.diagram-light width="420"}
+![](../figures/diagrams/theory_ch08_dualindex_dark.svg){.diagram-dark width="420"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch08_dualindex.pdf){width="420" fig-align="center"}
+:::
 
 ## Implementation
 
