@@ -177,14 +177,25 @@ chapter. Prefer diagrams and worked examples over formal definitions.
 
 If this section needs its own flow diagram (an algorithm's internal
 steps, not the chapter-opening progress marker), it follows the same
-TikZ -> PDF/SVG pattern, added to THEORY_DIAGRAMS (not DIAGRAMS) in
-figures/diagrams/generate_diagrams.py — see chapter_01, 02, 04, 05, 09,
-11, and 12 for worked examples, including multi-line labels (a step
-name plus a smaller annotation, e.g. "Extraction" / "Chapter 1 --
-pdfplumber"). The generator only draws a straight vertical chain; a
-diagram that branches (a yes/no decision) needs that support added
-first, or should stay as prose/ASCII for now (chapters 6, 8, and 10 have
-one each, still ASCII, for exactly this reason).
+TikZ -> PDF/SVG pattern. Two shapes exist in figures/diagrams/generate_diagrams.py:
+
+- A straight vertical chain with no branching: add labels to
+  THEORY_DIAGRAMS (not DIAGRAMS) — see chapter_01, 02, 04, 05, 09, 11,
+  and 12's main pipeline for worked examples, including multi-line
+  labels (a step name plus a smaller annotation, e.g. "Extraction" /
+  "Chapter 1 -- pdfplumber"). THEORY_DIAGRAMS' generic builder still
+  only draws a straight chain — it has no branch/fork support.
+- Anything that branches — a yes/no decision, an exception exit, a
+  fan-out into independent parallel outputs, or independent side-by-side
+  components with no flow between them — needs a hand-built one-off
+  TikZ block instead (not a THEORY_DIAGRAMS entry). See DAILY_LOOP_TEX
+  (Ch 13, phase-grouped chain with 2 exception exits), ROUTING_TEX
+  (Ch 10, symmetric two-column decision, neither branch an exception),
+  QUALITY_GATE_TEX (Ch 6, main chain + 1 exception exit), DUAL_INDEX_TEX
+  (Ch 8, fan-out fork, no decision), and SATELLITES_TEX (Ch 12, two
+  independent boxes, no arrows at all) for five different worked
+  shapes — match the diagram's shape to what the content actually is,
+  don't force it into whichever template is closest.
 
 Add an "Engineering Translation" callout for every new concept this
 chapter introduces — see rule 5 above. Example: -->
