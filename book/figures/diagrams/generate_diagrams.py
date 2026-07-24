@@ -285,6 +285,58 @@ CHUNK_OVERLAP_TEX = r"""
 \end{document}
 """
 
+# Chapter 13's daily loop is a branching flowchart, not a straight chain --
+# the duplicate check and the quality gate each have an "exit" path (skip /
+# reject) that peels off the main column. Order matters here: it follows
+# ingest_report() in code/chapter_13/ingest.py exactly (duplicate check
+# before extraction, since there's no reason to extract text from a report
+# you're about to discard), not the old ASCII figure's extract-then-dedupe
+# order, which the code and the surrounding prose both contradicted.
+DAILY_LOOP_TEX = r"""
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily,
+  box/.style={rectangle, rounded corners=2pt, draw, thick, text width=40mm,
+    minimum height=9mm, font=\sffamily\small, align=center},
+  exitbox/.style={rectangle, rounded corners=2pt, draw=exitColor, thick,
+    text width=27mm, minimum height=9mm, font=\sffamily\small,
+    align=center, text=exitColor},
+  arr/.style={-{Stealth[length=2.2mm]}, thick},
+  exitarr/.style={-{Stealth[length=2.2mm]}, thick, exitColor},
+  lbl/.style={font=\scriptsize\itshape}
+]
+\definecolor{exitColor}{HTML}{B8562F}
+
+\node[box] (arrive) {a new report PDF arrives};
+\node[box, below=8mm of arrive] (dup) {already indexed?\\{\scriptsize\itshape duplicate check, by filename}};
+\node[exitbox, right=12mm of dup] (skip) {yes $\to$ skip};
+\node[box, below=8mm of dup] (extract) {extract text\\{\scriptsize\itshape Chapter 1}};
+\node[box, below=8mm of extract] (gate) {quality gate\\{\scriptsize\itshape Chapter 6}};
+\node[exitbox, right=12mm of gate] (reject) {fail $\to$ reject,\\review queue};
+\node[box, below=8mm of gate] (chunk) {page-aware chunk\\{\scriptsize\itshape Chapter 7}};
+\node[box, below=8mm of chunk] (embed) {embed\\{\scriptsize\itshape Chapter 4}};
+\node[box, below=8mm of embed] (index) {index.add()\\{\scriptsize\itshape Chapter 8}};
+\node[box, below=8mm of index] (gap) {re-run the gap check\\{\scriptsize\itshape Chapter 10}};
+\node[box, below=8mm of gap] (question) {``no report filed yesterday?''};
+
+\draw[arr] (arrive) -- (dup);
+\draw[arr] (dup) -- node[lbl, left] {no} (extract);
+\draw[exitarr] (dup) -- (skip);
+\draw[arr] (extract) -- (gate);
+\draw[arr] (gate) -- node[lbl, left] {pass} (chunk);
+\draw[exitarr] (gate) -- (reject);
+\draw[arr] (chunk) -- (embed);
+\draw[arr] (embed) -- (index);
+\draw[arr] (index) -- (gap);
+\draw[arr] (gap) -- (question);
+\end{tikzpicture}
+\end{document}
+"""
+
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmp:
         workdir = Path(tmp)
@@ -294,3 +346,5 @@ if __name__ == "__main__":
             generate(name, labels, width, workdir)
         render_tex("theory_ch07_chunkoverlap", CHUNK_OVERLAP_TEX, workdir)
         print("OK: theory_ch07_chunkoverlap (token strip, 3 overlapping chunks)")
+        render_tex("theory_ch13_dailyloop", DAILY_LOOP_TEX, workdir)
+        print("OK: theory_ch13_dailyloop (branching flowchart, 2 exit paths)")

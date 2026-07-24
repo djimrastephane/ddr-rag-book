@@ -103,19 +103,21 @@ twice and it contributes its chunks twice, silently inflating how much
 "evidence" a query appears to have. So ingestion checks first: is this
 report already in the index? If so, skip it.
 
-Here's the daily loop, end to end — every box is a tool you already built:
+Here's the daily loop, end to end — every box is a tool you already built.
+The duplicate check runs first, before extraction, for the same reason
+`ingest_report` puts it first in code: there's no point extracting text
+from a report you're about to discard.
 
-```
-        a new report PDF arrives
-                  │
-      extract text (Ch 1)  ──►  quality gate (Ch 6)  ──► reject → review queue
-                  │                     │ pass
-                  │            already added? (skip duplicates) ──► yes → skip
-                  │                     │ no
-        page-aware chunk (Ch 7)  ──►  embed (Ch 4)  ──►  index.add() (Ch 8)
-                  │
-        re-run the gap check (Ch 10)  ──►  "no report filed yesterday?"
-```
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch13_dailyloop_light.svg){.diagram-light width="320"}
+![](../figures/diagrams/theory_ch13_dailyloop_dark.svg){.diagram-dark width="320"}
+:::
+:::
+
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch13_dailyloop.pdf){width="320" fig-align="center"}
+:::
 
 ## Implementation
 
