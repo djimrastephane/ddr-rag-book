@@ -711,6 +711,59 @@ DUAL_INDEX_TEX = r"""
 \end{document}
 """
 
+# Chapter 12's "two more pieces" note isn't a sequence or a fork -- the
+# prose is explicit that Evaluation and Sequence Detection "sit alongside
+# this pipeline rather than inside it," i.e. two independent components,
+# neither derived from or leading to the other. So no arrows connect
+# them; they're two self-contained boxes side by side, same box/icon/
+# title conventions as the other converted figures but no flow lines.
+SATELLITES_TEX = r"""
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{positioning, calc}
+\begin{document}
+\begin{tikzpicture}[
+  font=\sffamily,
+  box/.style={rectangle, rounded corners=2pt, draw, thick, text width=58mm,
+    minimum height=9mm, font=\sffamily\small, align=center}
+]
+
+% -- Title -------------------------------------------------------------
+\node[font=\sffamily\Large\bfseries, align=center] (title)
+  {Two Systems That Run\\Alongside the Pipeline};
+\node[font=\sffamily\normalsize\itshape, align=center, text width=120mm,
+  below=3mm of title] (subtitle)
+  {``They don't run on every query, but they're what make\\the rest of it trustworthy at scale.''};
+\draw[thin] ($(subtitle.south west)+(0,-1.2mm)$) -- ($(subtitle.south east)+(0,-1.2mm)$);
+
+% -- Two independent boxes, side by side, no arrows ----------------------
+\coordinate (anchor) at ($(subtitle.south)+(0,-13mm)$);
+\node[box, anchor=north east, xshift=-4mm] at (anchor) (eval)
+  {Evaluation\\{\scriptsize\itshape Chapter 11}\\[2mm]
+  Measures how well the pipeline performs, against
+  questions with known correct answers};
+\node[box, anchor=north west, xshift=4mm] at (anchor) (seq)
+  {Sequence Detection\\{\scriptsize\itshape Chapter 12}\\[2mm]
+  Mines what's already indexed for patterns no
+  single query would surface on its own};
+
+% -- Icons ----------------------------------------------------------------
+\begin{scope}[shift={($(eval.west)+(-9mm,0)$)}, thin]
+  \draw (0mm,0mm) circle (1.8mm);
+  \draw (0mm,0mm) circle (0.9mm);
+  \fill (0mm,0mm) circle (0.25mm);
+\end{scope}
+\begin{scope}[shift={($(seq.east)+(9mm,0)$)}, thin]
+  \draw (-1.6mm,-1mm) -- (0mm,0.6mm) -- (1.6mm,-0.4mm);
+  \fill (-1.6mm,-1mm) circle (0.35mm);
+  \fill (0mm,0.6mm) circle (0.35mm);
+  \fill (1.6mm,-0.4mm) circle (0.35mm);
+\end{scope}
+\end{tikzpicture}
+\end{document}
+"""
+
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmp:
         workdir = Path(tmp)
@@ -728,3 +781,5 @@ if __name__ == "__main__":
         print("OK: theory_ch06_qualitygate (main chain + 1 exit path, icons)")
         render_tex("theory_ch08_dualindex", DUAL_INDEX_TEX, workdir)
         print("OK: theory_ch08_dualindex (fan-out fork, icons)")
+        render_tex("theory_ch12_satellites", SATELLITES_TEX, workdir)
+        print("OK: theory_ch12_satellites (two independent boxes, no arrows)")

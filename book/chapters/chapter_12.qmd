@@ -366,15 +366,16 @@ Two more pieces sit alongside this pipeline rather than inside it —
 they don't run on every query, but they're what make the rest of it
 trustworthy at scale:
 
-```
-Evaluation (Chapter 11) ---------- measures how well the pipeline above
-                                    actually performs, against questions
-                                    with known correct answers
+::: {.content-visible when-format="html"}
+::: {.pipeline-diagram}
+![](../figures/diagrams/theory_ch12_satellites_light.svg){.diagram-light width="420"}
+![](../figures/diagrams/theory_ch12_satellites_dark.svg){.diagram-dark width="420"}
+:::
+:::
 
-Sequence detection (Chapter 12) -- mines what the pipeline has already
-                                    indexed for patterns no single query
-                                    would surface on its own
-```
+::: {.content-visible when-format="pdf"}
+![](../figures/diagrams/theory_ch12_satellites.pdf){width="420" fig-align="center"}
+:::
 
 Every stage exists because an earlier, simpler version of this system
 failed at it — a scanned page with no text, a chunk that split a
