@@ -88,7 +88,7 @@ being able to judge what it would take to extend it.
 
 This book borrows the practical-first, project-based spirit of *Python
 Crash Course* [@matthes2023python] — small wins early, theory only when
-the code in front of you needs it, a working artifact at the end of
+the code in front of you needs it, a working artefact at the end of
 every chapter — but assumes considerably less going in. You do not need
 to have written Python before. You do not need to know what a function
 or a loop is before Chapter 1; each concept is explained in plain

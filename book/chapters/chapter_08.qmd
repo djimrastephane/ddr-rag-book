@@ -71,7 +71,7 @@ persistent, loadable index file. (Larger-scale approximate indexes — IVF,
 HNSW — trade a small amount of accuracy for speed at millions of vectors;
 not a tradeoff this book's scale needs.)
 
-Because embeddings are normalized (Chapter 4), inner product *is* cosine
+Because embeddings are normalised (Chapter 4), inner product *is* cosine
 similarity — which is exactly why `IndexFlatIP` is the right index type
 rather than a distance-based one.
 
@@ -336,7 +336,7 @@ order as Chapter 4's brute-force search — report #38 at rank 2, report
 #39 at rank 5.
 
 **You'll know it worked when:** the FAISS-based and brute-force results
-agree — because, mathematically, `IndexFlatIP` over normalized vectors
+agree — because, mathematically, `IndexFlatIP` over normalised vectors
 *is* cosine similarity, just implemented differently.
 
 ## Field notes

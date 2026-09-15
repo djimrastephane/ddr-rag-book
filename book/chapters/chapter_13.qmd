@@ -69,7 +69,7 @@ ingestion possible — and one makes half of it harder than it looks.
 
 **The dense index is append-only, and that's a feature.** FAISS's
 `IndexFlatIP` stores one row per chunk, and `index.add(new_vectors)` bolts
-new rows onto the end. Because Chapter 4's embeddings are normalized and
+new rows onto the end. Because Chapter 4's embeddings are normalised and
 each chunk's vector is computed independently of every other, the vectors
 you add today are identical to the vectors a full rebuild would produce
 for the same chunks. Order doesn't matter; nothing already in the index
@@ -85,7 +85,7 @@ matters (more on that below).
 
 **BM25 is not append-only, and pretending otherwise is a bug.** Chapter
 9's sparse signal scores a term by its rarity across the whole archive
-(inverse document frequency) and normalizes for average document length.
+(inverse document frequency) and normalises for average document length.
 Both of those depend on *every* report. Add one report and every term's
 IDF shifts a little and the average length moves — so the correct BM25
 score for a document you indexed last week is now slightly different. You
@@ -319,7 +319,7 @@ for **333** — the exact total Chapter 8's `build_chunk_metadata_index`
 produces in a single batch pass over all ten reports.
 
 **Why:** each chunk's embedding is computed independently and the vectors
-are normalized, so the row you append today is bit-for-bit the row a
+are normalised, so the row you append today is bit-for-bit the row a
 rebuild would have produced. `IndexFlatIP` is an exact index; append and
 rebuild are two paths to the same place.
 

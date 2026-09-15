@@ -19,7 +19,7 @@ Progress `███████████░░` **11 / 13** &nbsp;·&nbsp; **
 
 By the end of this chapter, you will be able to:
 
-- Build a hand-labeled evaluation set that records, per question, the
+- Build a hand-labelled evaluation set that records, per question, the
   expected source report and page.
 - Compute `recall@k`, Mean Reciprocal Rank (MRR), and `NDCG@k`, and
   explain what each number actually tells you.
@@ -84,7 +84,7 @@ Three metrics, each answering a slightly different question:
   #1, not just somewhere in the top 10 — closer to what a user actually
   experiences.
 - **`NDCG@k`** (Normalized Discounted Cumulative Gain) — like recall, but
-  weights a hit at rank 1 more than a hit at rank 5, and normalizes so
+  weights a hit at rank 1 more than a hit at rank 5, and normalises so
   the score is comparable across queries with different numbers of
   correct answers.
 
@@ -269,7 +269,7 @@ def ndcg_at_k(results: list[dict], k: int) -> float:
 
 Instead of `1 / rank` (MRR), each hit's credit shrinks by `1 / log2(rank
 + 1)` — a gentler slope that still rewards a rank-1 hit the most, still
-penalizes a rank-5 hit, but doesn't fall off quite as sharply. Anything
+penalises a rank-5 hit, but doesn't fall off quite as sharply. Anything
 outside the top `k` scores zero, same as `recall@k`.
 
 Each `result` dict records, per evaluation question, the rank at which
@@ -288,7 +288,7 @@ deployment. A few realities worth planning for:
   Part I sample won't stay representative of a live system fielding real
   engineers' questions
 - tuning the retrieval pipeline specifically to score well against your
-  own evaluation set risks overfitting to it — the same way memorizing an
+  own evaluation set risks overfitting to it — the same way memorising an
   exam's specific questions isn't the same as knowing the material.
   Holding some questions back, or continuously adding new ones, keeps the
   score honest
@@ -396,7 +396,7 @@ before this system sees a real, full-scale archive.
 | `DDR_UTAH_FORGE/scripts/run_eval.py` | Evaluation harness (companion repo — requires DDR_UTAH_FORGE) — ready to point at a Utah FORGE question set once you build one |
 
 ::: {.callout-caution title="CHECKPOINT — Chapter 11"}
-- [x] Built a hand-labeled evaluation set with known correct answers
+- [x] Built a hand-labelled evaluation set with known correct answers
 - [x] Computed `recall@k`, MRR, and `NDCG@k`, and can explain what each one tells you
 - [x] Tracked one hard question across every retrieval method in this book
 - [x] Reported results broken down by category instead of one aggregate score

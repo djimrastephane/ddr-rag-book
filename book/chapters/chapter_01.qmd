@@ -65,7 +65,7 @@ commercial operator's confidential asset, its DDRs are openly available —
 which means every example in this book is real, traceable text, not an
 invented stand-in.
 
-Before we can search this archive, summarize it, or ask it questions, we
+Before we can search this archive, summarise it, or ask it questions, we
 need the words inside those PDFs available to a computer as plain text.
 That's the whole job of this chapter: given one PDF, get its text into
 something Python can work with. Nothing clever yet — no search, no

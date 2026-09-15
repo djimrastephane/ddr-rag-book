@@ -200,7 +200,7 @@ they never need repeating:
   commitment before you start.
 - **CHECKPOINT** — a checklist near the end of each chapter, confirming
   the specific skills you just gained.
-- **WHAT YOU BUILT** — a green box naming the concrete artifact (a
+- **WHAT YOU BUILT** — a green box naming the concrete artefact (a
   script, an index, a pipeline) you now have, distinct from the
   conceptual "Key takeaways" earlier in the chapter.
 - **Field notes** 🔧 — a real operational vignette: something an

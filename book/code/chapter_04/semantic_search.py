@@ -52,7 +52,7 @@ def search(model: SentenceTransformer, query: str, filenames: list[str],
     only the best matches.
     """
     query_vec = model.encode([query], normalize_embeddings=True)[0]
-    scores = embeddings @ query_vec  # cosine similarity, since vectors are normalized
+    scores = embeddings @ query_vec  # cosine similarity, since vectors are normalised
     top_indices = np.argsort(-scores)[:top_k]
     return [(filenames[i], float(scores[i])) for i in top_indices]
 

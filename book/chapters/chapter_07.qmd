@@ -21,7 +21,7 @@ By the end of this chapter, you will be able to:
 
 - Explain why chunk size is measured in tokens, not characters or words.
 - Implement token-based chunking with overlap using `tiktoken`.
-- Implement segment-aware chunking that breaks at natural report
+- Sketch a segment-aware chunking approach that breaks at natural report
   boundaries (section headers) instead of at an arbitrary character count.
 
 ## Operational Problem

@@ -92,7 +92,7 @@ traceable and already fully verified with real text.
 
 The companion pipeline's `src/ddr_rag/causality_analyzer.py` — part of
 `DDR_UTAH_FORGE`, not this book's repository — implements exactly this
-kind of check, generalized: for a given term, it compares frequency in a
+kind of check, generalised: for a given term, it compares frequency in a
 window before and after a boundary date, and labels a term **causal**
 only above a defined post-boundary NPT rate, and **escalating** only
 above a defined frequency-increase ratio. The thresholds below are
@@ -285,7 +285,7 @@ in prose, one day after the structured number spiked.
 **Lesson:** a single structured signal, however precise, is one thread
 of a larger story. Report #39 is exactly the kind of continuation a
 torque-only check would miss entirely, but that hybrid retrieval and
-narrative search (Chapters 3-9 combined) can still surface. That's the
+narrative search (Chapters 3–9 combined) can still surface. That's the
 whole book's argument, compressed into one field note: no single
 technique in this book is sufficient alone — structured checks,
 narrative retrieval, and traceable generation each catch what the others
@@ -317,7 +317,7 @@ solution is in `code/chapter_12/challenge/`.
   before running it.
 - Genuine cross-well intelligence needs more than one well's worth of
   data to compare against — Utah FORGE's `data/fields/UtahForge/wells/`
-  structure in the companion pipeline is already organized to support
+  structure in the companion pipeline is already organised to support
   additional wells as this research programme (or your own multi-well
   archive) grows.
 

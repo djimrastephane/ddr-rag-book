@@ -16,7 +16,7 @@ dataset but likely to appear in others.
 
 | Abbreviation | Expansion |
 |---|---|
-| AFE | authorization for expenditure (FORGE) |
+| AFE | authorisation for expenditure (FORGE) |
 | BHA | bottom hole assembly (FORGE) |
 | BOP | blowout preventer (FORGE) |
 | CBL | cement bond log |

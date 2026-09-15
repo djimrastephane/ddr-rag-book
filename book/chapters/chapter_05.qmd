@@ -501,7 +501,7 @@ a feeling.
 **`first_rag.py`** — a working RAG *prototype*: ask it a question in plain
 English, and it retrieves evidence, generates an answer with a local
 model, and hands back the source reports and excerpts that answer is
-traceable to. This is Part I's capstone artifact — and the known limits
+traceable to. This is Part I's capstone artefact — and the known limits
 you just saw in this chapter (evidence width, fabricated page numbers)
 are exactly what Part II hardens.
 :::

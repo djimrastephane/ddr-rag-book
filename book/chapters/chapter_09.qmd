@@ -103,7 +103,7 @@ substantially slower per comparison — which is exactly why it's applied
 after fusion has already narrowed the field, not instead of it.
 
 ::: {.callout-tip title="Engineering Translation: Cross-encoder"}
-A dense embedding is like summarizing the query and each report
+A dense embedding is like summarising the query and each report
 separately, then comparing the two summaries from a distance. A
 **cross-encoder** instead reads the query and one candidate passage
 *side by side, together*, and judges the pair directly — closer to how a

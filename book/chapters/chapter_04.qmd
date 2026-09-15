@@ -215,7 +215,7 @@ A ranked list of `(filename, score)` pairs, highest similarity first.
 def search(model: SentenceTransformer, query: str, filenames: list[str],
            embeddings: np.ndarray, top_k: int = 3) -> list[tuple[str, float]]:
     query_vec = model.encode([query], normalize_embeddings=True)[0]
-    scores = embeddings @ query_vec  # cosine similarity, since vectors are normalized
+    scores = embeddings @ query_vec  # cosine similarity, since vectors are normalised
     top_indices = np.argsort(-scores)[:top_k]
     return [(filenames[i], float(scores[i])) for i in top_indices]
 ```
@@ -223,7 +223,7 @@ def search(model: SentenceTransformer, query: str, filenames: list[str],
 **What just happened?**
 
 The query got turned into its own vector, then compared against every
-report's vector at once. Because every vector was normalized to the same
+report's vector at once. Because every vector was normalised to the same
 length in Step 2, one matrix multiplication (`embeddings @ query_vec`)
 gives back the cosine similarity for every report simultaneously —
 that's the "arithmetic" that replaces exact word matching.

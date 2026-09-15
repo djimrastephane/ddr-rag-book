@@ -404,7 +404,7 @@ A reference solution is in `code/chapter_10/challenge/`.
   check, not just a citation-shaped sentence.
 - A citation is only as trustworthy as where its fields come from — a
   hand-typed `page=1` proves the data structure works, not that the
-  system can produce one. Chapters 7-10 wire the real value through:
+  system can produce one. Chapters 7–10 wire the real value through:
   Chapter 1's page markers, Chapter 7's per-page chunking, Chapter 8's
   chunk metadata, read back here. Not every field needs that much
   plumbing, though — the report date was sitting in the filename the

@@ -378,8 +378,10 @@ encounter the real noisy data it's meant to catch.
 
 ::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}
 **`ocr_quality_gate.py`** — an OCR quality gate: score any extracted text
-against four cheap heuristics and decide, automatically, whether it's
-trustworthy enough to index or needs a human to review it first.
+against two cheap heuristics and decide, automatically, whether it's
+trustworthy enough to index or needs a human to review it first. (The
+companion pipeline's production version checks two more — see Theory,
+above.)
 :::
 
 ## What can you do now that you couldn't do before?
