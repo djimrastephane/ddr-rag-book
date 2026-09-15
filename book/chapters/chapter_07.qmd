@@ -158,6 +158,21 @@ import tiktoken
 
 def chunk_text_by_tokens(text: str, chunk_tokens: int = 200,
                           overlap_tokens: int = 40) -> list[str]:
+    if chunk_tokens <= 0:
+        raise ValueError(
+            f"chunk_tokens must be a positive number of tokens, got {chunk_tokens}."
+        )
+    if overlap_tokens < 0:
+        raise ValueError(
+            f"overlap_tokens can't be negative, got {overlap_tokens}."
+        )
+    if overlap_tokens >= chunk_tokens:
+        raise ValueError(
+            f"overlap_tokens ({overlap_tokens}) must be smaller than chunk_tokens "
+            f"({chunk_tokens}) -- otherwise each step forward is zero or negative "
+            f"and the sliding window never makes progress through the text."
+        )
+
     enc = tiktoken.get_encoding("cl100k_base")
     tokens = enc.encode(text.strip())
     chunks, start = [], 0
@@ -176,6 +191,14 @@ The text got converted into tokens, then sliced into fixed-size windows
 that each step forward by less than a full window's width — that gap is
 the overlap, and it's what keeps a sentence sitting near a boundary from
 being fully lost to one side or the other.
+
+The three checks up front rule out inputs that would otherwise make the
+sliding window misbehave silently: a `chunk_tokens` of zero or less can
+never produce a chunk at all, a negative `overlap_tokens` doesn't mean
+anything, and an `overlap_tokens` that's too large makes `start` stop
+moving forward — the loop would then either run forever or repeat the
+same chunk endlessly instead of stopping with a clear message about
+what went wrong.
 
 This is a direct simplification of `chunk_text_by_tokens()` in the
 companion repository — same sliding-window-with-overlap logic, without
@@ -223,8 +246,18 @@ def split_pages(pages_text: str) -> list[tuple[int, str]]:
 
 def chunk_pages_by_tokens(pages_text: str, chunk_tokens: int = 60,
                           overlap_tokens: int = 15) -> list[tuple[int, str]]:
+    pages = split_pages(pages_text)
+    if not pages:
+        raise ValueError(
+            "No '--- Page N ---' markers found in this text, so it can't be "
+            "split into pages. chunk_pages_by_tokens() expects text from "
+            "Chapter 1's extract_text() (or a .txt file it wrote) -- for "
+            "plain text without page markers, use chunk_text_by_tokens() "
+            "instead."
+        )
+
     chunks_with_pages = []
-    for page_number, page_text in split_pages(pages_text):
+    for page_number, page_text in pages:
         for chunk in chunk_text_by_tokens(page_text, chunk_tokens, overlap_tokens):
             chunks_with_pages.append((page_number, chunk))
     return chunks_with_pages
@@ -239,6 +272,12 @@ into `(page_number, page_text)` pairs. `chunk_pages_by_tokens` then chunks
 per page instead of chunking the whole joined document is what actually
 guarantees no chunk can straddle two pages: the token window in Step 1
 never sees more than one page's text at a time.
+
+The empty-`pages` check exists because this function's whole job depends
+on those markers being there: text that was never run through Chapter
+1's `extract_text()` (or had its markers stripped) has no page to attach
+a chunk to, and silently returning an empty list would look like "this
+report has no chunks" instead of "this text can't be paginated at all."
 
 Run this against report #38's real text and it produces **37 chunks**,
 every one correctly labelled `page 1` — because every DDR in this sample

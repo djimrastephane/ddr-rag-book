@@ -145,9 +145,17 @@ from dataclasses import dataclass
 class Citation:
     report: str
     page: int | None = None
+    report_date: str | None = None
 
 def format_evidence(citations: list[Citation]) -> str:
-    lines = [f"  {c.report}" + (f" page {c.page}" if c.page else "") for c in citations]
+    lines = []
+    for c in citations:
+        line = f"  {c.report}"
+        if c.page:
+            line += f" page {c.page}"
+        if c.report_date:
+            line += f" ({c.report_date})"
+        lines.append(line)
     return "Evidence:\n" + "\n".join(lines)
 ```
 

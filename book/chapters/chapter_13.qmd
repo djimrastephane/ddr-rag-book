@@ -150,7 +150,7 @@ from pathlib import Path
 
 def load_state(index_path, meta_path):
     if index_path.exists() and meta_path.exists():
-        return load_index(index_path), json.loads(meta_path.read_text())
+        return load_index(index_path), json.loads(meta_path.read_text(encoding="utf-8"))
     return None, []
 ```
 
@@ -185,9 +185,19 @@ and a status string.
 #| eval: false
 import faiss
 
+def already_ingested(metadata, report):
+    return any(record["report"] == report for record in metadata)
+
 def ingest_report(pdf_path, model, index, metadata):
+    if not pdf_path.exists():
+        raise FileNotFoundError(
+            f"{pdf_path} does not exist -- check the path. It's usually "
+            f"relative to the book/ directory, e.g. "
+            f"datasets/sample_ddrs/<filename>.pdf."
+        )
+
     report = pdf_path.name
-    if any(m["report"] == report for m in metadata):        # skip if already added
+    if already_ingested(metadata, report):                  # skip if already added
         return index, 0, "skipped (already ingested)"
 
     text = extract_text(pdf_path)                            # Chapter 1
@@ -195,13 +205,13 @@ def ingest_report(pdf_path, model, index, metadata):
     if gate["reject_ocr"]:
         return index, 0, f"rejected by quality gate: {gate['flags']}"
 
+    date = report_date(report)                               # Chapter 8
     pairs = chunk_pages_by_tokens(text, 60, 15)              # Chapter 7
     vectors = embed_texts(model, [c for _p, c in pairs]).astype("float32")  # Chapter 4
 
     if index is None:
         index = faiss.IndexFlatIP(vectors.shape[1])
     index.add(vectors)                                       # <- append, not rebuild
-    date = report_date(report)                               # Chapter 8
     for page, _chunk in pairs:
         metadata.append({"report": report, "page": page, "date": date})
 
@@ -210,7 +220,11 @@ def ingest_report(pdf_path, model, index, metadata):
 
 **What just happened?**
 
-Read top to bottom, this is the daily loop in one function. The
+The path check comes before anything else: without it, handing this
+function a typo'd filename would fail deep inside `extract_text()`, with
+a long, confusing error from Chapter 1's PDF-reading code instead of the
+clear message above pointing at the actual mistake. Read top to bottom
+after that, this is the daily loop in one function. The
 duplicate check comes *first*, because an append-only index can't take
 it back afterwards. The quality gate runs before anything gets indexed, so
 bad OCR is routed to review instead of silently polluting the index. Then

@@ -144,11 +144,12 @@ instead.
 
 **Expected Output**
 
-A dictionary reporting the decision and which specific checks failed, for
-example:
+A dictionary reporting the decision, which specific checks failed, and
+the underlying numbers those checks were based on, for example:
 
 ```
-{"reject_ocr": True, "flags": {"low_text_density": True, "high_symbol_ratio": True}}
+{"reject_ocr": True, "flags": {"low_text_density": True, "high_symbol_ratio": True},
+ "chars": 43, "alpha_words": 5, "symbol_ratio": 0.61}
 ```
 
 ```{python}
@@ -170,7 +171,13 @@ def evaluate_ocr_quality(text: str, min_chars: int = 200,
         "high_symbol_ratio": symbol_ratio > max_symbol_ratio,
     }
     active = [k for k, v in flags.items() if v]
-    return {"reject_ocr": len(active) >= reject_min_flags, "flags": flags}
+    return {
+        "reject_ocr": len(active) >= reject_min_flags,
+        "flags": flags,
+        "chars": len(text),
+        "alpha_words": len(alpha_tokens),
+        "symbol_ratio": symbol_ratio,
+    }
 ```
 
 **What just happened?**

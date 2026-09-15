@@ -205,7 +205,20 @@ from collections import defaultdict
 
 def reciprocal_rank_fusion(ranked_lists: list[list[str]], k: int = 20,
                             weights: list[float] | None = None) -> list[tuple[str, float]]:
-    weights = weights or [1.0] * len(ranked_lists)
+    if not ranked_lists:
+        return []
+
+    if weights is None:
+        weights = [1.0] * len(ranked_lists)
+    elif len(weights) != len(ranked_lists):
+        raise ValueError(
+            f"weights has {len(weights)} entries but ranked_lists has "
+            f"{len(ranked_lists)} -- pass exactly one weight per ranked list "
+            f"(or leave weights=None to weight every list equally). zip() "
+            f"would otherwise silently drop whichever lists don't have a "
+            f"matching weight."
+        )
+
     scores: dict[str, float] = defaultdict(float)
     for ranked_list, weight in zip(ranked_lists, weights):
         for rank, doc_id in enumerate(ranked_list, start=1):
@@ -225,6 +238,14 @@ item[1]` on the sort line is just Python's way of saying "order by the
 second thing in each pair" — here, the fused score rather than the report
 name.)
 
+The `weights` check exists because `zip(ranked_lists, weights)` doesn't
+error on a length mismatch — it just silently stops at whichever list
+runs out first, quietly dropping any ranked list past the end of a
+too-short `weights` list. That's a fusion bug that would produce a
+plausible-looking ranking while silently ignoring a whole retrieval
+method, so it's rejected outright instead of being allowed to happen
+quietly.
+
 ### Step 2: turn that into a real hybrid search
 
 `reciprocal_rank_fusion` fuses ranked lists — but it needs two of them to
@@ -238,15 +259,30 @@ plain term-frequency fallback if `rank-bm25` isn't installed):
 ```{python}
 #| eval: false
 # code/chapter_09/sparse_ranking.py
-from rank_bm25 import BM25Okapi
+from pathlib import Path
 
-def rank_bm25(text_dir, query):
+def rank_bm25(text_dir: Path, query: str) -> list[str]:
     paths = sorted(text_dir.glob("*.txt"))
     corpus = [tokenize(p.read_text(encoding="utf-8")) for p in paths]
-    scores = BM25Okapi(corpus).get_scores(tokenize(query))
-    ranked = sorted(zip(paths, scores), key=lambda ps: ps[1], reverse=True)
-    return [p.name for p, _ in ranked]
+    query_tokens = tokenize(query)
+
+    try:
+        from rank_bm25 import BM25Okapi
+        scores = BM25Okapi(corpus).get_scores(query_tokens)
+    except ImportError:
+        query_set = set(query_tokens)
+        scores = [sum(1 for token in doc if token in query_set) for doc in corpus]
+
+    ranked = sorted(zip(paths, scores), key=lambda pair: pair[1], reverse=True)
+    return [path.name for path, _score in ranked]
 ```
+
+The `import` for `rank_bm25` sits inside the `try`, right where it's
+used, not at the top of the file — that's what makes the fallback
+actually reachable. An import at the top of the file runs the moment
+the file loads, before `rank_bm25()` is ever called, so a missing
+`rank-bm25` package would stop the whole script immediately instead of
+letting this function fall back to the plain term-frequency count.
 
 With both ranked signals in hand, `hybrid_search()` in
 `code/chapter_09/hybrid_search.py` runs all three steps end to end: BM25

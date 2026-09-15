@@ -215,6 +215,7 @@ answer and the exact list of reports it was allowed to use.
 - The embedding model, filenames, texts, and embeddings from Chapter 4.
 - `llm_call`: any function that takes a prompt string and returns the
   model's answer.
+- `top_k`: how many reports to retrieve as evidence, defaulting to 3.
 
 **Expected Output**
 
@@ -224,8 +225,8 @@ that were actually retrieved and shown to the model.
 ```{python}
 #| eval: false
 def answer_question(question: str, model, filenames, texts, embeddings,
-                     llm_call) -> tuple[str, list[str]]:
-    retrieved = search(model, question, filenames, embeddings, top_k=3)
+                     llm_call, top_k: int = 3) -> tuple[str, list[str]]:
+    retrieved = search(model, question, filenames, embeddings, top_k=top_k)
     prompt = build_prompt(question, retrieved, filenames, texts)
     answer_text = llm_call(prompt)  # plug in your LLM of choice
     evidence = [filename for filename, _score in retrieved]
@@ -293,9 +294,10 @@ mix.
 tied to it — pass any model you've pulled to `ollama_llm_call(model=...)`.
 Pick whatever runs comfortably on your hardware: `llama3.1:8b` or
 `mistral` are similar in size, `qwen2.5:14b` is stronger if you have the
-memory for it, and swapping the one HTTP call for a hosted API's would let
-you point at a cloud model instead. The retrieval and prompt work above
-doesn't change either way — only which model reads the evidence.
+memory for it. `host` is configurable too — point it at another machine
+on the network running Ollama, or swap the one HTTP call for a hosted
+API's to use a cloud model instead. The retrieval and prompt work
+above doesn't change either way — only which model reads the evidence.
 
 `ollama_llm_call` talks to that local server over plain HTTP — standard
 library only, no extra package to install, and a clear message instead of
@@ -307,15 +309,23 @@ import json
 import urllib.error
 import urllib.request
 
-def ollama_llm_call(prompt: str, model: str = "qwen2.5:7b-instruct") -> str:
+def ollama_llm_call(prompt: str, model: str = "qwen2.5:7b-instruct",
+                    host: str = "http://localhost:11434") -> str:
     payload = json.dumps({"model": model, "prompt": prompt, "stream": False}).encode()
-    request = urllib.request.Request("http://localhost:11434/api/generate", data=payload,
-                                     headers={"Content-Type": "application/json"})
+    request = urllib.request.Request(
+        f"{host}/api/generate", data=payload,
+        headers={"Content-Type": "application/json"},
+    )
     try:
         with urllib.request.urlopen(request, timeout=120) as response:
             return json.loads(response.read())["response"].strip()
     except (urllib.error.URLError, OSError) as error:
-        return f"[Ollama not reachable: {error}. See setup above; retrieval still ran.]"
+        return (
+            f"[Ollama not reachable at {host}: {error}. Install it from "
+            f"ollama.com, run `ollama pull {model}` then `ollama serve`, and "
+            f"re-run. Retrieval and prompt assembly still worked above — only "
+            f"generation was skipped.]"
+        )
 ```
 
 Run the whole system against the single best-matching report:
