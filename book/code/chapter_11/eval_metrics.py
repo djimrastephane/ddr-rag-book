@@ -7,10 +7,33 @@ Usage:
 import math
 
 
+def _validate_ranks(results: list[dict]) -> None:
+    """Enforce this module's one shared contract: every `rank` is either
+    `None` (not found) or a 1-indexed integer >= 1. Rank 1 is the best
+    possible score, so there's no such thing as rank 0.
+
+    Checked explicitly, up front, in all three metrics below -- rather
+    than left to whichever ones happen to divide by `rank` to reject a
+    bad value by accident. Dividing would turn an invalid rank of 0 into
+    a confusing `ZeroDivisionError`; recall_at_k(), which never divides
+    by rank, would otherwise silently count it as a valid hit at the top
+    position instead of rejecting it at all. Neither is an acceptable
+    way to fail on bad input.
+    """
+    for r in results:
+        rank = r.get("rank")
+        if rank is not None and rank < 1:
+            raise ValueError(
+                f"rank must be None (not found) or an integer >= 1 "
+                f"(ranks are 1-indexed), got {rank!r} for {r!r}."
+            )
+
+
 def recall_at_k(results: list[dict], k: int) -> float:
     """Fraction of questions where the correct report appeared anywhere
     in the top k retrieved results. `rank` is None if it wasn't found at
     all within whatever top-k window the retrieval step considered."""
+    _validate_ranks(results)
     hits = [r for r in results if r.get("rank") is not None and r["rank"] <= k]
     return len(hits) / len(results) if results else 0.0
 
@@ -28,6 +51,7 @@ def mrr(results: list[dict]) -> float:
     r.get("rank")`) would silently misread a 0-indexed rank of 0 as
     "not found" instead of a hit.
     """
+    _validate_ranks(results)
     scores = [1.0 / r["rank"] if r.get("rank") is not None else 0.0 for r in results]
     return sum(scores) / len(scores) if scores else 0.0
 
@@ -48,6 +72,7 @@ def ndcg_at_k(results: list[dict], k: int) -> float:
     "was it found, and within k" check below uses `is not None` rather
     than truthiness for the same reason.
     """
+    _validate_ranks(results)
     scores = []
     for r in results:
         rank = r.get("rank")

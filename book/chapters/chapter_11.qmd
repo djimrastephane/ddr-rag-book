@@ -163,7 +163,18 @@ correct report was within the top `k`.
 ```{python}
 #| eval: false
 # code/chapter_11/eval_metrics.py
+def _validate_ranks(results: list[dict]) -> None:
+    for r in results:
+        rank = r.get("rank")
+        if rank is not None and rank < 1:
+            raise ValueError(
+                f"rank must be None (not found) or an integer >= 1 "
+                f"(ranks are 1-indexed), got {rank!r} for {r!r}."
+            )
+
+
 def recall_at_k(results: list[dict], k: int) -> float:
+    _validate_ranks(results)
     hits = [r for r in results if r.get("rank") is not None and r["rank"] <= k]
     return len(hits) / len(results) if results else 0.0
 ```
@@ -174,6 +185,15 @@ For each question, this checks whether the correct report's rank is
 within `k` — a plain hit or miss — then reports what fraction of all
 questions counted as a hit. It says nothing about *how close to the top*
 a hit was, which is exactly the gap the next two metrics fill.
+
+All three metrics in this chapter share the same one-sentence contract:
+`rank` is either `None` (not found) or a 1-indexed integer of 1 or
+higher — there's no such thing as rank 0. `_validate_ranks()` checks
+that up front, once, and raises a clear error naming the offending
+result rather than letting each metric discover a bad rank on its own
+however it happens to (silently miscounting it, or crashing on a
+division deep inside the calculation). All three functions below call
+it before doing anything else.
 
 ### Step 2: reward landing near the top, not just anywhere
 
@@ -195,6 +215,7 @@ the top, lower when they're buried further down or missing.
 ```{python}
 #| eval: false
 def mrr(results: list[dict]) -> float:
+    _validate_ranks(results)
     scores = [1.0 / r["rank"] if r.get("rank") is not None else 0.0 for r in results]
     return sum(scores) / len(scores) if scores else 0.0
 ```
@@ -208,10 +229,11 @@ far more than answers merely present somewhere in the list.
 
 The "was it found" check is `r.get("rank") is not None`, not `if
 r.get("rank")`. Ranks in this book are 1-indexed — rank 1 is the best
-possible score — so `None` is the only value that means "not found."
-A plain truthiness check would misread a (here, never-occurring) rank
-of `0` as a miss instead of a hit; `is not None` says exactly what's
-meant regardless of what rank values a future retrieval step produces.
+possible score — so `None` is the only value that means "not found." A
+plain truthiness check would misread a rank of `0` as a miss instead of
+a hit; by this point `_validate_ranks()` has already rejected `0`
+outright, but `is not None` is still the correct check in general, for
+any value the contract allows.
 
 ### Step 3: give partial credit based on exact position
 
@@ -234,6 +256,7 @@ hit at rank 5, and anything beyond `k` counts as zero.
 #| eval: false
 def ndcg_at_k(results: list[dict], k: int) -> float:
     import math
+    _validate_ranks(results)
     scores = []
     for r in results:
         rank = r.get("rank")
