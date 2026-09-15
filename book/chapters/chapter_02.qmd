@@ -27,7 +27,7 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Diego, the completions engineer, wants next chapter's search tool to
+Carlos, the completions engineer, wants next chapter's search tool to
 answer: *"Show me every report that mentions the bottom hole assembly."*
 Will it find
 report #38? Open the `.txt` file you extracted from it in Chapter 1 and
@@ -248,7 +248,7 @@ archive.
 
 🟢 **Beginner**
 
-**Try it yourself:** Help Diego get his answer — run the expander against
+**Try it yourself:** Help Carlos get his answer — run the expander against
 `FORGE-16A-78-32_Drilling_038_2020-11-26.txt`.
 
 **You'll know it worked when:** `Pick up Curve assembly 2, BHA 21` becomes

@@ -29,7 +29,7 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Retrieval (Chapter 4) gets you the right passages. What Diego, the
+Retrieval (Chapter 4) gets you the right passages. What Carlos, the
 completions engineer, actually wants is an answer: *"What led to the
 fishing operation on report #50?"* — not two ranked text chunks he has
 to read and synthesise himself. But a generated answer that isn't
