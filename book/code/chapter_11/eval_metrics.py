@@ -21,8 +21,14 @@ def mrr(results: list[dict]) -> float:
     This rewards ranking the right answer FIRST, not just somewhere in
     the results -- closer to what a user actually experiences than
     recall@k alone.
+
+    `rank` must be `None` (not found) or an integer >= 1 -- ranks are
+    1-indexed throughout this book, so `r.get("rank") is not None` is
+    the correct "was it found" check. A plain truthiness check (`if
+    r.get("rank")`) would silently misread a 0-indexed rank of 0 as
+    "not found" instead of a hit.
     """
-    scores = [1.0 / r["rank"] if r.get("rank") else 0.0 for r in results]
+    scores = [1.0 / r["rank"] if r.get("rank") is not None else 0.0 for r in results]
     return sum(scores) / len(scores) if scores else 0.0
 
 
@@ -31,11 +37,22 @@ def ndcg_at_k(results: list[dict], k: int) -> float:
     rank 1 counts for more than a hit at rank k -- log2(rank + 1) grows
     slowly, so the "discount" for being ranked lower is gentle at first
     and steeper further down.
+
+    This assumes exactly one relevant document per question, at an ideal
+    rank of 1 -- which makes the ideal DCG (IDCG) exactly
+    1/log2(1+1) = 1.0, so dividing by it is a no-op and is skipped here.
+    Do not reuse this function for an eval set with more than one
+    relevant document per question without adding an explicit IDCG term.
+
+    As in mrr() above, `rank` must be `None` or an integer >= 1; the
+    "was it found, and within k" check below uses `is not None` rather
+    than truthiness for the same reason.
     """
     scores = []
     for r in results:
         rank = r.get("rank")
-        scores.append(1.0 / math.log2(rank + 1) if rank and rank <= k else 0.0)
+        found_within_k = rank is not None and rank <= k
+        scores.append(1.0 / math.log2(rank + 1) if found_within_k else 0.0)
     return sum(scores) / len(scores) if scores else 0.0
 
 
