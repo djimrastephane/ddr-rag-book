@@ -683,7 +683,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single number between 0 and 1 — the fraction of questions where the correct report was within the top <code>k</code>.</p>
-<div id="627f8c82" class="cell" data-execution_count="1">
+<div id="e256625c" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_11/eval_metrics.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _validate_ranks(results: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> r <span class="kw">in</span> results:</span>
@@ -714,7 +714,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single average score: higher when correct answers tend to rank near the top, lower when they’re buried further down or missing.</p>
-<div id="88f34568" class="cell" data-execution_count="2">
+<div id="44ed6282" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mrr(results: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    _validate_ranks(results)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> [<span class="fl">1.0</span> <span class="op">/</span> r[<span class="st">"rank"</span>] <span class="cf">if</span> r.get(<span class="st">"rank"</span>) <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> <span class="fl">0.0</span> <span class="cf">for</span> r <span class="kw">in</span> results]</span>
@@ -734,7 +734,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single average score, weighted so a hit at rank 1 counts more than a hit at rank 5, and anything beyond <code>k</code> counts as zero.</p>
-<div id="2bb1758b" class="cell" data-execution_count="3">
+<div id="2226f8ae" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ndcg_at_k(results: <span class="bu">list</span>[<span class="bu">dict</span>], k: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> math</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    _validate_ranks(results)</span>
@@ -764,7 +764,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 <h2 data-number="11.7" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">11.7</span> Practical exercise</h2>
 <p>🟢 <strong>Beginner</strong></p>
 <p><strong>Try it yourself:</strong> Run the five questions above through Chapter 9’s <code>hybrid_search()</code> over the ten-report sample archive, record each correct report’s rank, and compute <code>recall@3</code> by hand.</p>
-<p><strong>You’ll know it worked when:</strong> you have a small CSV or JSON file mapping question → expected report → observed rank, and a <code>recall@3</code> score you can quote and defend — because you wrote and verified every question yourself. On this five-question set every expected report lands in the top three, so <code>recall@3</code> comes out to 1.0; don’t read that as “retrieval is solved,” though — five hand-picked, distinctly-worded questions over ten reports is the easiest case there is, which is exactly why the challenge below scales it up to fifteen questions over all 76.</p>
+<p><strong>You’ll know it worked when:</strong> you have a small CSV or JSON file mapping question → expected report → observed rank, and a <code>recall@3</code> score you can quote and defend — because you wrote and verified every question yourself. On this five-question set every expected report lands in the top three, so <code>recall@3</code> comes out to 1.0 — and if you also run <code>mrr()</code> and <code>ndcg_at_k()</code> against the same five ranks, expect similarly high numbers for the same reason. Don’t read any of the three as “retrieval is solved,” though — five hand-picked, distinctly-worded questions over ten reports is the easiest case there is, which is exactly why the challenge below scales it up to fifteen questions over all 76.</p>
 </section>
 <section id="field-notes" class="level2" data-number="11.8">
 <h2 data-number="11.8" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">11.8</span> Field notes</h2>
@@ -1668,114 +1668,116 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 <span id="cb6-318"><a href="#cb6-318" aria-hidden="true" tabindex="-1"></a>question → expected report → observed rank, and a <span class="in">`recall@3`</span> score you</span>
 <span id="cb6-319"><a href="#cb6-319" aria-hidden="true" tabindex="-1"></a>can quote and defend — because you wrote and verified every question</span>
 <span id="cb6-320"><a href="#cb6-320" aria-hidden="true" tabindex="-1"></a>yourself. On this five-question set every expected report lands in the</span>
-<span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a>top three, so <span class="in">`recall@3`</span> comes out to 1.0; don't read that as "retrieval</span>
-<span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a>is solved," though — five hand-picked, distinctly-worded questions over</span>
-<span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a>ten reports is the easiest case there is, which is exactly why the</span>
-<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a>challenge below scales it up to fifteen questions over all 76.</span>
-<span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
+<span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a>top three, so <span class="in">`recall@3`</span> comes out to 1.0 — and if you also run <span class="in">`mrr()`</span></span>
+<span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a>and <span class="in">`ndcg_at_k()`</span> against the same five ranks, expect similarly high</span>
+<span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a>numbers for the same reason. Don't read any of the three as "retrieval</span>
+<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a>is solved," though — five hand-picked, distinctly-worded questions over</span>
+<span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a>ten reports is the easiest case there is, which is exactly why the</span>
+<span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a>challenge below scales it up to fifteen questions over all 76.</span>
 <span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="🔧 Field notes: 'better' isn't monotonic — track one hard question across every chapter"}</span>
-<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a>**Action:** track report #39's rank for the query <span class="in">`"stuck pipe"`</span> through</span>
-<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>every retrieval method this book has built so far, instead of just</span>
-<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a>looking at one final aggregate score.</span>
-<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>**Result:**</span>
+<span id="cb6-328"><a href="#cb6-328" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
+<span id="cb6-329"><a href="#cb6-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-330"><a href="#cb6-330" aria-hidden="true" tabindex="-1"></a>::: {.callout-important title="🔧 Field notes: 'better' isn't monotonic — track one hard question across every chapter"}</span>
+<span id="cb6-331"><a href="#cb6-331" aria-hidden="true" tabindex="-1"></a>**Action:** track report #39's rank for the query <span class="in">`"stuck pipe"`</span> through</span>
+<span id="cb6-332"><a href="#cb6-332" aria-hidden="true" tabindex="-1"></a>every retrieval method this book has built so far, instead of just</span>
+<span id="cb6-333"><a href="#cb6-333" aria-hidden="true" tabindex="-1"></a>looking at one final aggregate score.</span>
 <span id="cb6-334"><a href="#cb6-334" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a><span class="in">Chapter 3  keyword (AND)         not found at all   (0 of 10)</span></span>
-<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a><span class="in">Chapter 4  dense, whole-document  rank 5 of 10</span></span>
-<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a><span class="in">Chapter 9  hybrid, pipeline weights (BM25x2.0/dense x0.5)  rank 9 of 10</span></span>
-<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a><span class="in">Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</span></span>
-<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a>**Why:** each chapter's technique is a genuine improvement *in general* —</span>
-<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a>that's not in question. But this specific, operationally important</span>
-<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a>question doesn't improve monotonically as the pipeline gets more</span>
-<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a>sophisticated. It gets a little better (Chapter 4), then gets worse</span>
-<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a>twice in a row (Chapter 9's two weightings) before hybrid retrieval's</span>
-<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a>other strengths (Chapter 9's <span class="in">`"packers fishing"`</span> example) show up</span>
-<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a>clearly.</span>
-<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a>**Lesson:** a single aggregate metric — <span class="in">`recall@5`</span> averaged across your</span>
-<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a>whole evaluation set — can climb steadily from chapter to chapter while</span>
-<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a>a specific, real question you care about gets worse. This is exactly why</span>
-<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a>Chapter 9 insisted on per-category breakdowns and why this chapter opened</span>
-<span id="cb6-354"><a href="#cb6-354" aria-hidden="true" tabindex="-1"></a>by building your own question set rather than trusting someone else's</span>
-<span id="cb6-355"><a href="#cb6-355" aria-hidden="true" tabindex="-1"></a>summary number: the only way to know if *your* hard questions are</span>
-<span id="cb6-356"><a href="#cb6-356" aria-hidden="true" tabindex="-1"></a>improving is to track them individually, the way this table just did.</span>
-<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
+<span id="cb6-335"><a href="#cb6-335" aria-hidden="true" tabindex="-1"></a>**Result:**</span>
+<span id="cb6-336"><a href="#cb6-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-337"><a href="#cb6-337" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-338"><a href="#cb6-338" aria-hidden="true" tabindex="-1"></a><span class="in">Chapter 3  keyword (AND)         not found at all   (0 of 10)</span></span>
+<span id="cb6-339"><a href="#cb6-339" aria-hidden="true" tabindex="-1"></a><span class="in">Chapter 4  dense, whole-document  rank 5 of 10</span></span>
+<span id="cb6-340"><a href="#cb6-340" aria-hidden="true" tabindex="-1"></a><span class="in">Chapter 9  hybrid, pipeline weights (BM25x2.0/dense x0.5)  rank 9 of 10</span></span>
+<span id="cb6-341"><a href="#cb6-341" aria-hidden="true" tabindex="-1"></a><span class="in">Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</span></span>
+<span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a>**Why:** each chapter's technique is a genuine improvement *in general* —</span>
+<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a>that's not in question. But this specific, operationally important</span>
+<span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a>question doesn't improve monotonically as the pipeline gets more</span>
+<span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a>sophisticated. It gets a little better (Chapter 4), then gets worse</span>
+<span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a>twice in a row (Chapter 9's two weightings) before hybrid retrieval's</span>
+<span id="cb6-349"><a href="#cb6-349" aria-hidden="true" tabindex="-1"></a>other strengths (Chapter 9's <span class="in">`"packers fishing"`</span> example) show up</span>
+<span id="cb6-350"><a href="#cb6-350" aria-hidden="true" tabindex="-1"></a>clearly.</span>
+<span id="cb6-351"><a href="#cb6-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-352"><a href="#cb6-352" aria-hidden="true" tabindex="-1"></a>**Lesson:** a single aggregate metric — <span class="in">`recall@5`</span> averaged across your</span>
+<span id="cb6-353"><a href="#cb6-353" aria-hidden="true" tabindex="-1"></a>whole evaluation set — can climb steadily from chapter to chapter while</span>
+<span id="cb6-354"><a href="#cb6-354" aria-hidden="true" tabindex="-1"></a>a specific, real question you care about gets worse. This is exactly why</span>
+<span id="cb6-355"><a href="#cb6-355" aria-hidden="true" tabindex="-1"></a>Chapter 9 insisted on per-category breakdowns and why this chapter opened</span>
+<span id="cb6-356"><a href="#cb6-356" aria-hidden="true" tabindex="-1"></a>by building your own question set rather than trusting someone else's</span>
+<span id="cb6-357"><a href="#cb6-357" aria-hidden="true" tabindex="-1"></a>summary number: the only way to know if *your* hard questions are</span>
+<span id="cb6-358"><a href="#cb6-358" aria-hidden="true" tabindex="-1"></a>improving is to track them individually, the way this table just did.</span>
+<span id="cb6-359"><a href="#cb6-359" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-360"><a href="#cb6-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a>🔴 **Advanced**</span>
+<span id="cb6-361"><a href="#cb6-361" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
 <span id="cb6-362"><a href="#cb6-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a>**Challenge:** Extend your five-question set to at least 15 questions</span>
-<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a>against the *full* 76-report archive (<span class="in">`datasets/forge_archive/`</span>), and</span>
-<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a>compute <span class="in">`recall@5`</span>. This is genuinely useful, unpublished work: as far as</span>
-<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a>this book's companion pipeline is concerned, you'll be building the first</span>
-<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a>real evaluation set for Utah FORGE. Save your question set alongside your</span>
-<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>results — it's the seed of exactly the kind of evaluation harness</span>
-<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a><span class="in">`scripts/run_eval.py`</span> runs at scale once one exists. A reference solution</span>
-<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>approach is in <span class="in">`code/chapter_11/challenge/`</span>.</span>
-<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a>Don't be alarmed if <span class="in">`recall@5`</span> comes back much lower than you'd expect</span>
-<span id="cb6-373"><a href="#cb6-373" aria-hidden="true" tabindex="-1"></a>from Part I — the reference solution's own 15-question set, run against</span>
-<span id="cb6-374"><a href="#cb6-374" aria-hidden="true" tabindex="-1"></a>all 76 reports with Chapter 4's plain whole-document embeddings, scores</span>
-<span id="cb6-375"><a href="#cb6-375" aria-hidden="true" tabindex="-1"></a><span class="in">`recall@5`</span> of only **0.47**. That's not a bug: at 10 candidates, chance</span>
-<span id="cb6-376"><a href="#cb6-376" aria-hidden="true" tabindex="-1"></a>alone gets you partway there, and whole-document dilution barely</span>
-<span id="cb6-377"><a href="#cb6-377" aria-hidden="true" tabindex="-1"></a>matters. At 76 candidates, both problems compound. A low score here is</span>
-<span id="cb6-378"><a href="#cb6-378" aria-hidden="true" tabindex="-1"></a>the honest, measured version of the same lesson Chapter 9 already</span>
-<span id="cb6-379"><a href="#cb6-379" aria-hidden="true" tabindex="-1"></a>taught — it's exactly what motivates hybrid retrieval and reranking</span>
-<span id="cb6-380"><a href="#cb6-380" aria-hidden="true" tabindex="-1"></a>before this system sees a real, full-scale archive.</span>
-<span id="cb6-381"><a href="#cb6-381" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb6-363"><a href="#cb6-363" aria-hidden="true" tabindex="-1"></a>🔴 **Advanced**</span>
+<span id="cb6-364"><a href="#cb6-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-365"><a href="#cb6-365" aria-hidden="true" tabindex="-1"></a>**Challenge:** Extend your five-question set to at least 15 questions</span>
+<span id="cb6-366"><a href="#cb6-366" aria-hidden="true" tabindex="-1"></a>against the *full* 76-report archive (<span class="in">`datasets/forge_archive/`</span>), and</span>
+<span id="cb6-367"><a href="#cb6-367" aria-hidden="true" tabindex="-1"></a>compute <span class="in">`recall@5`</span>. This is genuinely useful, unpublished work: as far as</span>
+<span id="cb6-368"><a href="#cb6-368" aria-hidden="true" tabindex="-1"></a>this book's companion pipeline is concerned, you'll be building the first</span>
+<span id="cb6-369"><a href="#cb6-369" aria-hidden="true" tabindex="-1"></a>real evaluation set for Utah FORGE. Save your question set alongside your</span>
+<span id="cb6-370"><a href="#cb6-370" aria-hidden="true" tabindex="-1"></a>results — it's the seed of exactly the kind of evaluation harness</span>
+<span id="cb6-371"><a href="#cb6-371" aria-hidden="true" tabindex="-1"></a><span class="in">`scripts/run_eval.py`</span> runs at scale once one exists. A reference solution</span>
+<span id="cb6-372"><a href="#cb6-372" aria-hidden="true" tabindex="-1"></a>approach is in <span class="in">`code/chapter_11/challenge/`</span>.</span>
+<span id="cb6-373"><a href="#cb6-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-374"><a href="#cb6-374" aria-hidden="true" tabindex="-1"></a>Don't be alarmed if <span class="in">`recall@5`</span> comes back much lower than you'd expect</span>
+<span id="cb6-375"><a href="#cb6-375" aria-hidden="true" tabindex="-1"></a>from Part I — the reference solution's own 15-question set, run against</span>
+<span id="cb6-376"><a href="#cb6-376" aria-hidden="true" tabindex="-1"></a>all 76 reports with Chapter 4's plain whole-document embeddings, scores</span>
+<span id="cb6-377"><a href="#cb6-377" aria-hidden="true" tabindex="-1"></a><span class="in">`recall@5`</span> of only **0.47**. That's not a bug: at 10 candidates, chance</span>
+<span id="cb6-378"><a href="#cb6-378" aria-hidden="true" tabindex="-1"></a>alone gets you partway there, and whole-document dilution barely</span>
+<span id="cb6-379"><a href="#cb6-379" aria-hidden="true" tabindex="-1"></a>matters. At 76 candidates, both problems compound. A low score here is</span>
+<span id="cb6-380"><a href="#cb6-380" aria-hidden="true" tabindex="-1"></a>the honest, measured version of the same lesson Chapter 9 already</span>
+<span id="cb6-381"><a href="#cb6-381" aria-hidden="true" tabindex="-1"></a>taught — it's exactly what motivates hybrid retrieval and reranking</span>
+<span id="cb6-382"><a href="#cb6-382" aria-hidden="true" tabindex="-1"></a>before this system sees a real, full-scale archive.</span>
 <span id="cb6-383"><a href="#cb6-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An evaluation set with known correct answers is more valuable than any</span>
-<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a>  single retrieval technique — it's what tells you whether a technique</span>
-<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a>  helped.</span>
-<span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`recall@k`</span>, MRR, and <span class="in">`NDCG@k`</span> answer different questions; report more</span>
-<span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a>  than one.</span>
-<span id="cb6-389"><a href="#cb6-389" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Don't trust a system's evaluation results from a different dataset as a</span>
-<span id="cb6-390"><a href="#cb6-390" aria-hidden="true" tabindex="-1"></a>  proxy for how it performs on yours — a harness that scored well on one</span>
-<span id="cb6-391"><a href="#cb6-391" aria-hidden="true" tabindex="-1"></a>  campaign says nothing certain about a new well until you build and run</span>
-<span id="cb6-392"><a href="#cb6-392" aria-hidden="true" tabindex="-1"></a>  a question set against that well's own archive, which is exactly what</span>
-<span id="cb6-393"><a href="#cb6-393" aria-hidden="true" tabindex="-1"></a>  this chapter had you do.</span>
-<span id="cb6-394"><a href="#cb6-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-395"><a href="#cb6-395" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb6-384"><a href="#cb6-384" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb6-385"><a href="#cb6-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-386"><a href="#cb6-386" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>An evaluation set with known correct answers is more valuable than any</span>
+<span id="cb6-387"><a href="#cb6-387" aria-hidden="true" tabindex="-1"></a>  single retrieval technique — it's what tells you whether a technique</span>
+<span id="cb6-388"><a href="#cb6-388" aria-hidden="true" tabindex="-1"></a>  helped.</span>
+<span id="cb6-389"><a href="#cb6-389" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`recall@k`</span>, MRR, and <span class="in">`NDCG@k`</span> answer different questions; report more</span>
+<span id="cb6-390"><a href="#cb6-390" aria-hidden="true" tabindex="-1"></a>  than one.</span>
+<span id="cb6-391"><a href="#cb6-391" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Don't trust a system's evaluation results from a different dataset as a</span>
+<span id="cb6-392"><a href="#cb6-392" aria-hidden="true" tabindex="-1"></a>  proxy for how it performs on yours — a harness that scored well on one</span>
+<span id="cb6-393"><a href="#cb6-393" aria-hidden="true" tabindex="-1"></a>  campaign says nothing certain about a new well until you build and run</span>
+<span id="cb6-394"><a href="#cb6-394" aria-hidden="true" tabindex="-1"></a>  a question set against that well's own archive, which is exactly what</span>
+<span id="cb6-395"><a href="#cb6-395" aria-hidden="true" tabindex="-1"></a>  this chapter had you do.</span>
 <span id="cb6-396"><a href="#cb6-396" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-397"><a href="#cb6-397" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb6-398"><a href="#cb6-398" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb6-399"><a href="#cb6-399" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_11/eval_metrics.py`</span> <span class="pp">|</span> <span class="in">`recall@k`</span>, MRR, <span class="in">`NDCG@k`</span> implementations <span class="pp">|</span></span>
-<span id="cb6-400"><a href="#cb6-400" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/scripts/run_eval.py`</span> <span class="pp">|</span> Evaluation harness (companion repo — requires DDR_UTAH_FORGE) — ready to point at a Utah FORGE question set once you build one <span class="pp">|</span></span>
-<span id="cb6-401"><a href="#cb6-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-402"><a href="#cb6-402" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 11"}</span>
-<span id="cb6-403"><a href="#cb6-403" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built a hand-labeled evaluation set with known correct answers</span>
-<span id="cb6-404"><a href="#cb6-404" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Computed <span class="in">`recall@k`</span>, MRR, and <span class="in">`NDCG@k`</span>, and can explain what each one tells you</span>
-<span id="cb6-405"><a href="#cb6-405" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Tracked one hard question across every retrieval method in this book</span>
-<span id="cb6-406"><a href="#cb6-406" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Reported results broken down by category instead of one aggregate score</span>
-<span id="cb6-407"><a href="#cb6-407" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-408"><a href="#cb6-408" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-409"><a href="#cb6-409" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb6-410"><a href="#cb6-410" aria-hidden="true" tabindex="-1"></a>**`eval_metrics.py`** plus a real, hand-verified evaluation set — the</span>
-<span id="cb6-411"><a href="#cb6-411" aria-hidden="true" tabindex="-1"></a>first ever built against this archive, with a defensible number attached</span>
-<span id="cb6-412"><a href="#cb6-412" aria-hidden="true" tabindex="-1"></a>to "how good is it."</span>
-<span id="cb6-413"><a href="#cb6-413" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb6-414"><a href="#cb6-414" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-415"><a href="#cb6-415" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb6-397"><a href="#cb6-397" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb6-398"><a href="#cb6-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-399"><a href="#cb6-399" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb6-400"><a href="#cb6-400" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb6-401"><a href="#cb6-401" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_11/eval_metrics.py`</span> <span class="pp">|</span> <span class="in">`recall@k`</span>, MRR, <span class="in">`NDCG@k`</span> implementations <span class="pp">|</span></span>
+<span id="cb6-402"><a href="#cb6-402" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/scripts/run_eval.py`</span> <span class="pp">|</span> Evaluation harness (companion repo — requires DDR_UTAH_FORGE) — ready to point at a Utah FORGE question set once you build one <span class="pp">|</span></span>
+<span id="cb6-403"><a href="#cb6-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-404"><a href="#cb6-404" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 11"}</span>
+<span id="cb6-405"><a href="#cb6-405" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built a hand-labeled evaluation set with known correct answers</span>
+<span id="cb6-406"><a href="#cb6-406" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Computed <span class="in">`recall@k`</span>, MRR, and <span class="in">`NDCG@k`</span>, and can explain what each one tells you</span>
+<span id="cb6-407"><a href="#cb6-407" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Tracked one hard question across every retrieval method in this book</span>
+<span id="cb6-408"><a href="#cb6-408" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Reported results broken down by category instead of one aggregate score</span>
+<span id="cb6-409"><a href="#cb6-409" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb6-410"><a href="#cb6-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-411"><a href="#cb6-411" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb6-412"><a href="#cb6-412" aria-hidden="true" tabindex="-1"></a>**`eval_metrics.py`** plus a real, hand-verified evaluation set — the</span>
+<span id="cb6-413"><a href="#cb6-413" aria-hidden="true" tabindex="-1"></a>first ever built against this archive, with a defensible number attached</span>
+<span id="cb6-414"><a href="#cb6-414" aria-hidden="true" tabindex="-1"></a>to "how good is it."</span>
+<span id="cb6-415"><a href="#cb6-415" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb6-416"><a href="#cb6-416" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-417"><a href="#cb6-417" aria-hidden="true" tabindex="-1"></a>You can put a defensible number on how well your retrieval system</span>
-<span id="cb6-418"><a href="#cb6-418" aria-hidden="true" tabindex="-1"></a>actually works, broken down by the kinds of questions it handles well and</span>
-<span id="cb6-419"><a href="#cb6-419" aria-hidden="true" tabindex="-1"></a>the ones it doesn't — instead of shipping a decision-support tool on the</span>
-<span id="cb6-420"><a href="#cb6-420" aria-hidden="true" tabindex="-1"></a>strength of "it feels like it's working."</span>
-<span id="cb6-421"><a href="#cb6-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-422"><a href="#cb6-422" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb6-417"><a href="#cb6-417" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb6-418"><a href="#cb6-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-419"><a href="#cb6-419" aria-hidden="true" tabindex="-1"></a>You can put a defensible number on how well your retrieval system</span>
+<span id="cb6-420"><a href="#cb6-420" aria-hidden="true" tabindex="-1"></a>actually works, broken down by the kinds of questions it handles well and</span>
+<span id="cb6-421"><a href="#cb6-421" aria-hidden="true" tabindex="-1"></a>the ones it doesn't — instead of shipping a decision-support tool on the</span>
+<span id="cb6-422"><a href="#cb6-422" aria-hidden="true" tabindex="-1"></a>strength of "it feels like it's working."</span>
 <span id="cb6-423"><a href="#cb6-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-424"><a href="#cb6-424" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 12:** Every discipline from Chapters 6–11 — OCR</span>
-<span id="cb6-425"><a href="#cb6-425" aria-hidden="true" tabindex="-1"></a>gating, structured chunking, hybrid retrieval, traceability, evaluation —</span>
-<span id="cb6-426"><a href="#cb6-426" aria-hidden="true" tabindex="-1"></a>exists in service of a single payoff: finding things in an archive a</span>
-<span id="cb6-427"><a href="#cb6-427" aria-hidden="true" tabindex="-1"></a>human reading it linearly would miss. Chapter 12 builds toward that</span>
-<span id="cb6-428"><a href="#cb6-428" aria-hidden="true" tabindex="-1"></a>payoff, using a real sequence of events already in this archive.</span>
+<span id="cb6-424"><a href="#cb6-424" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb6-425"><a href="#cb6-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-426"><a href="#cb6-426" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 12:** Every discipline from Chapters 6–11 — OCR</span>
+<span id="cb6-427"><a href="#cb6-427" aria-hidden="true" tabindex="-1"></a>gating, structured chunking, hybrid retrieval, traceability, evaluation —</span>
+<span id="cb6-428"><a href="#cb6-428" aria-hidden="true" tabindex="-1"></a>exists in service of a single payoff: finding things in an archive a</span>
+<span id="cb6-429"><a href="#cb6-429" aria-hidden="true" tabindex="-1"></a>human reading it linearly would miss. Chapter 12 builds toward that</span>
+<span id="cb6-430"><a href="#cb6-430" aria-hidden="true" tabindex="-1"></a>payoff, using a real sequence of events already in this archive.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
