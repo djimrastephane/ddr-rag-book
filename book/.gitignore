@@ -34,3 +34,4 @@ datasets/_scanned_example_*.pdf
 # Editor
 .vscode/
 .positron/
+.idea/
