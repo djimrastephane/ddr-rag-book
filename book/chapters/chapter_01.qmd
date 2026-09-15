@@ -307,6 +307,12 @@ same procedure every time, instead of re-writing the steps by hand for
 each report. A **loop** (`for page_number, page in enumerate(...)`) means
 "repeat this operation for every page in the report" — the same way an
 SOP says "repeat for each joint" instead of listing every joint by hand.
+`enumerate()` is what hands back that running `page_number` alongside
+each page as the loop repeats — `start=1` just means "count from 1, not
+0," so the numbers it produces read the way a person would number pages,
+not the way Python numbers list positions internally. This same
+`enumerate(..., start=1)` pattern shows up throughout the book any time
+something needs to be numbered for a human reader.
 :::
 
 Note the `or ""`. If a page has no extractable text — a scanned page mixed

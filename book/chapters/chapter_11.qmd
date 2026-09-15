@@ -312,7 +312,9 @@ report's rank, and compute `recall@3` by hand.
 question → expected report → observed rank, and a `recall@3` score you
 can quote and defend — because you wrote and verified every question
 yourself. On this five-question set every expected report lands in the
-top three, so `recall@3` comes out to 1.0; don't read that as "retrieval
+top three, so `recall@3` comes out to 1.0 — and if you also run `mrr()`
+and `ndcg_at_k()` against the same five ranks, expect similarly high
+numbers for the same reason. Don't read any of the three as "retrieval
 is solved," though — five hand-picked, distinctly-worded questions over
 ten reports is the easiest case there is, which is exactly why the
 challenge below scales it up to fifteen questions over all 76.

@@ -224,6 +224,13 @@ completely consistent, and because a single well gives you exactly one
 example of the pattern. Genuine cross-well intelligence has different
 demands entirely:
 
+- torque on its own is a weak, non-diagnostic signal — a real driller
+  reads a torque jump alongside drag, overpull, and ROP together before
+  concluding anything, because torque alone can rise for reasons that
+  have nothing to do with a sticking BHA (a formation change, a
+  different mud property, a genuinely tighter dogleg). This chapter's
+  check is a first-pass filter for *which reports deserve a closer
+  read*, not a diagnosis by itself
 - different rigs and BHA configurations have different normal torque
   ranges — a 25% jump threshold tuned on this well could be meaningless,
   or far too sensitive, on a well drilled with different equipment

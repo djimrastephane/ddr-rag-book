@@ -124,6 +124,16 @@ because none was needed — this is what "publicly available" means in
 practice, and it lets this book show you genuine field language instead
 of an approximation of it.
 
+FORGE 16A(78)-32 is a geothermal well, not an oil or gas well — but
+every report quoted in this book covers drilling-phase operations
+(tripping, BHA runs, stuck pipe, fishing) that use the same rig,
+mud system, and rotary-drilling terminology as a conventional oil or
+gas well. The reservoir at the bottom differs; the drilling above it
+doesn't. That's why an oil and gas drilling engineer reading this
+book's excerpts will find the events, the terminology, and the
+decision-making immediately familiar, not translated from an
+unrelated industry.
+
 That said, the *technique* generalises directly to a confidential
 archive: everything from Chapter 6 onward — OCR gating, traceability,
 corpus-completeness checks — exists precisely because production

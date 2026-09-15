@@ -226,6 +226,15 @@ def reciprocal_rank_fusion(ranked_lists: list[list[str]], k: int = 20,
     return sorted(scores.items(), key=lambda item: item[1], reverse=True)
 ```
 
+::: {.callout-tip title="Engineering Translation: defaultdict"}
+A plain dictionary raises an error the first time you try to add to a
+key it hasn't seen yet — you'd have to check "has this report already
+got a score?" before every single addition. `defaultdict(float)` skips
+that check: the first time a new report shows up, it's silently handed
+a starting score of `0.0` automatically, so `scores[doc_id] += ...`
+always works, on the first mention of a report or the fiftieth.
+:::
+
 **What just happened?**
 
 For every report, this adds up a small credit from each ranked list based
