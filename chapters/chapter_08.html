@@ -603,7 +603,7 @@ div.csl-indent {
 </section>
 <section id="operational-problem" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">8.2</span> Operational Problem</h2>
-<p>Mike, the completions engineer, has been happily querying all ten sample reports through Chapter 5’s system — but what happens when his ten-document prototype meets the full archive? Chapter 4’s <code>embeddings @ query_vec</code> brute-force search works fine over ten documents — it’s a single matrix multiply. The full Utah FORGE archive is 76 reports. The companion pipeline’s chunking and embedding steps, run against all 76, produce <strong>1,428 chunks</strong> — still small by industrial standards, but already the point where you want a persistent, queryable index rather than an in-memory NumPy array you rebuild every session. And a production system needs more than one query mode: per-document search (fast, scoped to one report) and campaign-wide search across every chunk are genuinely different operations.</p>
+<p>Carlos, the completions engineer, has been happily querying all ten sample reports through Chapter 5’s system — but what happens when his ten-document prototype meets the full archive? Chapter 4’s <code>embeddings @ query_vec</code> brute-force search works fine over ten documents — it’s a single matrix multiply. The full Utah FORGE archive is 76 reports. The companion pipeline’s chunking and embedding steps, run against all 76, produce <strong>1,428 chunks</strong> — still small by industrial standards, but already the point where you want a persistent, queryable index rather than an in-memory NumPy array you rebuild every session. And a production system needs more than one query mode: per-document search (fast, scoped to one report) and campaign-wide search across every chunk are genuinely different operations.</p>
 </section>
 <section id="theory" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="theory"><span class="header-section-number">8.3</span> Theory</h2>
@@ -669,7 +669,7 @@ Building FAISS IndexFlatIP ((1428, 384))...
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A <code>faiss.index</code> file on disk, plus the same in-memory index object ready to query immediately.</p>
-<div id="a45d0625" class="cell" data-execution_count="1">
+<div id="ede86bde" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_08/build_faiss_index.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -700,7 +700,7 @@ Building FAISS IndexFlatIP ((1428, 384))...
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(chunk_index, similarity_score)</code> pairs — the same shape of result Chapter 4’s brute-force <code>search</code> returned.</p>
-<div id="e18dc684" class="cell" data-execution_count="2">
+<div id="b072731f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_index(path: Path) <span class="op">-&gt;</span> faiss.Index:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> faiss.read_index(<span class="bu">str</span>(path))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -723,7 +723,7 @@ Building FAISS IndexFlatIP ((1428, 384))...
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A FAISS index with one row per chunk, and a parallel <code>metadata</code> list — <code>metadata[i]</code> is a <code>{"report": ..., "page": ..., "date": ...}</code> dict describing exactly what <code>embeddings[i]</code> is.</p>
-<div id="fce54669" class="cell" data-execution_count="3">
+<div id="a4df2768" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>REPORT_DATE <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"_</span><span class="kw">(</span><span class="dv">\d</span><span class="op">{4}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="kw">)</span><span class="ch">\.</span><span class="vs">"</span>)</span>
@@ -1405,7 +1405,7 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>Mike, the completions engineer, has been happily querying all ten sample</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>Carlos, the completions engineer, has been happily querying all ten sample</span>
 <span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>reports through Chapter 5's system — but what happens when his</span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>ten-document prototype meets the full archive? Chapter 4's `embeddings @</span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>query_vec` brute-force search works fine over</span>

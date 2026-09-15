@@ -583,7 +583,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="operational-problem" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">6.2</span> Operational Problem</h2>
-<p>Sean, the production engineer, asks a question that matters long before any answer gets generated: <em>“Can you trust the text this archive extracted — even from a report that was scanned instead of born digital?”</em> Every one of the 76 Utah FORGE reports used in this book is digital-native — extracting all 76 with Chapter 1’s own <code>extract_text()</code> confirms zero unparsed PDFs. (The companion pipeline’s QA/QC pass reports the same result across 227 source files — the larger, pre-deduplication count from the raw public archive before Chapter 8’s <code>build_full_archive.py</code> collapsed it down to 76; that raw archive isn’t part of this book’s repository, so the 227-file figure isn’t independently checkable here.) You got lucky: WellEz, the software that generated these reports, embeds real character data on every page. Not every archive is this well-behaved. Faxed reports, reports scanned from paper files, and photos of a logbook page all produce PDFs with no character data at all — just a picture of text. Chapter 1’s <code>extract_text()</code> handled this gracefully (an empty string, not a crash), but a real, larger archive needs more than graceful failure: it needs OCR to recover the text, and a way to know whether to trust what OCR gives back.</p>
+<p>Farid, the production engineer, asks a question that matters long before any answer gets generated: <em>“Can you trust the text this archive extracted — even from a report that was scanned instead of born digital?”</em> Every one of the 76 Utah FORGE reports used in this book is digital-native — extracting all 76 with Chapter 1’s own <code>extract_text()</code> confirms zero unparsed PDFs. (The companion pipeline’s QA/QC pass reports the same result across 227 source files — the larger, pre-deduplication count from the raw public archive before Chapter 8’s <code>build_full_archive.py</code> collapsed it down to 76; that raw archive isn’t part of this book’s repository, so the 227-file figure isn’t independently checkable here.) You got lucky: WellEz, the software that generated these reports, embeds real character data on every page. Not every archive is this well-behaved. Faxed reports, reports scanned from paper files, and photos of a logbook page all produce PDFs with no character data at all — just a picture of text. Chapter 1’s <code>extract_text()</code> handled this gracefully (an empty string, not a crash), but a real, larger archive needs more than graceful failure: it needs OCR to recover the text, and a way to know whether to trust what OCR gives back.</p>
 </section>
 <section id="example-ddr-extract" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="example-ddr-extract"><span class="header-section-number">6.3</span> Example DDR extract</h2>
@@ -669,7 +669,7 @@ Degraded OCR output from a hypothetical poor scan of the same line:
 <p>A dictionary reporting the decision, which specific checks failed, and the underlying numbers those checks were based on, for example:</p>
 <pre><code>{"reject_ocr": True, "flags": {"low_text_density": True, "high_symbol_ratio": True},
  "chars": 43, "alpha_words": 5, "symbol_ratio": 0.61}</code></pre>
-<div id="91421c18" class="cell" data-execution_count="1">
+<div id="a2927ed0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_06/ocr_quality_gate.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1394,7 +1394,7 @@ Quality gate:
 <span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>Sean, the production engineer, asks a question that matters long before</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>Farid, the production engineer, asks a question that matters long before</span>
 <span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>any answer gets generated: *"Can you trust the text this archive</span>
 <span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>extracted — even from a report that was scanned instead of born</span>
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>digital?"* Every one of the 76 Utah FORGE</span>

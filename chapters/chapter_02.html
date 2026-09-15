@@ -585,7 +585,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="operational-problem" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">2.2</span> Operational Problem</h2>
-<p>Mike, the completions engineer, wants next chapter’s search tool to answer: <em>“Show me every report that mentions the bottom hole assembly.”</em> Will it find report #38? Open the <code>.txt</code> file you extracted from it in Chapter 1 and check: the report never once writes “bottom hole assembly.” It writes <code>BHA</code> — nine times. A search tool that only knows the literal words you typed will come back empty, on a report that was exactly the one you needed.</p>
+<p>Carlos, the completions engineer, wants next chapter’s search tool to answer: <em>“Show me every report that mentions the bottom hole assembly.”</em> Will it find report #38? Open the <code>.txt</code> file you extracted from it in Chapter 1 and check: the report never once writes “bottom hole assembly.” It writes <code>BHA</code> — nine times. A search tool that only knows the literal words you typed will come back empty, on a report that was exactly the one you needed.</p>
 </section>
 <section id="why-keyword-search-fails" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="why-keyword-search-fails"><span class="header-section-number">2.3</span> Why keyword search fails</h2>
@@ -652,7 +652,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A Python dictionary — no output printed yet, just a lookup table in memory, ready for the next step to use.</p>
-<div id="66f833cb" class="cell" data-execution_count="1">
+<div id="2000d5e6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_02/expand_abbreviations.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ABBREVIATIONS <span class="op">=</span> {</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"BHA"</span>: <span class="st">"bottom hole assembly"</span>,</span>
@@ -689,7 +689,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The same text, with every whole-word abbreviation replaced by its expansion — for example, <code>Pick up Curve assembly 2, BHA 21</code> becomes <code>Pick up Curve assembly 2, bottom hole assembly 21</code>.</p>
-<div id="c3a8f73e" class="cell" data-execution_count="2">
+<div id="59371e14" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> expand_text(text: <span class="bu">str</span>, abbreviations: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">str</span>] <span class="op">=</span> ABBREVIATIONS) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
@@ -744,7 +744,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <section id="practical-exercise" class="level2" data-number="2.8">
 <h2 data-number="2.8" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">2.8</span> Practical exercise</h2>
 <p>🟢 <strong>Beginner</strong></p>
-<p><strong>Try it yourself:</strong> Help Mike get his answer — run the expander against <code>FORGE-16A-78-32_Drilling_038_2020-11-26.txt</code>.</p>
+<p><strong>Try it yourself:</strong> Help Carlos get his answer — run the expander against <code>FORGE-16A-78-32_Drilling_038_2020-11-26.txt</code>.</p>
 <p><strong>You’ll know it worked when:</strong> <code>Pick up Curve assembly 2, BHA 21</code> becomes <code>Pick up Curve assembly 2, bottom hole assembly 21</code>, and no unrelated word (check the <code>MD</code>/<code>TVD</code> survey table carefully — short abbreviations are the ones most likely to collide with real words) gets corrupted.</p>
 </section>
 <section id="field-notes" class="level2" data-number="2.9">
@@ -1363,7 +1363,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>Mike, the completions engineer, wants next chapter's search tool to</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>Carlos, the completions engineer, wants next chapter's search tool to</span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>answer: *"Show me every report that mentions the bottom hole assembly."*</span>
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>Will it find</span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>report #38? Open the <span class="in">`.txt`</span> file you extracted from it in Chapter 1 and</span>
@@ -1584,7 +1584,7 @@ WOB 20 TO 35k, Rotary 50, Torque 6,500, SPP        &lt;- WOB, SPP never expanded
 <span id="cb5-252"><a href="#cb5-252" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-253"><a href="#cb5-253" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
 <span id="cb5-254"><a href="#cb5-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-255"><a href="#cb5-255" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Help Mike get his answer — run the expander against</span>
+<span id="cb5-255"><a href="#cb5-255" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Help Carlos get his answer — run the expander against</span>
 <span id="cb5-256"><a href="#cb5-256" aria-hidden="true" tabindex="-1"></a><span class="in">`FORGE-16A-78-32_Drilling_038_2020-11-26.txt`</span>.</span>
 <span id="cb5-257"><a href="#cb5-257" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-258"><a href="#cb5-258" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** <span class="in">`Pick up Curve assembly 2, BHA 21`</span> becomes</span>

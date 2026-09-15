@@ -585,7 +585,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="operational-problem" class="level2" data-number="13.2">
 <h2 data-number="13.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">13.2</span> Operational Problem</h2>
-<p>Sean, the production engineer, asks the question every previous chapter quietly assumed away: <em>“Report #77 lands tomorrow morning, and I need to ask about it on the call. Do we rebuild the whole index every night just to add one page?”</em></p>
+<p>Farid, the production engineer, asks the question every previous chapter quietly assumed away: <em>“Report #77 lands tomorrow morning, and I need to ask about it on the call. Do we rebuild the whole index every night just to add one page?”</em></p>
 <p>Everything so far has been <strong>batch</strong>: point the pipeline at a fixed folder of reports, extract, chunk, embed, and index all of them in one pass. That is exactly right for learning, and fine for a frozen archive. But these are <em>Daily</em> Drilling Reports. In a real deployment the archive is never frozen — one new report arrives every day, sometimes several, and the system has to absorb each one and be ready to answer questions about it within minutes. Rebuilding the entire index from scratch to add a single report works at ten documents and is absurd at ten thousand. The job of this chapter is to add one report to a live system the way the field actually does it: incrementally.</p>
 </section>
 <section id="example-a-new-report-arrives" class="level2" data-number="13.3">
@@ -645,7 +645,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The loaded index and metadata list — or empty state (<code>None</code>, <code>[]</code>) on the very first run.</p>
-<div id="2b009c76" class="cell" data-execution_count="1">
+<div id="247fa2ce" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -668,7 +668,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The updated index, the number of chunks added (0 if skipped or rejected), and a status string.</p>
-<div id="1c09bd44" class="cell" data-execution_count="2">
+<div id="8304342d" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> already_ingested(metadata, report):</span>
@@ -716,7 +716,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The current list of reporting gaps — ideally empty.</p>
-<div id="13b467da" class="cell" data-execution_count="3">
+<div id="53661a52" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1381,7 +1381,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
 <span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>Sean, the production engineer, asks the question every previous chapter</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>Farid, the production engineer, asks the question every previous chapter</span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>quietly assumed away: *"Report #77 lands tomorrow morning, and I need to</span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>ask about it on the call. Do we rebuild the whole index every night just</span>
 <span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>to add one page?"*</span>

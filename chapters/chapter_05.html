@@ -604,7 +604,7 @@ div.csl-indent {
 </section>
 <section id="operational-problem" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="operational-problem"><span class="header-section-number">5.2</span> Operational Problem</h2>
-<p>Retrieval (Chapter 4) gets you the right passages. What Mike, the completions engineer, actually wants is an answer: <em>“What led to the fishing operation on report #50?”</em> — not two ranked text chunks he has to read and synthesise himself. But a generated answer that isn’t traceable back to specific reports is worse than no answer at all in an engineering context, because it invites misplaced trust. This chapter builds the smallest system that does both: synthesise an answer, and show exactly where every part of it came from.</p>
+<p>Retrieval (Chapter 4) gets you the right passages. What Carlos, the completions engineer, actually wants is an answer: <em>“What led to the fishing operation on report #50?”</em> — not two ranked text chunks he has to read and synthesise himself. But a generated answer that isn’t traceable back to specific reports is worse than no answer at all in an engineering context, because it invites misplaced trust. This chapter builds the smallest system that does both: synthesise an answer, and show exactly where every part of it came from.</p>
 </section>
 <section id="example-ddr-extract" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="example-ddr-extract"><span class="header-section-number">5.3</span> Example DDR extract</h2>
@@ -681,7 +681,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A reusable prompt template with two blanks: the evidence, and the question.</p>
-<div id="6d5b6f37" class="cell" data-execution_count="1">
+<div id="e08996de" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_05/first_rag.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>PROMPT_TEMPLATE <span class="op">=</span> <span class="st">"""Answer the question using ONLY the evidence below.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">If the evidence doesn't contain the answer, say so — do not guess.</span></span>
@@ -708,7 +708,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One complete prompt string, evidence labelled by source filename, ready to send to a model.</p>
-<div id="a7b6e57f" class="cell" data-execution_count="2">
+<div id="30c1e65a" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> semantic_search <span class="im">import</span> embed_texts, load_chunks, search  <span class="co"># from Chapter 4</span></span>
@@ -740,7 +740,7 @@ Evidence:
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A tuple: the generated answer text, and the list of report filenames that were actually retrieved and shown to the model.</p>
-<div id="74475846" class="cell" data-execution_count="3">
+<div id="7b3f19f9" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> answer_question(question: <span class="bu">str</span>, model, filenames, texts, embeddings,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                     llm_call, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    retrieved <span class="op">=</span> search(model, question, filenames, embeddings, top_k<span class="op">=</span>top_k)</span>
@@ -782,7 +782,7 @@ Evidence:
 </div>
 <p><code>qwen2.5:7b-instruct</code> is a small, capable default, but nothing here is tied to it — pass any model you’ve pulled to <code>ollama_llm_call(model=...)</code>. Pick whatever runs comfortably on your hardware: <code>llama3.1:8b</code> or <code>mistral</code> are similar in size, <code>qwen2.5:14b</code> is stronger if you have the memory for it. <code>host</code> is configurable too — point it at another machine on the network running Ollama, or swap the one HTTP call for a hosted API’s to use a cloud model instead. The retrieval and prompt work above doesn’t change either way — only which model reads the evidence.</p>
 <p><code>ollama_llm_call</code> talks to that local server over plain HTTP — standard library only, no extra package to install, and a clear message instead of a crash if Ollama isn’t running:</p>
-<div id="055ebabc" class="cell" data-execution_count="4">
+<div id="a9323dbe" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.error</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
@@ -1510,7 +1510,7 @@ Lewis, Patrick, Ethan Perez, Aleksandra Piktus, et al. 2020. <span>“Retrieval-
 <span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>
 <span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>Retrieval (Chapter 4) gets you the right passages. What Mike, the</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>Retrieval (Chapter 4) gets you the right passages. What Carlos, the</span>
 <span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>completions engineer, actually wants is an answer: *"What led to the</span>
 <span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>fishing operation on report #50?"* — not two ranked text chunks he has</span>
 <span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>to read and synthesise himself. But a generated answer that isn't</span>
