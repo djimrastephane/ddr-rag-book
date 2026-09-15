@@ -28,7 +28,7 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Mike, the completions engineer, has been happily querying all ten sample
+Diego, the completions engineer, has been happily querying all ten sample
 reports through Chapter 5's system — but what happens when his
 ten-document prototype meets the full archive? Chapter 4's `embeddings @
 query_vec` brute-force search works fine over

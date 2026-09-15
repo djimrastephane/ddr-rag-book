@@ -30,7 +30,7 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Mike, the completions engineer, is back with the packers question from
+Diego, the completions engineer, is back with the packers question from
 Chapter 8: which report had packers fail to set — and why doesn't either
 search method alone find it reliably? A query like *"which report had
 packers fail to set?"* has both a semantic component (packers, setting, failure —

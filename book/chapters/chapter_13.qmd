@@ -29,7 +29,7 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Sean, the production engineer, asks the question every previous chapter
+Farid, the production engineer, asks the question every previous chapter
 quietly assumed away: *"Report #77 lands tomorrow morning, and I need to
 ask about it on the call. Do we rebuild the whole index every night just
 to add one page?"*

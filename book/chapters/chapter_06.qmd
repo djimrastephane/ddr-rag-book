@@ -27,7 +27,7 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Sean, the production engineer, asks a question that matters long before
+Farid, the production engineer, asks a question that matters long before
 any answer gets generated: *"Can you trust the text this archive
 extracted — even from a report that was scanned instead of born
 digital?"* Every one of the 76 Utah FORGE

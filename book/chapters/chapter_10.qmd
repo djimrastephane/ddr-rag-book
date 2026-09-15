@@ -28,7 +28,7 @@ By the end of this chapter, you will be able to:
 
 ## Operational Problem
 
-Sean, the production engineer, asks a pointed question after seeing a
+Farid, the production engineer, asks a pointed question after seeing a
 generated number in a draft report: *"Can you actually prove that number,
 or did the model just make it sound right?"* Chapter 5 built a prompt
 that *asks* a language model to cite

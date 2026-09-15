@@ -216,12 +216,12 @@ opens a chapter's **Operational Problem**:
 | Name | Role |
 |---|---|
 | Oumy | Drilling Engineer |
-| Mike | Completions Engineer |
+| Diego | Completions Engineer |
 | Sarah | Intervention Engineer |
-| Sean | Production Engineer |
+| Farid | Production Engineer |
 
 They're a framing device, not a source of data: whichever question Oumy,
-Mike, Sarah, or Sean asks, every report, number, and quote used to answer
+Diego, Sarah, or Farid asks, every report, number, and quote used to answer
 it is the real, unaltered Utah FORGE archive described above — never
 invented on their behalf.
 
