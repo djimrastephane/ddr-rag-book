@@ -578,7 +578,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Explain why chunk size is measured in tokens, not characters or words.</li>
 <li>Implement token-based chunking with overlap using <code>tiktoken</code>.</li>
-<li>Implement segment-aware chunking that breaks at natural report boundaries (section headers) instead of at an arbitrary character count.</li>
+<li>Sketch a segment-aware chunking approach that breaks at natural report boundaries (section headers) instead of at an arbitrary character count.</li>
 </ul>
 </section>
 <section id="operational-problem" class="level2" data-number="7.2">
@@ -664,7 +664,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of text chunks, each roughly <code>chunk_tokens</code> tokens long, each overlapping the next by <code>overlap_tokens</code> tokens.</p>
-<div id="99572bf4" class="cell" data-execution_count="1">
+<div id="307c9af0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_07/token_chunking.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tiktoken</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -711,7 +711,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(page_number, chunk_text)</code> pairs — the same chunks as before, each now labelled with the real page it came from.</p>
-<div id="450b71ad" class="cell" data-execution_count="2">
+<div id="dba22dd3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>PAGE_MARKER <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"--- Page </span><span class="kw">(</span><span class="dv">\d</span><span class="op">+</span><span class="kw">)</span><span class="vs"> ---</span><span class="ch">\n</span><span class="op">?</span><span class="vs">"</span>)</span>
@@ -1375,7 +1375,7 @@ Chunk B: "uck 04:00 06:00 2.0 Work pipe, circulate lube sweep, work
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain why chunk size is measured in tokens, not characters or words.</span>
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Implement token-based chunking with overlap using <span class="in">`tiktoken`</span>.</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Implement segment-aware chunking that breaks at natural report</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Sketch a segment-aware chunking approach that breaks at natural report</span>
 <span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  boundaries (section headers) instead of at an arbitrary character count.</span>
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Operational Problem</span></span>

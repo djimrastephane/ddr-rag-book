@@ -623,7 +623,7 @@ div.csl-indent {
 </div>
 </div>
 <p>At this book’s scale, even the simplest FAISS index — <code>IndexFlatIP</code> (flat, inner-product) — is the right choice: it’s an <em>exact</em> nearest-neighbour search, mathematically equivalent to Chapter 4’s brute-force approach, just implemented in optimised C++ with a persistent, loadable index file. (Larger-scale approximate indexes — IVF, HNSW — trade a small amount of accuracy for speed at millions of vectors; not a tradeoff this book’s scale needs.)</p>
-<p>Because embeddings are normalized (Chapter 4), inner product <em>is</em> cosine similarity — which is exactly why <code>IndexFlatIP</code> is the right index type rather than a distance-based one.</p>
+<p>Because embeddings are normalised (Chapter 4), inner product <em>is</em> cosine similarity — which is exactly why <code>IndexFlatIP</code> is the right index type rather than a distance-based one.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Persisting an index">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -669,7 +669,7 @@ Building FAISS IndexFlatIP ((1428, 384))...
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A <code>faiss.index</code> file on disk, plus the same in-memory index object ready to query immediately.</p>
-<div id="73ed8b50" class="cell" data-execution_count="1">
+<div id="f35bd141" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_08/build_faiss_index.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -700,7 +700,7 @@ Building FAISS IndexFlatIP ((1428, 384))...
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(chunk_index, similarity_score)</code> pairs — the same shape of result Chapter 4’s brute-force <code>search</code> returned.</p>
-<div id="4ce22b22" class="cell" data-execution_count="2">
+<div id="27922148" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_index(path: Path) <span class="op">-&gt;</span> faiss.Index:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> faiss.read_index(<span class="bu">str</span>(path))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -723,7 +723,7 @@ Building FAISS IndexFlatIP ((1428, 384))...
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A FAISS index with one row per chunk, and a parallel <code>metadata</code> list — <code>metadata[i]</code> is a <code>{"report": ..., "page": ..., "date": ...}</code> dict describing exactly what <code>embeddings[i]</code> is.</p>
-<div id="2fbf3de2" class="cell" data-execution_count="3">
+<div id="f3f3b608" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>REPORT_DATE <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"_</span><span class="kw">(</span><span class="dv">\d</span><span class="op">{4}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="vs">-</span><span class="dv">\d</span><span class="op">{2}</span><span class="kw">)</span><span class="ch">\.</span><span class="vs">"</span>)</span>
@@ -766,7 +766,7 @@ Building FAISS IndexFlatIP ((1428, 384))...
 <h2 data-number="8.7" class="anchored" data-anchor-id="practical-exercise"><span class="header-section-number">8.7</span> Practical exercise</h2>
 <p>🟢 <strong>Beginner</strong></p>
 <p><strong>Try it yourself:</strong> Build a FAISS index over the ten sample DDR embeddings from Chapter 4, save it to disk, reload it in a fresh Python session, and confirm a query for “stuck pipe” returns the same ranked order as Chapter 4’s brute-force search — report #38 at rank 2, report #39 at rank 5.</p>
-<p><strong>You’ll know it worked when:</strong> the FAISS-based and brute-force results agree — because, mathematically, <code>IndexFlatIP</code> over normalized vectors <em>is</em> cosine similarity, just implemented differently.</p>
+<p><strong>You’ll know it worked when:</strong> the FAISS-based and brute-force results agree — because, mathematically, <code>IndexFlatIP</code> over normalised vectors <em>is</em> cosine similarity, just implemented differently.</p>
 </section>
 <section id="field-notes" class="level2" data-number="8.8">
 <h2 data-number="8.8" class="anchored" data-anchor-id="field-notes"><span class="header-section-number">8.8</span> Field notes</h2>
@@ -1448,7 +1448,7 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>HNSW — trade a small amount of accuracy for speed at millions of vectors;</span>
 <span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>not a tradeoff this book's scale needs.)</span>
 <span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>Because embeddings are normalized (Chapter 4), inner product *is* cosine</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>Because embeddings are normalised (Chapter 4), inner product *is* cosine</span>
 <span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>similarity — which is exactly why <span class="in">`IndexFlatIP`</span> is the right index type</span>
 <span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>rather than a distance-based one.</span>
 <span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
@@ -1713,7 +1713,7 @@ Johnson, Jeff, Matthijs Douze, and Hervé Jégou. 2017. <em>Billion-Scale Simila
 <span id="cb6-342"><a href="#cb6-342" aria-hidden="true" tabindex="-1"></a>#39 at rank 5.</span>
 <span id="cb6-343"><a href="#cb6-343" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-344"><a href="#cb6-344" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** the FAISS-based and brute-force results</span>
-<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a>agree — because, mathematically, <span class="in">`IndexFlatIP`</span> over normalized vectors</span>
+<span id="cb6-345"><a href="#cb6-345" aria-hidden="true" tabindex="-1"></a>agree — because, mathematically, <span class="in">`IndexFlatIP`</span> over normalised vectors</span>
 <span id="cb6-346"><a href="#cb6-346" aria-hidden="true" tabindex="-1"></a>*is* cosine similarity, just implemented differently.</span>
 <span id="cb6-347"><a href="#cb6-347" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-348"><a href="#cb6-348" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>

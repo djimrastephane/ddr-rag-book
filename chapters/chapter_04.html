@@ -675,7 +675,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>Two matching lists: report filenames, and each report’s full text.</p>
-<div id="7a7d2abb" class="cell" data-execution_count="1">
+<div id="b70f44c2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_04/semantic_search.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -727,7 +727,7 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>One 384-number vector per report, all packed into a single array.</p>
-<div id="c9f03864" class="cell" data-execution_count="2">
+<div id="0b3d9f1c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -751,16 +751,16 @@ Semantic search, whole-report embeddings (this chapter): report #39
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A ranked list of <code>(filename, score)</code> pairs, highest similarity first.</p>
-<div id="140ec1b8" class="cell" data-execution_count="3">
+<div id="e0f09706" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(model: SentenceTransformer, query: <span class="bu">str</span>, filenames: <span class="bu">list</span>[<span class="bu">str</span>],</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>           embeddings: np.ndarray, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    query_vec <span class="op">=</span> model.encode([query], normalize_embeddings<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> embeddings <span class="op">@</span> query_vec  <span class="co"># cosine similarity, since vectors are normalized</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> embeddings <span class="op">@</span> query_vec  <span class="co"># cosine similarity, since vectors are normalised</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    top_indices <span class="op">=</span> np.argsort(<span class="op">-</span>scores)[:top_k]</span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [(filenames[i], <span class="bu">float</span>(scores[i])) <span class="cf">for</span> i <span class="kw">in</span> top_indices]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
-<p>The query got turned into its own vector, then compared against every report’s vector at once. Because every vector was normalized to the same length in Step 2, one matrix multiplication (<code>embeddings @ query_vec</code>) gives back the cosine similarity for every report simultaneously — that’s the “arithmetic” that replaces exact word matching.</p>
+<p>The query got turned into its own vector, then compared against every report’s vector at once. Because every vector was normalised to the same length in Step 2, one matrix multiplication (<code>embeddings @ query_vec</code>) gives back the cosine similarity for every report simultaneously — that’s the “arithmetic” that replaces exact word matching.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Sorting and list comprehensions">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1658,7 +1658,7 @@ Reimers, Nils, and Iryna Gurevych. 2019. <span>“Sentence-<span>BERT</span>: Se
 <span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> search(model: SentenceTransformer, query: <span class="bu">str</span>, filenames: <span class="bu">list</span>[<span class="bu">str</span>],</span>
 <span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a>           embeddings: np.ndarray, top_k: <span class="bu">int</span> <span class="op">=</span> <span class="dv">3</span>) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]:</span>
 <span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a>    query_vec <span class="op">=</span> model.encode([query], normalize_embeddings<span class="op">=</span><span class="va">True</span>)[<span class="dv">0</span>]</span>
-<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> embeddings <span class="op">@</span> query_vec  <span class="co"># cosine similarity, since vectors are normalized</span></span>
+<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> embeddings <span class="op">@</span> query_vec  <span class="co"># cosine similarity, since vectors are normalised</span></span>
 <span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>    top_indices <span class="op">=</span> np.argsort(<span class="op">-</span>scores)[:top_k]</span>
 <span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [(filenames[i], <span class="bu">float</span>(scores[i])) <span class="cf">for</span> i <span class="kw">in</span> top_indices]</span>
 <span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
@@ -1666,7 +1666,7 @@ Reimers, Nils, and Iryna Gurevych. 2019. <span>“Sentence-<span>BERT</span>: Se
 <span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a>The query got turned into its own vector, then compared against every</span>
-<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a>report's vector at once. Because every vector was normalized to the same</span>
+<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a>report's vector at once. Because every vector was normalised to the same</span>
 <span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a>length in Step 2, one matrix multiplication (<span class="in">`embeddings @ query_vec`</span>)</span>
 <span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>gives back the cosine similarity for every report simultaneously —</span>
 <span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>that's the "arithmetic" that replaces exact word matching.</span>

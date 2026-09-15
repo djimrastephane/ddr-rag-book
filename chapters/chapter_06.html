@@ -669,7 +669,7 @@ Degraded OCR output from a hypothetical poor scan of the same line:
 <p>A dictionary reporting the decision, which specific checks failed, and the underlying numbers those checks were based on, for example:</p>
 <pre><code>{"reject_ocr": True, "flags": {"low_text_density": True, "high_symbol_ratio": True},
  "chars": 43, "alpha_words": 5, "symbol_ratio": 0.61}</code></pre>
-<div id="9bd0d729" class="cell" data-execution_count="1">
+<div id="c78d931a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_06/ocr_quality_gate.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -866,7 +866,7 @@ Quality gate:
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong><code>ocr_quality_gate.py</code></strong> — an OCR quality gate: score any extracted text against four cheap heuristics and decide, automatically, whether it’s trustworthy enough to index or needs a human to review it first.</p>
+<p><strong><code>ocr_quality_gate.py</code></strong> — an OCR quality gate: score any extracted text against two cheap heuristics and decide, automatically, whether it’s trustworthy enough to index or needs a human to review it first. (The companion pipeline’s production version checks two more — see Theory, above.)</p>
 </div>
 </div>
 </section>
@@ -1745,23 +1745,25 @@ Quality gate:
 <span id="cb8-380"><a href="#cb8-380" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-381"><a href="#cb8-381" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
 <span id="cb8-382"><a href="#cb8-382" aria-hidden="true" tabindex="-1"></a>**`ocr_quality_gate.py`** — an OCR quality gate: score any extracted text</span>
-<span id="cb8-383"><a href="#cb8-383" aria-hidden="true" tabindex="-1"></a>against four cheap heuristics and decide, automatically, whether it's</span>
-<span id="cb8-384"><a href="#cb8-384" aria-hidden="true" tabindex="-1"></a>trustworthy enough to index or needs a human to review it first.</span>
-<span id="cb8-385"><a href="#cb8-385" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb8-386"><a href="#cb8-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-387"><a href="#cb8-387" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb8-383"><a href="#cb8-383" aria-hidden="true" tabindex="-1"></a>against two cheap heuristics and decide, automatically, whether it's</span>
+<span id="cb8-384"><a href="#cb8-384" aria-hidden="true" tabindex="-1"></a>trustworthy enough to index or needs a human to review it first. (The</span>
+<span id="cb8-385"><a href="#cb8-385" aria-hidden="true" tabindex="-1"></a>companion pipeline's production version checks two more — see Theory,</span>
+<span id="cb8-386"><a href="#cb8-386" aria-hidden="true" tabindex="-1"></a>above.)</span>
+<span id="cb8-387"><a href="#cb8-387" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb8-388"><a href="#cb8-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-389"><a href="#cb8-389" aria-hidden="true" tabindex="-1"></a>You can tell, automatically, whether a page of extracted or OCR'd text is</span>
-<span id="cb8-390"><a href="#cb8-390" aria-hidden="true" tabindex="-1"></a>trustworthy enough to search on — and route the pages that aren't to a</span>
-<span id="cb8-391"><a href="#cb8-391" aria-hidden="true" tabindex="-1"></a>human for review, instead of silently indexing garbage alongside good</span>
-<span id="cb8-392"><a href="#cb8-392" aria-hidden="true" tabindex="-1"></a>reports.</span>
-<span id="cb8-393"><a href="#cb8-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-394"><a href="#cb8-394" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb8-389"><a href="#cb8-389" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb8-390"><a href="#cb8-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-391"><a href="#cb8-391" aria-hidden="true" tabindex="-1"></a>You can tell, automatically, whether a page of extracted or OCR'd text is</span>
+<span id="cb8-392"><a href="#cb8-392" aria-hidden="true" tabindex="-1"></a>trustworthy enough to search on — and route the pages that aren't to a</span>
+<span id="cb8-393"><a href="#cb8-393" aria-hidden="true" tabindex="-1"></a>human for review, instead of silently indexing garbage alongside good</span>
+<span id="cb8-394"><a href="#cb8-394" aria-hidden="true" tabindex="-1"></a>reports.</span>
 <span id="cb8-395"><a href="#cb8-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 7:** Once you trust the text coming out of OCR and</span>
-<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a>digital extraction alike, the next question is how to break it into</span>
-<span id="cb8-398"><a href="#cb8-398" aria-hidden="true" tabindex="-1"></a>pieces small enough to embed and retrieve — without cutting a stuck-pipe</span>
-<span id="cb8-399"><a href="#cb8-399" aria-hidden="true" tabindex="-1"></a>narrative in half across two chunks. That's Chapter 7.</span>
+<span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-398"><a href="#cb8-398" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 7:** Once you trust the text coming out of OCR and</span>
+<span id="cb8-399"><a href="#cb8-399" aria-hidden="true" tabindex="-1"></a>digital extraction alike, the next question is how to break it into</span>
+<span id="cb8-400"><a href="#cb8-400" aria-hidden="true" tabindex="-1"></a>pieces small enough to embed and retrieve — without cutting a stuck-pipe</span>
+<span id="cb8-401"><a href="#cb8-401" aria-hidden="true" tabindex="-1"></a>narrative in half across two chunks. That's Chapter 7.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -611,7 +611,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <section id="theory" class="level2" data-number="13.4">
 <h2 data-number="13.4" class="anchored" data-anchor-id="theory"><span class="header-section-number">13.4</span> Theory</h2>
 <p>Two facts about the index you built in Chapter 8 make incremental ingestion possible — and one makes half of it harder than it looks.</p>
-<p><strong>The dense index is append-only, and that’s a feature.</strong> FAISS’s <code>IndexFlatIP</code> stores one row per chunk, and <code>index.add(new_vectors)</code> bolts new rows onto the end. Because Chapter 4’s embeddings are normalized and each chunk’s vector is computed independently of every other, the vectors you add today are identical to the vectors a full rebuild would produce for the same chunks. Order doesn’t matter; nothing already in the index needs to change. Appending is exact.</p>
+<p><strong>The dense index is append-only, and that’s a feature.</strong> FAISS’s <code>IndexFlatIP</code> stores one row per chunk, and <code>index.add(new_vectors)</code> bolts new rows onto the end. Because Chapter 4’s embeddings are normalised and each chunk’s vector is computed independently of every other, the vectors you add today are identical to the vectors a full rebuild would produce for the same chunks. Order doesn’t matter; nothing already in the index needs to change. Appending is exact.</p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: Append-only index">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -625,7 +625,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <p>An <strong>append-only</strong> index is a bound logbook, not a whiteboard: you add tomorrow’s entry to the next blank line without rewriting yesterday’s. That makes adding cheap and safe — but it also means you can’t quietly erase a line, which is why getting each entry right <em>before</em> you write it matters (more on that below).</p>
 </div>
 </div>
-<p><strong>BM25 is not append-only, and pretending otherwise is a bug.</strong> Chapter 9’s sparse signal scores a term by its rarity across the whole archive (inverse document frequency) and normalizes for average document length. Both of those depend on <em>every</em> report. Add one report and every term’s IDF shifts a little and the average length moves — so the correct BM25 score for a document you indexed last week is now slightly different. You can’t append to BM25; you recompute its whole-archive statistics. That’s cheap at this book’s scale and a real cost at millions of documents, and it’s the honest asymmetry at the heart of incremental retrieval: <strong>the dense signal appends, the sparse signal recomputes.</strong></p>
+<p><strong>BM25 is not append-only, and pretending otherwise is a bug.</strong> Chapter 9’s sparse signal scores a term by its rarity across the whole archive (inverse document frequency) and normalises for average document length. Both of those depend on <em>every</em> report. Add one report and every term’s IDF shifts a little and the average length moves — so the correct BM25 score for a document you indexed last week is now slightly different. You can’t append to BM25; you recompute its whole-archive statistics. That’s cheap at this book’s scale and a real cost at millions of documents, and it’s the honest asymmetry at the heart of incremental retrieval: <strong>the dense signal appends, the sparse signal recomputes.</strong></p>
 <p><strong>An append-only index has to catch duplicates at the door.</strong> Because you can’t easily un-add a row, the moment to stop a report being indexed twice is <em>before</em> you add it — not after. This archive already makes the point: its raw form has duplicate filename variants of the same report (Chapter 8’s <code>build_full_archive.py</code> deduplicates them). Ingest report #38 twice and it contributes its chunks twice, silently inflating how much “evidence” a query appears to have. So ingestion checks first: is this report already in the index? If so, skip it.</p>
 <p>Here’s the daily loop, end to end, grouped into the four phases the system moves through. Notice the duplicate check runs first, before extraction, for the same reason <code>ingest_report</code> puts it first in code: there’s no point extracting text from a report you’re about to discard.</p>
 <div class="pipeline-diagram">
@@ -645,7 +645,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The loaded index and metadata list — or empty state (<code>None</code>, <code>[]</code>) on the very first run.</p>
-<div id="edee5dc4" class="cell" data-execution_count="1">
+<div id="b3cb1959" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_13/ingest.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -668,7 +668,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The updated index, the number of chunks added (0 if skipped or rejected), and a status string.</p>
-<div id="167071cb" class="cell" data-execution_count="2">
+<div id="487c2e1f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> faiss</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> already_ingested(metadata, report):</span>
@@ -716,7 +716,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>The current list of reporting gaps — ideally empty.</p>
-<div id="51877077" class="cell" data-execution_count="3">
+<div id="1351a796" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ingested_dates(metadata):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sorted</span>({m[<span class="st">"date"</span>] <span class="cf">for</span> m <span class="kw">in</span> metadata <span class="cf">if</span> m.get(<span class="st">"date"</span>)})</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -758,7 +758,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <div class="callout-body-container callout-body">
 <p><strong>Action:</strong> build the index from the first nine sample reports, then ingest the tenth, and compare the result to Chapter 8’s one-shot build over all ten.</p>
 <p><strong>Result:</strong> nine reports give 296 chunks; ingesting report #50 adds 37, for <strong>333</strong> — the exact total Chapter 8’s <code>build_chunk_metadata_index</code> produces in a single batch pass over all ten reports.</p>
-<p><strong>Why:</strong> each chunk’s embedding is computed independently and the vectors are normalized, so the row you append today is bit-for-bit the row a rebuild would have produced. <code>IndexFlatIP</code> is an exact index; append and rebuild are two paths to the same place.</p>
+<p><strong>Why:</strong> each chunk’s embedding is computed independently and the vectors are normalised, so the row you append today is bit-for-bit the row a rebuild would have produced. <code>IndexFlatIP</code> is an exact index; append and rebuild are two paths to the same place.</p>
 <p><strong>Lesson:</strong> incremental ingestion isn’t an <em>approximation</em> of the batch system to be traded off against accuracy — for an exact flat index it produces the same index, one report at a time. That’s what makes it safe to run every day instead of rebuilding every night.</p>
 </div>
 </div>
@@ -1421,7 +1421,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>**The dense index is append-only, and that's a feature.** FAISS's</span>
 <span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="in">`IndexFlatIP`</span> stores one row per chunk, and <span class="in">`index.add(new_vectors)`</span> bolts</span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>new rows onto the end. Because Chapter 4's embeddings are normalized and</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>new rows onto the end. Because Chapter 4's embeddings are normalised and</span>
 <span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>each chunk's vector is computed independently of every other, the vectors</span>
 <span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>you add today are identical to the vectors a full rebuild would produce</span>
 <span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>for the same chunks. Order doesn't matter; nothing already in the index</span>
@@ -1437,7 +1437,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>**BM25 is not append-only, and pretending otherwise is a bug.** Chapter</span>
 <span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>9's sparse signal scores a term by its rarity across the whole archive</span>
-<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>(inverse document frequency) and normalizes for average document length.</span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>(inverse document frequency) and normalises for average document length.</span>
 <span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>Both of those depend on *every* report. Add one report and every term's</span>
 <span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>IDF shifts a little and the average length moves — so the correct BM25</span>
 <span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>score for a document you indexed last week is now slightly different. You</span>
@@ -1671,7 +1671,7 @@ Live index after:     333 chunks across 10 reports   (+37, no rebuild)</code></p
 <span id="cb5-325"><a href="#cb5-325" aria-hidden="true" tabindex="-1"></a>produces in a single batch pass over all ten reports.</span>
 <span id="cb5-326"><a href="#cb5-326" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-327"><a href="#cb5-327" aria-hidden="true" tabindex="-1"></a>**Why:** each chunk's embedding is computed independently and the vectors</span>
-<span id="cb5-328"><a href="#cb5-328" aria-hidden="true" tabindex="-1"></a>are normalized, so the row you append today is bit-for-bit the row a</span>
+<span id="cb5-328"><a href="#cb5-328" aria-hidden="true" tabindex="-1"></a>are normalised, so the row you append today is bit-for-bit the row a</span>
 <span id="cb5-329"><a href="#cb5-329" aria-hidden="true" tabindex="-1"></a>rebuild would have produced. <span class="in">`IndexFlatIP`</span> is an exact index; append and</span>
 <span id="cb5-330"><a href="#cb5-330" aria-hidden="true" tabindex="-1"></a>rebuild are two paths to the same place.</span>
 <span id="cb5-331"><a href="#cb5-331" aria-hidden="true" tabindex="-1"></a></span>

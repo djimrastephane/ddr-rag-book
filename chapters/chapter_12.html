@@ -626,7 +626,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 </section>
 <section id="theory-how-the-production-tool-would-check-this-at-scale" class="level2" data-number="12.4">
 <h2 data-number="12.4" class="anchored" data-anchor-id="theory-how-the-production-tool-would-check-this-at-scale"><span class="header-section-number">12.4</span> Theory: how the production tool would check this at scale</h2>
-<p>The companion pipeline’s <code>src/ddr_rag/causality_analyzer.py</code> — part of <code>DDR_UTAH_FORGE</code>, not this book’s repository — implements exactly this kind of check, generalized: for a given term, it compares frequency in a window before and after a boundary date, and labels a term <strong>causal</strong> only above a defined post-boundary NPT rate, and <strong>escalating</strong> only above a defined frequency-increase ratio. The thresholds below are reported directly from that module, not something you can inspect or run with this book’s own bundled code:</p>
+<p>The companion pipeline’s <code>src/ddr_rag/causality_analyzer.py</code> — part of <code>DDR_UTAH_FORGE</code>, not this book’s repository — implements exactly this kind of check, generalised: for a given term, it compares frequency in a window before and after a boundary date, and labels a term <strong>causal</strong> only above a defined post-boundary NPT rate, and <strong>escalating</strong> only above a defined frequency-increase ratio. The thresholds below are reported directly from that module, not something you can inspect or run with this book’s own bundled code:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>TRANSITION_WINDOW_DAYS <span class="op">=</span> <span class="dv">14</span>   <span class="co"># days before/after a boundary to compare</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>MIN_TERM_FREQ <span class="op">=</span> <span class="dv">3</span>             <span class="co"># minimum occurrences before a term counts at all</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>NPT_SIGNAL_THRESHOLD <span class="op">=</span> <span class="fl">0.40</span>   <span class="co"># post-boundary NPT rate to call a term "causal"</span></span>
@@ -672,7 +672,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(date, torque_value, percentage_change)</code> — one entry for every day after the first, since a percentage change needs a previous day to compare against.</p>
-<div id="d3ee6abb" class="cell" data-execution_count="1">
+<div id="e12a6f40" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_12/torque_trend_check.py</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> torque_trend(readings: <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>]]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">float</span>, <span class="bu">float</span>]]:</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Given [(date, torque_value), ...] in chronological order, return</span></span>
@@ -697,7 +697,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <p><strong>Expected Output</strong></p>
 <pre><code>2020-11-25: 4200 (-4.5%)
 2020-11-26: 5615 (+33.7%)</code></pre>
-<div id="371f5d6c" class="cell" data-execution_count="2">
+<div id="b4ce68bf" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>readings <span class="op">=</span> [</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-24"</span>, <span class="dv">4400</span>),</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"2020-11-25"</span>, <span class="dv">4200</span>),</span>
@@ -748,7 +748,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 </ul>
 <p>Continued elevated-torque language, one calendar day after report #38’s header <code>TORQUE</code> value jumped 33.7% on the stuck-pipe day itself.</p>
 <p><strong>Why:</strong> this chapter’s structured trend check only looks at the <code>TORQUE</code> header field across three days, and stops at report #38. But report #39’s narrative — high torque, a tight hole, a deliberate decision to pull out of hole — reads like the same operational story continuing in prose, one day after the structured number spiked.</p>
-<p><strong>Lesson:</strong> a single structured signal, however precise, is one thread of a larger story. Report #39 is exactly the kind of continuation a torque-only check would miss entirely, but that hybrid retrieval and narrative search (Chapters 3-9 combined) can still surface. That’s the whole book’s argument, compressed into one field note: no single technique in this book is sufficient alone — structured checks, narrative retrieval, and traceable generation each catch what the others miss.</p>
+<p><strong>Lesson:</strong> a single structured signal, however precise, is one thread of a larger story. Report #39 is exactly the kind of continuation a torque-only check would miss entirely, but that hybrid retrieval and narrative search (Chapters 3–9 combined) can still surface. That’s the whole book’s argument, compressed into one field note: no single technique in this book is sufficient alone — structured checks, narrative retrieval, and traceable generation each catch what the others miss.</p>
 </div>
 </div>
 </section>
@@ -762,7 +762,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <ul>
 <li>A single structured number, tracked day over day, can corroborate a narrative event — but be precise about what you’ve actually shown: same-day correlation is not the same claim as a multi-day leading indicator, and this chapter deliberately didn’t claim more than the real data supports.</li>
 <li>Production causality-detection code carries real, inspectable thresholds — read them before trusting output, and check that its configuration (like a phase vocabulary) actually matches your dataset before running it.</li>
-<li>Genuine cross-well intelligence needs more than one well’s worth of data to compare against — Utah FORGE’s <code>data/fields/UtahForge/wells/</code> structure in the companion pipeline is already organized to support additional wells as this research programme (or your own multi-well archive) grows.</li>
+<li>Genuine cross-well intelligence needs more than one well’s worth of data to compare against — Utah FORGE’s <code>data/fields/UtahForge/wells/</code> structure in the companion pipeline is already organised to support additional wells as this research programme (or your own multi-well archive) grows.</li>
 </ul>
 </section>
 <section id="repository-files" class="level2" data-number="12.11">
@@ -1430,7 +1430,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>The companion pipeline's <span class="in">`src/ddr_rag/causality_analyzer.py`</span> — part of</span>
 <span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a><span class="in">`DDR_UTAH_FORGE`</span>, not this book's repository — implements exactly this</span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>kind of check, generalized: for a given term, it compares frequency in a</span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>kind of check, generalised: for a given term, it compares frequency in a</span>
 <span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>window before and after a boundary date, and labels a term **causal**</span>
 <span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>only above a defined post-boundary NPT rate, and **escalating** only</span>
 <span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>above a defined frequency-increase ratio. The thresholds below are</span>
@@ -1623,7 +1623,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <span id="cb6-289"><a href="#cb6-289" aria-hidden="true" tabindex="-1"></a>**Lesson:** a single structured signal, however precise, is one thread</span>
 <span id="cb6-290"><a href="#cb6-290" aria-hidden="true" tabindex="-1"></a>of a larger story. Report #39 is exactly the kind of continuation a</span>
 <span id="cb6-291"><a href="#cb6-291" aria-hidden="true" tabindex="-1"></a>torque-only check would miss entirely, but that hybrid retrieval and</span>
-<span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a>narrative search (Chapters 3-9 combined) can still surface. That's the</span>
+<span id="cb6-292"><a href="#cb6-292" aria-hidden="true" tabindex="-1"></a>narrative search (Chapters 3–9 combined) can still surface. That's the</span>
 <span id="cb6-293"><a href="#cb6-293" aria-hidden="true" tabindex="-1"></a>whole book's argument, compressed into one field note: no single</span>
 <span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a>technique in this book is sufficient alone — structured checks,</span>
 <span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a>narrative retrieval, and traceable generation each catch what the others</span>
@@ -1655,7 +1655,7 @@ Report #38 (2020-11-26): TORQUE: 5,615 (header) / 6,500 (during the slide)
 <span id="cb6-321"><a href="#cb6-321" aria-hidden="true" tabindex="-1"></a>  before running it.</span>
 <span id="cb6-322"><a href="#cb6-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Genuine cross-well intelligence needs more than one well's worth of</span>
 <span id="cb6-323"><a href="#cb6-323" aria-hidden="true" tabindex="-1"></a>  data to compare against — Utah FORGE's <span class="in">`data/fields/UtahForge/wells/`</span></span>
-<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a>  structure in the companion pipeline is already organized to support</span>
+<span id="cb6-324"><a href="#cb6-324" aria-hidden="true" tabindex="-1"></a>  structure in the companion pipeline is already organised to support</span>
 <span id="cb6-325"><a href="#cb6-325" aria-hidden="true" tabindex="-1"></a>  additional wells as this research programme (or your own multi-well</span>
 <span id="cb6-326"><a href="#cb6-326" aria-hidden="true" tabindex="-1"></a>  archive) grows.</span>
 <span id="cb6-327"><a href="#cb6-327" aria-hidden="true" tabindex="-1"></a></span>

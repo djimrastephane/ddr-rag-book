@@ -577,7 +577,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="11.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">11.1</span> Learning objectives</h2>
 <p>By the end of this chapter, you will be able to:</p>
 <ul>
-<li>Build a hand-labeled evaluation set that records, per question, the expected source report and page.</li>
+<li>Build a hand-labelled evaluation set that records, per question, the expected source report and page.</li>
 <li>Compute <code>recall@k</code>, Mean Reciprocal Rank (MRR), and <code>NDCG@k</code>, and explain what each number actually tells you.</li>
 <li>Break results down by question category and difficulty to find <em>where</em> a system fails, not just <em>whether</em> it does.</li>
 </ul>
@@ -623,7 +623,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 <ul>
 <li><strong><code>recall@k</code></strong> — did the correct answer appear <em>anywhere</em> in the top k results? Simple, and the right first metric to compute.</li>
 <li><strong>Mean Reciprocal Rank (MRR)</strong> — averages <code>1 / rank</code> of the correct answer across all questions. Rewards getting the right answer to rank #1, not just somewhere in the top 10 — closer to what a user actually experiences.</li>
-<li><strong><code>NDCG@k</code></strong> (Normalized Discounted Cumulative Gain) — like recall, but weights a hit at rank 1 more than a hit at rank 5, and normalizes so the score is comparable across queries with different numbers of correct answers.</li>
+<li><strong><code>NDCG@k</code></strong> (Normalized Discounted Cumulative Gain) — like recall, but weights a hit at rank 1 more than a hit at rank 5, and normalises so the score is comparable across queries with different numbers of correct answers.</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled" title="Engineering Translation: recall@k">
 <div class="callout-header d-flex align-content-center">
@@ -683,7 +683,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single number between 0 and 1 — the fraction of questions where the correct report was within the top <code>k</code>.</p>
-<div id="796b846c" class="cell" data-execution_count="1">
+<div id="72589921" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_11/eval_metrics.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _validate_ranks(results: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> r <span class="kw">in</span> results:</span>
@@ -714,7 +714,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single average score: higher when correct answers tend to rank near the top, lower when they’re buried further down or missing.</p>
-<div id="20bf0ddd" class="cell" data-execution_count="2">
+<div id="f0333278" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mrr(results: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    _validate_ranks(results)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    scores <span class="op">=</span> [<span class="fl">1.0</span> <span class="op">/</span> r[<span class="st">"rank"</span>] <span class="cf">if</span> r.get(<span class="st">"rank"</span>) <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> <span class="fl">0.0</span> <span class="cf">for</span> r <span class="kw">in</span> results]</span>
@@ -734,7 +734,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A single average score, weighted so a hit at rank 1 counts more than a hit at rank 5, and anything beyond <code>k</code> counts as zero.</p>
-<div id="35eabcf6" class="cell" data-execution_count="3">
+<div id="96b32c2f" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ndcg_at_k(results: <span class="bu">list</span>[<span class="bu">dict</span>], k: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> math</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    _validate_ranks(results)</span>
@@ -746,7 +746,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(scores) <span class="op">/</span> <span class="bu">len</span>(scores) <span class="cf">if</span> scores <span class="cf">else</span> <span class="fl">0.0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
-<p>Instead of <code>1 / rank</code> (MRR), each hit’s credit shrinks by <code>1 / log2(rank + 1)</code> — a gentler slope that still rewards a rank-1 hit the most, still penalizes a rank-5 hit, but doesn’t fall off quite as sharply. Anything outside the top <code>k</code> scores zero, same as <code>recall@k</code>.</p>
+<p>Instead of <code>1 / rank</code> (MRR), each hit’s credit shrinks by <code>1 / log2(rank + 1)</code> — a gentler slope that still rewards a rank-1 hit the most, still penalises a rank-5 hit, but doesn’t fall off quite as sharply. Anything outside the top <code>k</code> scores zero, same as <code>recall@k</code>.</p>
 <p>Each <code>result</code> dict records, per evaluation question, the rank at which the known-correct report was retrieved (or <code>None</code> if it wasn’t in the top k considered). This mirrors the shape of <code>_recall_at_k()</code>, <code>_mrr()</code>, and <code>_ndcg_at_k()</code> in the companion repository’s <code>scripts/run_eval.py</code>.</p>
 </section>
 </section>
@@ -755,7 +755,7 @@ Q5: "Which report shows the crew rigging up before spud?"
 <p>The evaluation set in this chapter has five questions, and the challenge exercise’s has fifteen — genuinely useful, but still small next to a real deployment. A few realities worth planning for:</p>
 <ul>
 <li>an evaluation set needs to keep growing as new report types, wells, and question styles show up — five questions that were exhaustive for the Part I sample won’t stay representative of a live system fielding real engineers’ questions</li>
-<li>tuning the retrieval pipeline specifically to score well against your own evaluation set risks overfitting to it — the same way memorizing an exam’s specific questions isn’t the same as knowing the material. Holding some questions back, or continuously adding new ones, keeps the score honest</li>
+<li>tuning the retrieval pipeline specifically to score well against your own evaluation set risks overfitting to it — the same way memorising an exam’s specific questions isn’t the same as knowing the material. Holding some questions back, or continuously adding new ones, keeps the score honest</li>
 <li>an aggregate metric is a summary, not a substitute for periodically reading real answers by eye — especially before a decision with real consequences rides on the system’s output</li>
 <li>who writes the evaluation questions matters — a question set written entirely by the person who built the retrieval pipeline tends to test what that person already thought to check, not what a working engineer will actually ask</li>
 </ul>
@@ -838,7 +838,7 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 </div>
 <div class="callout-body-container callout-body">
 <ul class="task-list">
-<li><label><input type="checkbox" checked="">Built a hand-labeled evaluation set with known correct answers</label></li>
+<li><label><input type="checkbox" checked="">Built a hand-labelled evaluation set with known correct answers</label></li>
 <li><label><input type="checkbox" checked="">Computed <code>recall@k</code>, MRR, and <code>NDCG@k</code>, and can explain what each one tells you</label></li>
 <li><label><input type="checkbox" checked="">Tracked one hard question across every retrieval method in this book</label></li>
 <li><label><input type="checkbox" checked="">Reported results broken down by category instead of one aggregate score</label></li>
@@ -1375,7 +1375,7 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Build a hand-labeled evaluation set that records, per question, the</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Build a hand-labelled evaluation set that records, per question, the</span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  expected source report and page.</span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Compute <span class="in">`recall@k`</span>, Mean Reciprocal Rank (MRR), and <span class="in">`NDCG@k`</span>, and</span>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  explain what each number actually tells you.</span>
@@ -1440,7 +1440,7 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 <span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>  #1, not just somewhere in the top 10 — closer to what a user actually</span>
 <span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>  experiences.</span>
 <span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`NDCG@k`** (Normalized Discounted Cumulative Gain) — like recall, but</span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>  weights a hit at rank 1 more than a hit at rank 5, and normalizes so</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>  weights a hit at rank 1 more than a hit at rank 5, and normalises so</span>
 <span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>  the score is comparable across queries with different numbers of</span>
 <span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>  correct answers.</span>
 <span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a></span>
@@ -1625,7 +1625,7 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 <span id="cb6-275"><a href="#cb6-275" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-276"><a href="#cb6-276" aria-hidden="true" tabindex="-1"></a>Instead of <span class="in">`1 / rank`</span> (MRR), each hit's credit shrinks by `1 / log2(rank</span>
 <span id="cb6-277"><a href="#cb6-277" aria-hidden="true" tabindex="-1"></a><span class="ss">+ </span>1)` — a gentler slope that still rewards a rank-1 hit the most, still</span>
-<span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a>penalizes a rank-5 hit, but doesn't fall off quite as sharply. Anything</span>
+<span id="cb6-278"><a href="#cb6-278" aria-hidden="true" tabindex="-1"></a>penalises a rank-5 hit, but doesn't fall off quite as sharply. Anything</span>
 <span id="cb6-279"><a href="#cb6-279" aria-hidden="true" tabindex="-1"></a>outside the top <span class="in">`k`</span> scores zero, same as <span class="in">`recall@k`</span>.</span>
 <span id="cb6-280"><a href="#cb6-280" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-281"><a href="#cb6-281" aria-hidden="true" tabindex="-1"></a>Each <span class="in">`result`</span> dict records, per evaluation question, the rank at which</span>
@@ -1644,7 +1644,7 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 <span id="cb6-294"><a href="#cb6-294" aria-hidden="true" tabindex="-1"></a>  Part I sample won't stay representative of a live system fielding real</span>
 <span id="cb6-295"><a href="#cb6-295" aria-hidden="true" tabindex="-1"></a>  engineers' questions</span>
 <span id="cb6-296"><a href="#cb6-296" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>tuning the retrieval pipeline specifically to score well against your</span>
-<span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a>  own evaluation set risks overfitting to it — the same way memorizing an</span>
+<span id="cb6-297"><a href="#cb6-297" aria-hidden="true" tabindex="-1"></a>  own evaluation set risks overfitting to it — the same way memorising an</span>
 <span id="cb6-298"><a href="#cb6-298" aria-hidden="true" tabindex="-1"></a>  exam's specific questions isn't the same as knowing the material.</span>
 <span id="cb6-299"><a href="#cb6-299" aria-hidden="true" tabindex="-1"></a>  Holding some questions back, or continuously adding new ones, keeps the</span>
 <span id="cb6-300"><a href="#cb6-300" aria-hidden="true" tabindex="-1"></a>  score honest</span>
@@ -1752,7 +1752,7 @@ Chapter 9  hybrid, equal weights (1.0/1.0)                 rank 7 of 10</code></
 <span id="cb6-402"><a href="#cb6-402" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/scripts/run_eval.py`</span> <span class="pp">|</span> Evaluation harness (companion repo — requires DDR_UTAH_FORGE) — ready to point at a Utah FORGE question set once you build one <span class="pp">|</span></span>
 <span id="cb6-403"><a href="#cb6-403" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-404"><a href="#cb6-404" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 11"}</span>
-<span id="cb6-405"><a href="#cb6-405" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built a hand-labeled evaluation set with known correct answers</span>
+<span id="cb6-405"><a href="#cb6-405" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built a hand-labelled evaluation set with known correct answers</span>
 <span id="cb6-406"><a href="#cb6-406" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Computed <span class="in">`recall@k`</span>, MRR, and <span class="in">`NDCG@k`</span>, and can explain what each one tells you</span>
 <span id="cb6-407"><a href="#cb6-407" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Tracked one hard question across every retrieval method in this book</span>
 <span id="cb6-408"><a href="#cb6-408" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Reported results broken down by category instead of one aggregate score</span>
