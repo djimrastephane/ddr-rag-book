@@ -665,7 +665,7 @@ operation_text: "PJSM, pre job safety meeting. Rig up Schlumberger
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A plain-text “Evidence:” block listing each source, ready to show alongside a generated answer.</p>
-<div id="52722d20" class="cell" data-execution_count="1">
+<div id="762c8b8e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># code/chapter_10/traceable_answers.py</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -673,10 +673,18 @@ operation_text: "PJSM, pre job safety meeting. Rig up Schlumberger
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Citation:</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    report: <span class="bu">str</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    page: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> format_evidence(citations: <span class="bu">list</span>[Citation]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> [<span class="ss">f"  </span><span class="sc">{</span>c<span class="sc">.</span>report<span class="sc">}</span><span class="ss">"</span> <span class="op">+</span> (<span class="ss">f" page </span><span class="sc">{</span>c<span class="sc">.</span>page<span class="sc">}</span><span class="ss">"</span> <span class="cf">if</span> c.page <span class="cf">else</span> <span class="st">""</span>) <span class="cf">for</span> c <span class="kw">in</span> citations]</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Evidence:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(lines)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    report_date: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> format_evidence(citations: <span class="bu">list</span>[Citation]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> []</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> citations:</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        line <span class="op">=</span> <span class="ss">f"  </span><span class="sc">{</span>c<span class="sc">.</span>report<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> c.page:</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>            line <span class="op">+=</span> <span class="ss">f" page </span><span class="sc">{</span>c<span class="sc">.</span>page<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> c.report_date:</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>            line <span class="op">+=</span> <span class="ss">f" (</span><span class="sc">{</span>c<span class="sc">.</span>report_date<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        lines.append(line)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Evidence:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(lines)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><strong>What just happened?</strong></p>
 <p><code>Citation</code> bundles a report and a page number together as one unit — the equivalent of an evidence tag on an exhibit, so a claim’s source can never get separated from the claim itself by accident. <code>format_evidence</code> turns a list of those tags into a plain block of text a reader can check against the real reports, one line per source.</p>
@@ -704,7 +712,7 @@ operation_text: "PJSM, pre job safety meeting. Rig up Schlumberger
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>(start, end)</code> date ranges with no report — empty if the archive is complete.</p>
-<div id="97cab0a1" class="cell" data-execution_count="2">
+<div id="f708afe3" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_date_gaps(report_dates: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">str</span>]]:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return (start, end) date ranges with no report, given a sorted</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    list of ISO date strings covering a continuous daily-reporting period."""</span></span>
@@ -732,7 +740,7 @@ operation_text: "PJSM, pre job safety meeting. Rig up Schlumberger
 </ul>
 <p><strong>Expected Output</strong></p>
 <p>A list of <code>Citation</code> objects built entirely from the search results — real reports, real pages, real dates, in ranked order.</p>
-<div id="472ca24c" class="cell" data-execution_count="3">
+<div id="25e7ecf4" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Citation:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    report: <span class="bu">str</span></span>
@@ -1523,310 +1531,318 @@ Ji, Ziwei, Nayeon Lee, Rita Frieske, et al. 2023. <span>“Survey of Hallucinati
 <span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Citation:</span>
 <span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    report: <span class="bu">str</span></span>
 <span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>    page: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> format_evidence(citations: <span class="bu">list</span>[Citation]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> [<span class="ss">f"  </span><span class="sc">{</span>c<span class="sc">.</span>report<span class="sc">}</span><span class="ss">"</span> <span class="op">+</span> (<span class="ss">f" page </span><span class="sc">{</span>c<span class="sc">.</span>page<span class="sc">}</span><span class="ss">"</span> <span class="cf">if</span> c.page <span class="cf">else</span> <span class="st">""</span>) <span class="cf">for</span> c <span class="kw">in</span> citations]</span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Evidence:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(lines)</span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a><span class="in">`Citation`</span> bundles a report and a page number together as one unit — the</span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>equivalent of an evidence tag on an exhibit, so a claim's source can never</span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>get separated from the claim itself by accident. <span class="in">`format_evidence`</span> turns</span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>a list of those tags into a plain block of text a reader can check</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>against the real reports, one line per source.</span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>    report_date: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> format_evidence(citations: <span class="bu">list</span>[Citation]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>    lines <span class="op">=</span> []</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> c <span class="kw">in</span> citations:</span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>        line <span class="op">=</span> <span class="ss">f"  </span><span class="sc">{</span>c<span class="sc">.</span>report<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> c.page:</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>            line <span class="op">+=</span> <span class="ss">f" page </span><span class="sc">{</span>c<span class="sc">.</span>page<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> c.report_date:</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>            line <span class="op">+=</span> <span class="ss">f" (</span><span class="sc">{</span>c<span class="sc">.</span>report_date<span class="sc">}</span><span class="ss">)"</span></span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>        lines.append(line)</span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Evidence:</span><span class="ch">\n</span><span class="st">"</span> <span class="op">+</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(lines)</span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Dataclass"}</span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>A **dataclass** like <span class="in">`Citation`</span> is a small, labelled bundle of related</span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>facts — the code equivalent of an equipment tag that keeps a part number</span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>and its location together on one card, instead of as two separate loose</span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>numbers you could mix up.</span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: check the archive for real gaps</span></span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
-<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>Detect whether the archive has days with no report at all, so the system</span>
-<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>can say "I have nothing for that date" instead of guessing or silently</span>
-<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>retrieving the nearest available report.</span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a><span class="in">`Citation`</span> bundles a report and a page number together as one unit — the</span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>equivalent of an evidence tag on an exhibit, so a claim's source can never</span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>get separated from the claim itself by accident. <span class="in">`format_evidence`</span> turns</span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>a list of those tags into a plain block of text a reader can check</span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>against the real reports, one line per source.</span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip title="Engineering Translation: Dataclass"}</span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>A **dataclass** like <span class="in">`Citation`</span> is a small, labelled bundle of related</span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a>facts — the code equivalent of an equipment tag that keeps a part number</span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>and its location together on one card, instead of as two separate loose</span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>numbers you could mix up.</span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 2: check the archive for real gaps</span></span>
 <span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A list of report dates, as ISO date strings (the plain <span class="in">`YYYY-MM-DD`</span></span>
-<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>  format the examples below use), covering a period that should have one</span>
-<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>  report per day.</span>
-<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>Detect whether the archive has days with no report at all, so the system</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>can say "I have nothing for that date" instead of guessing or silently</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>retrieving the nearest available report.</span>
 <span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>A list of <span class="in">`(start, end)`</span> date ranges with no report — empty if the</span>
-<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>archive is complete.</span>
-<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_date_gaps(report_dates: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">str</span>]]:</span>
-<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return (start, end) date ranges with no report, given a sorted</span></span>
-<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a><span class="co">    list of ISO date strings covering a continuous daily-reporting period."""</span></span>
-<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> datetime <span class="im">import</span> date, timedelta</span>
-<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>    dates <span class="op">=</span> <span class="bu">sorted</span>(date.fromisoformat(d) <span class="cf">for</span> d <span class="kw">in</span> report_dates)</span>
-<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a>    gaps <span class="op">=</span> []</span>
-<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> prev, curr <span class="kw">in</span> <span class="bu">zip</span>(dates, dates[<span class="dv">1</span>:]):</span>
-<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a>        missing_days <span class="op">=</span> (curr <span class="op">-</span> prev).days <span class="op">-</span> <span class="dv">1</span></span>
-<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> missing_days <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a>            gaps.append(((prev <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)).isoformat(), (curr <span class="op">-</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)).isoformat()))</span>
-<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> gaps</span>
-<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a>The dates get sorted, then checked one consecutive pair at a time: if</span>
-<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>more than one day passes between two reports, everything in between gets</span>
-<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>recorded as a missing range. No content is inspected here at all — this</span>
-<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>only checks whether a report *exists* for each day, which is exactly</span>
-<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a>enough to catch the real two-day gap in this archive.</span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A list of report dates, as ISO date strings (the plain <span class="in">`YYYY-MM-DD`</span></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>  format the examples below use), covering a period that should have one</span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>  report per day.</span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a>A list of <span class="in">`(start, end)`</span> date ranges with no report — empty if the</span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>archive is complete.</span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_date_gaps(report_dates: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">str</span>, <span class="bu">str</span>]]:</span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return (start, end) date ranges with no report, given a sorted</span></span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a><span class="co">    list of ISO date strings covering a continuous daily-reporting period."""</span></span>
+<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> datetime <span class="im">import</span> date, timedelta</span>
+<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a>    dates <span class="op">=</span> <span class="bu">sorted</span>(date.fromisoformat(d) <span class="cf">for</span> d <span class="kw">in</span> report_dates)</span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>    gaps <span class="op">=</span> []</span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> prev, curr <span class="kw">in</span> <span class="bu">zip</span>(dates, dates[<span class="dv">1</span>:]):</span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a>        missing_days <span class="op">=</span> (curr <span class="op">-</span> prev).days <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> missing_days <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>            gaps.append(((prev <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)).isoformat(), (curr <span class="op">-</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)).isoformat()))</span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> gaps</span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: build a citation from a real search, not by hand</span></span>
+<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
 <span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
-<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a>Every <span class="in">`Citation`</span> shown so far in this chapter was typed in by hand —</span>
-<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a><span class="in">`Citation(report="...", page=1)`</span> — which proves the data structure works</span>
-<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a>but not that the *system* can produce one. A citation is only actually</span>
-<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a>trustworthy if it comes from the same retrieval the answer itself used.</span>
-<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a>This step closes that loop: run a real query against Chapter 8's</span>
-<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a>chunk-level index, and read the report, page, and date straight off</span>
-<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a>whichever chunk matched — never re-typed, never assumed.</span>
+<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a>The dates get sorted, then checked one consecutive pair at a time: if</span>
+<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a>more than one day passes between two reports, everything in between gets</span>
+<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a>recorded as a missing range. No content is inspected here at all — this</span>
+<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a>only checks whether a report *exists* for each day, which is exactly</span>
+<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a>enough to catch the real two-day gap in this archive.</span>
+<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a><span class="fu">### Step 3: build a citation from a real search, not by hand</span></span>
+<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a>**What problem are we solving?**</span>
 <span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
-<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Chapter 8's <span class="in">`build_chunk_metadata_index()`</span> and <span class="in">`search()`</span>.</span>
-<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A query string.</span>
-<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
-<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a>A list of <span class="in">`Citation`</span> objects built entirely from the search results —</span>
-<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>real reports, real pages, real dates, in ranked order.</span>
+<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>Every <span class="in">`Citation`</span> shown so far in this chapter was typed in by hand —</span>
+<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a><span class="in">`Citation(report="...", page=1)`</span> — which proves the data structure works</span>
+<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a>but not that the *system* can produce one. A citation is only actually</span>
+<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a>trustworthy if it comes from the same retrieval the answer itself used.</span>
+<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a>This step closes that loop: run a real query against Chapter 8's</span>
+<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a>chunk-level index, and read the report, page, and date straight off</span>
+<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a>whichever chunk matched — never re-typed, never assumed.</span>
+<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>**Inputs**</span>
 <span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
-<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Citation:</span>
-<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a>    report: <span class="bu">str</span></span>
-<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a>    page: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
-<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a>    report_date: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>  <span class="co"># "report_date": date is the stdlib class</span></span>
-<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> citations_from_search(chunk_results: <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">int</span>, <span class="bu">float</span>]],</span>
-<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a>                           metadata: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[Citation]:</span>
-<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a>    citations <span class="op">=</span> []</span>
-<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a>    seen_report_pages <span class="op">=</span> <span class="bu">set</span>()</span>
-<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> idx, _score <span class="kw">in</span> chunk_results:</span>
-<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a>        report_page <span class="op">=</span> (metadata[idx][<span class="st">"report"</span>], metadata[idx][<span class="st">"page"</span>])</span>
-<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> report_page <span class="kw">in</span> seen_report_pages:</span>
-<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
-<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a>        seen_report_pages.add(report_page)</span>
-<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a>        citations.append(Citation(report<span class="op">=</span>metadata[idx][<span class="st">"report"</span>], page<span class="op">=</span>metadata[idx][<span class="st">"page"</span>],</span>
-<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a>                                   report_date<span class="op">=</span>metadata[idx].get(<span class="st">"date"</span>)))</span>
-<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> citations</span>
-<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
-<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a>For every <span class="in">`(row_index, score)`</span> pair a search returns, this looks up</span>
-<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a><span class="in">`metadata[row_index]`</span> — the real report, page, and date Chapter 8</span>
-<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a>recorded for that exact chunk — and wraps it in a <span class="in">`Citation`</span>. There's no</span>
-<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a>separate "figure out the source" step: the metadata was attached back</span>
-<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a>when the chunk was indexed, so reading it is all citing requires. The</span>
-<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a>field is named <span class="in">`report_date`</span>, not <span class="in">`date`</span> — <span class="in">`date`</span> is already the name of</span>
-<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a>the standard library class this file imports below for <span class="in">`find_date_gaps`</span>,</span>
-<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>and reusing that name (**shadowing** it) would be its own quiet bug</span>
-<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a>waiting to happen.</span>
-<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a>The <span class="in">`seen_report_pages`</span> set is doing real work, not defensive</span>
-<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a>boilerplate (generic safety-net code that never actually fires). A long</span>
-<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a>page gets split into several chunks by Chapter 7's</span>
-<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a>chunker, and more than one of those chunks can land in the same top-k</span>
-<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>result — so without this check, one report page can show up in the</span>
-<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a>Evidence list two, three, or four times, drowning out how many</span>
-<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a>*distinct* sources actually back the answer. Only the first — and</span>
-<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a>therefore best-ranked — chunk from each <span class="in">`(report, page)`</span> pair is kept;</span>
-<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a>later duplicates are skipped.</span>
-<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a>Run this against the real archive for <span class="in">`"stuck pipe"`</span> at <span class="in">`top_k=3`</span> and</span>
-<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a>the top result is:</span>
-<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a><span class="in">Evidence:</span></span>
-<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a><span class="in">  FORGE-16A-78-32_Drilling_038_2020-11-26.txt page 1 (2020-11-26)</span></span>
-<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Chapter 8's <span class="in">`build_chunk_metadata_index()`</span> and <span class="in">`search()`</span>.</span>
+<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A query string.</span>
+<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a>**Expected Output**</span>
+<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a>A list of <span class="in">`Citation`</span> objects built entirely from the search results —</span>
+<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a>real reports, real pages, real dates, in ranked order.</span>
+<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span></span>
+<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Citation:</span>
+<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a>    report: <span class="bu">str</span></span>
+<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a>    page: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a>    report_date: <span class="bu">str</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>  <span class="co"># "report_date": date is the stdlib class</span></span>
+<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> citations_from_search(chunk_results: <span class="bu">list</span>[<span class="bu">tuple</span>[<span class="bu">int</span>, <span class="bu">float</span>]],</span>
+<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a>                           metadata: <span class="bu">list</span>[<span class="bu">dict</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[Citation]:</span>
+<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a>    citations <span class="op">=</span> []</span>
+<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a>    seen_report_pages <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> idx, _score <span class="kw">in</span> chunk_results:</span>
+<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a>        report_page <span class="op">=</span> (metadata[idx][<span class="st">"report"</span>], metadata[idx][<span class="st">"page"</span>])</span>
+<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> report_page <span class="kw">in</span> seen_report_pages:</span>
+<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a>        seen_report_pages.add(report_page)</span>
+<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a>        citations.append(Citation(report<span class="op">=</span>metadata[idx][<span class="st">"report"</span>], page<span class="op">=</span>metadata[idx][<span class="st">"page"</span>],</span>
+<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a>                                   report_date<span class="op">=</span>metadata[idx].get(<span class="st">"date"</span>)))</span>
+<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> citations</span>
+<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a>**What just happened?**</span>
+<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a>For every <span class="in">`(row_index, score)`</span> pair a search returns, this looks up</span>
+<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a><span class="in">`metadata[row_index]`</span> — the real report, page, and date Chapter 8</span>
+<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a>recorded for that exact chunk — and wraps it in a <span class="in">`Citation`</span>. There's no</span>
+<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a>separate "figure out the source" step: the metadata was attached back</span>
+<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a>when the chunk was indexed, so reading it is all citing requires. The</span>
+<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a>field is named <span class="in">`report_date`</span>, not <span class="in">`date`</span> — <span class="in">`date`</span> is already the name of</span>
+<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>the standard library class this file imports below for <span class="in">`find_date_gaps`</span>,</span>
+<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a>and reusing that name (**shadowing** it) would be its own quiet bug</span>
+<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a>waiting to happen.</span>
+<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a>The <span class="in">`seen_report_pages`</span> set is doing real work, not defensive</span>
+<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a>boilerplate (generic safety-net code that never actually fires). A long</span>
+<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a>page gets split into several chunks by Chapter 7's</span>
+<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a>chunker, and more than one of those chunks can land in the same top-k</span>
+<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a>result — so without this check, one report page can show up in the</span>
+<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a>Evidence list two, three, or four times, drowning out how many</span>
+<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a>*distinct* sources actually back the answer. Only the first — and</span>
+<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a>therefore best-ranked — chunk from each <span class="in">`(report, page)`</span> pair is kept;</span>
+<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a>later duplicates are skipped.</span>
 <span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>That's the same report #38 this whole book has used for the stuck-pipe</span>
-<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>story, cited automatically from a live search — not because the example</span>
-<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>was written to come out that way, but because Chapter 8 already</span>
-<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a>verified report #38 ranks 1st for this exact query against the real</span>
-<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>chunk-level index. Every DDR in this sample archive is a single page, so</span>
-<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a><span class="in">`page`</span> reads <span class="in">`1`</span> every time here; the code doesn't know that in advance,</span>
-<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>and would report page 4 just as readily on a report that actually had</span>
-<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>one, which is the entire point of building it this way instead of typing</span>
-<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a><span class="in">`page=1`</span> by hand. The date, unlike the page, isn't a Chapter 7 invention</span>
-<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>at all — it was always sitting in the filename; this step is the first</span>
-<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>place anything actually reads it.</span>
-<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>Widen the same query to <span class="in">`top_k=10`</span> and the gap the deduplication closes</span>
-<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>becomes visible: 10 chunk results come back, but only 6 distinct</span>
-<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a><span class="in">`(report, page)`</span> pairs are behind them — the Completion report alone</span>
-<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>supplies four of the ten chunks. Without deduplication, the Evidence</span>
-<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a>list would repeat that one report four times and imply four independent</span>
-<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>sources instead of one.</span>
-<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
-<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>This chapter's citation and gap-detection code both assume the</span>
-<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a>underlying extraction is trustworthy — but structured extraction is still</span>
-<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>code, written by someone, and can encode a judgment call worth checking</span>
-<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>(see this chapter's own Field Notes on <span class="in">`is_npt`</span> below). A deployed system</span>
-<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a>has more to plan for:</span>
+<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>Run this against the real archive for <span class="in">`"stuck pipe"`</span> at <span class="in">`top_k=3`</span> and</span>
+<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>the top result is:</span>
+<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a><span class="in">Evidence:</span></span>
+<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a><span class="in">  FORGE-16A-78-32_Drilling_038_2020-11-26.txt page 1 (2020-11-26)</span></span>
+<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>That's the same report #38 this whole book has used for the stuck-pipe</span>
+<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a>story, cited automatically from a live search — not because the example</span>
+<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>was written to come out that way, but because Chapter 8 already</span>
+<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>verified report #38 ranks 1st for this exact query against the real</span>
+<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>chunk-level index. Every DDR in this sample archive is a single page, so</span>
+<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a><span class="in">`page`</span> reads <span class="in">`1`</span> every time here; the code doesn't know that in advance,</span>
+<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>and would report page 4 just as readily on a report that actually had</span>
+<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>one, which is the entire point of building it this way instead of typing</span>
+<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a><span class="in">`page=1`</span> by hand. The date, unlike the page, isn't a Chapter 7 invention</span>
+<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a>at all — it was always sitting in the filename; this step is the first</span>
+<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a>place anything actually reads it.</span>
+<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>Widen the same query to <span class="in">`top_k=10`</span> and the gap the deduplication closes</span>
+<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a>becomes visible: 10 chunk results come back, but only 6 distinct</span>
+<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a><span class="in">`(report, page)`</span> pairs are behind them — the Completion report alone</span>
+<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>supplies four of the ten chunks. Without deduplication, the Evidence</span>
+<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>list would repeat that one report four times and imply four independent</span>
+<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a>sources instead of one.</span>
 <span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>gap detection has to run continuously as new reports arrive, not just</span>
-<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a>  once at setup — a system that only checked for gaps on day one won't</span>
-<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a>  notice a new one appearing three months later</span>
-<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>not every gap is administrative silence — a missing day could mean a</span>
-<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a>  missing safety report, which is worth escalating to a person, not just</span>
-<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a>  logging quietly as "no data for this date"</span>
-<span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>a citation is only useful if someone actually reads it — a system that</span>
-<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a>  buries the evidence list at the bottom of a long answer, in small</span>
-<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a>  print, earns the same blind trust as a system with no citations at all</span>
-<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>some engineering decisions (regulatory submissions, incident reports)</span>
-<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a>  require a human sign-off no matter how good the system's citations</span>
-<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a>  are — traceability supports a human reviewer, it doesn't replace one</span>
-<span id="cb7-331"><a href="#cb7-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-332"><a href="#cb7-332" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
-<span id="cb7-333"><a href="#cb7-333" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-334"><a href="#cb7-334" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
-<span id="cb7-335"><a href="#cb7-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-336"><a href="#cb7-336" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Run <span class="in">`find_date_gaps()`</span> against the report dates in</span>
-<span id="cb7-337"><a href="#cb7-337" aria-hidden="true" tabindex="-1"></a>this book's ten-report sample — `["2020-10-22", "2020-11-07",</span>
-<span id="cb7-338"><a href="#cb7-338" aria-hidden="true" tabindex="-1"></a>"2020-11-24", "2020-11-25", "2020-11-26", "2020-11-27", "2020-12-06",</span>
-<span id="cb7-339"><a href="#cb7-339" aria-hidden="true" tabindex="-1"></a>"2020-12-07", "2020-12-08", "2021-01-06"]`.</span>
-<span id="cb7-340"><a href="#cb7-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-341"><a href="#cb7-341" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** the function reports several gaps — most</span>
-<span id="cb7-342"><a href="#cb7-342" aria-hidden="true" tabindex="-1"></a>of them simply reflecting that Part I's curated subset skips most of the</span>
-<span id="cb7-343"><a href="#cb7-343" aria-hidden="true" tabindex="-1"></a>archive's days on purpose. Then run it against the *full* 76-report</span>
-<span id="cb7-344"><a href="#cb7-344" aria-hidden="true" tabindex="-1"></a>archive's dates (<span class="in">`datasets/forge_archive/`</span>) and confirm it finds exactly</span>
-<span id="cb7-345"><a href="#cb7-345" aria-hidden="true" tabindex="-1"></a>one real gap: January 4th–5th, 2021, right before the Completion report.</span>
-<span id="cb7-346"><a href="#cb7-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-347"><a href="#cb7-347" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
+<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a><span class="fu">## Production Reality</span></span>
+<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a>This chapter's citation and gap-detection code both assume the</span>
+<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a>underlying extraction is trustworthy — but structured extraction is still</span>
+<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a>code, written by someone, and can encode a judgment call worth checking</span>
+<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a>(see this chapter's own Field Notes on <span class="in">`is_npt`</span> below). A deployed system</span>
+<span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a>has more to plan for:</span>
+<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>gap detection has to run continuously as new reports arrive, not just</span>
+<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a>  once at setup — a system that only checked for gaps on day one won't</span>
+<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a>  notice a new one appearing three months later</span>
+<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>not every gap is administrative silence — a missing day could mean a</span>
+<span id="cb7-331"><a href="#cb7-331" aria-hidden="true" tabindex="-1"></a>  missing safety report, which is worth escalating to a person, not just</span>
+<span id="cb7-332"><a href="#cb7-332" aria-hidden="true" tabindex="-1"></a>  logging quietly as "no data for this date"</span>
+<span id="cb7-333"><a href="#cb7-333" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>a citation is only useful if someone actually reads it — a system that</span>
+<span id="cb7-334"><a href="#cb7-334" aria-hidden="true" tabindex="-1"></a>  buries the evidence list at the bottom of a long answer, in small</span>
+<span id="cb7-335"><a href="#cb7-335" aria-hidden="true" tabindex="-1"></a>  print, earns the same blind trust as a system with no citations at all</span>
+<span id="cb7-336"><a href="#cb7-336" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>some engineering decisions (regulatory submissions, incident reports)</span>
+<span id="cb7-337"><a href="#cb7-337" aria-hidden="true" tabindex="-1"></a>  require a human sign-off no matter how good the system's citations</span>
+<span id="cb7-338"><a href="#cb7-338" aria-hidden="true" tabindex="-1"></a>  are — traceability supports a human reviewer, it doesn't replace one</span>
+<span id="cb7-339"><a href="#cb7-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-340"><a href="#cb7-340" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical exercise</span></span>
+<span id="cb7-341"><a href="#cb7-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-342"><a href="#cb7-342" aria-hidden="true" tabindex="-1"></a>🟢 **Beginner**</span>
+<span id="cb7-343"><a href="#cb7-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-344"><a href="#cb7-344" aria-hidden="true" tabindex="-1"></a>**Try it yourself:** Run <span class="in">`find_date_gaps()`</span> against the report dates in</span>
+<span id="cb7-345"><a href="#cb7-345" aria-hidden="true" tabindex="-1"></a>this book's ten-report sample — `["2020-10-22", "2020-11-07",</span>
+<span id="cb7-346"><a href="#cb7-346" aria-hidden="true" tabindex="-1"></a>"2020-11-24", "2020-11-25", "2020-11-26", "2020-11-27", "2020-12-06",</span>
+<span id="cb7-347"><a href="#cb7-347" aria-hidden="true" tabindex="-1"></a>"2020-12-07", "2020-12-08", "2021-01-06"]`.</span>
 <span id="cb7-348"><a href="#cb7-348" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-349"><a href="#cb7-349" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: verify the automatic label, not just the automatic lookup"}</span>
-<span id="cb7-350"><a href="#cb7-350" aria-hidden="true" tabindex="-1"></a>**Action:** check the real, computed <span class="in">`is_npt`</span> flag — set once during</span>
-<span id="cb7-351"><a href="#cb7-351" aria-hidden="true" tabindex="-1"></a>extraction, not re-derived on every query — for every operations row on</span>
-<span id="cb7-352"><a href="#cb7-352" aria-hidden="true" tabindex="-1"></a>report #38, the stuck-pipe day.</span>
-<span id="cb7-353"><a href="#cb7-353" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-354"><a href="#cb7-354" aria-hidden="true" tabindex="-1"></a>**Result:** out of ten rows covering the full 24 hours, exactly **one**</span>
-<span id="cb7-355"><a href="#cb7-355" aria-hidden="true" tabindex="-1"></a>is flagged <span class="in">`is_npt = True`</span>:</span>
+<span id="cb7-349"><a href="#cb7-349" aria-hidden="true" tabindex="-1"></a>**You'll know it worked when:** the function reports several gaps — most</span>
+<span id="cb7-350"><a href="#cb7-350" aria-hidden="true" tabindex="-1"></a>of them simply reflecting that Part I's curated subset skips most of the</span>
+<span id="cb7-351"><a href="#cb7-351" aria-hidden="true" tabindex="-1"></a>archive's days on purpose. Then run it against the *full* 76-report</span>
+<span id="cb7-352"><a href="#cb7-352" aria-hidden="true" tabindex="-1"></a>archive's dates (<span class="in">`datasets/forge_archive/`</span>) and confirm it finds exactly</span>
+<span id="cb7-353"><a href="#cb7-353" aria-hidden="true" tabindex="-1"></a>one real gap: January 4th–5th, 2021, right before the Completion report.</span>
+<span id="cb7-354"><a href="#cb7-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-355"><a href="#cb7-355" aria-hidden="true" tabindex="-1"></a><span class="fu">## Field notes</span></span>
 <span id="cb7-356"><a href="#cb7-356" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-357"><a href="#cb7-357" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-358"><a href="#cb7-358" aria-hidden="true" tabindex="-1"></a><span class="in">23:30-04:00  is_npt=True   "Drill From 6,360' to 6,507'... During the</span></span>
-<span id="cb7-359"><a href="#cb7-359" aria-hidden="true" tabindex="-1"></a><span class="in">                            slide lost tool face and became assembly</span></span>
-<span id="cb7-360"><a href="#cb7-360" aria-hidden="true" tabindex="-1"></a><span class="in">                            became stuck"</span></span>
-<span id="cb7-361"><a href="#cb7-361" aria-hidden="true" tabindex="-1"></a><span class="in">04:00-06:00  is_npt=False  "Work pipe, circulate lube sweep, work tool</span></span>
-<span id="cb7-362"><a href="#cb7-362" aria-hidden="true" tabindex="-1"></a><span class="in">                            back in position, Pipe free"</span></span>
-<span id="cb7-363"><a href="#cb7-363" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-357"><a href="#cb7-357" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning title="🔧 Field notes: verify the automatic label, not just the automatic lookup"}</span>
+<span id="cb7-358"><a href="#cb7-358" aria-hidden="true" tabindex="-1"></a>**Action:** check the real, computed <span class="in">`is_npt`</span> flag — set once during</span>
+<span id="cb7-359"><a href="#cb7-359" aria-hidden="true" tabindex="-1"></a>extraction, not re-derived on every query — for every operations row on</span>
+<span id="cb7-360"><a href="#cb7-360" aria-hidden="true" tabindex="-1"></a>report #38, the stuck-pipe day.</span>
+<span id="cb7-361"><a href="#cb7-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-362"><a href="#cb7-362" aria-hidden="true" tabindex="-1"></a>**Result:** out of ten rows covering the full 24 hours, exactly **one**</span>
+<span id="cb7-363"><a href="#cb7-363" aria-hidden="true" tabindex="-1"></a>is flagged <span class="in">`is_npt = True`</span>:</span>
 <span id="cb7-364"><a href="#cb7-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-365"><a href="#cb7-365" aria-hidden="true" tabindex="-1"></a>**Why:** the classifier flagged the 4.5-hour block where the pipe</span>
-<span id="cb7-366"><a href="#cb7-366" aria-hidden="true" tabindex="-1"></a>*became* stuck, but not the following 2-hour block where the crew</span>
-<span id="cb7-367"><a href="#cb7-367" aria-hidden="true" tabindex="-1"></a>actually recovered it. That's a defensible reading — the drilling</span>
-<span id="cb7-368"><a href="#cb7-368" aria-hidden="true" tabindex="-1"></a>operation is what got interrupted — but it's also a real judgment call:</span>
-<span id="cb7-369"><a href="#cb7-369" aria-hidden="true" tabindex="-1"></a>an engineer asking "how many hours did this stuck-pipe event cost?"</span>
-<span id="cb7-370"><a href="#cb7-370" aria-hidden="true" tabindex="-1"></a>would probably expect all 6.5 hours counted, not 4.5.</span>
-<span id="cb7-371"><a href="#cb7-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-372"><a href="#cb7-372" aria-hidden="true" tabindex="-1"></a>**Lesson:** a structured field being *automatically extracted* doesn't</span>
-<span id="cb7-373"><a href="#cb7-373" aria-hidden="true" tabindex="-1"></a>mean it's automatically *correct for your question*. Trusting</span>
-<span id="cb7-374"><a href="#cb7-374" aria-hidden="true" tabindex="-1"></a><span class="in">`ddr_facts.parquet`</span> blindly here would silently undercount the incident</span>
-<span id="cb7-375"><a href="#cb7-375" aria-hidden="true" tabindex="-1"></a>by 2 hours, every time someone asks. The fix isn't to distrust structured</span>
-<span id="cb7-376"><a href="#cb7-376" aria-hidden="true" tabindex="-1"></a>data — Chapter 10's whole argument is that it beats generation — it's to</span>
-<span id="cb7-377"><a href="#cb7-377" aria-hidden="true" tabindex="-1"></a>read the classification logic once, understand exactly what it counts,</span>
-<span id="cb7-378"><a href="#cb7-378" aria-hidden="true" tabindex="-1"></a>and know the edge it sits on before you build a report or a chart on top</span>
-<span id="cb7-379"><a href="#cb7-379" aria-hidden="true" tabindex="-1"></a>of it.</span>
-<span id="cb7-380"><a href="#cb7-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-381"><a href="#cb7-381" aria-hidden="true" tabindex="-1"></a>(<span class="in">`ddr_facts.parquet`</span> and its <span class="in">`is_npt`</span> classifier live in <span class="in">`DDR_UTAH_FORGE`</span>,</span>
-<span id="cb7-382"><a href="#cb7-382" aria-hidden="true" tabindex="-1"></a>not in this book's repository — the rows above are reported from that</span>
-<span id="cb7-383"><a href="#cb7-383" aria-hidden="true" tabindex="-1"></a>pipeline, not something you can query with this book's own bundled code.)</span>
-<span id="cb7-384"><a href="#cb7-384" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-385"><a href="#cb7-385" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-386"><a href="#cb7-386" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
-<span id="cb7-387"><a href="#cb7-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-388"><a href="#cb7-388" aria-hidden="true" tabindex="-1"></a>🟠 **Intermediate**</span>
-<span id="cb7-389"><a href="#cb7-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-390"><a href="#cb7-390" aria-hidden="true" tabindex="-1"></a>**Challenge:** Extend <span class="in">`find_date_gaps()`</span> to classify each gap's severity</span>
-<span id="cb7-391"><a href="#cb7-391" aria-hidden="true" tabindex="-1"></a>(e.g. a gap under 3 days is Low; a gap that crosses a report-type boundary</span>
-<span id="cb7-392"><a href="#cb7-392" aria-hidden="true" tabindex="-1"></a>— Drilling to Completion, as this one does — is High regardless of</span>
-<span id="cb7-393"><a href="#cb7-393" aria-hidden="true" tabindex="-1"></a>length, since it likely represents an unrecorded operational transition).</span>
-<span id="cb7-394"><a href="#cb7-394" aria-hidden="true" tabindex="-1"></a>A reference solution is in <span class="in">`code/chapter_10/challenge/`</span>.</span>
+<span id="cb7-365"><a href="#cb7-365" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-366"><a href="#cb7-366" aria-hidden="true" tabindex="-1"></a><span class="in">23:30-04:00  is_npt=True   "Drill From 6,360' to 6,507'... During the</span></span>
+<span id="cb7-367"><a href="#cb7-367" aria-hidden="true" tabindex="-1"></a><span class="in">                            slide lost tool face and became assembly</span></span>
+<span id="cb7-368"><a href="#cb7-368" aria-hidden="true" tabindex="-1"></a><span class="in">                            became stuck"</span></span>
+<span id="cb7-369"><a href="#cb7-369" aria-hidden="true" tabindex="-1"></a><span class="in">04:00-06:00  is_npt=False  "Work pipe, circulate lube sweep, work tool</span></span>
+<span id="cb7-370"><a href="#cb7-370" aria-hidden="true" tabindex="-1"></a><span class="in">                            back in position, Pipe free"</span></span>
+<span id="cb7-371"><a href="#cb7-371" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-372"><a href="#cb7-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-373"><a href="#cb7-373" aria-hidden="true" tabindex="-1"></a>**Why:** the classifier flagged the 4.5-hour block where the pipe</span>
+<span id="cb7-374"><a href="#cb7-374" aria-hidden="true" tabindex="-1"></a>*became* stuck, but not the following 2-hour block where the crew</span>
+<span id="cb7-375"><a href="#cb7-375" aria-hidden="true" tabindex="-1"></a>actually recovered it. That's a defensible reading — the drilling</span>
+<span id="cb7-376"><a href="#cb7-376" aria-hidden="true" tabindex="-1"></a>operation is what got interrupted — but it's also a real judgment call:</span>
+<span id="cb7-377"><a href="#cb7-377" aria-hidden="true" tabindex="-1"></a>an engineer asking "how many hours did this stuck-pipe event cost?"</span>
+<span id="cb7-378"><a href="#cb7-378" aria-hidden="true" tabindex="-1"></a>would probably expect all 6.5 hours counted, not 4.5.</span>
+<span id="cb7-379"><a href="#cb7-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-380"><a href="#cb7-380" aria-hidden="true" tabindex="-1"></a>**Lesson:** a structured field being *automatically extracted* doesn't</span>
+<span id="cb7-381"><a href="#cb7-381" aria-hidden="true" tabindex="-1"></a>mean it's automatically *correct for your question*. Trusting</span>
+<span id="cb7-382"><a href="#cb7-382" aria-hidden="true" tabindex="-1"></a><span class="in">`ddr_facts.parquet`</span> blindly here would silently undercount the incident</span>
+<span id="cb7-383"><a href="#cb7-383" aria-hidden="true" tabindex="-1"></a>by 2 hours, every time someone asks. The fix isn't to distrust structured</span>
+<span id="cb7-384"><a href="#cb7-384" aria-hidden="true" tabindex="-1"></a>data — Chapter 10's whole argument is that it beats generation — it's to</span>
+<span id="cb7-385"><a href="#cb7-385" aria-hidden="true" tabindex="-1"></a>read the classification logic once, understand exactly what it counts,</span>
+<span id="cb7-386"><a href="#cb7-386" aria-hidden="true" tabindex="-1"></a>and know the edge it sits on before you build a report or a chart on top</span>
+<span id="cb7-387"><a href="#cb7-387" aria-hidden="true" tabindex="-1"></a>of it.</span>
+<span id="cb7-388"><a href="#cb7-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-389"><a href="#cb7-389" aria-hidden="true" tabindex="-1"></a>(<span class="in">`ddr_facts.parquet`</span> and its <span class="in">`is_npt`</span> classifier live in <span class="in">`DDR_UTAH_FORGE`</span>,</span>
+<span id="cb7-390"><a href="#cb7-390" aria-hidden="true" tabindex="-1"></a>not in this book's repository — the rows above are reported from that</span>
+<span id="cb7-391"><a href="#cb7-391" aria-hidden="true" tabindex="-1"></a>pipeline, not something you can query with this book's own bundled code.)</span>
+<span id="cb7-392"><a href="#cb7-392" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-393"><a href="#cb7-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-394"><a href="#cb7-394" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenge exercise</span></span>
 <span id="cb7-395"><a href="#cb7-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-396"><a href="#cb7-396" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb7-396"><a href="#cb7-396" aria-hidden="true" tabindex="-1"></a>🟠 **Intermediate**</span>
 <span id="cb7-397"><a href="#cb7-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-398"><a href="#cb7-398" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Prefer structured lookup over generation whenever the question is</span>
-<span id="cb7-399"><a href="#cb7-399" aria-hidden="true" tabindex="-1"></a>  answerable from data you already extracted — it's exact, not just</span>
-<span id="cb7-400"><a href="#cb7-400" aria-hidden="true" tabindex="-1"></a>  plausible.</span>
-<span id="cb7-401"><a href="#cb7-401" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Every generated claim needs a citation an engineer can independently</span>
-<span id="cb7-402"><a href="#cb7-402" aria-hidden="true" tabindex="-1"></a>  check, not just a citation-shaped sentence.</span>
-<span id="cb7-403"><a href="#cb7-403" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A citation is only as trustworthy as where its fields come from — a</span>
-<span id="cb7-404"><a href="#cb7-404" aria-hidden="true" tabindex="-1"></a>  hand-typed <span class="in">`page=1`</span> proves the data structure works, not that the</span>
-<span id="cb7-405"><a href="#cb7-405" aria-hidden="true" tabindex="-1"></a>  system can produce one. Chapters 7-10 wire the real value through:</span>
-<span id="cb7-406"><a href="#cb7-406" aria-hidden="true" tabindex="-1"></a>  Chapter 1's page markers, Chapter 7's per-page chunking, Chapter 8's</span>
-<span id="cb7-407"><a href="#cb7-407" aria-hidden="true" tabindex="-1"></a>  chunk metadata, read back here. Not every field needs that much</span>
-<span id="cb7-408"><a href="#cb7-408" aria-hidden="true" tabindex="-1"></a>  plumbing, though — the report date was sitting in the filename the</span>
-<span id="cb7-409"><a href="#cb7-409" aria-hidden="true" tabindex="-1"></a>  whole time; the work there was reading it, not producing it.</span>
-<span id="cb7-410"><a href="#cb7-410" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A system that can tell you what it *doesn't have* is more trustworthy</span>
-<span id="cb7-411"><a href="#cb7-411" aria-hidden="true" tabindex="-1"></a>  than one that answers fluently regardless of coverage — this archive's</span>
-<span id="cb7-412"><a href="#cb7-412" aria-hidden="true" tabindex="-1"></a>  real two-day gap at the Drilling-to-Completion handover is exactly the</span>
-<span id="cb7-413"><a href="#cb7-413" aria-hidden="true" tabindex="-1"></a>  kind of silence worth surfacing explicitly, not filling in.</span>
-<span id="cb7-414"><a href="#cb7-414" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Deduplicate citations by <span class="in">`(report, page)`</span>, not just by chunk — a</span>
-<span id="cb7-415"><a href="#cb7-415" aria-hidden="true" tabindex="-1"></a>  chunk-level index can return several chunks from the same page among</span>
-<span id="cb7-416"><a href="#cb7-416" aria-hidden="true" tabindex="-1"></a>  the top-k results, and an Evidence list that repeats one source four</span>
-<span id="cb7-417"><a href="#cb7-417" aria-hidden="true" tabindex="-1"></a>  times looks like four independent sources unless it's collapsed down</span>
-<span id="cb7-418"><a href="#cb7-418" aria-hidden="true" tabindex="-1"></a>  to the distinct ones.</span>
-<span id="cb7-419"><a href="#cb7-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-420"><a href="#cb7-420" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
-<span id="cb7-421"><a href="#cb7-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-422"><a href="#cb7-422" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
-<span id="cb7-423"><a href="#cb7-423" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb7-424"><a href="#cb7-424" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_10/traceable_answers.py`</span> <span class="pp">|</span> Citation formatting, real search-to-citation wiring, and date-gap detection <span class="pp">|</span></span>
-<span id="cb7-425"><a href="#cb7-425" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv`</span> <span class="pp">|</span> Real, computed gap-detection output (companion repo — reported here, not reproduced without DDR_UTAH_FORGE) <span class="pp">|</span></span>
-<span id="cb7-426"><a href="#cb7-426" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-427"><a href="#cb7-427" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 10"}</span>
-<span id="cb7-428"><a href="#cb7-428" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Distinguished questions to compute from data versus questions to generate an answer to</span>
-<span id="cb7-429"><a href="#cb7-429" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Attached a checkable citation to every generated claim</span>
-<span id="cb7-430"><a href="#cb7-430" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built a real Citation from a live search result, not typed in by hand</span>
-<span id="cb7-431"><a href="#cb7-431" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Deduplicated citations so a repeated report/page isn't miscounted as independent evidence</span>
-<span id="cb7-432"><a href="#cb7-432" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Detected a real gap in the archive instead of silently assuming completeness</span>
-<span id="cb7-433"><a href="#cb7-433" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Caught a structured field's judgment call, not just trusted it blindly</span>
-<span id="cb7-434"><a href="#cb7-434" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-435"><a href="#cb7-435" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-436"><a href="#cb7-436" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
-<span id="cb7-437"><a href="#cb7-437" aria-hidden="true" tabindex="-1"></a>**`traceable_answers.py`** — a citation and gap-detection layer: every</span>
-<span id="cb7-438"><a href="#cb7-438" aria-hidden="true" tabindex="-1"></a>claim carries a real, live-search-sourced citation — report, page, and</span>
-<span id="cb7-439"><a href="#cb7-439" aria-hidden="true" tabindex="-1"></a>date, never hand-typed — and every silence in the archive gets surfaced</span>
-<span id="cb7-440"><a href="#cb7-440" aria-hidden="true" tabindex="-1"></a>instead of hidden.</span>
-<span id="cb7-441"><a href="#cb7-441" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-442"><a href="#cb7-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-443"><a href="#cb7-443" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
-<span id="cb7-444"><a href="#cb7-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-445"><a href="#cb7-445" aria-hidden="true" tabindex="-1"></a>You can tell the difference between a question you should compute from</span>
-<span id="cb7-446"><a href="#cb7-446" aria-hidden="true" tabindex="-1"></a>data you already have and one you should generate an answer to — and you</span>
-<span id="cb7-447"><a href="#cb7-447" aria-hidden="true" tabindex="-1"></a>can prove, with a citation built from a real search result (not typed in</span>
-<span id="cb7-448"><a href="#cb7-448" aria-hidden="true" tabindex="-1"></a>by hand), exactly where every part of a generated answer came from,</span>
-<span id="cb7-449"><a href="#cb7-449" aria-hidden="true" tabindex="-1"></a>including telling an engineer honestly when the archive simply has</span>
-<span id="cb7-450"><a href="#cb7-450" aria-hidden="true" tabindex="-1"></a>nothing to say.</span>
-<span id="cb7-451"><a href="#cb7-451" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-452"><a href="#cb7-452" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
-<span id="cb7-453"><a href="#cb7-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-454"><a href="#cb7-454" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 11:** You now have a system that retrieves well</span>
-<span id="cb7-455"><a href="#cb7-455" aria-hidden="true" tabindex="-1"></a>and answers honestly. Chapter 11 asks the question every system like this</span>
-<span id="cb7-456"><a href="#cb7-456" aria-hidden="true" tabindex="-1"></a>eventually needs answered with numbers, not impressions: *how good is it,</span>
-<span id="cb7-457"><a href="#cb7-457" aria-hidden="true" tabindex="-1"></a>really* — and where specifically does it still fail?</span>
+<span id="cb7-398"><a href="#cb7-398" aria-hidden="true" tabindex="-1"></a>**Challenge:** Extend <span class="in">`find_date_gaps()`</span> to classify each gap's severity</span>
+<span id="cb7-399"><a href="#cb7-399" aria-hidden="true" tabindex="-1"></a>(e.g. a gap under 3 days is Low; a gap that crosses a report-type boundary</span>
+<span id="cb7-400"><a href="#cb7-400" aria-hidden="true" tabindex="-1"></a>— Drilling to Completion, as this one does — is High regardless of</span>
+<span id="cb7-401"><a href="#cb7-401" aria-hidden="true" tabindex="-1"></a>length, since it likely represents an unrecorded operational transition).</span>
+<span id="cb7-402"><a href="#cb7-402" aria-hidden="true" tabindex="-1"></a>A reference solution is in <span class="in">`code/chapter_10/challenge/`</span>.</span>
+<span id="cb7-403"><a href="#cb7-403" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-404"><a href="#cb7-404" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key takeaways</span></span>
+<span id="cb7-405"><a href="#cb7-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-406"><a href="#cb7-406" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Prefer structured lookup over generation whenever the question is</span>
+<span id="cb7-407"><a href="#cb7-407" aria-hidden="true" tabindex="-1"></a>  answerable from data you already extracted — it's exact, not just</span>
+<span id="cb7-408"><a href="#cb7-408" aria-hidden="true" tabindex="-1"></a>  plausible.</span>
+<span id="cb7-409"><a href="#cb7-409" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Every generated claim needs a citation an engineer can independently</span>
+<span id="cb7-410"><a href="#cb7-410" aria-hidden="true" tabindex="-1"></a>  check, not just a citation-shaped sentence.</span>
+<span id="cb7-411"><a href="#cb7-411" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A citation is only as trustworthy as where its fields come from — a</span>
+<span id="cb7-412"><a href="#cb7-412" aria-hidden="true" tabindex="-1"></a>  hand-typed <span class="in">`page=1`</span> proves the data structure works, not that the</span>
+<span id="cb7-413"><a href="#cb7-413" aria-hidden="true" tabindex="-1"></a>  system can produce one. Chapters 7-10 wire the real value through:</span>
+<span id="cb7-414"><a href="#cb7-414" aria-hidden="true" tabindex="-1"></a>  Chapter 1's page markers, Chapter 7's per-page chunking, Chapter 8's</span>
+<span id="cb7-415"><a href="#cb7-415" aria-hidden="true" tabindex="-1"></a>  chunk metadata, read back here. Not every field needs that much</span>
+<span id="cb7-416"><a href="#cb7-416" aria-hidden="true" tabindex="-1"></a>  plumbing, though — the report date was sitting in the filename the</span>
+<span id="cb7-417"><a href="#cb7-417" aria-hidden="true" tabindex="-1"></a>  whole time; the work there was reading it, not producing it.</span>
+<span id="cb7-418"><a href="#cb7-418" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A system that can tell you what it *doesn't have* is more trustworthy</span>
+<span id="cb7-419"><a href="#cb7-419" aria-hidden="true" tabindex="-1"></a>  than one that answers fluently regardless of coverage — this archive's</span>
+<span id="cb7-420"><a href="#cb7-420" aria-hidden="true" tabindex="-1"></a>  real two-day gap at the Drilling-to-Completion handover is exactly the</span>
+<span id="cb7-421"><a href="#cb7-421" aria-hidden="true" tabindex="-1"></a>  kind of silence worth surfacing explicitly, not filling in.</span>
+<span id="cb7-422"><a href="#cb7-422" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Deduplicate citations by <span class="in">`(report, page)`</span>, not just by chunk — a</span>
+<span id="cb7-423"><a href="#cb7-423" aria-hidden="true" tabindex="-1"></a>  chunk-level index can return several chunks from the same page among</span>
+<span id="cb7-424"><a href="#cb7-424" aria-hidden="true" tabindex="-1"></a>  the top-k results, and an Evidence list that repeats one source four</span>
+<span id="cb7-425"><a href="#cb7-425" aria-hidden="true" tabindex="-1"></a>  times looks like four independent sources unless it's collapsed down</span>
+<span id="cb7-426"><a href="#cb7-426" aria-hidden="true" tabindex="-1"></a>  to the distinct ones.</span>
+<span id="cb7-427"><a href="#cb7-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-428"><a href="#cb7-428" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repository files</span></span>
+<span id="cb7-429"><a href="#cb7-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-430"><a href="#cb7-430" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> File <span class="pp">|</span> Purpose <span class="pp">|</span></span>
+<span id="cb7-431"><a href="#cb7-431" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb7-432"><a href="#cb7-432" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`code/chapter_10/traceable_answers.py`</span> <span class="pp">|</span> Citation formatting, real search-to-citation wiring, and date-gap detection <span class="pp">|</span></span>
+<span id="cb7-433"><a href="#cb7-433" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`DDR_UTAH_FORGE/data/processed/qc/raw_pdf_missing_reports.csv`</span> <span class="pp">|</span> Real, computed gap-detection output (companion repo — reported here, not reproduced without DDR_UTAH_FORGE) <span class="pp">|</span></span>
+<span id="cb7-434"><a href="#cb7-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-435"><a href="#cb7-435" aria-hidden="true" tabindex="-1"></a>::: {.callout-caution title="CHECKPOINT — Chapter 10"}</span>
+<span id="cb7-436"><a href="#cb7-436" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Distinguished questions to compute from data versus questions to generate an answer to</span>
+<span id="cb7-437"><a href="#cb7-437" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Attached a checkable citation to every generated claim</span>
+<span id="cb7-438"><a href="#cb7-438" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Built a real Citation from a live search result, not typed in by hand</span>
+<span id="cb7-439"><a href="#cb7-439" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Deduplicated citations so a repeated report/page isn't miscounted as independent evidence</span>
+<span id="cb7-440"><a href="#cb7-440" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Detected a real gap in the archive instead of silently assuming completeness</span>
+<span id="cb7-441"><a href="#cb7-441" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Caught a structured field's judgment call, not just trusted it blindly</span>
+<span id="cb7-442"><a href="#cb7-442" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-443"><a href="#cb7-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-444"><a href="#cb7-444" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip .built-box title="✓ WHAT YOU BUILT"}</span>
+<span id="cb7-445"><a href="#cb7-445" aria-hidden="true" tabindex="-1"></a>**`traceable_answers.py`** — a citation and gap-detection layer: every</span>
+<span id="cb7-446"><a href="#cb7-446" aria-hidden="true" tabindex="-1"></a>claim carries a real, live-search-sourced citation — report, page, and</span>
+<span id="cb7-447"><a href="#cb7-447" aria-hidden="true" tabindex="-1"></a>date, never hand-typed — and every silence in the archive gets surfaced</span>
+<span id="cb7-448"><a href="#cb7-448" aria-hidden="true" tabindex="-1"></a>instead of hidden.</span>
+<span id="cb7-449"><a href="#cb7-449" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-450"><a href="#cb7-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-451"><a href="#cb7-451" aria-hidden="true" tabindex="-1"></a><span class="fu">## What can you do now that you couldn't do before?</span></span>
+<span id="cb7-452"><a href="#cb7-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-453"><a href="#cb7-453" aria-hidden="true" tabindex="-1"></a>You can tell the difference between a question you should compute from</span>
+<span id="cb7-454"><a href="#cb7-454" aria-hidden="true" tabindex="-1"></a>data you already have and one you should generate an answer to — and you</span>
+<span id="cb7-455"><a href="#cb7-455" aria-hidden="true" tabindex="-1"></a>can prove, with a citation built from a real search result (not typed in</span>
+<span id="cb7-456"><a href="#cb7-456" aria-hidden="true" tabindex="-1"></a>by hand), exactly where every part of a generated answer came from,</span>
+<span id="cb7-457"><a href="#cb7-457" aria-hidden="true" tabindex="-1"></a>including telling an engineer honestly when the archive simply has</span>
+<span id="cb7-458"><a href="#cb7-458" aria-hidden="true" tabindex="-1"></a>nothing to say.</span>
+<span id="cb7-459"><a href="#cb7-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-460"><a href="#cb7-460" aria-hidden="true" tabindex="-1"></a><span class="fu">## Suggested next step</span></span>
+<span id="cb7-461"><a href="#cb7-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-462"><a href="#cb7-462" aria-hidden="true" tabindex="-1"></a>**Coming up in Chapter 11:** You now have a system that retrieves well</span>
+<span id="cb7-463"><a href="#cb7-463" aria-hidden="true" tabindex="-1"></a>and answers honestly. Chapter 11 asks the question every system like this</span>
+<span id="cb7-464"><a href="#cb7-464" aria-hidden="true" tabindex="-1"></a>eventually needs answered with numbers, not impressions: *how good is it,</span>
+<span id="cb7-465"><a href="#cb7-465" aria-hidden="true" tabindex="-1"></a>really* — and where specifically does it still fail?</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
