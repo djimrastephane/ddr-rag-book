@@ -195,7 +195,7 @@ the top, lower when they're buried further down or missing.
 ```{python}
 #| eval: false
 def mrr(results: list[dict]) -> float:
-    scores = [1.0 / r["rank"] if r.get("rank") else 0.0 for r in results]
+    scores = [1.0 / r["rank"] if r.get("rank") is not None else 0.0 for r in results]
     return sum(scores) / len(scores) if scores else 0.0
 ```
 
@@ -205,6 +205,13 @@ Each question's score is `1 / rank` — rank 1 scores a full 1.0, rank 5
 scores only 0.2, and a miss scores 0. Averaging those scores across every
 question produces one number that rewards *first-place* correct answers
 far more than answers merely present somewhere in the list.
+
+The "was it found" check is `r.get("rank") is not None`, not `if
+r.get("rank")`. Ranks in this book are 1-indexed — rank 1 is the best
+possible score — so `None` is the only value that means "not found."
+A plain truthiness check would misread a (here, never-occurring) rank
+of `0` as a miss instead of a hit; `is not None` says exactly what's
+meant regardless of what rank values a future retrieval step produces.
 
 ### Step 3: give partial credit based on exact position
 
@@ -230,7 +237,8 @@ def ndcg_at_k(results: list[dict], k: int) -> float:
     scores = []
     for r in results:
         rank = r.get("rank")
-        scores.append(1.0 / math.log2(rank + 1) if rank and rank <= k else 0.0)
+        found_within_k = rank is not None and rank <= k
+        scores.append(1.0 / math.log2(rank + 1) if found_within_k else 0.0)
     return sum(scores) / len(scores) if scores else 0.0
 ```
 
